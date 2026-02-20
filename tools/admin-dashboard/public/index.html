@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Luna Admin Dashboard</title>
+<style>
+body{font-family:Arial,sans-serif;background:#0f172a;color:#e2e8f0;margin:0}
+header{padding:16px 20px;border-bottom:1px solid #334155;background:#111827}
+h1{margin:0;font-size:20px}
+main{padding:20px;display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+.card{background:#111827;border:1px solid #334155;border-radius:12px;padding:14px}
+.card h2{margin:0 0 10px 0;font-size:16px}
+pre{white-space:pre-wrap;word-wrap:break-word;font-size:12px;background:#0b1220;border:1px solid #263244;padding:10px;border-radius:8px;max-height:260px;overflow:auto}
+.muted{color:#94a3b8;font-size:12px}
+button{background:#2563eb;color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+ul{margin:0;padding-left:18px}.ok{color:#22c55e}.warn{color:#f59e0b}
+</style>
+</head>
+<body>
+<header><h1>🌌 Luna Admin Dashboard</h1><div class="muted">OpenClaw Agent Übersicht</div></header>
+<main>
+<section class="card"><h2>Overview</h2><button onclick="loadAll()">Refresh</button><div id="overview"></div></section>
+<section class="card"><h2>Cron Jobs</h2><div id="cron"></div></section>
+<section class="card"><h2>Memory</h2><div id="memory"></div></section>
+<section class="card"><h2>Skills</h2><div id="skills"></div></section>
+<section class="card" style="grid-column:1/-1;"><h2>Projects</h2><div id="projects"></div></section>
+</main>
+<script>
+const j = (u)=>fetch(u).then(r=>r.json());
+const up=(s)=>`${Math.floor(s/3600)}h ${Math.floor((s%3600)/60)}m`;
+
+async function loadOverview(){
+const d=await j('/api/overview');
+document.getElementById('overview').innerHTML = `
+<ul>
+<li><b>Host:</b> ${d.hostname}</li>
+<li><b>Uptime:</b> ${up(d.uptimeSec)}</li>
+<li><b>Workspace:</b> ${d.workspace}</li>
+<li><b>Disk:</b> <span class="${d?.disk?.avail?'ok':'warn'}">${d?.disk?.avail||'n/a'} frei (${d?.disk?.usePercent||'n/a'})</span></li>
+<li><b>Xvfb:</b> ${d?.services?.xvfb||'n/a'}</li>
+</ul>
+<pre>${(d?.services?.openclawStatus||'').slice(0,1400)}</pre>`;
+}
+async function loadCron(){
+const d=await j('/api/cron'); const jobs=d?.userCrontab?.jobs||[];
+document.getElementById('cron').innerHTML = `
+<div><b>User Crontab:</b> ${jobs.length} Jobs</div>
+<ul>${jobs.map(x=>`<li><code>${x.schedule}</code> → ${x.command}</li>`).join('') || '<li>Keine Jobs</li>'}</ul>
+<div class="muted" style="margin-top:8px;">OpenClaw cron list:</div>
+<pre>${d?.openclawCron?.raw||'n/a'}</pre>`;
+}
+async function loadMemory(){
+const d=await j('/api/memory');
+document.getElementById('memory').innerHTML = `
+<div><b>Daily Files:</b> ${d.countDailyFiles}</div>
+<div class="muted">MEMORY.md</div><pre>${(d?.memoryMd?.content||'').slice(0,1600)}</pre>
+<div class="muted">Letzte 7</div>
+<ul>${(d.daily||[]).map(x=>`<li>${x.name}</li>`).join('') || '<li>Keine Daily Notes</li>'}</ul>`;
+}
+async function loadSkills(){
+const d=await j('/api/skills');
+document.getElementById('skills').innerHTML = `
+<div><b>Installiert:</b> ${d.count}</div>
+<ul>${(d.skills||[]).map(s=>`<li><b>${s.name}</b><br><span class="muted">${s.path}</span></li>`).join('')}</ul>`;
+}
+async function loadProjects(){
+const d=await j('/api/projects');
+document.getElementById('projects').innerHTML = `
+<div><b>Projekte:</b> ${d.count}</div>
+${(d.projects||[]).map(p=>`<h3 style="margin:10px 0 4px;">${p.name}</h3><pre>${p.preview}</pre>`).join('')}`;
+}
+async function loadAll(){ await Promise.all([loadOverview(),loadCron(),loadMemory(),loadSkills(),loadProjects()]); }
+loadAll();
+</script>
+</body>
+</html>
