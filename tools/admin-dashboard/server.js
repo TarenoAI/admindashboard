@@ -6,214 +6,166 @@ const os = require("os");
 
 const app = express();
 const PORT = process.env.PORT || 3477;
-
-// ─── Real Paths on VPS ──────────────────────────────────────────────────────
-const WORKSPACE_ROOT = "/root/.openclaw/workspace-tareno";
-const AGENTS_DIR = path.join(WORKSPACE_ROOT, "agents");
-const AGENTS_SKILLS_DIR = path.join(WORKSPACE_ROOT, ".agents", "skills");
+const WORKSPACE_ROOT = path.resolve(__dirname, "..", "..");
 const MEMORY_DIR = path.join(WORKSPACE_ROOT, "memory");
-const PROJECTS_DIR = path.join(WORKSPACE_ROOT, "projects");
-const OPENCLAW_CRON_DIR = "/root/.openclaw/cron";
+const SKILLS_DIR = "/usr/lib/node_modules/openclaw/skills";
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
 function readFileSafe(filePath) {
-    try { return fs.readFileSync(filePath, "utf8"); } catch { return null; }
+try { return fs.readFileSync(filePath, "utf8"); } catch { return null; }
 }
 function listFilesSafe(dir) {
-    try { return fs.readdirSync(dir).sort(); } catch { return []; }
-}
-function listDirsSafe(dir) {
-    try {
-        return fs.readdirSync(dir, { withFileTypes: true })
-            .filter(d => d.isDirectory())
-            .map(d => d.name);
-    } catch { return []; }
+try { return fs.readdirSync(dir).sort(); } catch { return []; }
 }
 function runCmd(cmd) {
-    return new Promise(resolve => {
-        exec(cmd, { timeout: 8000 }, (err, stdout, stderr) => {
-            resolve({ ok: !err, stdout: (stdout || "").trim(), stderr: (stderr || "").trim(), error: err ? err.message : null });
-        });
-    });
+return new Promise((resolve) => {
+exec(cmd, { timeout: 12000 }, (err, stdout, stderr) => {
+resolve({
+ok: !err,
+stdout: (stdout || "").trim(),
+stderr: (stderr || "").trim(),
+error: err ? err.message : null,
+});
+});
+});
+}
+function tryParseJson(s) {
+try { return JSON.parse(s); } catch { return null; }
+}
+async function runFirstOk(commands) {
+for (const cmd of commands) {
+const r = await runCmd(cmd);
+if (r.ok && (r.stdout || "").length) return { cmd, ...r };
+}
+const last = await runCmd(commands[commands.length - 1]);
+return { cmd: commands[commands.length - 1], ...last };
 }
 function parseSimpleCron(text) {
-    const lines = (text || "").split("\n").map(l => l.trim()).filter(l => l && !l.startsWith("#"));
-    return lines.map((line, idx) => {
-        const parts = line.split(/\s+/);
-        if (parts.length < 6) return { id: idx + 1, schedule: "?", command: line };
-        return { id: idx + 1, schedule: parts.slice(0, 5).join(" "), command: parts.slice(5).join(" ") };
-    });
+const lines = (text || "").split("\n").map(l => l.trim()).filter(l => l && !l.startsWith("#"));
+return lines.map((line, idx) => {
+const parts = line.split(/\s+/);
+if (parts.length < 6) return { id: idx + 1, raw: line, schedule: "?", command: line };
+return { id: idx + 1, raw: line, schedule: parts.slice(0,5).join(" "), command: parts.slice(5).join(" ") };
+});
+}
+function getDiskInfo() {
+return new Promise((resolve) => {
+exec("df -h /", (err, stdout) => {
+if (err || !stdout) return resolve({ ok: false, raw: null });
+const line = (stdout.trim().split("\n")[1] || "");
+const p = line.split(/\s+/);
+resolve({
+ok: true, filesystem: p[0] || null, size: p[1] || null, used: p[2] || null,
+avail: p[3] || null, usePercent: p[4] || null, mount: p[5] || null, raw: line
+});
+});
+});
+}
+async function getSkills() {
+const dirs = listFilesSafe(SKILLS_DIR);
+const out = [];
+for (const d of dirs) {
+const skillMd = path.join(SKILLS_DIR, d, "SKILL.md");
+const content = readFileSafe(skillMd);
+if (!content) continue;
+const firstLine = content.split("\n").find(l => l.trim()) || "";
+out.push({ name: d, path: path.join(SKILLS_DIR, d), title: firstLine.replace(/^#+\s*/, "") });
+}
+return out.sort((a,b) => a.name.localeCompare(b.name));
 }
 
-// ─── /api/overview ───────────────────────────────────────────────────────────
 app.get("/api/overview", async (_, res) => {
-    const openclaw = await runCmd("openclaw status");
-    res.json({
-        hostname: os.hostname(),
-        uptimeSec: os.uptime(),
-        workspace: WORKSPACE_ROOT,
-        now: new Date().toISOString(),
-        services: {
-            openclawStatus: openclaw.ok ? openclaw.stdout : `Fehler: ${openclaw.error || openclaw.stderr}`,
-        },
-    });
+const disk = await getDiskInfo();
+const xvfb = await runCmd("systemctl is-active xvfb");
+const openclaw = await runFirstOk([
+"/usr/bin/openclaw status",
+"/usr/local/bin/openclaw status"
+]);
+res.json({
+hostname: os.hostname(),
+uptimeSec: os.uptime(),
+workspace: WORKSPACE_ROOT,
+now: new Date().toISOString(),
+disk,
+services: {
+xvfb: xvfb.stdout || (xvfb.ok ? "active" : "unknown"),
+openclawStatus: openclaw.ok ? openclaw.stdout : (openclaw.stderr || openclaw.error || "unknown")
+}
+});
+});app.get("/api/agents", async (_, res) => {
+const sessions = await runFirstOk([
+"/usr/bin/openclaw sessions list --json",
+"/usr/local/bin/openclaw sessions list --json",
+"/usr/bin/openclaw sessions list",
+"/usr/local/bin/openclaw sessions list"
+]);
+const agents = await runFirstOk([
+"/usr/bin/openclaw agents list --json",
+"/usr/local/bin/openclaw agents list --json",
+"/usr/bin/openclaw agents list",
+"/usr/local/bin/openclaw agents list"
+]);
+
+const sessionsJson = tryParseJson(sessions.stdout);
+const agentsJson = tryParseJson(agents.stdout);
+
+const safeSessions = Array.isArray(sessionsJson?.sessions)
+? sessionsJson.sessions.map(s => ({
+key: s.key || null, kind: s.kind || null, updatedAt: s.updatedAt || null,
+ageMs: s.ageMs || null, model: s.model || null, totalTokens: s.totalTokens ?? null
+}))
+: [];
+
+const safeAgents = Array.isArray(agentsJson?.agents)
+? agentsJson.agents.map(a => ({
+name: a.name || a.key || null, key: a.key || null, role: a.role || null, status: a.status || null
+}))
+: [];
+
+res.json({
+sessions: { count: safeSessions.length, items: safeSessions, rawPreview: (sessions.stdout || "").slice(0, 500) },
+agents: { count: safeAgents.length, items: safeAgents, rawPreview: (agents.stdout || "").slice(0, 500) },
+security: { note: "No file contents exposed" }
+});
 });
 
-// ─── /api/agents ─────────────────────────────────────────────────────────────
-app.get("/api/agents", (_, res) => {
-    // Special root-level MD files for the main agent (Luna)
-    const rootMds = ["SOUL.md", "AGENTS.md", "MEMORY.md", "USER.md", "HEARTBEAT.md", "IDENTITY.md", "TOOLS.md", "INFRASTRUCTURE.md"];
-    const rootFiles = rootMds
-        .filter(f => fs.existsSync(path.join(WORKSPACE_ROOT, f)))
-        .map(f => ({
-            name: f,
-            content: (readFileSafe(path.join(WORKSPACE_ROOT, f)) || "").slice(0, 800)
-        }));
-
-    const agents = [{ name: "Luna (Tareno)", role: "Main OpenClaw Agent", files: rootFiles }];
-
-    // Additional sub-agents from /agents/ dir
-    const subDirs = listDirsSafe(AGENTS_DIR);
-    for (const d of subDirs) {
-        const dir = path.join(AGENTS_DIR, d);
-        const files = listFilesSafe(dir).filter(f => f.endsWith(".md")).map(f => ({
-            name: f,
-            content: (readFileSafe(path.join(dir, f)) || "").slice(0, 800)
-        }));
-        if (files.length) agents.push({ name: d, role: "Sub-Agent", files });
-    }
-
-    res.json({ count: agents.length, agents });
-});
-
-// ─── /api/memory ─────────────────────────────────────────────────────────────
-app.get("/api/memory", (_, res) => {
-    const mainMemory = readFileSafe(path.join(WORKSPACE_ROOT, "MEMORY.md")) || "MEMORY.md nicht gefunden";
-    const files = listFilesSafe(MEMORY_DIR).filter(f => f.endsWith(".md") || f.endsWith(".json"));
-    const daily = files.map(f => ({
-        name: f,
-        content: (readFileSafe(path.join(MEMORY_DIR, f)) || "").slice(0, 600)
-    }));
-    res.json({ mainMemory, daily, countFiles: files.length });
-});
-
-// ─── /api/cron ───────────────────────────────────────────────────────────────
 app.get("/api/cron", async (_, res) => {
-    const userCrontab = await runCmd("crontab -l");
-    const openclawCron = await runCmd("openclaw cron list");
-
-    // Also read cron dir files
-    const cronFiles = listFilesSafe(OPENCLAW_CRON_DIR).map(f => ({
-        name: f,
-        content: readFileSafe(path.join(OPENCLAW_CRON_DIR, f)) || ""
-    }));
-
-    res.json({
-        userCrontab: {
-            ok: userCrontab.ok,
-            jobs: parseSimpleCron(userCrontab.stdout),
-        },
-        openclawCron: {
-            ok: openclawCron.ok,
-            raw: openclawCron.ok ? openclawCron.stdout : (openclawCron.stderr || openclawCron.error),
-        },
-        cronFiles,
-    });
+const userCrontab = await runCmd("crontab -l");
+const openclawCron = await runFirstOk([
+"/usr/bin/openclaw cron list",
+"/usr/local/bin/openclaw cron list"
+]);
+res.json({
+userCrontab: { ok: userCrontab.ok, raw: userCrontab.stdout || userCrontab.stderr, jobs: parseSimpleCron(userCrontab.stdout) },
+openclawCron: { ok: openclawCron.ok, raw: openclawCron.stdout || openclawCron.stderr || openclawCron.error }
+});
 });
 
-// ─── /api/projects ───────────────────────────────────────────────────────────
+app.get("/api/memory", (_, res) => {
+const memoryIndex = readFileSafe(path.join(WORKSPACE_ROOT, "MEMORY.md"));
+const files = listFilesSafe(MEMORY_DIR).filter(f => f.endsWith(".md"));
+res.json({
+memoryMd: { path: path.join(WORKSPACE_ROOT, "MEMORY.md"), content: memoryIndex || "MEMORY.md nicht gefunden" },
+daily: files.slice(-7),
+countDailyFiles: files.length
+});
+});
+
+app.get("/api/skills", async (_, res) => {
+const skills = await getSkills();
+res.json({ count: skills.length, skills });
+});
+
 app.get("/api/projects", (_, res) => {
-    const files = listFilesSafe(PROJECTS_DIR).filter(f => f.endsWith(".md"));
-    const projects = files.map(f => ({
-        name: f.replace(/\.md$/, ""),
-        preview: (readFileSafe(path.join(PROJECTS_DIR, f)) || "").slice(0, 1000)
-    }));
-    res.json({ count: projects.length, projects });
+const projectsDir = path.join(WORKSPACE_ROOT, "projects");
+const files = listFilesSafe(projectsDir).filter(f => f.endsWith(".md"));
+const projects = files.map(f => {
+const full = path.join(projectsDir, f);
+return { name: f.replace(/\.md$/, ""), file: full, preview: (readFileSafe(full) || "").slice(0, 400) };
+});
+res.json({ count: projects.length, projects });
 });
 
-// ─── /api/skills ─────────────────────────────────────────────────────────────
-app.get("/api/skills", (_, res) => {
-    const dirs = listDirsSafe(AGENTS_SKILLS_DIR);
-    const skills = dirs.map(d => {
-        const skillMd = path.join(AGENTS_SKILLS_DIR, d, "SKILL.md");
-        const content = readFileSafe(skillMd) || "";
-        // Extract description from YAML frontmatter
-        const descMatch = content.match(/description:\s*["']?(.+?)["']?\n/);
-        const description = descMatch ? descMatch[1].trim() : "";
-        // First heading as title
-        const titleMatch = content.match(/^#\s+(.+)$/m);
-        const title = titleMatch ? titleMatch[1].trim() : d;
-        return { name: d, title, description, path: path.join(AGENTS_SKILLS_DIR, d) };
-    }).sort((a, b) => a.name.localeCompare(b.name));
-    res.json({ count: skills.length, skills });
-});
-
-// ─── /api/organization ───────────────────────────────────────────────────────
-app.get("/api/organization", (_, res) => {
-    // Read AGENTS.md for the real hierarchy if it exists
-    const agentsMd = readFileSafe(path.join(WORKSPACE_ROOT, "AGENTS.md"));
-    const subDirs = listDirsSafe(AGENTS_DIR).map(name => ({ name }));
-    res.json({
-        agentsMd: agentsMd || null,
-        hierarchy: {
-            name: "OpenClaw System (Tareno)",
-            children: [
-                {
-                    name: "🤖 Luna (Main Agent)",
-                    children: subDirs.length > 0 ? subDirs : [{ name: "Keine Sub-Agenten" }]
-                }
-            ]
-        }
-    });
-});
-
-// ─── /api/activity ───────────────────────────────────────────────────────────
-app.get("/api/activity", async (_, res) => {
-    // Read recent memory logs as activity
-    const files = listFilesSafe(MEMORY_DIR).filter(f => f.endsWith(".md")).slice(-5).reverse();
-    const activities = files.map(f => ({
-        time: f.replace(".md", ""),
-        text: (readFileSafe(path.join(MEMORY_DIR, f)) || "").split("\n").find(l => l.trim().length > 5) || f,
-        type: "memory"
-    }));
-
-    // Add heartbeat info
-    const heartbeat = readFileSafe(path.join(WORKSPACE_ROOT, "HEARTBEAT.md"));
-    if (heartbeat) {
-        activities.unshift({ time: "Heartbeat", text: heartbeat.split("\n").find(l => l.trim().length > 5) || "–", type: "system" });
-    }
-
-    res.json({ activities });
-});
-
-// ─── /api/channels ───────────────────────────────────────────────────────────
-app.get("/api/channels", (_, res) => {
-    // Check for telegram config
-    const telegramDir = "/root/.openclaw/telegram";
-    const hasTelegram = fs.existsSync(telegramDir);
-    const openclawJson = readFileSafe("/root/.openclaw/openclaw.json");
-    let channels = [];
-
-    if (openclawJson) {
-        try {
-            const config = JSON.parse(openclawJson);
-            if (config.telegram) channels.push({ name: "Telegram", active: hasTelegram, details: config.telegram.botToken ? "Bot konfiguriert" : "Kein Bot-Token" });
-            if (config.slack) channels.push({ name: "Slack", active: true, details: "Webhook konfiguriert" });
-            if (config.email) channels.push({ name: "E-Mail", active: true, details: config.email.from || "" });
-        } catch { }
-    }
-
-    if (channels.length === 0) {
-        channels = [
-            { name: "Telegram", active: hasTelegram, details: hasTelegram ? "Verzeichnis vorhanden" : "Nicht konfiguriert" },
-            { name: "OpenClaw CLI", active: true, details: "Immer aktiv" },
-        ];
-    }
-
-    res.json({ channels });
-});
-
-app.listen(PORT, () => console.log(`✅ OpenClaw Admin Dashboard läuft auf http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`OpenClaw Admin Dashboard läuft auf http://localhost:${PORT}`));
