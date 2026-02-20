@@ -118,11 +118,17 @@ ageMs: s.ageMs || null, model: s.model || null, totalTokens: s.totalTokens ?? nu
 }))
 : [];
 
-const safeAgents = Array.isArray(agentsJson?.agents)
-? agentsJson.agents.map(a => ({
-name: a.name || a.key || null, key: a.key || null, role: a.role || null, status: a.status || null
-}))
-: [];
+const rawAgents = Array.isArray(agentsJson?.agents)
+? agentsJson.agents
+: (Array.isArray(agentsJson) ? agentsJson : []);
+
+const safeAgents = rawAgents.map(a => ({
+name: a.name || a.identityName || a.id || a.key || null,
+key: a.key || a.id || null,
+role: a.role || "agent",
+status: a.status || "unknown"
+}));
+
 
 res.json({
 sessions: { count: safeSessions.length, items: safeSessions, rawPreview: (sessions.stdout || "").slice(0, 500) },
