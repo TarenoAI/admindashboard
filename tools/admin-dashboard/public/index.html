@@ -1,77 +1,387 @@
 <!doctype html>
-<html lang="de">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Luna Admin Dashboard</title>
-<style>
-body{font-family:Arial,sans-serif;background:#0f172a;color:#e2e8f0;margin:0}
-header{padding:16px 20px;border-bottom:1px solid #334155;background:#111827}
-h1{margin:0;font-size:20px}
-main{padding:20px;display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
-.card{background:#111827;border:1px solid #334155;border-radius:12px;padding:14px}
-.card h2{margin:0 0 10px 0;font-size:16px}
-pre{white-space:pre-wrap;word-wrap:break-word;font-size:12px;background:#0b1220;border:1px solid #263244;padding:10px;border-radius:8px;max-height:260px;overflow:auto}
-.muted{color:#94a3b8;font-size:12px}
-button{background:#2563eb;color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
-ul{margin:0;padding-left:18px}.ok{color:#22c55e}.warn{color:#f59e0b}
-</style>
-</head>
-<body>
-<header><h1>🌌 Luna Admin Dashboard</h1><div class="muted">OpenClaw Agent Übersicht</div></header>
-<main>
-<section class="card"><h2>Overview</h2><button onclick="loadAll()">Refresh</button><div id="overview"></div></section>
-<section class="card"><h2>Cron Jobs</h2><div id="cron"></div></section>
-<section class="card"><h2>Memory</h2><div id="memory"></div></section>
-<section class="card"><h2>Skills</h2><div id="skills"></div></section>
-<section class="card" style="grid-column:1/-1;"><h2>Projects</h2><div id="projects"></div></section>
-</main>
-<script>
-const j = (u)=>fetch(u).then(r=>r.json());
-const up=(s)=>`${Math.floor(s/3600)}h ${Math.floor((s%3600)/60)}m`;
+<html lang="de" class="dark">
 
-async function loadOverview(){
-const d=await j('/api/overview');
-document.getElementById('overview').innerHTML = `
-<ul>
-<li><b>Host:</b> ${d.hostname}</li>
-<li><b>Uptime:</b> ${up(d.uptimeSec)}</li>
-<li><b>Workspace:</b> ${d.workspace}</li>
-<li><b>Disk:</b> <span class="${d?.disk?.avail?'ok':'warn'}">${d?.disk?.avail||'n/a'} frei (${d?.disk?.usePercent||'n/a'})</span></li>
-<li><b>Xvfb:</b> ${d?.services?.xvfb||'n/a'}</li>
-</ul>
-<pre>${(d?.services?.openclawStatus||'').slice(0,1400)}</pre>`;
-}
-async function loadCron(){
-const d=await j('/api/cron'); const jobs=d?.userCrontab?.jobs||[];
-document.getElementById('cron').innerHTML = `
-<div><b>User Crontab:</b> ${jobs.length} Jobs</div>
-<ul>${jobs.map(x=>`<li><code>${x.schedule}</code> → ${x.command}</li>`).join('') || '<li>Keine Jobs</li>'}</ul>
-<div class="muted" style="margin-top:8px;">OpenClaw cron list:</div>
-<pre>${d?.openclawCron?.raw||'n/a'}</pre>`;
-}
-async function loadMemory(){
-const d=await j('/api/memory');
-document.getElementById('memory').innerHTML = `
-<div><b>Daily Files:</b> ${d.countDailyFiles}</div>
-<div class="muted">MEMORY.md</div><pre>${(d?.memoryMd?.content||'').slice(0,1600)}</pre>
-<div class="muted">Letzte 7</div>
-<ul>${(d.daily||[]).map(x=>`<li>${x.name}</li>`).join('') || '<li>Keine Daily Notes</li>'}</ul>`;
-}
-async function loadSkills(){
-const d=await j('/api/skills');
-document.getElementById('skills').innerHTML = `
-<div><b>Installiert:</b> ${d.count}</div>
-<ul>${(d.skills||[]).map(s=>`<li><b>${s.name}</b><br><span class="muted">${s.path}</span></li>`).join('')}</ul>`;
-}
-async function loadProjects(){
-const d=await j('/api/projects');
-document.getElementById('projects').innerHTML = `
-<div><b>Projekte:</b> ${d.count}</div>
-${(d.projects||[]).map(p=>`<h3 style="margin:10px 0 4px;">${p.name}</h3><pre>${p.preview}</pre>`).join('')}`;
-}
-async function loadAll(){ await Promise.all([loadOverview(),loadCron(),loadMemory(),loadSkills(),loadProjects()]); }
-loadAll();
-</script>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenClaw - Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+                    colors: {
+                        brand: { DEFAULT: '#8251EE', hover: '#9366F5', subtle: 'rgba(130, 81, 238, 0.15)' },
+                        neutral: { bg1: 'hsl(240, 6%, 6%)', bg2: 'hsl(240, 5%, 9%)', bg3: 'hsl(240, 5%, 12%)' },
+                        text: { primary: '#FFFFFF', secondary: '#A1A1AA', muted: '#71717A' },
+                        border: { subtle: 'hsla(0, 0%, 100%, 0.08)', default: 'hsla(0, 0%, 100%, 0.12)' }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease-out',
+                        'slide-up': 'slideUp 0.3s ease-out'
+                    },
+                    keyframes: {
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                        slideUp: { '0%': { opacity: '0', transform: 'translateY(10px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            background-color: theme('colors.neutral.bg1');
+            color: theme('colors.text.primary');
+            margin: 0;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Background elements for glow */
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            width: 40vw;
+            height: 40vw;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: -1;
+            opacity: 0.15;
+            transition: all 1s ease;
+        }
+
+        body::before {
+            background: #8251EE;
+            top: -10vw;
+            left: -10vw;
+        }
+
+        body::after {
+            background: #3B82F6;
+            bottom: -10vw;
+            right: -10vw;
+        }
+
+        /* Glass Panels */
+        .glass-sidebar {
+            background: rgba(10, 10, 12, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-right: 1px solid theme('colors.border.subtle');
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid theme('colors.border.default');
+            border-radius: 1rem;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        pre {
+            font-size: 0.8rem;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid theme('colors.border.subtle');
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            max-height: 200px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            color: theme('colors.text.secondary');
+            transition: all 0.2s ease;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .nav-item:hover {
+            background: theme('colors.brand.subtle');
+            color: theme('colors.text.primary');
+        }
+
+        .nav-item.active {
+            background: theme('colors.brand.DEFAULT');
+            color: #fff;
+            box-shadow: 0 0 15px theme('colors.brand.subtle');
+        }
+
+        .loader {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-top-color: theme('colors.brand.DEFAULT');
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="flex h-screen font-sans antialiased text-sm">
+
+    <!-- Sidebar -->
+    <aside class="glass-sidebar w-64 flex flex-col h-full z-10">
+        <div class="px-6 py-8">
+            <h1
+                class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-brand to-blue-400 flex items-center gap-2">
+                <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
+                    </path>
+                </svg>
+                OpenClaw
+            </h1>
+            <p class="text-xs text-text-muted mt-1 font-medium">Agent Operations</p>
+        </div>
+
+        <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+            <div class="nav-item active" onclick="switchTab('agents', this)">
+                <span>🤖</span> Alle Agenten
+            </div>
+            <div class="nav-item" onclick="switchTab('organization', this)">
+                <span>🏢</span> Organization
+            </div>
+            <div class="nav-item" onclick="switchTab('activity', this)">
+                <span>⚡</span> Activity
+            </div>
+            <div class="nav-item" onclick="switchTab('cron', this)">
+                <span>⏱️</span> Cron Jobs
+            </div>
+            <div class="nav-item" onclick="switchTab('projects', this)">
+                <span>📂</span> Projekte
+            </div>
+            <div class="nav-item" onclick="switchTab('skills', this)">
+                <span>🧠</span> Skills & Docs
+            </div>
+            <div class="nav-item" onclick="switchTab('channels', this)">
+                <span>💬</span> Channels
+            </div>
+        </nav>
+
+        <div class="p-4 border-t border-border-subtle">
+            <div class="flex items-center gap-3 glass-card p-3 border-none bg-neutral-bg3/50">
+                <div
+                    class="w-8 h-8 rounded-full bg-brand flex items-center justify-center text-xs font-bold shadow-glow">
+                    MK</div>
+                <div>
+                    <div class="text-xs font-medium">Admin User</div>
+                    <div class="text-[10px] text-text-muted">Online</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden relative z-0">
+        <header
+            class="h-16 flex items-center justify-between px-8 border-b border-border-subtle backdrop-blur-md bg-transparent z-10">
+            <h2 id="view-title" class="text-lg font-semibold tracking-wide">Alle Agenten</h2>
+            <button onclick="loadCurrentView()"
+                class="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-4 py-1.5 rounded-lg text-xs font-medium transition-all focus:ring-2 focus:ring-brand">
+                Refresh Data
+            </button>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8 animate-fade-in" id="content-area">
+            <div class="flex items-center justify-center h-full">
+                <div class="loader"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentTab = 'agents';
+
+        function switchTab(tabId, el) {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            el.classList.add('active');
+            currentTab = tabId;
+            document.getElementById('view-title').innerText = el.innerText.substring(2).trim(); // Remove emoji
+            loadCurrentView();
+        }
+
+        async function loadCurrentView() {
+            const container = document.getElementById('content-area');
+            container.innerHTML = '<div class="flex items-center justify-center h-full"><div class="loader"></div></div>';
+
+            try {
+                const response = await fetch(`/api/${currentTab}`);
+                const data = await response.json();
+                renderView(currentTab, data, container);
+            } catch (err) {
+                container.innerHTML = `<div class="glass-card p-6 border-red-500/30 bg-red-500/5 text-red-200">
+          <h3 class="font-semibold mb-2 flex items-center gap-2"><span>⚠️</span> Error Loading View</h3>
+          <p class="text-xs text-red-300/80">Konnte Daten von /api/${currentTab} nicht laden. Ist der Server online und sind alle Endpunkte in server.js implementiert?</p>
+        </div>`;
+            }
+        }
+
+        function renderView(tab, data, container) {
+            let html = '';
+
+            if (tab === 'agents') {
+                html = '<div class="grid grid-cols-1 xl:grid-cols-2 gap-6">';
+                data.agents.forEach(agent => {
+                    html += `<div class="glass-card overflow-hidden flex flex-col">
+            <div class="p-4 border-b border-border-default bg-black/20 flex justify-between items-center">
+              <div>
+                <h3 class="font-bold text-lg text-brand">${agent.name}</h3>
+                <p class="text-xs text-text-muted">${agent.role || 'Autonomous OpenClaw Agent'}</p>
+              </div>
+              <span class="px-2 py-1 bg-green-500/20 text-green-400 text-[10px] rounded border border-green-500/30 uppercase font-bold tracking-wider">Active</span>
+            </div>
+            <div class="p-4 flex-1 grid gap-4 grid-cols-1 md:grid-cols-2">`;
+                    agent.files.forEach(f => {
+                        html += `<div class="bg-black/20 border border-white/5 rounded-lg p-3">
+                <div class="text-xs font-medium text-text-secondary mb-2 flex items-center gap-1"><span>📄</span> ${f.name}</div>
+                <pre class="text-[10px] text-text-muted/80 m-0 border-none bg-black/40 p-2">${f.content}</pre>
+              </div>`;
+                    });
+                    html += `</div></div>`;
+                });
+                html += '</div>';
+            }
+
+            else if (tab === 'organization') {
+                const renderOrg = (node) => {
+                    let str = `<div class="ml-6 relative before:content-[''] before:absolute before:-left-3 before:top-4 before:w-3 before:border-t before:border-white/10 before:h-full">
+            <div class="glass-card p-4 mb-4 inline-block min-w-[200px] hover:border-brand/50 relative z-10 bg-neutral-bg2">
+              <div class="font-medium text-white">${node.name}</div>
+            </div>
+            ${node.children ? `<div class="border-l border-white/10 ml-4 pb-4">${node.children.map(renderOrg).join('')}</div>` : ''}
+          </div>`;
+                    return str;
+                };
+                html = `<div class="overflow-x-auto p-4"><div class="inline-block p-4 border border-border-default rounded-xl bg-black/20">${renderOrg(data.hierarchy)}</div></div>`;
+            }
+
+            else if (tab === 'activity') {
+                html = '<div class="glass-card p-6"><h3 class="text-base font-semibold mb-6 flex items-center gap-2"><span>⚡</span> Letzte Systemaktivitäten</h3><div class="space-y-4">';
+                data.activities.forEach(act => {
+                    const color = act.type === 'system' ? 'text-brand' : act.type === 'bot' ? 'text-blue-400' : 'text-green-400';
+                    html += `<div class="flex items-start gap-4 p-3 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/5 transition-colors">
+            <div class="mt-1 w-2 h-2 rounded-full bg-current ${color} shadow-[0_0_8px_currentColor]"></div>
+            <div>
+              <div class="text-sm font-medium text-white">${act.text}</div>
+              <div class="text-xs text-text-muted mt-1 uppercase tracking-wider">${act.time}</div>
+            </div>
+          </div>`;
+                });
+                html += '</div></div>';
+            }
+
+            else if (tab === 'cron') {
+                const user = data.userCrontab;
+                html = `<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="glass-card p-6">
+            <h3 class="font-semibold mb-4 text-brand">System Cron (OS)</h3>
+            <div class="space-y-3">
+              ${user.jobs && user.jobs.length ? user.jobs.map(j => `
+                <div class="bg-black/30 border border-white/5 p-3 rounded-lg flex flex-col gap-2">
+                  <code class="text-xs text-blue-400 bg-blue-400/10 px-2 py-1 rounded inline-block w-max border border-blue-400/20">${j.schedule}</code>
+                  <div class="text-sm font-mono text-text-secondary truncate" title="${j.command}">${j.command}</div>
+                </div>`).join('') : '<p class="text-sm text-text-muted">Keine Jobs</p>'}
+            </div>
+          </div>
+          <div class="glass-card p-6">
+            <h3 class="font-semibold mb-4 text-blue-400">OpenClaw Internal Tasks</h3>
+            <pre class="w-full text-xs text-text-secondary h-full min-h-[200px]">${data.openclawCron.raw || 'Keine Daten'}</pre>
+          </div>
+        </div>`;
+            }
+
+            else if (tab === 'projects') {
+                html = '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">';
+                data.projects.forEach(p => {
+                    html += `<div class="glass-card p-6 flex flex-col group">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-semibold text-lg text-white group-hover:text-brand transition-colors">${p.name}</h3>
+              <span class="text-xs text-text-muted bg-white/5 px-2 py-1 rounded-md border border-white/5">Project</span>
+            </div>
+            <pre class="flex-1 text-[10px] text-text-secondary overflow-hidden text-ellipsis mb-4 bg-black/20">${p.preview}</pre>
+            <button class="w-full py-2 bg-white/5 hover:bg-brand/20 border border-white/10 hover:border-brand/40 rounded-lg text-xs font-medium transition-all text-white">Wissen durchstöbern</button>
+          </div>`;
+                });
+                html += '</div>';
+            }
+
+            else if (tab === 'skills') {
+                html = '<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">';
+                data.skills.forEach(s => {
+                    html += `<div class="glass-card p-5 relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-24 h-24 bg-brand/20 rounded-full blur-2xl -mr-10 -mt-10 group-hover:bg-brand/40 transition-all"></div>
+            <h3 class="font-semibold text-white mb-1 relative z-10 flex items-center gap-2"><span>🧩</span> ${s.name}</h3>
+            <p class="text-xs text-brand/80 mb-3 font-medium relative z-10">${s.title}</p>
+            <div class="text-[10px] text-text-muted font-mono truncate relative z-10 bg-black/40 px-2 py-1 rounded border border-white/5">${s.path}</div>
+          </div>`;
+                });
+                html += '</div>';
+            }
+
+            else if (tab === 'channels') {
+                html = '<div class="glass-card p-6 max-w-2xl"><h3 class="font-semibold mb-4 text-lg">Kommunikations-Kanäle</h3><div class="divide-y divide-border-subtle border border-border-subtle rounded-xl overflow-hidden">';
+                data.channels.forEach(ch => {
+                    html += `<div class="p-4 bg-black/20 flex items-center justify-between hover:bg-black/40 transition-colors">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded bg-white/5 border border-white/10 flex items-center justify-center text-text-muted">#</div>
+              <span class="font-medium text-white">${ch.name}</span>
+            </div>
+            ${ch.active
+                            ? '<span class="px-2 py-1 bg-green-500/10 text-green-400 text-xs rounded-full border border-green-500/20 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Online</span>'
+                            : '<span class="px-2 py-1 bg-neutral-500/10 text-neutral-400 text-xs rounded-full border border-neutral-500/20 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-neutral-500"></span> Offline</span>'}
+          </div>`;
+                });
+                html += '</div></div>';
+            }
+
+            container.innerHTML = `<div class="animate-fade-in">${html}</div>`;
+        }
+
+        // Init first view
+        loadCurrentView();
+    </script>
 </body>
+
 </html>
