@@ -8,14 +8,28 @@ const app = express();
 const PORT = process.env.PORT || 3477;
 
 // --- SECURITY: Basic Authentication ---
+// Reads credentials from dashboard-auth.json in the same folder,
+// then falls back to env vars, then to built-in defaults.
+function loadAuthConfig() {
+    try {
+        const configPath = path.join(__dirname, 'dashboard-auth.json');
+        if (fs.existsSync(configPath)) {
+            const cfg = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+            return { user: cfg.user || 'admin', pass: cfg.pass };
+        }
+    } catch (e) { /* ignore parse errors */ }
+    return {
+        user: process.env.DASHBOARD_USER || 'admin',
+        pass: process.env.DASHBOARD_PASS || 'SecretClaw123!'
+    };
+}
+const authCfg = loadAuthConfig();
+console.log(`[Auth] Dashboard-Login: user="${authCfg.user}", pass-source=${fs.existsSync(path.join(__dirname, 'dashboard-auth.json')) ? 'dashboard-auth.json' : 'env/default'}`);
+
 app.use((req, res, next) => {
     const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
     const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':');
-
-    const expectedUser = process.env.DASHBOARD_USER || "admin";
-    const expectedPass = process.env.DASHBOARD_PASS || "SecretClaw123!"; // Default fallback
-
-    if (login && password && login === expectedUser && password === expectedPass) {
+    if (login && password && login === authCfg.user && password === authCfg.pass) {
         return next();
     }
     res.set('WWW-Authenticate', 'Basic realm="OpenClaw Admin Dashboard"');
