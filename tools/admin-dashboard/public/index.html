@@ -479,8 +479,28 @@
                     error: { dot: 'bg-red-400', text: 'text-red-400', badge: 'bg-red-400/10 text-red-300 border-red-400/20' },
                     warning: { dot: 'bg-yellow-400', text: 'text-yellow-400', badge: 'bg-yellow-400/10 text-yellow-300 border-yellow-400/20' }
                 };
-                html = `<div class="glass-card p-6">
-                    <h3 class="text-base font-semibold mb-4 flex items-center gap-2"><span>⚡</span> Letzte Systemaktivitäten <span class="ml-auto text-xs text-text-muted font-normal">${activities.length} Einträge</span></h3>
+                const activityStats = activities.reduce((acc, a) => {
+                    const tag = (a.taskType || 'routine').toLowerCase();
+                    if (tag === 'fix') acc.fix += 1;
+                    else if (tag === 'cron') acc.cron += 1;
+                    else acc.routine += 1;
+                    if ((a.result || '').toLowerCase() === 'error') acc.errors += 1;
+                    if (a.agent) acc.bots.add(a.agent);
+                    return acc;
+                }, { fix: 0, cron: 0, routine: 0, errors: 0, bots: new Set() });
+
+                html = `<div class="space-y-4">
+                    <div class="glass-card p-4">
+                        <h3 class="text-base font-semibold mb-3 flex items-center gap-2"><span>⚡</span> Letzte Systemaktivitäten <span class="ml-auto text-xs text-text-muted font-normal">${activities.length} Einträge</span></h3>
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-2 text-xs">
+                            <div class="bg-black/30 border border-white/10 rounded-lg p-2.5"><p class="text-text-muted uppercase text-[10px]">Fixes</p><p class="text-green-300 font-bold mt-1">${activityStats.fix}</p></div>
+                            <div class="bg-black/30 border border-white/10 rounded-lg p-2.5"><p class="text-text-muted uppercase text-[10px]">Cron</p><p class="text-blue-300 font-bold mt-1">${activityStats.cron}</p></div>
+                            <div class="bg-black/30 border border-white/10 rounded-lg p-2.5"><p class="text-text-muted uppercase text-[10px]">Routine</p><p class="text-yellow-300 font-bold mt-1">${activityStats.routine}</p></div>
+                            <div class="bg-black/30 border border-white/10 rounded-lg p-2.5"><p class="text-text-muted uppercase text-[10px]">Errors</p><p class="text-red-300 font-bold mt-1">${activityStats.errors}</p></div>
+                            <div class="bg-black/30 border border-white/10 rounded-lg p-2.5"><p class="text-text-muted uppercase text-[10px]">Aktive Bots</p><p class="text-white font-bold mt-1">${activityStats.bots.size}</p></div>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6">
                     <div class="grid grid-cols-1 md:grid-cols-5 gap-2 mb-4">
                       <input id="activity-filter-text" placeholder="Suche Text/Bot/Ziel" class="bg-black/30 border border-white/10 rounded px-3 py-2 text-xs" />
                       <select id="activity-filter-result" class="bg-black/30 border border-white/10 rounded px-3 py-2 text-xs">
@@ -509,7 +529,7 @@
                             <div class="flex items-center gap-2 mt-2 flex-wrap">
                                ${act.agent ? `<span class="px-2 py-0.5 border rounded-full text-[10px] font-bold tracking-wide bg-blue-500/10 text-blue-300 border-blue-500/30 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 shadow-[0_0_5px_rgba(96,165,250,0.8)]"></span> ${act.agent}</span>` : '<span class="px-2 py-0.5 border rounded-full text-[10px] bg-white/5 border-white/10">Bot: n/a</span>'}
                                <span class="px-1.5 py-0.5 border rounded text-[9px] uppercase font-bold tracking-wider ${c.badge}">${act.type}</span>
-                               <span class="px-1.5 py-0.5 border rounded text-[9px] uppercase font-bold tracking-wider bg-white/5 border-white/10 text-text-secondary">${act.taskType || 'routine'}</span>
+                               <span class="px-1.5 py-0.5 border rounded text-[9px] uppercase font-bold tracking-wider ${act.taskType === 'fix' ? 'bg-green-500/10 border-green-500/30 text-green-300' : act.taskType === 'cron' ? 'bg-blue-500/10 border-blue-500/30 text-blue-300' : 'bg-yellow-500/10 border-yellow-500/30 text-yellow-300'}">${act.taskType || 'routine'}</span>
                                <span class="text-[10px] text-text-muted">${act.timestamp || timeStr}</span>
                             </div>
                           </div>
@@ -524,7 +544,7 @@
                         </div>
                     </details>`;
                 });
-                html += '</div></div>';
+                html += '</div></div></div>';
             }
 
             else if (tab === 'cron') {
