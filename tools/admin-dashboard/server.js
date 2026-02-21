@@ -283,6 +283,15 @@ app.get("/api/agents", async (_, res) => {
         const matchingSession = nonCronSessions.find(s => s.key === (a.key || a.id) || s.key === a.name);
         const ws = resolveWorkspaceForAgent(a) || { name: String(a.key || a.id || a.name || 'workspace'), dir: WORKSPACE_ROOT };
         const meta = readAgentMeta(ws.dir) || {};
+        const totalTokens = matchingSession?.totalTokens ?? null;
+        const contextTokens = matchingSession?.contextTokens ?? null;
+        const tokenUsagePercent = (typeof totalTokens === 'number' && typeof contextTokens === 'number' && contextTokens > 0)
+            ? Math.round((totalTokens / contextTokens) * 100)
+            : null;
+        const tokenRemainingPercent = (typeof tokenUsagePercent === 'number')
+            ? Math.max(0, 100 - tokenUsagePercent)
+            : null;
+
         return {
             name: a.name || a.identityName || a.id || a.key || meta.soulTitle || "Unknown Agent",
             key: a.key || a.id || null,
@@ -292,7 +301,10 @@ app.get("/api/agents", async (_, res) => {
             model: matchingSession?.model || a.model || null,
             fallbackModel: globalFallbacks[0] || a.fallbackModel || a.defaultModel || a.model || 'gpt-5.3-codex',
             fallbackModels: globalFallbacks,
-            totalTokens: matchingSession?.totalTokens ?? null,
+            totalTokens,
+            contextTokens,
+            tokenUsagePercent,
+            tokenRemainingPercent,
             updatedAt: matchingSession?.updatedAt || null,
             ageMs: matchingSession?.ageMs || null,
             kind: matchingSession?.kind || a.kind || null,

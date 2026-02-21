@@ -341,6 +341,7 @@
                                 <p class="text-[9px] text-text-muted uppercase tracking-wider mb-1">Model</p>
                                 <p class="text-xs font-bold text-blue-300 truncate">${agent.model || '—'}</p>
                                 <p class="text-[9px] text-text-muted mt-1 truncate">Fallback: ${(agent.fallbackModels && agent.fallbackModels.length) ? agent.fallbackModels.join(' → ') : (agent.fallbackModel || '—')}</p>
+                                <p class="text-[9px] mt-1 ${agent.tokenRemainingPercent != null ? 'text-emerald-300' : 'text-text-muted'}">Rest: ${agent.tokenRemainingPercent != null ? `${agent.tokenRemainingPercent}%` : '—'}</p>
                               </div>
                               ${tokens ? `<div class="bg-black/30 border border-white/5 rounded-lg p-2.5 text-center"><p class="text-[9px] text-text-muted uppercase tracking-wider mb-1">Tokens</p><p class="text-xs font-bold text-green-300">${tokens}</p></div>` : ''}
                               ${ageMin != null ? `<div class="bg-black/30 border border-white/5 rounded-lg p-2.5 text-center"><p class="text-[9px] text-text-muted uppercase tracking-wider mb-1">Aktiv</p><p class="text-xs font-bold text-white">${ageMin}m</p></div>` : ''}
