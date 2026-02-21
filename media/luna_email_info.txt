@@ -1,0 +1,6 @@
+Email: [REDACTED]
+Password: [REDACTED]
+Service: mail.tm (API-based)
+Created: 2026-02-15
+Purpose: Identity Test for Mert
+Security: Secrets removed from plaintext on 2026-02-21 (UTC)
