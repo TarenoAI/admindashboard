@@ -1,0 +1,20 @@
+{
+  "name": "Luna Identity Test",
+  "summary": "Interner Testlauf zur Agent-Identität und Setup-Verifikation.",
+  "status": "done",
+  "priority": "low",
+  "lastUpdate": "2026-02-15",
+  "agents": [
+    { "id": "main", "name": "Luna", "role": "lead" }
+  ],
+  "milestones": [
+    { "title": "Identity-Test abgeschlossen", "due": "2026-02-15", "status": "done" }
+  ],
+  "tasks": [
+    { "id": "LUN-1", "title": "Identity-Flow dokumentieren", "status": "done", "priority": "low", "assignee": "Luna", "due": "2026-02-15", "blocker": null }
+  ],
+  "dataRefs": [
+    { "label": "Project Notes", "path": "projects/luna-test.md", "type": "markdown" }
+  ],
+  "notes": "Archivprojekt; nur für Referenzzwecke."
+}

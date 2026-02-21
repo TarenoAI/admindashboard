@@ -40,6 +40,7 @@ app.use((req, res, next) => {
 const WORKSPACE_ROOT = path.resolve(__dirname, "..", "..");
 const MEMORY_DIR = path.join(WORKSPACE_ROOT, "memory");
 const SKILLS_DIR = "/usr/lib/node_modules/openclaw/skills";
+const PROJECT_DATA_DIR = path.join(WORKSPACE_ROOT, "data", "projects");
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
@@ -114,6 +115,26 @@ async function getSkills() {
     }
     return out.sort((a, b) => a.name.localeCompare(b.name));
 }
+
+function loadProjectMeta(projectId) {
+    const file = path.join(PROJECT_DATA_DIR, `${projectId}.json`);
+    const raw = readFileSafe(file);
+    if (!raw) return null;
+    const parsed = tryParseJson(raw);
+    if (!parsed || typeof parsed !== 'object') return null;
+    return parsed;
+}
+
+function countTasksByState(tasks = []) {
+    const states = { backlog: 0, in_progress: 0, review: 0, done: 0, blocked: 0 };
+    tasks.forEach(t => {
+        const key = (t.status || '').toLowerCase();
+        if (states[key] != null) states[key] += 1;
+        if (t.blocker) states.blocked += 1;
+    });
+    return states;
+}
+
 function ok(res, payload) {
     return res.json({ success: true, data: payload, ...payload });
 }
@@ -317,7 +338,31 @@ app.get("/api/projects", (_, res) => {
     const projects = files.map(f => {
         const full = path.join(projectsDir, f);
         const content = readFileSafe(full) || "";
-        return { name: f.replace(/\.md$/, ""), file: full, preview: content.slice(0, 400), content };
+        const id = f.replace(/\.md$/, "");
+        const meta = loadProjectMeta(id) || {};
+        const tasks = Array.isArray(meta.tasks) ? meta.tasks : [];
+        const taskStats = countTasksByState(tasks);
+        const openTasks = Math.max(tasks.length - (taskStats.done || 0), 0);
+        const leadAgent = (meta.agents || []).find(a => (a.role || '').toLowerCase() === 'lead') || (meta.agents || [])[0] || null;
+
+        return {
+            id,
+            name: meta.name || id,
+            file: full,
+            preview: (meta.summary || content).slice(0, 400),
+            content,
+            status: meta.status || 'planning',
+            priority: meta.priority || 'medium',
+            leadAgent,
+            agents: Array.isArray(meta.agents) ? meta.agents : [],
+            milestones: Array.isArray(meta.milestones) ? meta.milestones : [],
+            tasks,
+            taskStats,
+            openTasks,
+            dataRefs: Array.isArray(meta.dataRefs) ? meta.dataRefs : [],
+            notes: meta.notes || null,
+            lastUpdate: meta.lastUpdate || null
+        };
     });
     ok(res, { count: projects.length, projects });
 });

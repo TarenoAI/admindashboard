@@ -1,0 +1,25 @@
+{
+  "name": "Instafollows",
+  "summary": "Monitoring- und Posting-Pipeline für Fußball-Transfersignale auf X/Instagram.",
+  "status": "at_risk",
+  "priority": "high",
+  "lastUpdate": "2026-02-21",
+  "agents": [
+    { "id": "social", "name": "MiracleSocial", "role": "lead" },
+    { "id": "main", "name": "Luna", "role": "support" }
+  ],
+  "milestones": [
+    { "title": "Session-Stabilität für X wiederherstellen", "due": "2026-02-22", "status": "at_risk" },
+    { "title": "Queue-Processor Health prüfen", "due": "2026-02-23", "status": "planned" }
+  ],
+  "tasks": [
+    { "id": "INS-1", "title": "Twitter/X Session persistent stabilisieren", "status": "in_progress", "priority": "high", "assignee": "MiracleSocial", "due": "2026-02-22", "blocker": "Session expired" },
+    { "id": "INS-2", "title": "Monitor lock-file Verhalten beobachten", "status": "review", "priority": "medium", "assignee": "Luna", "due": "2026-02-23", "blocker": null },
+    { "id": "INS-3", "title": "Fehlerhafte Queue-Runs im Log taggen", "status": "backlog", "priority": "medium", "assignee": "MiracleSocial", "due": "2026-02-23", "blocker": null }
+  ],
+  "dataRefs": [
+    { "label": "Project Notes", "path": "projects/instafollows.md", "type": "markdown" },
+    { "label": "Instafollows Logs", "path": "logs/", "type": "folder" }
+  ],
+  "notes": "Höchstes Risiko bleibt Account-Session-Stabilität auf X."
+}
