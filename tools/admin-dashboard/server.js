@@ -139,6 +139,13 @@ function ok(res, payload) {
     return res.json({ success: true, data: payload, ...payload });
 }
 
+function loadOpenClawConfig() {
+    const p = '/root/.openclaw-tareno/openclaw.json';
+    const raw = readFileSafe(p);
+    const data = tryParseJson(raw || '{}') || {};
+    return { path: p, data };
+}
+
 app.get("/api/overview", async (_, res) => {
     const xvfb = await runCmd("systemctl is-active xvfb");
     const openclaw = await runFirstOk(["/usr/bin/openclaw status", "/usr/local/bin/openclaw status"]);
@@ -360,6 +367,83 @@ app.get('/api/agent-files', (req, res) => {
         workspace: ws.dir,
         files
     });
+});
+
+app.get('/api/agent-builder/meta', async (_, res) => {
+    const { data } = loadOpenClawConfig();
+    const models = Object.keys(data?.agents?.defaults?.models || {});
+    const primary = data?.agents?.defaults?.model?.primary || null;
+    const fallbacks = Array.isArray(data?.agents?.defaults?.model?.fallbacks) ? data.agents.defaults.model.fallbacks : [];
+    return ok(res, { models, primary, fallbacks });
+});
+
+app.get('/api/agent-builder', async (_, res) => {
+    const { data } = loadOpenClawConfig();
+    const models = Object.keys(data?.agents?.defaults?.models || {});
+    const primary = data?.agents?.defaults?.model?.primary || null;
+    const fallbacks = Array.isArray(data?.agents?.defaults?.model?.fallbacks) ? data.agents.defaults.model.fallbacks : [];
+    return ok(res, { models, primary, fallbacks });
+});
+
+app.post('/api/agent-builder/create', async (req, res) => {
+    try {
+        const { agentId, agentName, model, telegramChatId, telegramToken } = req.body || {};
+        const id = String(agentId || '').trim();
+        const name = String(agentName || '').trim() || id;
+        const chosenModel = String(model || '').trim();
+        const chatId = String(telegramChatId || '').trim();
+
+        if (!id || !/^[a-z0-9_-]+$/i.test(id)) return res.status(400).json({ success: false, error: 'Ungültige agentId (nur a-z0-9_-)' });
+        if (!chosenModel) return res.status(400).json({ success: false, error: 'Model required' });
+        if (!chatId) return res.status(400).json({ success: false, error: 'telegramChatId required (separater Channel/Gruppe)' });
+
+        const workspace = `/root/.openclaw/workspace-${id}`;
+        await runCmd(`mkdir -p ${workspace}`);
+
+        // Create agent (name uses id for deterministic key generation in OpenClaw)
+        const addR = await runCmd(`/usr/bin/openclaw --profile tareno agents add ${id} --non-interactive --workspace ${workspace} --model ${chosenModel} --json`);
+        if (!addR.ok) return res.status(500).json({ success: false, error: addR.stderr || addR.error || 'agents add failed' });
+
+        // Try to set display name
+        await runCmd(`/usr/bin/openclaw --profile tareno agents set-identity ${id} --name "${name.replace(/"/g, '')}"`);
+
+        // Update bindings (+ optional telegram token)
+        const cfg = loadOpenClawConfig();
+        cfg.data.bindings = Array.isArray(cfg.data.bindings) ? cfg.data.bindings : [];
+        cfg.data.bindings.push({
+            agentId: id,
+            match: {
+                channel: 'telegram',
+                accountId: 'default',
+                peer: {
+                    kind: String(chatId).startsWith('-100') ? 'group' : 'direct',
+                    id: chatId
+                }
+            }
+        });
+
+        if (telegramToken) {
+            cfg.data.channels = cfg.data.channels || {};
+            cfg.data.channels.telegram = cfg.data.channels.telegram || { enabled: true };
+            cfg.data.channels.telegram.botToken = String(telegramToken).trim();
+        }
+
+        fs.writeFileSync(cfg.path, JSON.stringify(cfg.data, null, 2) + '\n', 'utf8');
+
+        await runCmd('/usr/bin/openclaw gateway restart');
+
+        return ok(res, {
+            created: true,
+            agentId: id,
+            agentName: name,
+            workspace,
+            model: chosenModel,
+            telegramChatId: chatId,
+            note: telegramToken ? 'Telegram token updated (global account default)' : 'Existing Telegram token reused'
+        });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
 });
 
 app.post('/api/projects/task', (req, res) => {

@@ -198,6 +198,9 @@
             <div class="nav-item" onclick="switchTab('channels', this)">
                 <span>💬</span> Channels
             </div>
+            <div class="nav-item" onclick="switchTab('agent-builder', this)">
+                <span>🛠️</span> Agent Builder
+            </div>
         </nav>
 
         <div class="p-4 border-t border-border-subtle">
@@ -779,6 +782,33 @@
                 html += '</div>';
             }
 
+            else if (tab === 'agent-builder') {
+                const models = data.models || [];
+                html = `<div class="max-w-3xl space-y-4">
+                    <div class="glass-card p-4">
+                        <h3 class="text-base font-semibold">Neuen Agenten anlegen (Telegram separat)</h3>
+                        <p class="text-xs text-text-muted mt-1">Jeder neue Agent wird auf einen eigenen Telegram Chat/Channel gebunden.</p>
+                    </div>
+                    <div class="glass-card p-5 space-y-3">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <input id="new-agent-id" class="bg-black/30 border border-white/10 rounded px-3 py-2 text-xs" placeholder="agent id (z.B. newsbot)" />
+                            <input id="new-agent-name" class="bg-black/30 border border-white/10 rounded px-3 py-2 text-xs" placeholder="anzeigename (z.B. News Bot)" />
+                            <select id="new-agent-model" class="bg-black/30 border border-white/10 rounded px-3 py-2 text-xs">
+                                ${models.map(m => `<option value="${m}" ${m===data.primary?'selected':''}>${m}</option>`).join('')}
+                            </select>
+                            <input id="new-agent-chat" class="bg-black/30 border border-white/10 rounded px-3 py-2 text-xs" placeholder="telegram chat id (z.B. -100...)" />
+                        </div>
+                        <input id="new-agent-token" class="w-full bg-black/30 border border-white/10 rounded px-3 py-2 text-xs" placeholder="optional: Telegram Bot Token (leer = vorhandenes Token nutzen)" />
+                        <button onclick="createAgentFromDashboard()" class="px-4 py-2 rounded bg-brand/20 border border-brand/40 text-sm font-semibold">Agent erstellen</button>
+                        <p id="agent-builder-result" class="text-xs text-text-muted"></p>
+                    </div>
+                    <div class="glass-card p-4 text-xs text-text-secondary">
+                        <p><span class="text-text-muted">Primary:</span> ${data.primary || '—'}</p>
+                        <p><span class="text-text-muted">Fallbacks:</span> ${(data.fallbacks || []).join(' → ') || '—'}</p>
+                    </div>
+                </div>`;
+            }
+
             else if (tab === 'channels') {
                 const channels = data.channels || [];
                 const typeGroups = { messaging: [], social: [], team: [] };
@@ -936,6 +966,26 @@
             const rows = entries.map(e => `<div style="padding:8px;border-bottom:1px solid #333"><b>${e.status || '—'}</b> • ${e.runAtMs ? new Date(e.runAtMs).toISOString() : '—'}<br/><small>${(e.summary || '').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</small></div>`).join('') || '<p>Keine Runs gefunden</p>';
             w.document.write(`<div style="font-family:system-ui;background:#111;color:#ddd;min-height:100vh;padding:16px"><h2>Cron Runs: ${jobId}</h2>${rows}</div>`);
             w.document.title = `Cron Runs ${jobId}`;
+        };
+
+        window.createAgentFromDashboard = async () => {
+            const agentId = document.getElementById('new-agent-id')?.value?.trim();
+            const agentName = document.getElementById('new-agent-name')?.value?.trim();
+            const model = document.getElementById('new-agent-model')?.value;
+            const telegramChatId = document.getElementById('new-agent-chat')?.value?.trim();
+            const telegramToken = document.getElementById('new-agent-token')?.value?.trim();
+            const out = document.getElementById('agent-builder-result');
+            if (out) out.innerText = 'Erstelle Agent...';
+
+            const res = await fetch('/api/agent-builder/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ agentId, agentName, model, telegramChatId, telegramToken })
+            });
+            const data = await res.json();
+            if (out) out.innerText = data.success
+                ? `✅ Agent ${data.agentId} erstellt und auf Telegram ${data.telegramChatId} gebunden.`
+                : `❌ ${data.error || 'Fehler beim Anlegen'}`;
         };
 
         // Init first view
