@@ -41,6 +41,7 @@ const WORKSPACE_ROOT = path.resolve(__dirname, "..", "..");
 const MEMORY_DIR = path.join(WORKSPACE_ROOT, "memory");
 const SKILLS_DIR = "/usr/lib/node_modules/openclaw/skills";
 const PROJECT_DATA_DIR = path.join(WORKSPACE_ROOT, "data", "projects");
+const SKILL_POLICY_FILE = path.join(WORKSPACE_ROOT, "data", "skills-policy.json");
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
@@ -160,6 +161,20 @@ function loadOpenClawConfig() {
     const raw = readFileSafe(p);
     const data = tryParseJson(raw || '{}') || {};
     return { path: p, data };
+}
+
+function loadSkillPolicy() {
+    const raw = readFileSafe(SKILL_POLICY_FILE);
+    const data = tryParseJson(raw || '{}') || {};
+    return {
+        globalEnabled: data.globalEnabled !== false,
+        skills: (data.skills && typeof data.skills === 'object') ? data.skills : {}
+    };
+}
+
+function saveSkillPolicy(policy) {
+    fs.mkdirSync(path.dirname(SKILL_POLICY_FILE), { recursive: true });
+    fs.writeFileSync(SKILL_POLICY_FILE, JSON.stringify(policy, null, 2) + '\n', 'utf8');
 }
 
 app.get("/api/overview", async (_, res) => {
@@ -1074,6 +1089,9 @@ app.get("/api/cron-jobs", async (req, res) => {
 app.get("/api/skills", async (req, res) => {
     const skills = await getSkills();
     const workspaces = detectAgentWorkspaces();
+    const policy = loadSkillPolicy();
+    const cfg = loadOpenClawConfig().data;
+    const agents = Array.isArray(cfg?.agents?.list) ? cfg.agents.list.map(a => ({ id: a.id, name: a.name || a.id })) : [];
 
     const enrichedSkills = skills.map(skill => {
         const usedByAgents = workspaces
@@ -1087,6 +1105,7 @@ app.get("/api/skills", async (req, res) => {
         const skillMd = readFileSafe(path.join(skill.path, 'SKILL.md')) || '';
         const descLines = skillMd.split('\n').filter(l => l.trim() && !l.startsWith('#')).slice(0, 3).join(' ');
         const scope = skill.path.includes('/usr/lib/node_modules/openclaw/skills') ? 'global' : 'agent-specific';
+        const skillPolicy = policy.skills?.[skill.name] || { enabled: true, agents: ['*'] };
 
         return {
             ...skill,
@@ -1095,11 +1114,50 @@ app.get("/api/skills", async (req, res) => {
             scope,
             invoke: `Nutze den Skill automatisch durch passende Anfrage; intern via read auf ${skill.path}/SKILL.md`,
             functions: descLines.trim().slice(0, 140) || 'Siehe SKILL.md',
-            autoRefresh: true
+            autoRefresh: true,
+            activation: {
+                globalEnabled: policy.globalEnabled,
+                enabled: skillPolicy.enabled !== false,
+                agents: Array.isArray(skillPolicy.agents) ? skillPolicy.agents : ['*']
+            }
         };
     });
 
-    ok(res, { count: enrichedSkills.length, skills: enrichedSkills, autoRefresh: true });
+    const integrations = [
+        { name: 'ClawHub Skill Registry', ref: 'https://clawhub.com', note: 'Neue Skills suchen und versioniert integrieren' },
+        { name: 'OpenClaw Skill Creator', ref: '/skill_creator', note: 'Interne Skills strukturieren und erweitern' },
+        { name: 'OpenClaw Docs Skills', ref: 'https://docs.openclaw.ai', note: 'Kompatible Patterns und Tooling-Standards' }
+    ];
+
+    ok(res, {
+        count: enrichedSkills.length,
+        skills: enrichedSkills,
+        autoRefresh: true,
+        agents,
+        policy,
+        integrations
+    });
+});
+
+app.post('/api/skills/policy', (req, res) => {
+    try {
+        const { globalEnabled, skill, enabled, agents } = req.body || {};
+        const policy = loadSkillPolicy();
+
+        if (typeof globalEnabled === 'boolean') policy.globalEnabled = globalEnabled;
+
+        if (skill) {
+            policy.skills[skill] = {
+                enabled: enabled !== false,
+                agents: Array.isArray(agents) && agents.length ? agents : ['*']
+            };
+        }
+
+        saveSkillPolicy(policy);
+        return ok(res, { updated: true, policy });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
 });
 
 
