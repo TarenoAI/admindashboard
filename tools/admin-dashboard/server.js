@@ -258,17 +258,26 @@ app.get("/api/agents", async (_, res) => {
     // Detect workspaces for meta (SOUL.md etc.)
     const workspaces = detectAgentWorkspaces();
 
+    const resolveWorkspaceForAgent = (agent) => {
+        const key = String(agent?.key || agent?.id || agent?.name || '').toLowerCase();
+        const byName = workspaces.find(w => w.name.toLowerCase() === key);
+        if (byName) return byName;
+        if (key === 'main' || key.endsWith(':main')) return { name: 'main', dir: WORKSPACE_ROOT };
+        return null;
+    };
+
     // Merge: for each agent, attach matching session info + SOUL.md meta
     const safeAgents = rawAgents.map(a => {
         const matchingSession = nonCronSessions.find(s => s.key === (a.key || a.id) || s.key === a.name);
-        const ws = workspaces.find(w => w.name === (a.key || a.id || a.name));
-        const meta = ws ? readAgentMeta(ws.dir) : {};
+        const ws = resolveWorkspaceForAgent(a) || { name: String(a.key || a.id || a.name || 'workspace'), dir: WORKSPACE_ROOT };
+        const meta = readAgentMeta(ws.dir) || {};
         return {
             name: meta.soulTitle || a.name || a.identityName || a.id || a.key || "Unknown Agent",
             key: a.key || a.id || null,
             role: a.role || "Autonomous OpenClaw Agent",
             status: a.status || (matchingSession ? "active" : "idle"),
             model: matchingSession?.model || a.model || null,
+            fallbackModel: a.fallbackModel || a.defaultModel || a.model || 'gpt-5.3-codex',
             totalTokens: matchingSession?.totalTokens ?? null,
             updatedAt: matchingSession?.updatedAt || null,
             ageMs: matchingSession?.ageMs || null,
