@@ -255,11 +255,26 @@
                 clearInterval(organizationAutoRefreshTimer);
                 organizationAutoRefreshTimer = null;
             }
-            if (currentTab === 'organization') {
+            if (currentTab === 'organization' || currentTab === 'activity') {
                 organizationAutoRefreshTimer = setInterval(() => {
-                    if (currentTab === 'organization') loadCurrentView();
+                    if (currentTab === 'organization' || currentTab === 'activity') loadCurrentView();
                 }, 20000);
             }
+        }
+
+        function formatBerlinDateTime(value) {
+            if (!value) return '—';
+            const d = new Date(value);
+            if (Number.isNaN(d.getTime())) return value;
+            return new Intl.DateTimeFormat('de-DE', {
+                timeZone: 'Europe/Berlin',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            }).format(d);
         }
 
         async function loadCurrentView() {
@@ -553,12 +568,12 @@
                                ${act.agent ? `<span class="px-2 py-0.5 border rounded-full text-[10px] font-bold tracking-wide bg-blue-500/10 text-blue-300 border-blue-500/30 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 shadow-[0_0_5px_rgba(96,165,250,0.8)]"></span> ${act.agent}</span>` : '<span class="px-2 py-0.5 border rounded-full text-[10px] bg-white/5 border-white/10">Bot: n/a</span>'}
                                <span class="px-1.5 py-0.5 border rounded text-[9px] uppercase font-bold tracking-wider ${c.badge}">${act.type}</span>
                                <span class="px-1.5 py-0.5 border rounded text-[9px] uppercase font-bold tracking-wider ${act.taskType === 'fix' ? 'bg-green-500/10 border-green-500/30 text-green-300' : act.taskType === 'cron' ? 'bg-blue-500/10 border-blue-500/30 text-blue-300' : 'bg-yellow-500/10 border-yellow-500/30 text-yellow-300'}">${act.taskType || 'routine'}</span>
-                               <span class="text-[10px] text-text-muted">${act.timestamp || timeStr}</span>
+                               <span class="text-[10px] text-text-muted">${formatBerlinDateTime(act.timestamp || timeStr)}</span>
                             </div>
                           </div>
                         </summary>
                         <div class="mt-3 ml-5 text-[11px] text-text-secondary space-y-1 border-l border-white/10 pl-3">
-                          <p><span class="text-text-muted">Uhrzeit:</span> ${act.timestamp || '—'}</p>
+                          <p><span class="text-text-muted">Uhrzeit (Berlin):</span> ${formatBerlinDateTime(act.timestamp)}</p>
                           <p><span class="text-text-muted">Bot:</span> ${act.agent || 'unbekannt'}</p>
                           <p><span class="text-text-muted">Tag:</span> ${act.taskType || 'routine'}</p>
                           <p><span class="text-text-muted">Ziel:</span> ${act.target || '—'}</p>

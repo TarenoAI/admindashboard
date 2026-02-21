@@ -717,13 +717,19 @@ app.get("/api/activity", async (_, res) => {
         }
     }
 
-    // Extract agent name from a log line using common patterns:
-    // [AgentName], {AgentName}, «AgentName», "agent": "name", identity: name
+    // Extract agent name from a log line using common patterns.
     const extractAgent = (line) => {
+        // Most reliable: session key pattern lane=session:agent:<agentId>:...
+        const sessionAgentMatch = line.match(/session:agent:([a-zA-Z0-9_-]+):/i);
+        if (sessionAgentMatch) {
+            const id = sessionAgentMatch[1].trim();
+            const mapped = agentNames.find(a => a.key.toLowerCase() === id.toLowerCase());
+            return mapped?.displayName || id;
+        }
+
         // Try [BracketName]
         const bracketMatch = line.match(/\[([A-Za-z0-9_\-\s]{2,30})\]/);
         if (bracketMatch) {
-            // Filter out timestamps like [2024-01-01] or [INFO]
             const candidate = bracketMatch[1].trim();
             if (!/^\d{4}[-\/]/.test(candidate) && !/^(info|debug|warn|error|ok)$/i.test(candidate)) {
                 return candidate;
@@ -760,7 +766,7 @@ app.get("/api/activity", async (_, res) => {
                 return {
                     text: line.trim(),
                     type: isError ? "error" : isWarning ? "warning" : isSuccess ? "system" : "bot",
-                    agent: agentName,
+                    agent: agentName || 'System',
                     time: source,
                     id: `${source}-${i}`,
                     target: targetMatch ? targetMatch[1] : null,
