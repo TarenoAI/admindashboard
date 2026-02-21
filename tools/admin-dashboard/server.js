@@ -50,19 +50,6 @@ if (parts.length < 6) return { id: idx + 1, raw: line, schedule: "?", command: l
 return { id: idx + 1, raw: line, schedule: parts.slice(0,5).join(" "), command: parts.slice(5).join(" ") };
 });
 }
-function getDiskInfo() {
-return new Promise((resolve) => {
-exec("df -h /", (err, stdout) => {
-if (err || !stdout) return resolve({ ok: false, raw: null });
-const line = (stdout.trim().split("\n")[1] || "");
-const p = line.split(/\s+/);
-resolve({
-ok: true, filesystem: p[0] || null, size: p[1] || null, used: p[2] || null,
-avail: p[3] || null, usePercent: p[4] || null, mount: p[5] || null, raw: line
-});
-});
-});
-}
 async function getSkills() {
 const dirs = listFilesSafe(SKILLS_DIR);
 const out = [];
@@ -75,26 +62,21 @@ out.push({ name: d, path: path.join(SKILLS_DIR, d), title: firstLine.replace(/^#
 }
 return out.sort((a,b) => a.name.localeCompare(b.name));
 }
+function ok(res, payload) {
+return res.json({ success: true, data: payload, ...payload });
+}
 
 app.get("/api/overview", async (_, res) => {
-const disk = await getDiskInfo();
 const xvfb = await runCmd("systemctl is-active xvfb");
-const openclaw = await runFirstOk([
-"/usr/bin/openclaw status",
-"/usr/local/bin/openclaw status"
-]);
-
-res.json({
+const openclaw = await runFirstOk(["/usr/bin/openclaw status", "/usr/local/bin/openclaw status"]);
+ok(res, {
 hostname: os.hostname(),
 uptimeSec: os.uptime(),
 workspace: WORKSPACE_ROOT,
 now: new Date().toISOString(),
-disk,
 services: {
 xvfb: xvfb.stdout || (xvfb.ok ? "active" : "unknown"),
-openclawStatus: openclaw.ok
-? openclaw.stdout
-: (openclaw.stderr || openclaw.error || "unknown")
+openclawStatus: openclaw.ok ? openclaw.stdout : (openclaw.stderr || openclaw.error || "unknown")
 }
 });
 });
@@ -106,7 +88,6 @@ const sessions = await runFirstOk([
 "/usr/bin/openclaw sessions list",
 "/usr/local/bin/openclaw sessions list"
 ]);
-
 const agents = await runFirstOk([
 "/usr/bin/openclaw agents list --json",
 "/usr/local/bin/openclaw agents list --json",
@@ -118,13 +99,9 @@ const sessionsJson = tryParseJson(sessions.stdout);
 const agentsJson = tryParseJson(agents.stdout);
 
 const safeSessions = Array.isArray(sessionsJson?.sessions)
-? sessionsJson.sessions.map((s) => ({
-key: s.key || null,
-kind: s.kind || null,
-updatedAt: s.updatedAt || null,
-ageMs: s.ageMs || null,
-model: s.model || null,
-totalTokens: s.totalTokens ?? null
+? sessionsJson.sessions.map(s => ({
+key: s.key || null, kind: s.kind || null, updatedAt: s.updatedAt || null,
+ageMs: s.ageMs || null, model: s.model || null, totalTokens: s.totalTokens ?? null
 }))
 : [];
 
@@ -132,53 +109,36 @@ const rawAgents = Array.isArray(agentsJson?.agents)
 ? agentsJson.agents
 : (Array.isArray(agentsJson) ? agentsJson : []);
 
-const safeAgents = rawAgents.map((a) => ({
+const safeAgents = rawAgents.map(a => ({
 name: a.name || a.identityName || a.id || a.key || null,
 key: a.key || a.id || null,
 role: a.role || "agent",
 status: a.status || "unknown"
 }));
 
-// kompatibel für verschiedene Frontend-Varianten
-res.json({
+ok(res, {
 agents: safeAgents,
 sessions: safeSessions,
 count: safeAgents.length,
-items: safeAgents,
-meta: {
-agentsCount: safeAgents.length,
-sessionsCount: safeSessions.length
-},
-security: { note: "No file contents exposed" }
+items: safeAgents
 });
 });
 
 
 app.get("/api/cron", async (_, res) => {
 const userCrontab = await runCmd("crontab -l");
-const openclawCron = await runFirstOk([
-"/usr/bin/openclaw cron list",
-"/usr/local/bin/openclaw cron list"
-]);
-res.json({
-userCrontab: { ok: userCrontab.ok, raw: userCrontab.stdout || userCrontab.stderr, jobs: parseSimpleCron(userCrontab.stdout) },
-openclawCron: { ok: openclawCron.ok, raw: openclawCron.stdout || openclawCron.stderr || openclawCron.error }
+const openclawCron = await runFirstOk(["/usr/bin/openclaw cron list", "/usr/local/bin/openclaw cron list"]);
+ok(res, {
+userCrontab: {
+ok: userCrontab.ok,
+raw: userCrontab.stdout || userCrontab.stderr,
+jobs: parseSimpleCron(userCrontab.stdout || "")
+},
+openclawCron: {
+ok: openclawCron.ok,
+raw: openclawCron.stdout || openclawCron.stderr || openclawCron.error
+}
 });
-});
-
-app.get("/api/memory", (_, res) => {
-const memoryIndex = readFileSafe(path.join(WORKSPACE_ROOT, "MEMORY.md"));
-const files = listFilesSafe(MEMORY_DIR).filter(f => f.endsWith(".md"));
-res.json({
-memoryMd: { path: path.join(WORKSPACE_ROOT, "MEMORY.md"), content: memoryIndex || "MEMORY.md nicht gefunden" },
-daily: files.slice(-7),
-countDailyFiles: files.length
-});
-});
-
-app.get("/api/skills", async (_, res) => {
-const skills = await getSkills();
-res.json({ count: skills.length, skills });
 });
 
 app.get("/api/projects", (_, res) => {
@@ -188,7 +148,66 @@ const projects = files.map(f => {
 const full = path.join(projectsDir, f);
 return { name: f.replace(/\.md$/, ""), file: full, preview: (readFileSafe(full) || "").slice(0, 400) };
 });
-res.json({ count: projects.length, projects });
+ok(res, { count: projects.length, projects });
 });
+
+app.get("/api/channels", async (_, res) => {
+const r = await runFirstOk(["/usr/bin/openclaw status", "/usr/local/bin/openclaw status"]);
+ok(res, { channels: [{ name: "OpenClaw", detail: (r.stdout || "").slice(0, 1200) }] });
+});
+
+app.get("/api/activity", async (_, res) => {
+const logs = await runCmd("tail -n 120 dashboard.log");
+ok(res, {
+activity: {
+events: [],
+raw: logs.stdout || logs.stderr || ""
+}
+});
+});
+
+app.get("/api/organization", async (_, res) => {
+const r = await runFirstOk([
+"/usr/bin/openclaw status --all",
+"/usr/local/bin/openclaw status --all",
+"/usr/bin/openclaw status"
+]);
+
+ok(res, {
+organization: {
+name: "OpenClaw",
+status: "ok",
+raw: r.stdout || r.stderr || r.error || ""
+}
+});
+});
+
+app.get("/api/skills-docs", async (_, res) => {
+const skills = await getSkills();
+ok(res, { count: skills.length, skills });
+});
+
+// UI compatibility aliases
+app.get("/api/cron-jobs", async (req, res) => {
+const userCrontab = await runCmd("crontab -l");
+const openclawCron = await runFirstOk(["/usr/bin/openclaw cron list", "/usr/local/bin/openclaw cron list"]);
+ok(res, {
+userCrontab: {
+ok: userCrontab.ok,
+raw: userCrontab.stdout || userCrontab.stderr,
+jobs: parseSimpleCron(userCrontab.stdout || "")
+},
+openclawCron: {
+ok: openclawCron.ok,
+raw: openclawCron.stdout || openclawCron.stderr || openclawCron.error
+}
+});
+});
+
+app.get("/api/skills", async (req, res) => {
+const skills = await getSkills();
+ok(res, { count: skills.length, skills });
+});
+
 
 app.listen(PORT, () => console.log(`OpenClaw Admin Dashboard läuft auf http://localhost:${PORT}`));
