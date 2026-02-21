@@ -98,6 +98,50 @@ app.get("/api/overview", async (_, res) => {
     });
 });
 
+// Helper: read SOUL.md, AGENTS.md for an agent workspace dir
+function readAgentMeta(agentDir) {
+    const soul = readFileSafe(path.join(agentDir, 'SOUL.md')) || readFileSafe(path.join(agentDir, 'soul.md'));
+    const agentsMd = readFileSafe(path.join(agentDir, 'AGENTS.md')) || readFileSafe(path.join(agentDir, 'agents.md'));
+    const userMd = readFileSafe(path.join(agentDir, 'USER.md')) || readFileSafe(path.join(agentDir, 'user.md'));
+    const memoryMd = readFileSafe(path.join(agentDir, 'MEMORY.md')) || readFileSafe(path.join(agentDir, 'memory.md'));
+
+    // Parse soul: grab first few meaningful lines as description
+    const soulLines = (soul || '').split('\n').filter(l => l.trim() && !l.startsWith('#')).slice(0, 3);
+    const soulExcerpt = soulLines.join(' ').trim().slice(0, 200) || null;
+
+    // Parse AGENTS.md for active skills (lines containing skill names in bullet/table format)
+    const skillMatches = (agentsMd || '').match(/(?:skill[s]?|tool)[:\s]+([\w\-]+)/gi) || [];
+    const activeSkills = [...new Set(skillMatches.map(m => m.replace(/.*?[:\s]+/i, '').trim()))].slice(0, 8);
+
+    // Count cron jobs mentioned
+    const cronLines = (agentsMd || '').split('\n').filter(l => /\*.*\*.*\*/.test(l) || /cron|schedule/i.test(l));
+    const cronCount = cronLines.length;
+
+    // Parse soul header for agent title/name
+    const soulTitle = (soul || '').split('\n').find(l => l.startsWith('#'))?.replace(/^#+\s*/, '').trim() || null;
+
+    return { soul: soulExcerpt, soulTitle, activeSkills, cronCount, hasMemory: !!memoryMd, hasSoul: !!soul };
+}
+
+// Detect known agent workspaces in WORKSPACE_ROOT
+function detectAgentWorkspaces() {
+    const result = [];
+    const subdirs = listFilesSafe(WORKSPACE_ROOT);
+    for (const d of subdirs) {
+        const agentDir = path.join(WORKSPACE_ROOT, d);
+        try {
+            const stat = fs.statSync(agentDir);
+            if (!stat.isDirectory()) continue;
+            const hasSoul = fs.existsSync(path.join(agentDir, 'SOUL.md')) || fs.existsSync(path.join(agentDir, 'soul.md'));
+            const hasAgents = fs.existsSync(path.join(agentDir, 'AGENTS.md')) || fs.existsSync(path.join(agentDir, 'agents.md'));
+            if (hasSoul || hasAgents) {
+                result.push({ dir: agentDir, name: d });
+            }
+        } catch { /* skip */ }
+    }
+    return result;
+}
+
 app.get("/api/agents", async (_, res) => {
     const sessions = await runFirstOk([
         "/usr/bin/openclaw sessions list --json",
@@ -114,20 +158,19 @@ app.get("/api/agents", async (_, res) => {
 
     const sessionsJson = tryParseJson(sessions.stdout);
     const agentsJson = tryParseJson(agents.stdout);
+    const rawSessions = Array.isArray(sessionsJson?.sessions) ? sessionsJson.sessions : [];
+    const rawAgents = Array.isArray(agentsJson?.agents) ? agentsJson.agents : (Array.isArray(agentsJson) ? agentsJson : []);
 
-    const rawSessions = Array.isArray(sessionsJson?.sessions)
-        ? sessionsJson.sessions
-        : [];
+    // Detect workspaces for meta (SOUL.md etc.)
+    const workspaces = detectAgentWorkspaces();
 
-    const rawAgents = Array.isArray(agentsJson?.agents)
-        ? agentsJson.agents
-        : (Array.isArray(agentsJson) ? agentsJson : []);
-
-    // Merge: for each agent, attach matching session info
+    // Merge: for each agent, attach matching session info + SOUL.md meta
     const safeAgents = rawAgents.map(a => {
         const matchingSession = rawSessions.find(s => s.key === (a.key || a.id) || s.key === a.name);
+        const ws = workspaces.find(w => w.name === (a.key || a.id || a.name));
+        const meta = ws ? readAgentMeta(ws.dir) : {};
         return {
-            name: a.name || a.identityName || a.id || a.key || "Unknown Agent",
+            name: meta.soulTitle || a.name || a.identityName || a.id || a.key || "Unknown Agent",
             key: a.key || a.id || null,
             role: a.role || "Autonomous OpenClaw Agent",
             status: a.status || (matchingSession ? "active" : "idle"),
@@ -136,7 +179,13 @@ app.get("/api/agents", async (_, res) => {
             updatedAt: matchingSession?.updatedAt || null,
             ageMs: matchingSession?.ageMs || null,
             kind: matchingSession?.kind || a.kind || null,
-            description: a.description || null
+            description: a.description || null,
+            soul: meta.soul || null,
+            activeSkills: meta.activeSkills || [],
+            cronCount: meta.cronCount || 0,
+            hasMemory: meta.hasMemory || false,
+            hasSoul: meta.hasSoul || false,
+            workspaceDir: ws?.dir || null
         };
     });
 
@@ -153,10 +202,27 @@ app.get("/api/agents", async (_, res) => {
             updatedAt: s.updatedAt || null,
             ageMs: s.ageMs || null,
             kind: s.kind || null,
-            description: null
+            description: null,
+            soul: null, activeSkills: [], cronCount: 0, hasMemory: false, hasSoul: false
         }));
 
-    const allAgents = [...safeAgents, ...orphanSessions];
+    // Fall back: show discovered workspaces even if openclaw CLI returns nothing
+    const workspaceAgents = safeAgents.length + orphanSessions.length === 0
+        ? workspaces.map(ws => {
+            const meta = readAgentMeta(ws.dir);
+            return {
+                name: meta.soulTitle || ws.name,
+                key: ws.name, role: 'agent', status: 'idle',
+                model: null, totalTokens: null, updatedAt: null, ageMs: null,
+                kind: 'workspace', description: null,
+                soul: meta.soul, activeSkills: meta.activeSkills,
+                cronCount: meta.cronCount, hasMemory: meta.hasMemory, hasSoul: meta.hasSoul,
+                workspaceDir: ws.dir
+            };
+        })
+        : [];
+
+    const allAgents = [...safeAgents, ...orphanSessions, ...workspaceAgents];
 
     ok(res, {
         agents: allAgents,
@@ -196,8 +262,89 @@ app.get("/api/projects", (_, res) => {
 });
 
 app.get("/api/channels", async (_, res) => {
-    const r = await runFirstOk(["/usr/bin/openclaw status", "/usr/local/bin/openclaw status"]);
-    ok(res, { channels: [{ name: "OpenClaw", detail: (r.stdout || "").slice(0, 1200) }] });
+    // Read channel configs from workspace files - check for Telegram, WhatsApp, etc. configs
+    const checkFile = (f) => fs.existsSync(f);
+    const knownChannels = [
+        {
+            id: 'telegram',
+            name: 'Telegram',
+            icon: '✈️',
+            type: 'messaging',
+            description: 'Telegram Bot & Gruppen-Chat für Agent-Kommunikation',
+            configPaths: ['.env', 'config.json', 'skills/telegram-notify', 'skills/telegram-message'],
+            envKeys: ['TELEGRAM_BOT_TOKEN', 'TELEGRAM_CHAT_ID', 'TG_BOT_TOKEN']
+        },
+        {
+            id: 'whatsapp',
+            name: 'WhatsApp',
+            icon: '💬',
+            type: 'messaging',
+            description: 'WhatsApp Business API für Kundenkommunikation',
+            configPaths: ['skills/whatsapp', '.env'],
+            envKeys: ['WHATSAPP_TOKEN', 'WA_PHONE_ID', 'WHATSAPP_PHONE_NUMBER_ID']
+        },
+        {
+            id: 'twitter',
+            name: 'Twitter / X',
+            icon: '🐦',
+            type: 'social',
+            description: 'Twitter Engagement & Auto-Reply via OpenClaw',
+            configPaths: ['skills/twitter-engage', 'skills/twitter-post', '.env'],
+            envKeys: ['TWITTER_BEARER_TOKEN', 'TWITTER_API_KEY', 'X_API_KEY']
+        },
+        {
+            id: 'reddit',
+            name: 'Reddit',
+            icon: '🤖',
+            type: 'social',
+            description: 'Reddit Karma-Building & Subreddit-Engagement',
+            configPaths: ['skills/reddit-cultivate', 'skills/reddit-post', '.env'],
+            envKeys: ['REDDIT_CLIENT_ID', 'REDDIT_USER_AGENT']
+        },
+        {
+            id: 'email',
+            name: 'E-Mail',
+            icon: '📧',
+            type: 'messaging',
+            description: 'SMTP/IMAP E-Mail Kanal für Benachrichtigungen',
+            configPaths: ['.env'],
+            envKeys: ['SMTP_HOST', 'MAIL_FROM', 'EMAIL_HOST']
+        },
+        {
+            id: 'slack',
+            name: 'Slack',
+            icon: '⚡',
+            type: 'team',
+            description: 'Slack Workspace Integration für Team-Notifications',
+            configPaths: ['skills/slack-notify', '.env'],
+            envKeys: ['SLACK_TOKEN', 'SLACK_WEBHOOK_URL', 'SLACK_BOT_TOKEN']
+        },
+        {
+            id: 'discord',
+            name: 'Discord',
+            icon: '🎮',
+            type: 'team',
+            description: 'Discord Bot & Server-Integration',
+            configPaths: ['skills/discord-notify', '.env'],
+            envKeys: ['DISCORD_TOKEN', 'DISCORD_WEBHOOK', 'DISCORD_BOT_TOKEN']
+        }
+    ];
+
+    // Check which channels have config evidence
+    const envContent = readFileSafe(path.join(WORKSPACE_ROOT, '.env')) || '';
+    const enriched = knownChannels.map(ch => {
+        // Check env keys
+        const hasEnvKey = ch.envKeys.some(k => envContent.includes(k));
+        // Check if skill dir exists
+        const hasSkillDir = ch.configPaths.some(p =>
+            checkFile(path.join(WORKSPACE_ROOT, p)) ||
+            checkFile(path.join(SKILLS_DIR, p.replace('skills/', '')))
+        );
+        const active = hasEnvKey || hasSkillDir;
+        return { ...ch, active, hasEnvKey, hasSkillDir };
+    });
+
+    ok(res, { channels: enriched });
 });
 
 app.get("/api/activity", async (_, res) => {
@@ -346,7 +493,22 @@ app.get("/api/cron-jobs", async (req, res) => {
 
 app.get("/api/skills", async (req, res) => {
     const skills = await getSkills();
-    ok(res, { count: skills.length, skills });
+    // Enrich skills: check which agent workspaces reference each skill
+    const workspaces = detectAgentWorkspaces();
+    const enrichedSkills = skills.map(skill => {
+        const usedByAgents = workspaces
+            .filter(ws => {
+                const agentsMd = readFileSafe(path.join(ws.dir, 'AGENTS.md')) || readFileSafe(path.join(ws.dir, 'agents.md')) || '';
+                const cronMd = readFileSafe(path.join(ws.dir, 'cron', 'jobs.json')) || '';
+                return agentsMd.includes(skill.name) || cronMd.includes(skill.name);
+            })
+            .map(ws => ws.name);
+        // Get more detail from SKILL.md: description lines after title
+        const skillMd = readFileSafe(path.join(skill.path, 'SKILL.md')) || '';
+        const descLines = skillMd.split('\n').filter(l => l.trim() && !l.startsWith('#')).slice(0, 2).join(' ');
+        return { ...skill, usedByAgents, description: descLines.trim().slice(0, 180) || null };
+    });
+    ok(res, { count: enrichedSkills.length, skills: enrichedSkills });
 });
 
 
