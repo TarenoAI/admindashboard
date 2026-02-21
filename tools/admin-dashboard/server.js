@@ -83,6 +83,7 @@ const openclaw = await runFirstOk([
 "/usr/bin/openclaw status",
 "/usr/local/bin/openclaw status"
 ]);
+
 res.json({
 hostname: os.hostname(),
 uptimeSec: os.uptime(),
@@ -91,16 +92,21 @@ now: new Date().toISOString(),
 disk,
 services: {
 xvfb: xvfb.stdout || (xvfb.ok ? "active" : "unknown"),
-openclawStatus: openclaw.ok ? openclaw.stdout : (openclaw.stderr || openclaw.error || "unknown")
+openclawStatus: openclaw.ok
+? openclaw.stdout
+: (openclaw.stderr || openclaw.error || "unknown")
 }
 });
-});app.get("/api/agents", async (_, res) => {
+});
+
+app.get("/api/agents", async (_, res) => {
 const sessions = await runFirstOk([
 "/usr/bin/openclaw sessions list --json",
 "/usr/local/bin/openclaw sessions list --json",
 "/usr/bin/openclaw sessions list",
 "/usr/local/bin/openclaw sessions list"
 ]);
+
 const agents = await runFirstOk([
 "/usr/bin/openclaw agents list --json",
 "/usr/local/bin/openclaw agents list --json",
@@ -112,9 +118,13 @@ const sessionsJson = tryParseJson(sessions.stdout);
 const agentsJson = tryParseJson(agents.stdout);
 
 const safeSessions = Array.isArray(sessionsJson?.sessions)
-? sessionsJson.sessions.map(s => ({
-key: s.key || null, kind: s.kind || null, updatedAt: s.updatedAt || null,
-ageMs: s.ageMs || null, model: s.model || null, totalTokens: s.totalTokens ?? null
+? sessionsJson.sessions.map((s) => ({
+key: s.key || null,
+kind: s.kind || null,
+updatedAt: s.updatedAt || null,
+ageMs: s.ageMs || null,
+model: s.model || null,
+totalTokens: s.totalTokens ?? null
 }))
 : [];
 
@@ -122,20 +132,27 @@ const rawAgents = Array.isArray(agentsJson?.agents)
 ? agentsJson.agents
 : (Array.isArray(agentsJson) ? agentsJson : []);
 
-const safeAgents = rawAgents.map(a => ({
+const safeAgents = rawAgents.map((a) => ({
 name: a.name || a.identityName || a.id || a.key || null,
 key: a.key || a.id || null,
 role: a.role || "agent",
 status: a.status || "unknown"
 }));
 
-
+// kompatibel für verschiedene Frontend-Varianten
 res.json({
-sessions: { count: safeSessions.length, items: safeSessions, rawPreview: (sessions.stdout || "").slice(0, 500) },
-agents: { count: safeAgents.length, items: safeAgents, rawPreview: (agents.stdout || "").slice(0, 500) },
+agents: safeAgents,
+sessions: safeSessions,
+count: safeAgents.length,
+items: safeAgents,
+meta: {
+agentsCount: safeAgents.length,
+sessionsCount: safeSessions.length
+},
 security: { note: "No file contents exposed" }
 });
 });
+
 
 app.get("/api/cron", async (_, res) => {
 const userCrontab = await runCmd("crontab -l");
