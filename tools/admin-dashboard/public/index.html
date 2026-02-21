@@ -239,13 +239,27 @@
         let currentData = null;
         let selectedProject = null;
         let selectedAgent = null;
+        let organizationAutoRefreshTimer = null;
 
         function switchTab(tabId, el) {
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             el.classList.add('active');
             currentTab = tabId;
             document.getElementById('view-title').innerText = el.innerText.substring(2).trim(); // Remove emoji
+            configureAutoRefreshForTab();
             loadCurrentView();
+        }
+
+        function configureAutoRefreshForTab() {
+            if (organizationAutoRefreshTimer) {
+                clearInterval(organizationAutoRefreshTimer);
+                organizationAutoRefreshTimer = null;
+            }
+            if (currentTab === 'organization') {
+                organizationAutoRefreshTimer = setInterval(() => {
+                    if (currentTab === 'organization') loadCurrentView();
+                }, 20000);
+            }
         }
 
         async function loadCurrentView() {
@@ -990,6 +1004,7 @@
         };
 
         // Init first view
+        configureAutoRefreshForTab();
         loadCurrentView();
     </script>
 </body>

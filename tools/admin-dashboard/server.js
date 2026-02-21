@@ -834,18 +834,35 @@ app.get("/api/organization", async (_, res) => {
     const agentsJson = tryParseJson(agentsR.stdout);
     const rawAgents = Array.isArray(agentsJson?.agents) ? agentsJson.agents : (Array.isArray(agentsJson) ? agentsJson : []);
 
-    const norm = (s) => String(s || '').toLowerCase();
-    const findAgent = (pred) => rawAgents.find(pred) || null;
-
-    const tarenoblog = findAgent(a => norm(a.id || a.key || a.name).includes('tarenoblog'));
-    const tarenosocial = findAgent(a => norm(a.id || a.key || a.name).includes('social'));
-    const mainAgent = findAgent(a => norm(a.id || a.key || a.name).includes('main'));
-
-    const nodeFor = (agent, fallbackName, fallbackRole) => ({
-        name: (agent?.name || fallbackName),
-        role: fallbackRole,
+    const toAgentNode = (agent) => ({
+        name: agent?.name || agent?.id || agent?.key || 'Unknown Agent',
+        role: 'agent',
         status: agent?.status || 'idle',
         children: []
+    });
+
+    const groups = {
+        core: [],
+        content: [],
+        social: [],
+        ops: [],
+        other: []
+    };
+
+    rawAgents.forEach(agent => {
+        const id = String(agent?.id || agent?.key || agent?.name || '').toLowerCase();
+        if (id.includes('main')) groups.core.push(agent);
+        else if (id.includes('blog') || id.includes('content')) groups.content.push(agent);
+        else if (id.includes('social')) groups.social.push(agent);
+        else if (id.includes('kimi') || id.includes('ops') || id.includes('guard')) groups.ops.push(agent);
+        else groups.other.push(agent);
+    });
+
+    const toGroupNode = (name, items) => ({
+        name,
+        role: 'group',
+        status: items.some(a => String(a.status || '').toLowerCase() === 'active') ? 'active' : (items.length ? 'loaded' : 'empty'),
+        children: items.map(toAgentNode)
     });
 
     const hierarchy = {
@@ -853,30 +870,22 @@ app.get("/api/organization", async (_, res) => {
         role: "root",
         status: "online",
         children: [
-            {
-                name: "TarenoBlog",
-                role: "group",
-                status: (tarenoblog?.status || 'idle'),
-                children: [nodeFor(tarenoblog, 'Sam', 'Zuständig für Blogs bei Tareno')]
-            },
-            {
-                name: "TarenoSocial",
-                role: "group",
-                status: (tarenosocial?.status || 'idle'),
-                children: [nodeFor(tarenosocial, 'MiracleSocial', 'Social Marketer für Tareno')]
-            },
-            {
-                name: "Core",
-                role: "group",
-                status: (mainAgent?.status || 'idle'),
-                children: [nodeFor(mainAgent, 'Luna', 'Orchestrierung & Oversight')]
-            }
-        ]
+            toGroupNode('Core', groups.core),
+            toGroupNode('Content', groups.content),
+            toGroupNode('Social', groups.social),
+            toGroupNode('Ops', groups.ops),
+            toGroupNode('Weitere Agenten', groups.other)
+        ].filter(group => group.children.length > 0)
     };
+
+    if (hierarchy.children.length === 0) {
+        hierarchy.children.push({ name: 'Keine Agenten erkannt', role: 'group', status: 'empty', children: [] });
+    }
 
     ok(res, {
         hierarchy,
-        raw: statusAll.stdout || statusAll.stderr || statusAll.error || ""
+        raw: statusAll.stdout || statusAll.stderr || statusAll.error || "",
+        agentCount: rawAgents.length
     });
 });
 
