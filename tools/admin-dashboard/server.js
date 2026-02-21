@@ -81,6 +81,27 @@ function parseSimpleCron(text) {
         return { id: idx + 1, raw: line, schedule: parts.slice(0, 5).join(" "), command: parts.slice(5).join(" ") };
     });
 }
+
+function parseOpenClawCronList(text) {
+    const lines = (text || "").split("\n").map(l => l.trim()).filter(Boolean);
+    const rows = lines.filter(l => !l.startsWith('ID ') && !/^[-]+$/.test(l) && !l.startsWith('🦞') && !l.startsWith('Usage:') && !l.startsWith('Docs:'));
+    return rows.map((line) => {
+        const parts = line.split(/\s{2,}/).map(p => p.trim()).filter(Boolean);
+        if (parts.length < 7) return null;
+        return {
+            id: parts[0],
+            name: parts[1],
+            schedule: parts[2],
+            next: parts[3],
+            last: parts[4],
+            status: parts[5],
+            target: parts[6],
+            agent: parts[7] || null,
+            raw: line
+        };
+    }).filter(Boolean);
+}
+
 async function getSkills() {
     const dirs = listFilesSafe(SKILLS_DIR);
     const out = [];
@@ -118,6 +139,8 @@ function readAgentMeta(agentDir) {
     const agentsMd = readFileSafe(path.join(agentDir, 'AGENTS.md')) || readFileSafe(path.join(agentDir, 'agents.md'));
     const userMd = readFileSafe(path.join(agentDir, 'USER.md')) || readFileSafe(path.join(agentDir, 'user.md'));
     const memoryMd = readFileSafe(path.join(agentDir, 'MEMORY.md')) || readFileSafe(path.join(agentDir, 'memory.md'));
+    const heartbeatMd = readFileSafe(path.join(agentDir, 'HEARTBEAT.md')) || readFileSafe(path.join(agentDir, 'heartbeat.md'));
+    const identityMd = readFileSafe(path.join(agentDir, 'IDENTITY.md')) || readFileSafe(path.join(agentDir, 'identity.md'));
 
     // Parse soul: grab first few meaningful lines as description
     const soulLines = (soul || '').split('\n').filter(l => l.trim() && !l.startsWith('#')).slice(0, 3);
@@ -134,7 +157,25 @@ function readAgentMeta(agentDir) {
     // Parse soul header for agent title/name
     const soulTitle = (soul || '').split('\n').find(l => l.startsWith('#'))?.replace(/^#+\s*/, '').trim() || null;
 
-    return { soul: soulExcerpt, soulTitle, activeSkills, cronCount, hasMemory: !!memoryMd, hasSoul: !!soul };
+    const knowledgeFiles = {
+        soul: !!soul,
+        memory: !!memoryMd,
+        agents: !!agentsMd,
+        user: !!userMd,
+        heartbeat: !!heartbeatMd,
+        identity: !!identityMd
+    };
+
+    return {
+        soul: soulExcerpt,
+        soulTitle,
+        activeSkills,
+        cronCount,
+        hasMemory: !!memoryMd,
+        hasSoul: !!soul,
+        knowledgeFiles,
+        knowledgeScore: Object.values(knowledgeFiles).filter(Boolean).length
+    };
 }
 
 // Detect known agent workspaces in WORKSPACE_ROOT
@@ -181,6 +222,7 @@ app.get("/api/agents", async (_, res) => {
     const sessionsJson = tryParseJson(sessions.stdout);
     const agentsJson = tryParseJson(agents.stdout);
     const rawSessions = Array.isArray(sessionsJson?.sessions) ? sessionsJson.sessions : [];
+    const nonCronSessions = rawSessions.filter(s => !String(s.key || '').includes(':cron:'));
     const rawAgents = Array.isArray(agentsJson?.agents) ? agentsJson.agents : (Array.isArray(agentsJson) ? agentsJson : []);
 
     // Detect workspaces for meta (SOUL.md etc.)
@@ -188,7 +230,7 @@ app.get("/api/agents", async (_, res) => {
 
     // Merge: for each agent, attach matching session info + SOUL.md meta
     const safeAgents = rawAgents.map(a => {
-        const matchingSession = rawSessions.find(s => s.key === (a.key || a.id) || s.key === a.name);
+        const matchingSession = nonCronSessions.find(s => s.key === (a.key || a.id) || s.key === a.name);
         const ws = workspaces.find(w => w.name === (a.key || a.id || a.name));
         const meta = ws ? readAgentMeta(ws.dir) : {};
         return {
@@ -207,48 +249,14 @@ app.get("/api/agents", async (_, res) => {
             cronCount: meta.cronCount || 0,
             hasMemory: meta.hasMemory || false,
             hasSoul: meta.hasSoul || false,
+            knowledgeFiles: meta.knowledgeFiles || {},
+            knowledgeScore: meta.knowledgeScore || 0,
             workspaceDir: ws?.dir || null
         };
     });
 
-    // Also include orphan sessions (sessions without matching agent)
-    const identityById = Object.fromEntries(
-        rawAgents.map(a => [String(a.id || a.key || a.name || "").trim(), a.name || a.identityName || a.id || a.key])
-    );
-
-    const formatSessionName = (sessionKey) => {
-        if (!sessionKey) return "Session Agent";
-        const parts = String(sessionKey).split(":");
-        // Expected: agent:<agentId>:<channel>:<...>
-        const agentId = parts[1] || null;
-        const channel = parts[2] || null;
-        const identity = (agentId && identityById[agentId]) ? identityById[agentId] : null;
-
-        const channelLabel = channel === "telegram"
-            ? "Telegram"
-            : channel === "main"
-                ? "Main"
-                : (channel ? channel.charAt(0).toUpperCase() + channel.slice(1) : "Session");
-
-        if (identity) return `${identity} (${channelLabel})`;
-        return sessionKey;
-    };
-
-    const orphanSessions = rawSessions
-        .filter(s => !rawAgents.find(a => s.key === (a.key || a.id) || s.key === a.name))
-        .map(s => ({
-            name: formatSessionName(s.key),
-            key: s.key || null,
-            role: s.kind || "session",
-            status: "active",
-            model: s.model || null,
-            totalTokens: s.totalTokens ?? null,
-            updatedAt: s.updatedAt || null,
-            ageMs: s.ageMs || null,
-            kind: s.kind || null,
-            description: null,
-            soul: null, activeSkills: [], cronCount: 0, hasMemory: false, hasSoul: false
-        }));
+    // UX decision: "Alle Agenten" should show only configured agents (no session clones).
+    const orphanSessions = [];
 
     // Fall back: show discovered workspaces even if openclaw CLI returns nothing
     const workspaceAgents = safeAgents.length + orphanSessions.length === 0
@@ -261,6 +269,7 @@ app.get("/api/agents", async (_, res) => {
                 kind: 'workspace', description: null,
                 soul: meta.soul, activeSkills: meta.activeSkills,
                 cronCount: meta.cronCount, hasMemory: meta.hasMemory, hasSoul: meta.hasSoul,
+                knowledgeFiles: meta.knowledgeFiles, knowledgeScore: meta.knowledgeScore,
                 workspaceDir: ws.dir
             };
         })
@@ -281,7 +290,13 @@ app.get("/api/agents", async (_, res) => {
 
 app.get("/api/cron", async (_, res) => {
     const userCrontab = await runCmd("crontab -l");
-    const openclawCron = await runFirstOk(["/usr/bin/openclaw cron list", "/usr/local/bin/openclaw cron list"]);
+    const openclawCron = await runFirstOk([
+        "/usr/bin/openclaw --profile tareno cron list",
+        "/usr/local/bin/openclaw --profile tareno cron list",
+        "/usr/bin/openclaw cron list",
+        "/usr/local/bin/openclaw cron list"
+    ]);
+    const openclawRaw = openclawCron.stdout || openclawCron.stderr || openclawCron.error;
     ok(res, {
         userCrontab: {
             ok: userCrontab.ok,
@@ -290,7 +305,8 @@ app.get("/api/cron", async (_, res) => {
         },
         openclawCron: {
             ok: openclawCron.ok,
-            raw: openclawCron.stdout || openclawCron.stderr || openclawCron.error
+            raw: openclawRaw,
+            jobs: parseOpenClawCronList(openclawRaw)
         }
     });
 });

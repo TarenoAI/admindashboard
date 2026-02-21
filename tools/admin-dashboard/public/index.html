@@ -284,6 +284,15 @@
                         const tokens = agent.totalTokens != null ? Number(agent.totalTokens).toLocaleString('de-DE') : null;
                         const ageMin = agent.ageMs ? Math.round(agent.ageMs / 60000) : null;
                         const skills = agent.activeSkills || [];
+                        const knowledge = agent.knowledgeFiles || {};
+                        const knowledgeOrder = [
+                            { key: 'soul', label: 'SOUL' },
+                            { key: 'memory', label: 'MEMORY' },
+                            { key: 'agents', label: 'AGENTS' },
+                            { key: 'user', label: 'USER' },
+                            { key: 'heartbeat', label: 'HEARTBEAT' },
+                            { key: 'identity', label: 'IDENTITY' }
+                        ];
                         html += `<div class="glass-card overflow-hidden flex flex-col relative group">
                             <!-- Header glow -->
                             <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-brand/50 to-transparent"></div>
@@ -306,7 +315,10 @@
                               ${agent.model ? `<div class="bg-black/30 border border-white/5 rounded-lg p-2.5 text-center"><p class="text-[9px] text-text-muted uppercase tracking-wider mb-1">Model</p><p class="text-xs font-bold text-blue-300 truncate">${agent.model}</p></div>` : ''}
                               ${tokens ? `<div class="bg-black/30 border border-white/5 rounded-lg p-2.5 text-center"><p class="text-[9px] text-text-muted uppercase tracking-wider mb-1">Tokens</p><p class="text-xs font-bold text-green-300">${tokens}</p></div>` : ''}
                               ${ageMin != null ? `<div class="bg-black/30 border border-white/5 rounded-lg p-2.5 text-center"><p class="text-[9px] text-text-muted uppercase tracking-wider mb-1">Aktiv</p><p class="text-xs font-bold text-white">${ageMin}m</p></div>` : ''}
-                              ${agent.cronCount > 0 ? `<div class="bg-black/30 border border-white/5 rounded-lg p-2.5 text-center"><p class="text-[9px] text-text-muted uppercase tracking-wider mb-1">Cron Jobs</p><p class="text-xs font-bold text-yellow-300">${agent.cronCount}</p></div>` : ''}
+                              <div class="bg-black/30 border border-white/5 rounded-lg p-2.5 text-center">
+                                <p class="text-[9px] text-text-muted uppercase tracking-wider mb-1">Wissen</p>
+                                <p class="text-xs font-bold text-yellow-300">${agent.knowledgeScore || 0}/6</p>
+                              </div>
                               <div class="bg-black/30 border border-white/5 rounded-lg p-2.5 text-center">
                                 <p class="text-[9px] text-text-muted uppercase tracking-wider mb-1">Memory</p>
                                 <p class="text-xs font-bold ${agent.hasMemory ? 'text-green-400' : 'text-text-muted'}">${agent.hasMemory ? '✓ Ja' : '—'}</p>
@@ -316,10 +328,20 @@
                                 <p class="text-xs font-bold ${agent.hasSoul ? 'text-brand' : 'text-text-muted'}">${agent.hasSoul ? '✓ Ja' : '—'}</p>
                               </div>
                             </div>
+                            <!-- Knowledge Bank -->
+                            <div class="px-4 pb-4">
+                              <p class="text-[9px] text-text-muted uppercase tracking-wider mb-2 font-bold">Knowledge Bank</p>
+                              <div class="flex flex-wrap gap-1.5">
+                                ${knowledgeOrder.map(item => {
+                                    const present = !!knowledge[item.key];
+                                    return `<span class="px-2 py-0.5 border text-[10px] rounded-full font-medium ${present ? 'bg-green-500/10 border-green-500/30 text-green-300' : 'bg-black/20 border-white/10 text-text-muted'}">${item.label}</span>`;
+                                }).join('')}
+                              </div>
+                            </div>
                             <!-- Active Skills -->
                             ${skills.length > 0 ? `
                             <div class="px-4 pb-4">
-                              <p class="text-[9px] text-text-muted uppercase tracking-wider mb-2 font-bold">Active Skills</p>
+                              <p class="text-[9px] text-text-muted uppercase tracking-wider mb-2 font-bold">Skills</p>
                               <div class="flex flex-wrap gap-1.5">
                                 ${skills.map(sk => `<span class="px-2 py-0.5 bg-brand/10 border border-brand/20 text-brand text-[10px] rounded-full font-medium">${sk}</span>`).join('')}
                               </div>
@@ -471,8 +493,26 @@
             </div>
           </div>
           <div class="glass-card p-6 lg:col-span-2">
-            <h3 class="font-semibold mb-4 flex items-center gap-2 text-purple-400"><span class="text-xl">🤖</span> OpenClaw Internal Tasks</h3>
-            <pre class="w-full text-xs text-text-secondary min-h-[100px] bg-black/40 border border-white/5 p-4 rounded-xl shadow-inner scrollbar-thin">${data.openclawCron.raw || 'Keine internen Tasks definiert'}</pre>
+            <h3 class="font-semibold mb-4 flex items-center gap-2 text-purple-400"><span class="text-xl">🤖</span> OpenClaw Cron Jobs (pro Agent)</h3>
+            ${data.openclawCron.jobs && data.openclawCron.jobs.length ? `
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                ${data.openclawCron.jobs.map(job => `
+                  <div class="bg-black/30 border border-white/5 rounded-xl p-4">
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                      <p class="text-sm font-semibold text-white truncate" title="${job.name}">${job.name}</p>
+                      <span class="px-2 py-0.5 rounded-full text-[10px] uppercase border ${job.status === 'ok' ? 'bg-green-500/10 text-green-300 border-green-500/30' : job.status === 'error' ? 'bg-red-500/10 text-red-300 border-red-500/30' : 'bg-yellow-500/10 text-yellow-300 border-yellow-500/30'}">${job.status}</span>
+                    </div>
+                    <div class="text-[11px] text-text-secondary space-y-1">
+                      <p><span class="text-text-muted">Agent:</span> ${job.agent || '—'}</p>
+                      <p><span class="text-text-muted">Schedule:</span> ${job.schedule}</p>
+                      <p><span class="text-text-muted">Next:</span> ${job.next}</p>
+                      <p><span class="text-text-muted">Last:</span> ${job.last}</p>
+                      <p><span class="text-text-muted">Target:</span> ${job.target}</p>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            ` : `<pre class="w-full text-xs text-text-secondary min-h-[100px] bg-black/40 border border-white/5 p-4 rounded-xl shadow-inner scrollbar-thin">${data.openclawCron.raw || 'Keine internen Tasks definiert'}</pre>`}
           </div>
         </div>`;
             }
