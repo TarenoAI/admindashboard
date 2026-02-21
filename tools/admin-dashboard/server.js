@@ -365,6 +365,36 @@ app.post('/api/projects/task', (req, res) => {
     }
 });
 
+app.post('/api/projects/task-meta', (req, res) => {
+    try {
+        const { projectId, taskId, title, priority, due } = req.body || {};
+        if (!projectId || !taskId) return res.status(400).json({ success: false, error: 'projectId, taskId required' });
+        const file = path.join(PROJECT_DATA_DIR, `${projectId}.json`);
+        const raw = readFileSafe(file);
+        if (!raw) return res.status(404).json({ success: false, error: 'Project data file missing' });
+        const data = JSON.parse(raw);
+        const task = (data.tasks || []).find(t => t.id === taskId);
+        if (!task) return res.status(404).json({ success: false, error: 'Task not found' });
+        if (typeof title === 'string') task.title = title;
+        if (typeof priority === 'string') task.priority = priority;
+        if (typeof due === 'string') task.due = due;
+        data.lastUpdate = new Date().toISOString().slice(0, 10);
+        fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n', 'utf8');
+        return ok(res, { updated: true, projectId, taskId, title: task.title, priority: task.priority, due: task.due });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
+});
+
+app.get('/api/file', (req, res) => {
+    const target = String(req.query.path || '');
+    if (!target) return res.status(400).json({ success: false, error: 'Missing ?path=' });
+    const abs = path.resolve(target);
+    if (!abs.startsWith(WORKSPACE_ROOT)) return res.status(403).json({ success: false, error: 'Path outside workspace blocked' });
+    const content = readFileSafe(abs);
+    if (content == null) return res.status(404).json({ success: false, error: 'File not found' });
+    return ok(res, { path: abs, content });
+});
 
 app.get("/api/cron", async (_, res) => {
     const userCrontab = await runCmd("crontab -l");

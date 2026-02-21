@@ -481,13 +481,17 @@
                 };
                 html = `<div class="glass-card p-6">
                     <h3 class="text-base font-semibold mb-4 flex items-center gap-2"><span>⚡</span> Letzte Systemaktivitäten <span class="ml-auto text-xs text-text-muted font-normal">${activities.length} Einträge</span></h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-2 mb-4">
                       <input id="activity-filter-text" placeholder="Suche Text/Bot/Ziel" class="bg-black/30 border border-white/10 rounded px-3 py-2 text-xs" />
                       <select id="activity-filter-result" class="bg-black/30 border border-white/10 rounded px-3 py-2 text-xs">
                         <option value="">Alle Ergebnisse</option>
                         <option value="ok">ok</option><option value="warning">warning</option><option value="error">error</option><option value="info">info</option>
                       </select>
                       <button onclick="applyActivityFilters()" class="bg-brand/20 border border-brand/30 rounded px-3 py-2 text-xs font-semibold">Filter anwenden</button>
+                      <div class="flex gap-2">
+                        <button onclick="exportActivity('json')" class="flex-1 bg-white/5 border border-white/10 rounded px-3 py-2 text-xs">Export JSON</button>
+                        <button onclick="exportActivity('csv')" class="flex-1 bg-white/5 border border-white/10 rounded px-3 py-2 text-xs">Export CSV</button>
+                      </div>
                     </div>
                     <div id="activity-list" class="space-y-2">`;
                 activities.forEach(act => {
@@ -650,7 +654,7 @@
                                     <div class="bg-black/30 border border-white/5 rounded-lg p-3">
                                         <p class="text-[10px] uppercase tracking-wider text-text-muted mb-2">${state.replace('_',' ')}</p>
                                         <div class="space-y-2">
-                                            ${(taskByState[state] || []).map(t => `<div class="border border-white/10 rounded p-2 bg-black/20"><p class="font-semibold text-white">${t.id}: ${t.title}</p><p class="text-text-muted mt-1">${t.assignee || '—'} • ${t.priority || 'n/a'}</p>${t.blocker ? `<p class="text-red-300 mt-1">Blocker: ${t.blocker}</p>` : ''}<div class="mt-2 flex gap-2"><select id="task-${p.id}-${t.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px]"><option value="backlog" ${t.status==='backlog'?'selected':''}>backlog</option><option value="in_progress" ${t.status==='in_progress'?'selected':''}>in_progress</option><option value="review" ${t.status==='review'?'selected':''}>review</option><option value="done" ${t.status==='done'?'selected':''}>done</option></select><button onclick="updateTaskStatus('${p.id}','${t.id}')" class="text-[10px] px-2 py-1 rounded border border-brand/30 bg-brand/20">Speichern</button></div></div>`).join('') || '<p class="text-text-muted">—</p>'}
+                                            ${(taskByState[state] || []).map(t => `<div class="border border-white/10 rounded p-2 bg-black/20"><p class="font-semibold text-white">${t.id}: ${t.title}</p><p class="text-text-muted mt-1">${t.assignee || '—'} • ${t.priority || 'n/a'}</p>${t.blocker ? `<p class="text-red-300 mt-1">Blocker: ${t.blocker}</p>` : ''}<div class="mt-2 grid grid-cols-1 gap-2"><input id="task-title-${p.id}-${t.id}" value="${(t.title||'').replace(/"/g,'&quot;')}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px]" /><div class="flex gap-2"><select id="task-priority-${p.id}-${t.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px]"><option value="low" ${t.priority==='low'?'selected':''}>low</option><option value="medium" ${t.priority==='medium'?'selected':''}>medium</option><option value="high" ${t.priority==='high'?'selected':''}>high</option></select><input id="task-due-${p.id}-${t.id}" value="${t.due || ''}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px]" placeholder="YYYY-MM-DD" /></div><div class="flex gap-2"><select id="task-${p.id}-${t.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px]"><option value="backlog" ${t.status==='backlog'?'selected':''}>backlog</option><option value="in_progress" ${t.status==='in_progress'?'selected':''}>in_progress</option><option value="review" ${t.status==='review'?'selected':''}>review</option><option value="done" ${t.status==='done'?'selected':''}>done</option></select><button onclick="updateTaskStatus('${p.id}','${t.id}')" class="text-[10px] px-2 py-1 rounded border border-brand/30 bg-brand/20">Status</button><button onclick="updateTaskMeta('${p.id}','${t.id}')" class="text-[10px] px-2 py-1 rounded border border-white/20 bg-white/10">Meta</button></div></div></div>`).join('') || '<p class="text-text-muted">—</p>'}
                                         </div>
                                     </div>
                                 `).join('')}
@@ -691,6 +695,7 @@
                                     <span class="text-[10px] px-2 py-0.5 rounded-full border ${f.exists ? 'bg-green-500/10 border-green-500/30 text-green-300' : 'bg-red-500/10 border-red-500/30 text-red-300'}">${f.exists ? 'vorhanden' : 'fehlt'}</span>
                                 </div>
                                 <p class="text-[10px] text-text-muted font-mono break-all">${f.path || '—'}</p>
+                                <div class="mt-2"><button onclick="openFullFile('${(f.path || '').replace(/'/g, "\\'")}')" class="text-[10px] px-2 py-1 rounded border border-brand/30 bg-brand/20">Open full file</button></div>
                                 <pre class="mt-3 text-[11px] text-text-secondary whitespace-pre-wrap">${(f.preview || 'Keine Daten').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</pre>
                             </div>
                         `).join('') || '<div class="glass-card p-4"><p class="text-text-muted">Keine Dateien gefunden.</p></div>'}
@@ -831,6 +836,41 @@
                 body: JSON.stringify({ projectId, taskId, status })
             });
             loadCurrentView();
+        };
+
+        window.updateTaskMeta = async (projectId, taskId) => {
+            const title = document.getElementById(`task-title-${projectId}-${taskId}`)?.value || '';
+            const priority = document.getElementById(`task-priority-${projectId}-${taskId}`)?.value || 'medium';
+            const due = document.getElementById(`task-due-${projectId}-${taskId}`)?.value || '';
+            await fetch('/api/projects/task-meta', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ projectId, taskId, title, priority, due })
+            });
+            loadCurrentView();
+        };
+
+        window.exportActivity = (format) => {
+            const rows = (currentData?.activities || []);
+            if (format === 'json') {
+                const blob = new Blob([JSON.stringify(rows, null, 2)], { type: 'application/json' });
+                const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `activity-${Date.now()}.json`; a.click();
+                return;
+            }
+            const csv = ['id,agent,target,result,type,time,text', ...rows.map(r => [r.id,r.agent,r.target,r.result,r.type,r.time,(r.text||'').replace(/"/g,'""')].map(v => `"${v||''}"`).join(','))].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `activity-${Date.now()}.csv`; a.click();
+        };
+
+        window.openFullFile = async (filePath) => {
+            if (!filePath) return;
+            const res = await fetch(`/api/file?path=${encodeURIComponent(filePath)}`);
+            const data = await res.json();
+            const content = data.content || data.data?.content || 'Keine Daten';
+            const w = window.open('', '_blank');
+            if (!w) return;
+            w.document.write(`<pre style="white-space:pre-wrap;font-family:monospace;padding:16px;background:#111;color:#ddd;">${String(content).replace(/</g,'&lt;').replace(/>/g,'&gt;')}</pre>`);
+            w.document.title = filePath;
         };
 
         // Init first view
