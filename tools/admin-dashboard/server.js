@@ -204,10 +204,32 @@ app.get("/api/agents", async (_, res) => {
     });
 
     // Also include orphan sessions (sessions without matching agent)
+    const identityById = Object.fromEntries(
+        rawAgents.map(a => [String(a.id || a.key || a.name || "").trim(), a.identityName || a.name || a.id || a.key])
+    );
+
+    const formatSessionName = (sessionKey) => {
+        if (!sessionKey) return "Session Agent";
+        const parts = String(sessionKey).split(":");
+        // Expected: agent:<agentId>:<channel>:<...>
+        const agentId = parts[1] || null;
+        const channel = parts[2] || null;
+        const identity = (agentId && identityById[agentId]) ? identityById[agentId] : null;
+
+        const channelLabel = channel === "telegram"
+            ? "Telegram"
+            : channel === "main"
+                ? "Main"
+                : (channel ? channel.charAt(0).toUpperCase() + channel.slice(1) : "Session");
+
+        if (identity) return `${identity} (${channelLabel})`;
+        return sessionKey;
+    };
+
     const orphanSessions = rawSessions
         .filter(s => !rawAgents.find(a => s.key === (a.key || a.id) || s.key === a.name))
         .map(s => ({
-            name: s.key || "Session Agent",
+            name: formatSessionName(s.key),
             key: s.key || null,
             role: s.kind || "session",
             status: "active",
