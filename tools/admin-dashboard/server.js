@@ -6,6 +6,23 @@ const os = require("os");
 
 const app = express();
 const PORT = process.env.PORT || 3477;
+
+// --- SECURITY: Basic Authentication ---
+app.use((req, res, next) => {
+    const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
+    const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':');
+
+    const expectedUser = process.env.DASHBOARD_USER || "admin";
+    const expectedPass = process.env.DASHBOARD_PASS || "SecretClaw123!"; // Default fallback
+
+    if (login && password && login === expectedUser && password === expectedPass) {
+        return next();
+    }
+    res.set('WWW-Authenticate', 'Basic realm="OpenClaw Admin Dashboard"');
+    res.status(401).send('Authentication required.');
+});
+// --------------------------------------
+
 const WORKSPACE_ROOT = path.resolve(__dirname, "..", "..");
 const MEMORY_DIR = path.join(WORKSPACE_ROOT, "memory");
 const SKILLS_DIR = "/usr/lib/node_modules/openclaw/skills";
