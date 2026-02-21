@@ -158,14 +158,22 @@ function detectAgentWorkspaces() {
 
 app.get("/api/agents", async (_, res) => {
     const sessions = await runFirstOk([
+        "/usr/bin/openclaw --profile tareno sessions list --json",
+        "/usr/local/bin/openclaw --profile tareno sessions list --json",
         "/usr/bin/openclaw sessions list --json",
         "/usr/local/bin/openclaw sessions list --json",
+        "/usr/bin/openclaw --profile tareno sessions list",
+        "/usr/local/bin/openclaw --profile tareno sessions list",
         "/usr/bin/openclaw sessions list",
         "/usr/local/bin/openclaw sessions list"
     ]);
     const agents = await runFirstOk([
+        "/usr/bin/openclaw --profile tareno agents list --json",
+        "/usr/local/bin/openclaw --profile tareno agents list --json",
         "/usr/bin/openclaw agents list --json",
         "/usr/local/bin/openclaw agents list --json",
+        "/usr/bin/openclaw --profile tareno agents list",
+        "/usr/local/bin/openclaw --profile tareno agents list",
         "/usr/bin/openclaw agents list",
         "/usr/local/bin/openclaw agents list"
     ]);
@@ -205,7 +213,7 @@ app.get("/api/agents", async (_, res) => {
 
     // Also include orphan sessions (sessions without matching agent)
     const identityById = Object.fromEntries(
-        rawAgents.map(a => [String(a.id || a.key || a.name || "").trim(), a.identityName || a.name || a.id || a.key])
+        rawAgents.map(a => [String(a.id || a.key || a.name || "").trim(), a.name || a.identityName || a.id || a.key])
     );
 
     const formatSessionName = (sessionKey) => {
