@@ -438,9 +438,10 @@
                         <div class="mt-1.5 w-2 h-2 rounded-full flex-shrink-0 ${c.dot} shadow-[0_0_6px_currentColor]"></div>
                         <div class="flex-1 min-w-0">
                           <div class="text-xs text-text-secondary font-mono break-all leading-relaxed">${act.text}</div>
-                          <div class="text-[10px] text-text-muted mt-1 flex items-center gap-2">
-                            <span class="px-1.5 py-0.5 border rounded text-[9px] uppercase font-bold tracking-wider ${c.badge}">${act.type}</span>
-                            <span>${timeStr}</span>
+                          <div class="flex items-center gap-2 mt-2">
+                             ${act.agent ? `<span class="px-2 py-0.5 border rounded-full text-[10px] font-bold tracking-wide bg-blue-500/10 text-blue-300 border-blue-500/30 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 shadow-[0_0_5px_rgba(96,165,250,0.8)]"></span> ${act.agent}</span>` : ''}
+                             <span class="px-1.5 py-0.5 border rounded text-[9px] uppercase font-bold tracking-wider ${c.badge}">${act.type}</span>
+                             <span class="text-[10px] text-text-muted">${timeStr}</span>
                           </div>
                         </div>
                     </div>`;

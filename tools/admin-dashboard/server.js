@@ -363,42 +363,98 @@ app.get("/api/channels", async (_, res) => {
 
 app.get("/api/activity", async (_, res) => {
     const dashLog = await runCmd("tail -n 80 dashboard.log");
-    const sysLog = await runCmd("tail -n 40 /var/log/syslog 2>/dev/null || journalctl -n 40 --no-pager 2>/dev/null || echo ''");
     const openclawLog = await runFirstOk([
-        "/usr/bin/openclaw logs --tail 30",
-        "/usr/local/bin/openclaw logs --tail 30",
+        "/usr/bin/openclaw logs --tail 40",
+        "/usr/local/bin/openclaw logs --tail 40",
         "/usr/bin/openclaw status",
         "/usr/local/bin/openclaw status"
     ]);
+
+    // Known agent workspace names (used to match agent names in log lines)
+    const workspaces = detectAgentWorkspaces();
+    const agentNames = workspaces.map(w => {
+        const meta = readAgentMeta(w.dir);
+        return { key: w.name, displayName: meta.soulTitle || w.name };
+    });
+
+    // Also scan each agent's memory folder for today's daily log
+    const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    const agentMemoryEntries = [];
+    for (const ws of workspaces) {
+        const memDir = path.join(ws.dir, 'memory');
+        const todayLog = readFileSafe(path.join(memDir, `${today}.md`));
+        if (todayLog) {
+            const meta = readAgentMeta(ws.dir);
+            const agentDisplayName = meta.soulTitle || ws.name;
+            todayLog.split('\n').filter(l => l.trim() && !l.startsWith('#')).slice(-15).forEach((line, i) => {
+                const isError = /error|fail|exception/i.test(line);
+                const isWarning = /warn|timeout|retry/i.test(line);
+                agentMemoryEntries.push({
+                    text: line.trim(),
+                    type: isError ? 'error' : isWarning ? 'warning' : 'bot',
+                    agent: agentDisplayName,
+                    time: `${agentDisplayName} Memory`,
+                    id: `mem-${ws.name}-${i}`
+                });
+            });
+        }
+    }
+
+    // Extract agent name from a log line using common patterns:
+    // [AgentName], {AgentName}, «AgentName», "agent": "name", identity: name
+    const extractAgent = (line) => {
+        // Try [BracketName]
+        const bracketMatch = line.match(/\[([A-Za-z0-9_\-\s]{2,30})\]/);
+        if (bracketMatch) {
+            // Filter out timestamps like [2024-01-01] or [INFO]
+            const candidate = bracketMatch[1].trim();
+            if (!/^\d{4}[-\/]/.test(candidate) && !/^(info|debug|warn|error|ok)$/i.test(candidate)) {
+                return candidate;
+            }
+        }
+        // Try {BracketName}
+        const curlyMatch = line.match(/\{([A-Za-z][A-Za-z0-9_\-\s]{1,25})\}/);
+        if (curlyMatch) return curlyMatch[1].trim();
+        // Try "agent":"name" or agent: name
+        const agentKeyMatch = line.match(/(?:agent|bot|identity)["\s:]+["']?([A-Za-z0-9_\-]{2,30})/i);
+        if (agentKeyMatch) return agentKeyMatch[1].trim();
+        // Try matching known workspace names in the line
+        for (const ws of agentNames) {
+            if (line.toLowerCase().includes(ws.key.toLowerCase())) return ws.displayName;
+        }
+        return null;
+    };
 
     // Parse raw log lines into structured activity events
     const parseLogLines = (raw, source) => {
         if (!raw || !raw.trim()) return [];
         return raw.split("\n")
             .filter(l => l.trim())
-            .slice(-30)
+            .slice(-35)
             .map((line, i) => {
                 const isError = /error|fail|exception|critical/i.test(line);
                 const isWarning = /warn|timeout|retry/i.test(line);
-                const isSuccess = /success|done|started|running|active|ok/i.test(line);
+                const isSuccess = /success|done|started|running|active|ok|posted|sent|completed/i.test(line);
+                const agentName = extractAgent(line);
                 return {
                     text: line.trim(),
                     type: isError ? "error" : isWarning ? "warning" : isSuccess ? "system" : "bot",
+                    agent: agentName,
                     time: source,
                     id: `${source}-${i}`
                 };
             })
-            .reverse(); // newest first
+            .reverse();
     };
 
     const dashActivities = parseLogLines(dashLog.stdout, "dashboard.log");
     const clawActivities = parseLogLines(openclawLog.stdout, "openclaw");
-    const allActivities = [...clawActivities, ...dashActivities].slice(0, 50);
+    const allActivities = [...clawActivities, ...agentMemoryEntries, ...dashActivities].slice(0, 60);
 
-    // If no log files found, provide a helpful status
     const fallbackActivities = allActivities.length === 0 ? [{
-        text: "Kein Log-Output verfügbar. Dashboard läuft lokal – Agenten-Logs erscheinen hier sobald Verbindung zur VPS besteht.",
+        text: "Kein Log-Output verfügbar. Agenten-Logs erscheinen hier sobald OpenClaw auf der VPS läuft.",
         type: "system",
+        agent: null,
         time: new Date().toISOString(),
         id: "fallback-0"
     }] : allActivities;
