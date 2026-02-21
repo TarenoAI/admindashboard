@@ -563,6 +563,32 @@ app.get("/api/cron", async (_, res) => {
         });
     }
 
+    const byAgentMap = {};
+    enrichedJobs.forEach(job => {
+        const agent = job.agent || 'unknown';
+        if (!byAgentMap[agent]) {
+            byAgentMap[agent] = {
+                agent,
+                total: 0,
+                ok: 0,
+                warning: 0,
+                error: 0,
+                jobs: []
+            };
+        }
+        byAgentMap[agent].total += 1;
+        if (job.status === 'ok') byAgentMap[agent].ok += 1;
+        else if (job.status === 'error') byAgentMap[agent].error += 1;
+        else byAgentMap[agent].warning += 1;
+        byAgentMap[agent].jobs.push({
+            id: job.id,
+            name: job.name,
+            schedule: job.schedule,
+            next: job.next,
+            status: job.status
+        });
+    });
+
     ok(res, {
         userCrontab: {
             ok: userCrontab.ok,
@@ -572,7 +598,8 @@ app.get("/api/cron", async (_, res) => {
         openclawCron: {
             ok: openclawCron.ok,
             raw: openclawRaw,
-            jobs: enrichedJobs
+            jobs: enrichedJobs,
+            byAgent: Object.values(byAgentMap)
         }
     });
 });

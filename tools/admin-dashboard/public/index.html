@@ -255,9 +255,9 @@
                 clearInterval(organizationAutoRefreshTimer);
                 organizationAutoRefreshTimer = null;
             }
-            if (currentTab === 'organization' || currentTab === 'activity') {
+            if (currentTab === 'organization' || currentTab === 'activity' || currentTab === 'cron') {
                 organizationAutoRefreshTimer = setInterval(() => {
-                    if (currentTab === 'organization' || currentTab === 'activity') loadCurrentView();
+                    if (currentTab === 'organization' || currentTab === 'activity' || currentTab === 'cron') loadCurrentView();
                 }, 20000);
             }
         }
@@ -606,6 +606,17 @@
           </div>
           <div class="glass-card p-6 lg:col-span-2">
             <h3 class="font-semibold mb-4 flex items-center gap-2 text-purple-400"><span class="text-xl">🤖</span> OpenClaw Cron Jobs (pro Agent)</h3>
+            ${(data.openclawCron.byAgent && data.openclawCron.byAgent.length) ? `
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-4">
+                ${data.openclawCron.byAgent.map(a => `
+                  <div class="bg-black/30 border border-white/10 rounded-lg p-3 text-xs">
+                    <p class="font-semibold text-white">${a.agent}</p>
+                    <p class="text-text-muted mt-1">Automationen: ${a.total}</p>
+                    <p class="text-green-300 mt-1">OK: ${a.ok} <span class="text-yellow-300">Warn: ${a.warning}</span> <span class="text-red-300">Err: ${a.error}</span></p>
+                  </div>
+                `).join('')}
+              </div>
+            ` : ''}
             ${data.openclawCron.jobs && data.openclawCron.jobs.length ? `
               <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                 ${data.openclawCron.jobs.map(job => `
