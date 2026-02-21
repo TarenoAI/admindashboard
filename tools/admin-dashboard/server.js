@@ -318,6 +318,53 @@ app.get("/api/agents", async (_, res) => {
     });
 });
 
+app.get('/api/agent-files', (req, res) => {
+    const key = String(req.query.agent || '').trim();
+    if (!key) return res.status(400).json({ success: false, error: 'Missing ?agent=' });
+
+    const workspaces = detectAgentWorkspaces();
+    let ws = workspaces.find(w => w.name === key || key.includes(w.name));
+    if (!ws) {
+        ws = { name: key, dir: WORKSPACE_ROOT };
+    }
+
+    const meta = readAgentMeta(ws.dir);
+    const files = Object.entries(meta.knowledgePaths || {}).map(([kind, filePath]) => {
+        const content = readFileSafe(filePath);
+        return {
+            kind,
+            path: filePath,
+            exists: !!content,
+            preview: content ? content.slice(0, 2400) : null
+        };
+    });
+
+    return ok(res, {
+        agent: ws.name,
+        workspace: ws.dir,
+        files
+    });
+});
+
+app.post('/api/projects/task', (req, res) => {
+    try {
+        const { projectId, taskId, status } = req.body || {};
+        if (!projectId || !taskId || !status) return res.status(400).json({ success: false, error: 'projectId, taskId, status required' });
+        const file = path.join(PROJECT_DATA_DIR, `${projectId}.json`);
+        const raw = readFileSafe(file);
+        if (!raw) return res.status(404).json({ success: false, error: 'Project data file missing' });
+        const data = JSON.parse(raw);
+        const task = (data.tasks || []).find(t => t.id === taskId);
+        if (!task) return res.status(404).json({ success: false, error: 'Task not found' });
+        task.status = status;
+        data.lastUpdate = new Date().toISOString().slice(0, 10);
+        fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n', 'utf8');
+        return ok(res, { updated: true, projectId, taskId, status });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
+});
+
 
 app.get("/api/cron", async (_, res) => {
     const userCrontab = await runCmd("crontab -l");

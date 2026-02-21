@@ -235,6 +235,7 @@
         let currentTab = 'agents';
         let currentData = null;
         let selectedProject = null;
+        let selectedAgent = null;
 
         function switchTab(tabId, el) {
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -255,6 +256,14 @@
                     const refreshed = (data.projects || []).find(p => p.id === selectedProject.id) || selectedProject;
                     selectedProject = refreshed;
                     currentData = { project: refreshed };
+                    renderView(currentTab, currentData, container);
+                    return;
+                }
+
+                if (currentTab === 'agent-detail' && selectedAgent?.key) {
+                    const response = await fetch(`/api/agent-files?agent=${encodeURIComponent(selectedAgent.key)}`);
+                    const data = await response.json();
+                    currentData = data;
                     renderView(currentTab, currentData, container);
                     return;
                 }
@@ -361,6 +370,9 @@
                                 ${skills.map(sk => `<span class="px-2 py-0.5 bg-brand/10 border border-brand/20 text-brand text-[10px] rounded-full font-medium">${sk}</span>`).join('')}
                               </div>
                             </div>` : ''}
+                            <div class="px-4 pb-4">
+                              <button onclick="openAgentDetail('${(agent.key || '').replace(/'/g, "\\'")}', '${(agent.name || '').replace(/'/g, "\\'")}')" class="w-full py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs font-semibold text-white">Knowledge-Dateien öffnen</button>
+                            </div>
                         </div>`;
                     });
                     html += '</div>';
@@ -468,12 +480,20 @@
                     warning: { dot: 'bg-yellow-400', text: 'text-yellow-400', badge: 'bg-yellow-400/10 text-yellow-300 border-yellow-400/20' }
                 };
                 html = `<div class="glass-card p-6">
-                    <h3 class="text-base font-semibold mb-6 flex items-center gap-2"><span>⚡</span> Letzte Systemaktivitäten <span class="ml-auto text-xs text-text-muted font-normal">${activities.length} Einträge</span></h3>
-                    <div class="space-y-2">`;
+                    <h3 class="text-base font-semibold mb-4 flex items-center gap-2"><span>⚡</span> Letzte Systemaktivitäten <span class="ml-auto text-xs text-text-muted font-normal">${activities.length} Einträge</span></h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-4">
+                      <input id="activity-filter-text" placeholder="Suche Text/Bot/Ziel" class="bg-black/30 border border-white/10 rounded px-3 py-2 text-xs" />
+                      <select id="activity-filter-result" class="bg-black/30 border border-white/10 rounded px-3 py-2 text-xs">
+                        <option value="">Alle Ergebnisse</option>
+                        <option value="ok">ok</option><option value="warning">warning</option><option value="error">error</option><option value="info">info</option>
+                      </select>
+                      <button onclick="applyActivityFilters()" class="bg-brand/20 border border-brand/30 rounded px-3 py-2 text-xs font-semibold">Filter anwenden</button>
+                    </div>
+                    <div id="activity-list" class="space-y-2">`;
                 activities.forEach(act => {
                     const c = colorMap[act.type] || colorMap.bot;
                     const timeStr = act.time ? act.time.replace('dashboard.log', 'log').replace('openclaw', 'claw') : '';
-                    html += `<details class="p-3 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/5 transition-colors group">
+                    html += `<details data-search="${`${act.text||''} ${act.agent||''} ${act.target||''}`.toLowerCase()}" data-result="${(act.result||'info').toLowerCase()}" class="p-3 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/5 transition-colors group">
                         <summary class="flex items-start gap-3 cursor-pointer list-none">
                           <div class="mt-1.5 w-2 h-2 rounded-full flex-shrink-0 ${c.dot} shadow-[0_0_6px_currentColor]"></div>
                           <div class="flex-1 min-w-0">
@@ -630,7 +650,7 @@
                                     <div class="bg-black/30 border border-white/5 rounded-lg p-3">
                                         <p class="text-[10px] uppercase tracking-wider text-text-muted mb-2">${state.replace('_',' ')}</p>
                                         <div class="space-y-2">
-                                            ${(taskByState[state] || []).map(t => `<div class="border border-white/10 rounded p-2 bg-black/20"><p class="font-semibold text-white">${t.id}: ${t.title}</p><p class="text-text-muted mt-1">${t.assignee || '—'} • ${t.priority || 'n/a'}</p>${t.blocker ? `<p class="text-red-300 mt-1">Blocker: ${t.blocker}</p>` : ''}</div>`).join('') || '<p class="text-text-muted">—</p>'}
+                                            ${(taskByState[state] || []).map(t => `<div class="border border-white/10 rounded p-2 bg-black/20"><p class="font-semibold text-white">${t.id}: ${t.title}</p><p class="text-text-muted mt-1">${t.assignee || '—'} • ${t.priority || 'n/a'}</p>${t.blocker ? `<p class="text-red-300 mt-1">Blocker: ${t.blocker}</p>` : ''}<div class="mt-2 flex gap-2"><select id="task-${p.id}-${t.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px]"><option value="backlog" ${t.status==='backlog'?'selected':''}>backlog</option><option value="in_progress" ${t.status==='in_progress'?'selected':''}>in_progress</option><option value="review" ${t.status==='review'?'selected':''}>review</option><option value="done" ${t.status==='done'?'selected':''}>done</option></select><button onclick="updateTaskStatus('${p.id}','${t.id}')" class="text-[10px] px-2 py-1 rounded border border-brand/30 bg-brand/20">Speichern</button></div></div>`).join('') || '<p class="text-text-muted">—</p>'}
                                         </div>
                                     </div>
                                 `).join('')}
@@ -654,6 +674,28 @@
                         </div>
                     </div>`;
                 }
+            }
+
+            else if (tab === 'agent-detail') {
+                const files = data.files || data.data?.files || [];
+                html = `<div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <button onclick="backToAgents()" class="px-3 py-1.5 rounded-lg text-xs border border-white/10 bg-white/5 hover:bg-white/10">← Zurück zu Alle Agenten</button>
+                        <h3 class="text-lg font-semibold text-white">Agent-Dateien: ${data.agent || selectedAgent?.name || ''}</h3>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        ${files.map(f => `
+                            <div class="glass-card p-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <p class="text-sm font-semibold text-white uppercase">${f.kind}</p>
+                                    <span class="text-[10px] px-2 py-0.5 rounded-full border ${f.exists ? 'bg-green-500/10 border-green-500/30 text-green-300' : 'bg-red-500/10 border-red-500/30 text-red-300'}">${f.exists ? 'vorhanden' : 'fehlt'}</span>
+                                </div>
+                                <p class="text-[10px] text-text-muted font-mono break-all">${f.path || '—'}</p>
+                                <pre class="mt-3 text-[11px] text-text-secondary whitespace-pre-wrap">${(f.preview || 'Keine Daten').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</pre>
+                            </div>
+                        `).join('') || '<div class="glass-card p-4"><p class="text-text-muted">Keine Dateien gefunden.</p></div>'}
+                    </div>
+                </div>`;
             }
 
             else if (tab === 'skills') {
@@ -749,6 +791,45 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             const projectNav = Array.from(document.querySelectorAll('.nav-item')).find(n => n.innerText.includes('Projekte'));
             if (projectNav) projectNav.classList.add('active');
+            loadCurrentView();
+        };
+
+        window.openAgentDetail = (agentKey, agentName) => {
+            selectedAgent = { key: agentKey, name: agentName };
+            currentTab = 'agent-detail';
+            document.getElementById('view-title').innerText = `Agent • ${agentName || agentKey}`;
+            loadCurrentView();
+        };
+
+        window.backToAgents = () => {
+            selectedAgent = null;
+            currentTab = 'agents';
+            document.getElementById('view-title').innerText = 'Alle Agenten';
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const nav = Array.from(document.querySelectorAll('.nav-item')).find(n => n.innerText.includes('Alle Agenten'));
+            if (nav) nav.classList.add('active');
+            loadCurrentView();
+        };
+
+        window.applyActivityFilters = () => {
+            const q = (document.getElementById('activity-filter-text')?.value || '').toLowerCase();
+            const result = (document.getElementById('activity-filter-result')?.value || '').toLowerCase();
+            document.querySelectorAll('#activity-list details').forEach(el => {
+                const matchesText = !q || (el.dataset.search || '').includes(q);
+                const matchesResult = !result || (el.dataset.result || '') === result;
+                el.style.display = (matchesText && matchesResult) ? '' : 'none';
+            });
+        };
+
+        window.updateTaskStatus = async (projectId, taskId) => {
+            const sel = document.getElementById(`task-${projectId}-${taskId}`);
+            if (!sel) return;
+            const status = sel.value;
+            await fetch('/api/projects/task', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ projectId, taskId, status })
+            });
             loadCurrentView();
         };
 

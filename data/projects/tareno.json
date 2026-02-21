@@ -5,23 +5,83 @@
   "priority": "high",
   "lastUpdate": "2026-02-21",
   "agents": [
-    { "id": "tarenoblog", "name": "Sam", "role": "lead" },
-    { "id": "main", "name": "Luna", "role": "reviewer" },
-    { "id": "social", "name": "MiracleSocial", "role": "support" }
+    {
+      "id": "tarenoblog",
+      "name": "Sam",
+      "role": "lead"
+    },
+    {
+      "id": "main",
+      "name": "Luna",
+      "role": "reviewer"
+    },
+    {
+      "id": "social",
+      "name": "MiracleSocial",
+      "role": "support"
+    }
   ],
   "milestones": [
-    { "title": "Content-System strukturieren", "due": "2026-02-23", "status": "in_progress" },
-    { "title": "Erste 7 Tage Content vorausgeplant", "due": "2026-02-25", "status": "planned" }
+    {
+      "title": "Content-System strukturieren",
+      "due": "2026-02-23",
+      "status": "in_progress"
+    },
+    {
+      "title": "Erste 7 Tage Content vorausgeplant",
+      "due": "2026-02-25",
+      "status": "planned"
+    }
   ],
   "tasks": [
-    { "id": "TAR-1", "title": "KNOWLEDGE_INBOX.md anlegen", "status": "backlog", "priority": "high", "assignee": "Sam", "due": "2026-02-22", "blocker": null },
-    { "id": "TAR-2", "title": "30-Tage Redaktionsplan erstellen", "status": "in_progress", "priority": "high", "assignee": "Sam", "due": "2026-02-22", "blocker": null },
-    { "id": "TAR-3", "title": "Posting-Workflow mit Review-Regel dokumentieren", "status": "review", "priority": "medium", "assignee": "Luna", "due": "2026-02-23", "blocker": null },
-    { "id": "TAR-4", "title": "X/Twitter Session für LigaMonitor erneuern", "status": "backlog", "priority": "medium", "assignee": "MiracleSocial", "due": "2026-02-22", "blocker": "Manueller Login erforderlich" }
+    {
+      "id": "TAR-1",
+      "title": "KNOWLEDGE_INBOX.md anlegen",
+      "status": "backlog",
+      "priority": "high",
+      "assignee": "Sam",
+      "due": "2026-02-22",
+      "blocker": null
+    },
+    {
+      "id": "TAR-2",
+      "title": "30-Tage Redaktionsplan erstellen",
+      "status": "in_progress",
+      "priority": "high",
+      "assignee": "Sam",
+      "due": "2026-02-22",
+      "blocker": null
+    },
+    {
+      "id": "TAR-3",
+      "title": "Posting-Workflow mit Review-Regel dokumentieren",
+      "status": "review",
+      "priority": "medium",
+      "assignee": "Luna",
+      "due": "2026-02-23",
+      "blocker": null
+    },
+    {
+      "id": "TAR-4",
+      "title": "X/Twitter Session für LigaMonitor erneuern",
+      "status": "backlog",
+      "priority": "medium",
+      "assignee": "MiracleSocial",
+      "due": "2026-02-22",
+      "blocker": "Manueller Login erforderlich"
+    }
   ],
   "dataRefs": [
-    { "label": "Project Notes", "path": "projects/tareno.md", "type": "markdown" },
-    { "label": "Heartbeat Status", "path": "HEARTBEAT.md", "type": "markdown" }
+    {
+      "label": "Project Notes",
+      "path": "projects/tareno.md",
+      "type": "markdown"
+    },
+    {
+      "label": "Heartbeat Status",
+      "path": "HEARTBEAT.md",
+      "type": "markdown"
+    }
   ],
   "notes": "Sam liefert operative Updates; Luna validiert Struktur und Qualität."
 }
