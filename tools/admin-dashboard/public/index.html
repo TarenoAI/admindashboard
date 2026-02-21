@@ -233,6 +233,7 @@
 
     <script>
         let currentTab = 'agents';
+        let currentData = null;
 
         function switchTab(tabId, el) {
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -249,6 +250,7 @@
             try {
                 const response = await fetch(`/api/${currentTab}`);
                 const data = await response.json();
+                currentData = data;
                 renderView(currentTab, data, container);
             } catch (err) {
                 container.innerHTML = `<div class="glass-card p-6 border-red-500/30 bg-red-500/5 text-red-200">
@@ -453,32 +455,39 @@
                 const user = data.userCrontab;
                 html = `<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div class="glass-card p-6">
-            <h3 class="font-semibold mb-4 text-brand">System Cron (OS)</h3>
+            <h3 class="font-semibold mb-4 flex items-center gap-2 text-brand"><span class="text-xl">⚙️</span> System Cron (OS)</h3>
             <div class="space-y-3">
               ${user.jobs && user.jobs.length ? user.jobs.map(j => `
                 <div class="bg-black/30 border border-white/5 p-3 rounded-lg flex flex-col gap-2">
-                  <code class="text-xs text-blue-400 bg-blue-400/10 px-2 py-1 rounded inline-block w-max border border-blue-400/20">${j.schedule}</code>
+                  <code class="text-xs text-brand bg-brand/10 px-2 py-1 rounded inline-block w-max border border-brand/20 shadow-inner">${j.schedule}</code>
                   <div class="text-sm font-mono text-text-secondary truncate" title="${j.command}">${j.command}</div>
                 </div>`).join('') : '<p class="text-sm text-text-muted">Keine Jobs</p>'}
             </div>
           </div>
-          <div class="glass-card p-6">
-            <h3 class="font-semibold mb-4 text-blue-400">OpenClaw Internal Tasks</h3>
-            <pre class="w-full text-xs text-text-secondary h-full min-h-[200px]">${data.openclawCron.raw || 'Keine Daten'}</pre>
+          <div class="glass-card p-6 flex flex-col">
+            <h3 class="font-semibold mb-4 flex items-center gap-2 text-blue-400"><span class="text-xl">📜</span> Letzte Ausführungen (Syslog)</h3>
+            <div class="w-full flex-1 bg-black/40 border border-white/5 p-4 rounded-xl shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] overflow-x-auto relative">
+                <pre class="text-[10px] text-text-secondary whitespace-pre-wrap font-mono m-0 leading-relaxed">${(data.executionHistory || 'Keine Daten gefunden.').trim()}</pre>
+            </div>
+          </div>
+          <div class="glass-card p-6 lg:col-span-2">
+            <h3 class="font-semibold mb-4 flex items-center gap-2 text-purple-400"><span class="text-xl">🤖</span> OpenClaw Internal Tasks</h3>
+            <pre class="w-full text-xs text-text-secondary min-h-[100px] bg-black/40 border border-white/5 p-4 rounded-xl shadow-inner scrollbar-thin">${data.openclawCron.raw || 'Keine internen Tasks definiert'}</pre>
           </div>
         </div>`;
             }
 
             else if (tab === 'projects') {
                 html = '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">';
-                data.projects.forEach(p => {
-                    html += `<div class="glass-card p-6 flex flex-col group">
+                data.projects.forEach((p, idx) => {
+                    html += `<div class="glass-card p-6 flex flex-col group relative overflow-hidden">
+            <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand/50 to-blue-500/50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <div class="flex items-center justify-between mb-4">
-              <h3 class="font-semibold text-lg text-white group-hover:text-brand transition-colors">${p.name}</h3>
-              <span class="text-xs text-text-muted bg-white/5 px-2 py-1 rounded-md border border-white/5">Project</span>
+              <h3 class="font-semibold text-lg text-white group-hover:text-brand transition-colors truncate pr-2">${p.name}</h3>
+              <span class="text-[10px] uppercase font-bold tracking-wider text-text-muted bg-white/5 px-2 py-1 rounded-md border border-white/5 shadow-inner">Project</span>
             </div>
-            <pre class="flex-1 text-[10px] text-text-secondary overflow-hidden text-ellipsis mb-4 bg-black/20">${p.preview}</pre>
-            <button class="w-full py-2 bg-white/5 hover:bg-brand/20 border border-white/10 hover:border-brand/40 rounded-lg text-xs font-medium transition-all text-white">Wissen durchstöbern</button>
+            <pre class="flex-1 text-[10px] text-text-secondary overflow-hidden text-ellipsis mb-4 bg-black/20 p-3 rounded-lg border border-white/5">${p.preview}</pre>
+            <button onclick="openProjectModal(${idx})" class="w-full py-2 bg-brand/10 hover:bg-brand/20 border border-brand/20 hover:border-brand/40 rounded-lg text-xs font-bold tracking-wide transition-all text-brand hover:text-white shadow-[0_0_10px_rgba(130,81,238,0.1)]">Wissen durchstöbern</button>
           </div>`;
                 });
                 html += '</div>';
@@ -536,7 +545,7 @@
                         html += `<div class="glass-card p-5 relative overflow-hidden group transition-all duration-300 ${bg}">
                             <div class="absolute top-0 inset-x-0 h-px ${active ? 'bg-gradient-to-r from-transparent via-green-500/40 to-transparent' : 'bg-gradient-to-r from-transparent via-white/5 to-transparent'}"></div>
                             <div class="flex items-start justify-between mb-3">
-                                <div class="w-11 h-11 rounded-xl text-2xl flex items-center justify-center bg-black/30 border border-white/5">${ch.icon}</div>
+                                <div class="w-11 h-11 rounded-xl flex items-center justify-center bg-black/30 border border-white/5 shadow-inner ${ch.iconColor || ''}">${ch.icon}</div>
                                 <div class="px-2.5 py-1 rounded-full border text-[9px] font-bold uppercase tracking-wider flex items-center gap-1.5 ${badge}">
                                     <span class="w-1.5 h-1.5 rounded-full ${dot}" ${active ? 'style="animation: pulse 2s infinite;"' : ''}></span>
                                     ${active ? 'Aktiv' : 'Inaktiv'}
@@ -554,6 +563,28 @@
 
             container.innerHTML = `<div class="animate-fade-in">${html}</div>`;
         }
+
+        // --- Modals ---
+        window.openProjectModal = (idx) => {
+            if (!currentData || !currentData.projects) return;
+            const p = currentData.projects[idx];
+            const modal = document.createElement('div');
+            modal.id = 'project-modal';
+            modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80 backdrop-blur-md animate-fade-in';
+            modal.innerHTML = `
+                <div class="glass-card w-full max-w-4xl max-h-[90vh] flex flex-col bg-neutral-bg1 border border-border-default shadow-2xl relative overflow-hidden animate-slide-up">
+                    <button onclick="document.getElementById('project-modal').remove()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-red-500/80 text-white transition-colors z-10">✕</button>
+                    <div class="p-6 border-b border-white/5 bg-gradient-to-r from-brand/10 to-transparent relative">
+                        <h2 class="text-2xl font-bold text-white flex items-center gap-3"><span class="text-3xl">📂</span> ${p.name}</h2>
+                        <div class="text-xs text-text-muted mt-2 font-mono flex items-center gap-2"><span class="px-1.5 py-0.5 bg-black/40 rounded">PATH</span> ${p.file}</div>
+                    </div>
+                    <div class="flex-1 overflow-y-auto p-6 bg-[#0E0E11]">
+                        <pre class="text-sm text-text-secondary whitespace-pre-wrap font-mono m-0 bg-transparent border-none p-0 leading-relaxed">${p.content.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</pre>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        };
 
         // Init first view
         loadCurrentView();
