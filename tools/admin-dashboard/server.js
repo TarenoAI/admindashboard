@@ -408,59 +408,81 @@ app.get("/api/organization", async (_, res) => {
         "/usr/local/bin/openclaw agents list --json",
         "/usr/bin/openclaw agents list"
     ]);
-    const sessionsR = await runFirstOk([
-        "/usr/bin/openclaw sessions list --json",
-        "/usr/local/bin/openclaw sessions list --json"
-    ]);
-    const skills = await getSkills();
 
     const agentsJson = tryParseJson(agentsR.stdout);
-    const sessionsJson = tryParseJson(sessionsR.stdout);
     const rawAgents = Array.isArray(agentsJson?.agents) ? agentsJson.agents : (Array.isArray(agentsJson) ? agentsJson : []);
-    const rawSessions = Array.isArray(sessionsJson?.sessions) ? sessionsJson.sessions : [];
 
-    // Build a tree hierarchy for the org view
-    const agentChildren = rawAgents.map(a => ({
-        name: a.name || a.identityName || a.key || "Unknown Agent",
-        role: a.role || "agent",
-        status: a.status || "unknown",
-        children: []
-    }));
+    // Enrich agents with workspace info (SOUL, roles)
+    const workspaces = detectAgentWorkspaces();
+    const allAgents = rawAgents.map(a => {
+        const ws = workspaces.find(w => w.name === (a.key || a.id || a.name));
+        const meta = ws ? readAgentMeta(ws.dir) : {};
+        return {
+            name: meta.soulTitle || a.name || a.identityName || a.id || a.key || "Unknown Agent",
+            roleStr: (a.role || a.kind || meta.soul || "assistant").toLowerCase(),
+            status: a.status || "idle",
+            originalRole: a.role || "Agent"
+        };
+    });
 
-    const sessionChildren = rawSessions
-        .filter(s => !rawAgents.find(a => s.key === (a.key || a.id)))
-        .map(s => ({
-            name: s.key || "Session",
-            role: s.kind || "session",
-            status: "active",
+    // We also want to include workspaces that don't have active sessions but exist in the folder
+    workspaces.forEach(ws => {
+        if (!allAgents.find(a => a.name === ws.name || a.name.includes(ws.name))) {
+            const meta = readAgentMeta(ws.dir);
+            allAgents.push({
+                name: meta.soulTitle || ws.name,
+                roleStr: (meta.soul || "assistant").toLowerCase(),
+                status: "offline",
+                originalRole: "Agent"
+            });
+        }
+    });
+
+    // Helper to determine department based on agent's role or soul text
+    const getDept = (agent) => {
+        const text = agent.roleStr;
+        if (/frontend|ui|ux|design|css|react/i.test(text)) return 'Design & Frontend';
+        if (/backend|api|database|sql|server|cto|architect/i.test(text)) return 'Backend & Architecture (CTO)';
+        if (/marketing|social|twitter|reddit|seo|blog/i.test(text)) return 'Marketing & Growth (CMO)';
+        if (/support|service|mail|whatsapp/i.test(text)) return 'Cust. Service & Operations (COO)';
+        return 'General Assistants';
+    };
+
+    // Group agents by department
+    const depts = {};
+    allAgents.forEach(a => {
+        const d = getDept(a);
+        if (!depts[d]) depts[d] = [];
+        depts[d].push({
+            name: a.name,
+            role: "agent",
+            status: a.status,
+            originalRole: a.originalRole,
             children: []
-        }));
+        });
+    });
 
-    const skillChildren = skills.map(s => ({
-        name: s.name,
-        role: "skill",
-        status: "loaded",
-        children: []
-    }));
+    // Convert grouping to tree children format
+    const deptChildren = Object.keys(depts).map(deptName => {
+        return {
+            name: deptName,
+            role: "group",
+            status: depts[deptName].some(a => a.status === 'active' || a.status === 'online') ? 'active' : 'idle',
+            children: depts[deptName].map(a => ({
+                name: a.name,
+                role: a.originalRole.length < 20 ? a.originalRole : 'Agent',
+                status: a.status,
+                children: []
+            }))
+        };
+    });
 
+    // Root is Mert Karaca (CEO)
     const hierarchy = {
-        name: "OpenClaw Platform",
+        name: "Mert Karaca (CEO)",
         role: "root",
-        status: statusAll.ok ? "online" : "offline",
-        children: [
-            {
-                name: `Agenten (${agentChildren.length + sessionChildren.length})`,
-                role: "group",
-                status: agentChildren.length + sessionChildren.length > 0 ? "active" : "idle",
-                children: [...agentChildren, ...sessionChildren]
-            },
-            {
-                name: `Skills & Tools (${skillChildren.length})`,
-                role: "group",
-                status: skillChildren.length > 0 ? "loaded" : "empty",
-                children: skillChildren
-            }
-        ]
+        status: "online",
+        children: deptChildren.sort((a, b) => b.children.length - a.children.length) // sort largest departments first
     };
 
     ok(res, {
