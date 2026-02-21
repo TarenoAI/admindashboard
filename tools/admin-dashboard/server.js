@@ -116,13 +116,29 @@ async function getSkills() {
     return out.sort((a, b) => a.name.localeCompare(b.name));
 }
 
+function getProjectFile(projectId) {
+    return path.join(PROJECT_DATA_DIR, `${projectId}.json`);
+}
+
 function loadProjectMeta(projectId) {
-    const file = path.join(PROJECT_DATA_DIR, `${projectId}.json`);
+    const file = getProjectFile(projectId);
     const raw = readFileSafe(file);
     if (!raw) return null;
     const parsed = tryParseJson(raw);
     if (!parsed || typeof parsed !== 'object') return null;
     return parsed;
+}
+
+function saveProjectMeta(projectId, data) {
+    const file = getProjectFile(projectId);
+    fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n', 'utf8');
+}
+
+function getAgentWorkspace(agentId) {
+    const cfg = loadOpenClawConfig().data;
+    const list = Array.isArray(cfg?.agents?.list) ? cfg.agents.list : [];
+    const found = list.find(a => String(a.id || '').toLowerCase() === String(agentId || '').toLowerCase());
+    return found?.workspace || WORKSPACE_ROOT;
 }
 
 function countTasksByState(tasks = []) {
@@ -519,6 +535,112 @@ app.post('/api/projects/milestone', (req, res) => {
     }
 });
 
+app.post('/api/projects/agent', (req, res) => {
+    try {
+        const { projectId, agentId, agentName, role, permission } = req.body || {};
+        if (!projectId || !agentId) return res.status(400).json({ success: false, error: 'projectId, agentId required' });
+        const data = loadProjectMeta(projectId);
+        if (!data) return res.status(404).json({ success: false, error: 'Project data file missing' });
+
+        data.agents = Array.isArray(data.agents) ? data.agents : [];
+        data.permissions = (data.permissions && typeof data.permissions === 'object') ? data.permissions : {};
+
+        const existing = data.agents.find(a => String(a.id).toLowerCase() === String(agentId).toLowerCase());
+        if (existing) {
+            if (agentName) existing.name = agentName;
+            if (role) existing.role = role;
+        } else {
+            data.agents.push({ id: agentId, name: agentName || agentId, role: role || 'support' });
+        }
+
+        const perm = ['read', 'write'].includes(String(permission || '').toLowerCase()) ? String(permission).toLowerCase() : 'read';
+        data.permissions[agentId] = perm;
+        data.lastUpdate = new Date().toISOString().slice(0, 10);
+        saveProjectMeta(projectId, data);
+
+        return ok(res, { updated: true, projectId, agentId, permission: perm });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
+});
+
+app.post('/api/projects/reference', (req, res) => {
+    try {
+        const { projectId, label, sourcePath, type } = req.body || {};
+        if (!projectId || !sourcePath) return res.status(400).json({ success: false, error: 'projectId, sourcePath required' });
+        const data = loadProjectMeta(projectId);
+        if (!data) return res.status(404).json({ success: false, error: 'Project data file missing' });
+
+        const absSource = path.resolve(sourcePath);
+        if (!absSource.startsWith(WORKSPACE_ROOT)) {
+            return res.status(403).json({ success: false, error: 'sourcePath outside workspace blocked' });
+        }
+        if (!fs.existsSync(absSource)) {
+            return res.status(404).json({ success: false, error: 'sourcePath not found' });
+        }
+
+        const refsDir = path.join(PROJECT_DATA_DIR, '..', 'project-refs', projectId);
+        fs.mkdirSync(refsDir, { recursive: true });
+
+        const baseName = path.basename(absSource);
+        const dest = path.join(refsDir, baseName);
+        const isDir = fs.statSync(absSource).isDirectory();
+        if (!isDir) fs.copyFileSync(absSource, dest);
+
+        const rel = path.relative(WORKSPACE_ROOT, isDir ? absSource : dest);
+        data.dataRefs = Array.isArray(data.dataRefs) ? data.dataRefs : [];
+        data.dataRefs.push({
+            label: label || baseName,
+            path: rel,
+            type: type || (isDir ? 'folder' : 'file'),
+            addedAt: new Date().toISOString()
+        });
+        data.lastUpdate = new Date().toISOString().slice(0, 10);
+        saveProjectMeta(projectId, data);
+
+        return ok(res, { added: true, projectId, referencePath: rel });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
+});
+
+app.post('/api/projects/sync-agent', (req, res) => {
+    try {
+        const { projectId, agentId } = req.body || {};
+        if (!projectId || !agentId) return res.status(400).json({ success: false, error: 'projectId, agentId required' });
+        const data = loadProjectMeta(projectId);
+        if (!data) return res.status(404).json({ success: false, error: 'Project data file missing' });
+
+        const permission = data.permissions?.[agentId] || 'read';
+        const ws = getAgentWorkspace(agentId);
+        const outDir = path.join(ws, 'projects', '_access');
+        fs.mkdirSync(outDir, { recursive: true });
+        const outFile = path.join(outDir, `${projectId}.md`);
+
+        const lines = [
+            `# Project Access Snapshot: ${data.name || projectId}`,
+            '',
+            `- Project ID: ${projectId}`,
+            `- Permission: ${permission}`,
+            `- Last Sync: ${new Date().toISOString()}`,
+            '',
+            '## Summary',
+            data.summary || '—',
+            '',
+            '## Tasks',
+            ...(Array.isArray(data.tasks) ? data.tasks.map(t => `- [${t.status}] ${t.id}: ${t.title} (prio: ${t.priority || 'n/a'}, assignee: ${t.assignee || '—'})`) : ['- —']),
+            '',
+            '## References',
+            ...(Array.isArray(data.dataRefs) ? data.dataRefs.map(r => `- ${r.label}: ${r.path} (${r.type || 'file'})`) : ['- —'])
+        ];
+
+        fs.writeFileSync(outFile, lines.join('\n') + '\n', 'utf8');
+        return ok(res, { synced: true, projectId, agentId, permission, outFile });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
+});
+
 app.get('/api/file', (req, res) => {
     const target = String(req.query.path || '');
     if (!target) return res.status(400).json({ success: false, error: 'Missing ?path=' });
@@ -627,6 +749,7 @@ app.get("/api/projects", (_, res) => {
             priority: meta.priority || 'medium',
             leadAgent,
             agents: Array.isArray(meta.agents) ? meta.agents : [],
+            permissions: (meta.permissions && typeof meta.permissions === 'object') ? meta.permissions : {},
             milestones: Array.isArray(meta.milestones) ? meta.milestones : [],
             tasks,
             taskStats,
