@@ -255,6 +255,11 @@ app.get("/api/agents", async (_, res) => {
     const nonCronSessions = rawSessions.filter(s => !String(s.key || '').includes(':cron:'));
     const rawAgents = Array.isArray(agentsJson?.agents) ? agentsJson.agents : (Array.isArray(agentsJson) ? agentsJson : []);
 
+    const configJson = tryParseJson(readFileSafe('/root/.openclaw-tareno/openclaw.json') || '{}') || {};
+    const globalFallbacks = Array.isArray(configJson?.agents?.defaults?.model?.fallbacks)
+        ? configJson.agents.defaults.model.fallbacks
+        : [];
+
     // Detect workspaces for meta (SOUL.md etc.)
     const workspaces = detectAgentWorkspaces();
 
@@ -277,7 +282,8 @@ app.get("/api/agents", async (_, res) => {
             role: a.role || "Autonomous OpenClaw Agent",
             status: a.status || (matchingSession ? "active" : "idle"),
             model: matchingSession?.model || a.model || null,
-            fallbackModel: a.fallbackModel || a.defaultModel || a.model || 'gpt-5.3-codex',
+            fallbackModel: globalFallbacks[0] || a.fallbackModel || a.defaultModel || a.model || 'gpt-5.3-codex',
+            fallbackModels: globalFallbacks,
             totalTokens: matchingSession?.totalTokens ?? null,
             updatedAt: matchingSession?.updatedAt || null,
             ageMs: matchingSession?.ageMs || null,
