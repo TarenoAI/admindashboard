@@ -277,6 +277,27 @@
             }).format(d);
         }
 
+        function explainCronSchedule(schedule) {
+            const s = String(schedule || '').trim();
+            if (!s) return 'Keine Schedule-Info verfügbar.';
+
+            if (/^every\s+/i.test(s)) {
+                return `Intervall-Job: wird ${s} ausgeführt.`;
+            }
+
+            const parts = s.split(/\s+/);
+            if (parts.length === 6) {
+                const [sec, min, hour, day, month, weekday] = parts;
+                return `6-Feld-Cron (Sekunde Minute Stunde Tag Monat Wochentag): ${sec} ${min} ${hour} ${day} ${month} ${weekday}.`;
+            }
+            if (parts.length === 5) {
+                const [min, hour, day, month, weekday] = parts;
+                return `5-Feld-Cron (Minute Stunde Tag Monat Wochentag): ${min} ${hour} ${day} ${month} ${weekday}.`;
+            }
+
+            return `Schedule: ${s}`;
+        }
+
         async function loadCurrentView() {
             const container = document.getElementById('content-area');
             container.innerHTML = '<div class="flex items-center justify-center h-full"><div class="loader"></div></div>';
@@ -594,6 +615,7 @@
               ${user.jobs && user.jobs.length ? user.jobs.map(j => `
                 <div class="bg-black/30 border border-white/5 p-3 rounded-lg flex flex-col gap-2">
                   <code class="text-xs text-brand bg-brand/10 px-2 py-1 rounded inline-block w-max border border-brand/20 shadow-inner">${j.schedule}</code>
+                  <div class="text-[11px] text-text-muted">${explainCronSchedule(j.schedule)}</div>
                   <div class="text-sm font-mono text-text-secondary truncate" title="${j.command}">${j.command}</div>
                 </div>`).join('') : '<p class="text-sm text-text-muted">Keine Jobs</p>'}
             </div>
@@ -603,6 +625,11 @@
             <div class="w-full flex-1 bg-black/40 border border-white/5 p-4 rounded-xl shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] overflow-x-auto relative">
                 <pre class="text-[10px] text-text-secondary whitespace-pre-wrap font-mono m-0 leading-relaxed">${(data.executionHistory || 'Keine Daten gefunden.').trim()}</pre>
             </div>
+          </div>
+          <div class="glass-card p-4 lg:col-span-2 text-xs text-text-secondary">
+            <p class="font-semibold text-white mb-1">Cron-Legende</p>
+            <p><span class="text-text-muted">Beispiel:</span> <code class="text-brand">0 * * * * *</code> = jede Minute bei Sekunde 0.</p>
+            <p class="mt-1"><span class="text-text-muted">Felder:</span> Sekunde Minute Stunde Tag Monat Wochentag (bei 6 Feldern) bzw. Minute Stunde Tag Monat Wochentag (bei 5 Feldern).</p>
           </div>
           <div class="glass-card p-6 lg:col-span-2">
             <h3 class="font-semibold mb-4 flex items-center gap-2 text-purple-400"><span class="text-xl">🤖</span> OpenClaw Cron Jobs (pro Agent)</h3>
@@ -628,10 +655,11 @@
                     <div class="text-[11px] text-text-secondary space-y-1">
                       <p><span class="text-text-muted">Agent:</span> ${job.agent || '—'}</p>
                       <p><span class="text-text-muted">Schedule:</span> ${job.schedule}</p>
+                      <p><span class="text-text-muted">Bedeutung:</span> ${explainCronSchedule(job.schedule)}</p>
                       <p><span class="text-text-muted">Next:</span> ${job.next}</p>
                       <p><span class="text-text-muted">Last:</span> ${job.last}</p>
                       <p><span class="text-text-muted">Target:</span> ${job.target}</p>
-                      <p><span class="text-text-muted">Ziel:</span> ${job.objective || '—'}</p>
+                      <p><span class="text-text-muted">Warum läuft das:</span> ${job.objective || '—'}</p>
                       <p><span class="text-text-muted">Letzter Lauf:</span> ${job.lastRunStatus || '—'}</p>
                       <p class="text-[10px] text-text-muted leading-relaxed">${job.lastRunSummary || 'Keine Run-Details'}</p>
                       <button onclick="openCronRuns('${job.id}')" class="mt-2 text-[10px] px-2 py-1 rounded border border-white/20 bg-white/10">Run-Details</button>
