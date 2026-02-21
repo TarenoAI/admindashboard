@@ -186,6 +186,14 @@ function readAgentMeta(agentDir) {
         heartbeat: !!heartbeatMd,
         identity: !!identityMd
     };
+    const knowledgePaths = {
+        soul: path.join(agentDir, 'SOUL.md'),
+        memory: path.join(agentDir, 'MEMORY.md'),
+        agents: path.join(agentDir, 'AGENTS.md'),
+        user: path.join(agentDir, 'USER.md'),
+        heartbeat: path.join(agentDir, 'HEARTBEAT.md'),
+        identity: path.join(agentDir, 'IDENTITY.md')
+    };
 
     return {
         soul: soulExcerpt,
@@ -195,6 +203,7 @@ function readAgentMeta(agentDir) {
         hasMemory: !!memoryMd,
         hasSoul: !!soul,
         knowledgeFiles,
+        knowledgePaths,
         knowledgeScore: Object.values(knowledgeFiles).filter(Boolean).length
     };
 }
@@ -271,6 +280,7 @@ app.get("/api/agents", async (_, res) => {
             hasMemory: meta.hasMemory || false,
             hasSoul: meta.hasSoul || false,
             knowledgeFiles: meta.knowledgeFiles || {},
+            knowledgePaths: meta.knowledgePaths || {},
             knowledgeScore: meta.knowledgeScore || 0,
             workspaceDir: ws?.dir || null
         };
@@ -290,7 +300,7 @@ app.get("/api/agents", async (_, res) => {
                 kind: 'workspace', description: null,
                 soul: meta.soul, activeSkills: meta.activeSkills,
                 cronCount: meta.cronCount, hasMemory: meta.hasMemory, hasSoul: meta.hasSoul,
-                knowledgeFiles: meta.knowledgeFiles, knowledgeScore: meta.knowledgeScore,
+                knowledgeFiles: meta.knowledgeFiles, knowledgePaths: meta.knowledgePaths, knowledgeScore: meta.knowledgeScore,
                 workspaceDir: ws.dir
             };
         })
@@ -318,6 +328,31 @@ app.get("/api/cron", async (_, res) => {
         "/usr/local/bin/openclaw cron list"
     ]);
     const openclawRaw = openclawCron.stdout || openclawCron.stderr || openclawCron.error;
+    const jobs = parseOpenClawCronList(openclawRaw);
+
+    // enrich with objective + last run summary
+    let jobsConfig = null;
+    try {
+        const cfgRaw = readFileSafe('/root/.openclaw-tareno/cron/jobs.json');
+        jobsConfig = cfgRaw ? JSON.parse(cfgRaw) : null;
+    } catch { jobsConfig = null; }
+
+    const enrichedJobs = [];
+    for (const job of jobs) {
+        const cfg = (jobsConfig?.jobs || []).find(j => j.id === job.id);
+        const objective = cfg?.payload?.message ? String(cfg.payload.message).slice(0, 180) : null;
+        const runs = await runCmd(`/usr/bin/openclaw --profile tareno cron runs --id ${job.id} --limit 1`);
+        const runsJson = tryParseJson(runs.stdout);
+        const lastEntry = Array.isArray(runsJson?.entries) ? runsJson.entries[0] : null;
+        enrichedJobs.push({
+            ...job,
+            objective,
+            lastRunSummary: lastEntry?.summary ? String(lastEntry.summary).slice(0, 220) : null,
+            lastRunStatus: lastEntry?.status || null,
+            lastRunAtMs: lastEntry?.runAtMs || null
+        });
+    }
+
     ok(res, {
         userCrontab: {
             ok: userCrontab.ok,
@@ -327,7 +362,7 @@ app.get("/api/cron", async (_, res) => {
         openclawCron: {
             ok: openclawCron.ok,
             raw: openclawRaw,
-            jobs: parseOpenClawCronList(openclawRaw)
+            jobs: enrichedJobs
         }
     });
 });
@@ -368,96 +403,43 @@ app.get("/api/projects", (_, res) => {
 });
 
 app.get("/api/channels", async (_, res) => {
-    // Read channel configs from workspace files - check for Telegram, WhatsApp, etc. configs
-    const checkFile = (f) => fs.existsSync(f);
-    const knownChannels = [
-        {
-            id: 'telegram',
-            name: 'Telegram',
-            icon: '<svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.892-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>',
-            iconColor: 'text-[#229ED9]',
-            type: 'messaging',
-            description: 'Telegram Bot & Gruppen-Chat für Agent-Kommunikation',
-            configPaths: ['.env', 'config.json', 'skills/telegram-notify', 'skills/telegram-message'],
-            envKeys: ['TELEGRAM_BOT_TOKEN', 'TELEGRAM_CHAT_ID', 'TG_BOT_TOKEN']
-        },
-        {
-            id: 'whatsapp',
-            name: 'WhatsApp',
-            icon: '<svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M11.904 0C5.336 0 0 5.334 0 11.902c0 2.126.551 4.195 1.597 6.02L.15 23.498l5.728-1.5c1.782.956 3.79 1.46 5.86 1.46 6.567 0 11.901-5.334 11.901-11.903C23.639 5.336 18.307 0 11.904 0zm0 21.413c-1.838 0-3.64-.492-5.215-1.425l-.374-.222-3.87 1.013 1.034-3.774-.244-.388c-1.025-1.627-1.567-3.52-1.567-5.462 0-5.592 4.549-10.14 10.14-10.14 5.593 0 10.142 4.548 10.142 10.14 0 5.59-4.549 10.14-10.14 10.14zM17.47 14.155c-.305-.152-1.802-.89-2.08-.992-.279-.101-.482-.152-.685.152-.203.305-.786.992-.962 1.196-.178.203-.356.228-.661.076-1.79-.844-3.14-2.14-4.04-3.704-.177-.305-.019-.47.133-.623.136-.136.305-.355.457-.533.153-.178.203-.304.305-.508.102-.203.051-.38-.025-.533-.076-.153-.685-1.65-.94-2.261-.247-.591-.497-.512-.685-.52-.178-.008-.38-.01-.583-.01-.203 0-.533.076-.812.38s-1.066 1.041-1.066 2.54c0 1.498 1.092 2.945 1.244 3.148.152.203 2.146 3.275 5.19 4.568.723.307 1.287.49 1.728.627.728.228 1.391.195 1.914.118.583-.086 1.802-.736 2.056-1.447.254-.71.254-1.32.178-1.448-.076-.126-.28-.202-.584-.355z"/></svg>',
-            iconColor: 'text-[#25D366]',
-            type: 'messaging',
-            description: 'WhatsApp Business API für Kundenkommunikation',
-            configPaths: ['skills/whatsapp', '.env'],
-            envKeys: ['WHATSAPP_TOKEN', 'WA_PHONE_ID', 'WHATSAPP_PHONE_NUMBER_ID']
-        },
-        {
-            id: 'twitter',
-            name: 'Twitter / X',
-            icon: '<svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>',
-            iconColor: 'text-white',
-            type: 'social',
-            description: 'Twitter Engagement & Auto-Reply via OpenClaw',
-            configPaths: ['skills/twitter-engage', 'skills/twitter-post', '.env'],
-            envKeys: ['TWITTER_BEARER_TOKEN', 'TWITTER_API_KEY', 'X_API_KEY']
-        },
-        {
-            id: 'reddit',
-            name: 'Reddit',
-            icon: '<svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.688-.561-1.249-1.249-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>',
-            iconColor: 'text-[#FF4500]',
-            type: 'social',
-            description: 'Reddit Karma-Building & Subreddit-Engagement',
-            configPaths: ['skills/reddit-cultivate', 'skills/reddit-post', '.env'],
-            envKeys: ['REDDIT_CLIENT_ID', 'REDDIT_USER_AGENT']
-        },
-        {
-            id: 'email',
-            name: 'E-Mail',
-            icon: '<svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>',
-            iconColor: 'text-[#EA4335]',
-            type: 'messaging',
-            description: 'SMTP/IMAP E-Mail Kanal für Benachrichtigungen',
-            configPaths: ['.env'],
-            envKeys: ['SMTP_HOST', 'MAIL_FROM', 'EMAIL_HOST']
-        },
-        {
-            id: 'slack',
-            name: 'Slack',
-            icon: '<svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.523-2.522v-2.522h2.523zM15.165 17.688a2.527 2.527 0 0 1-2.523-2.523 2.526 2.526 0 0 1 2.523-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.52H15.165z"/></svg>',
-            iconColor: 'text-[#4A154B]',
-            type: 'team',
-            description: 'Slack Workspace Integration für Team-Notifications',
-            configPaths: ['skills/slack-notify', '.env'],
-            envKeys: ['SLACK_TOKEN', 'SLACK_WEBHOOK_URL', 'SLACK_BOT_TOKEN']
-        },
-        {
-            id: 'discord',
-            name: 'Discord',
-            icon: '<svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>',
-            iconColor: 'text-[#5865F2]',
-            type: 'team',
-            description: 'Discord Bot & Server-Integration',
-            configPaths: ['skills/discord-notify', '.env'],
-            envKeys: ['DISCORD_TOKEN', 'DISCORD_WEBHOOK', 'DISCORD_BOT_TOKEN']
-        }
-    ];
+    const statusAll = await runFirstOk([
+        "/usr/bin/openclaw --profile tareno status --all",
+        "/usr/local/bin/openclaw --profile tareno status --all",
+        "/usr/bin/openclaw status --all",
+        "/usr/local/bin/openclaw status --all"
+    ]);
 
-    // Check which channels have config evidence
-    const envContent = readFileSafe(path.join(WORKSPACE_ROOT, '.env')) || '';
-    const enriched = knownChannels.map(ch => {
-        // Check env keys
-        const hasEnvKey = ch.envKeys.some(k => envContent.includes(k));
-        // Check if skill dir exists
-        const hasSkillDir = ch.configPaths.some(p =>
-            checkFile(path.join(WORKSPACE_ROOT, p)) ||
-            checkFile(path.join(SKILLS_DIR, p.replace('skills/', '')))
-        );
-        const active = hasEnvKey || hasSkillDir;
-        return { ...ch, active, hasEnvKey, hasSkillDir };
+    const raw = statusAll.stdout || statusAll.stderr || statusAll.error || "";
+    const channelState = {};
+    raw.split('\n').forEach(line => {
+        // Table lines: │ Telegram │ ON │ OK │ ...
+        const m = line.match(/│\s*([A-Za-z0-9\/_ -]+)\s*│\s*(ON|OFF)\s*│\s*(OK|ERROR|WARN|UNKNOWN)\s*│/i);
+        if (m) {
+            channelState[m[1].trim().toLowerCase()] = { enabled: m[2].toUpperCase() === 'ON', state: m[3].toUpperCase() };
+        }
     });
 
-    ok(res, { channels: enriched });
+    const knownChannels = [
+        { id: 'telegram', name: 'Telegram', icon: '💬', type: 'messaging', description: 'Telegram Bot Kommunikation' },
+        { id: 'whatsapp', name: 'WhatsApp', icon: '🟢', type: 'messaging', description: 'WhatsApp Kanal' },
+        { id: 'discord', name: 'Discord', icon: '🎮', type: 'team', description: 'Discord Server/Bot' },
+        { id: 'slack', name: 'Slack', icon: '🧩', type: 'team', description: 'Slack Workspace' },
+        { id: 'twitter', name: 'Twitter / X', icon: '𝕏', type: 'social', description: 'Social Posting / Monitoring' }
+    ];
+
+    const enriched = knownChannels.map(ch => {
+        const st = channelState[ch.name.toLowerCase()] || channelState[ch.id] || null;
+        const active = !!(st && st.enabled && st.state === 'OK');
+        return {
+            ...ch,
+            active,
+            enabled: st ? st.enabled : false,
+            state: st ? st.state : 'UNKNOWN'
+        };
+    });
+
+    ok(res, { channels: enriched, raw });
 });
 
 app.get("/api/activity", async (_, res) => {
@@ -493,7 +475,10 @@ app.get("/api/activity", async (_, res) => {
                     type: isError ? 'error' : isWarning ? 'warning' : 'bot',
                     agent: agentDisplayName,
                     time: `${agentDisplayName} Memory`,
-                    id: `mem-${ws.name}-${i}`
+                    id: `mem-${ws.name}-${i}`,
+                    target: ws.name,
+                    result: isError ? 'error' : isWarning ? 'warning' : 'ok',
+                    details: line.trim()
                 });
             });
         }
@@ -535,12 +520,16 @@ app.get("/api/activity", async (_, res) => {
                 const isWarning = /warn|timeout|retry/i.test(line);
                 const isSuccess = /success|done|started|running|active|ok|posted|sent|completed/i.test(line);
                 const agentName = extractAgent(line);
+                const targetMatch = line.match(/(telegram:[^\s]+|discord:[^\s]+|whatsapp:[^\s]+|to\s+[\w:@\-\.]+)/i);
                 return {
                     text: line.trim(),
                     type: isError ? "error" : isWarning ? "warning" : isSuccess ? "system" : "bot",
                     agent: agentName,
                     time: source,
-                    id: `${source}-${i}`
+                    id: `${source}-${i}`,
+                    target: targetMatch ? targetMatch[1] : null,
+                    result: isError ? 'error' : isWarning ? 'warning' : isSuccess ? 'ok' : 'info',
+                    details: line.trim()
                 };
             })
             .reverse();
@@ -567,91 +556,58 @@ app.get("/api/activity", async (_, res) => {
 
 app.get("/api/organization", async (_, res) => {
     const statusAll = await runFirstOk([
+        "/usr/bin/openclaw --profile tareno status --all",
+        "/usr/local/bin/openclaw --profile tareno status --all",
         "/usr/bin/openclaw status --all",
-        "/usr/local/bin/openclaw status --all",
-        "/usr/bin/openclaw status",
-        "/usr/local/bin/openclaw status"
+        "/usr/local/bin/openclaw status --all"
     ]);
     const agentsR = await runFirstOk([
-        "/usr/bin/openclaw agents list --json",
-        "/usr/local/bin/openclaw agents list --json",
-        "/usr/bin/openclaw agents list"
+        "/usr/bin/openclaw --profile tareno agents list --json",
+        "/usr/local/bin/openclaw --profile tareno agents list --json",
+        "/usr/bin/openclaw agents list --json"
     ]);
 
     const agentsJson = tryParseJson(agentsR.stdout);
     const rawAgents = Array.isArray(agentsJson?.agents) ? agentsJson.agents : (Array.isArray(agentsJson) ? agentsJson : []);
 
-    // Enrich agents with workspace info (SOUL, roles)
-    const workspaces = detectAgentWorkspaces();
-    const allAgents = rawAgents.map(a => {
-        const ws = workspaces.find(w => w.name === (a.key || a.id || a.name));
-        const meta = ws ? readAgentMeta(ws.dir) : {};
-        return {
-            name: meta.soulTitle || a.name || a.identityName || a.id || a.key || "Unknown Agent",
-            roleStr: (a.role || a.kind || meta.soul || "assistant").toLowerCase(),
-            status: a.status || "idle",
-            originalRole: a.role || "Agent"
-        };
+    const norm = (s) => String(s || '').toLowerCase();
+    const findAgent = (pred) => rawAgents.find(pred) || null;
+
+    const tarenoblog = findAgent(a => norm(a.id || a.key || a.name).includes('tarenoblog'));
+    const tarenosocial = findAgent(a => norm(a.id || a.key || a.name).includes('social'));
+    const mainAgent = findAgent(a => norm(a.id || a.key || a.name).includes('main'));
+
+    const nodeFor = (agent, fallbackName, fallbackRole) => ({
+        name: (agent?.name || fallbackName),
+        role: fallbackRole,
+        status: agent?.status || 'idle',
+        children: []
     });
 
-    // We also want to include workspaces that don't have active sessions but exist in the folder
-    workspaces.forEach(ws => {
-        if (!allAgents.find(a => a.name === ws.name || a.name.includes(ws.name))) {
-            const meta = readAgentMeta(ws.dir);
-            allAgents.push({
-                name: meta.soulTitle || ws.name,
-                roleStr: (meta.soul || "assistant").toLowerCase(),
-                status: "offline",
-                originalRole: "Agent"
-            });
-        }
-    });
-
-    // Helper to determine department based on agent's role or soul text
-    const getDept = (agent) => {
-        const text = agent.roleStr;
-        if (/frontend|ui|ux|design|css|react/i.test(text)) return 'Design & Frontend';
-        if (/backend|api|database|sql|server|cto|architect/i.test(text)) return 'Backend & Architecture (CTO)';
-        if (/marketing|social|twitter|reddit|seo|blog/i.test(text)) return 'Marketing & Growth (CMO)';
-        if (/support|service|mail|whatsapp/i.test(text)) return 'Cust. Service & Operations (COO)';
-        return 'General Assistants';
-    };
-
-    // Group agents by department
-    const depts = {};
-    allAgents.forEach(a => {
-        const d = getDept(a);
-        if (!depts[d]) depts[d] = [];
-        depts[d].push({
-            name: a.name,
-            role: "agent",
-            status: a.status,
-            originalRole: a.originalRole,
-            children: []
-        });
-    });
-
-    // Convert grouping to tree children format
-    const deptChildren = Object.keys(depts).map(deptName => {
-        return {
-            name: deptName,
-            role: "group",
-            status: depts[deptName].some(a => a.status === 'active' || a.status === 'online') ? 'active' : 'idle',
-            children: depts[deptName].map(a => ({
-                name: a.name,
-                role: a.originalRole.length < 20 ? a.originalRole : 'Agent',
-                status: a.status,
-                children: []
-            }))
-        };
-    });
-
-    // Root is Mert Karaca (CEO)
     const hierarchy = {
-        name: "Mert Karaca (CEO)",
+        name: "Mert (Owner)",
         role: "root",
         status: "online",
-        children: deptChildren.sort((a, b) => b.children.length - a.children.length) // sort largest departments first
+        children: [
+            {
+                name: "TarenoBlog",
+                role: "group",
+                status: (tarenoblog?.status || 'idle'),
+                children: [nodeFor(tarenoblog, 'Sam', 'Zuständig für Blogs bei Tareno')]
+            },
+            {
+                name: "TarenoSocial",
+                role: "group",
+                status: (tarenosocial?.status || 'idle'),
+                children: [nodeFor(tarenosocial, 'MiracleSocial', 'Social Marketer für Tareno')]
+            },
+            {
+                name: "Core",
+                role: "group",
+                status: (mainAgent?.status || 'idle'),
+                children: [nodeFor(mainAgent, 'Luna', 'Orchestrierung & Oversight')]
+            }
+        ]
     };
 
     ok(res, {
@@ -688,8 +644,8 @@ app.get("/api/cron-jobs", async (req, res) => {
 
 app.get("/api/skills", async (req, res) => {
     const skills = await getSkills();
-    // Enrich skills: check which agent workspaces reference each skill
     const workspaces = detectAgentWorkspaces();
+
     const enrichedSkills = skills.map(skill => {
         const usedByAgents = workspaces
             .filter(ws => {
@@ -698,12 +654,23 @@ app.get("/api/skills", async (req, res) => {
                 return agentsMd.includes(skill.name) || cronMd.includes(skill.name);
             })
             .map(ws => ws.name);
-        // Get more detail from SKILL.md: description lines after title
+
         const skillMd = readFileSafe(path.join(skill.path, 'SKILL.md')) || '';
-        const descLines = skillMd.split('\n').filter(l => l.trim() && !l.startsWith('#')).slice(0, 2).join(' ');
-        return { ...skill, usedByAgents, description: descLines.trim().slice(0, 180) || null };
+        const descLines = skillMd.split('\n').filter(l => l.trim() && !l.startsWith('#')).slice(0, 3).join(' ');
+        const scope = skill.path.includes('/usr/lib/node_modules/openclaw/skills') ? 'global' : 'agent-specific';
+
+        return {
+            ...skill,
+            usedByAgents,
+            description: descLines.trim().slice(0, 220) || null,
+            scope,
+            invoke: `Nutze den Skill automatisch durch passende Anfrage; intern via read auf ${skill.path}/SKILL.md`,
+            functions: descLines.trim().slice(0, 140) || 'Siehe SKILL.md',
+            autoRefresh: true
+        };
     });
-    ok(res, { count: enrichedSkills.length, skills: enrichedSkills });
+
+    ok(res, { count: enrichedSkills.length, skills: enrichedSkills, autoRefresh: true });
 });
 
 

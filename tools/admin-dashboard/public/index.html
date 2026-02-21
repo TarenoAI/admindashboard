@@ -296,6 +296,7 @@
                         const ageMin = agent.ageMs ? Math.round(agent.ageMs / 60000) : null;
                         const skills = agent.activeSkills || [];
                         const knowledge = agent.knowledgeFiles || {};
+                        const knowledgePaths = agent.knowledgePaths || {};
                         const knowledgeOrder = [
                             { key: 'soul', label: 'SOUL' },
                             { key: 'memory', label: 'MEMORY' },
@@ -347,6 +348,9 @@
                                     const present = !!knowledge[item.key];
                                     return `<span class="px-2 py-0.5 border text-[10px] rounded-full font-medium ${present ? 'bg-green-500/10 border-green-500/30 text-green-300' : 'bg-black/20 border-white/10 text-text-muted'}">${item.label}</span>`;
                                 }).join('')}
+                              </div>
+                              <div class="mt-2 space-y-1">
+                                ${knowledgeOrder.map(item => knowledge[item.key] ? `<div class="text-[10px] text-text-muted font-mono truncate" title="${knowledgePaths[item.key] || ''}">${item.label}: ${knowledgePaths[item.key] || '—'}</div>` : '').join('')}
                               </div>
                             </div>
                             <!-- Active Skills -->
@@ -469,17 +473,25 @@
                 activities.forEach(act => {
                     const c = colorMap[act.type] || colorMap.bot;
                     const timeStr = act.time ? act.time.replace('dashboard.log', 'log').replace('openclaw', 'claw') : '';
-                    html += `<div class="flex items-start gap-3 p-3 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/5 transition-colors group">
-                        <div class="mt-1.5 w-2 h-2 rounded-full flex-shrink-0 ${c.dot} shadow-[0_0_6px_currentColor]"></div>
-                        <div class="flex-1 min-w-0">
-                          <div class="text-xs text-text-secondary font-mono break-all leading-relaxed">${act.text}</div>
-                          <div class="flex items-center gap-2 mt-2">
-                             ${act.agent ? `<span class="px-2 py-0.5 border rounded-full text-[10px] font-bold tracking-wide bg-blue-500/10 text-blue-300 border-blue-500/30 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 shadow-[0_0_5px_rgba(96,165,250,0.8)]"></span> ${act.agent}</span>` : ''}
-                             <span class="px-1.5 py-0.5 border rounded text-[9px] uppercase font-bold tracking-wider ${c.badge}">${act.type}</span>
-                             <span class="text-[10px] text-text-muted">${timeStr}</span>
+                    html += `<details class="p-3 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/5 transition-colors group">
+                        <summary class="flex items-start gap-3 cursor-pointer list-none">
+                          <div class="mt-1.5 w-2 h-2 rounded-full flex-shrink-0 ${c.dot} shadow-[0_0_6px_currentColor]"></div>
+                          <div class="flex-1 min-w-0">
+                            <div class="text-xs text-text-secondary font-mono break-all leading-relaxed">${act.text}</div>
+                            <div class="flex items-center gap-2 mt-2">
+                               ${act.agent ? `<span class="px-2 py-0.5 border rounded-full text-[10px] font-bold tracking-wide bg-blue-500/10 text-blue-300 border-blue-500/30 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 shadow-[0_0_5px_rgba(96,165,250,0.8)]"></span> ${act.agent}</span>` : ''}
+                               <span class="px-1.5 py-0.5 border rounded text-[9px] uppercase font-bold tracking-wider ${c.badge}">${act.type}</span>
+                               <span class="text-[10px] text-text-muted">${timeStr}</span>
+                            </div>
                           </div>
+                        </summary>
+                        <div class="mt-3 ml-5 text-[11px] text-text-secondary space-y-1 border-l border-white/10 pl-3">
+                          <p><span class="text-text-muted">Bot:</span> ${act.agent || 'unbekannt'}</p>
+                          <p><span class="text-text-muted">Ziel:</span> ${act.target || '—'}</p>
+                          <p><span class="text-text-muted">Ergebnis:</span> ${act.result || 'info'}</p>
+                          <p class="font-mono break-all"><span class="text-text-muted">Details:</span> ${act.details || act.text}</p>
                         </div>
-                    </div>`;
+                    </details>`;
                 });
                 html += '</div></div>';
             }
@@ -519,6 +531,9 @@
                       <p><span class="text-text-muted">Next:</span> ${job.next}</p>
                       <p><span class="text-text-muted">Last:</span> ${job.last}</p>
                       <p><span class="text-text-muted">Target:</span> ${job.target}</p>
+                      <p><span class="text-text-muted">Ziel:</span> ${job.objective || '—'}</p>
+                      <p><span class="text-text-muted">Letzter Lauf:</span> ${job.lastRunStatus || '—'}</p>
+                      <p class="text-[10px] text-text-muted leading-relaxed">${job.lastRunSummary || 'Keine Run-Details'}</p>
                     </div>
                   </div>
                 `).join('')}
@@ -550,7 +565,7 @@
                     const done = p.taskStats?.done || 0;
                     const total = (p.tasks || []).length;
                     const blocked = p.taskStats?.blocked || 0;
-                    html += `<div class="glass-card p-6 flex flex-col group relative overflow-hidden">
+                    html += `<div class="glass-card p-6 flex flex-col group relative overflow-hidden hover:scale-[1.01] transition-all duration-300 bg-gradient-to-br from-white/[0.05] via-white/[0.02] to-brand/[0.06]">
                         <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand/60 to-blue-500/60 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         <div class="flex items-start justify-between gap-2 mb-3">
                           <h3 class="font-semibold text-lg text-white truncate">${p.name}</h3>
@@ -657,9 +672,15 @@
                             ${s.title !== s.name ? `<p class="text-xs text-brand/80 mb-2 font-medium">${s.title}</p>` : ''}
                             ${s.description ? `<p class="text-[11px] text-text-muted leading-relaxed mb-3">${s.description}</p>` : ''}
                             <div class="text-[10px] text-text-muted font-mono truncate bg-black/40 px-2 py-1 rounded border border-white/5 mb-3">${s.path}</div>
+                            <div class="space-y-2">
+                                <p class="text-[10px]"><span class="text-text-muted">Scope:</span> <span class="text-white">${s.scope || 'global'}</span></p>
+                                <p class="text-[10px]"><span class="text-text-muted">Aufruf:</span> <span class="text-text-secondary">${s.invoke || 'via Skill-Matching'}</span></p>
+                                <p class="text-[10px]"><span class="text-text-muted">Funktion:</span> <span class="text-text-secondary">${s.functions || 'siehe SKILL.md'}</span></p>
+                                <p class="text-[10px]"><span class="text-text-muted">Dashboard Auto-Update:</span> <span class="text-green-300">${s.autoRefresh ? 'Ja' : 'Nein'}</span></p>
+                            </div>
                             ${agents.length > 0 ? `
                             <div>
-                                <p class="text-[9px] text-text-muted uppercase tracking-wider mb-1.5 font-bold">Genutzt von</p>
+                                <p class="text-[9px] text-text-muted uppercase tracking-wider mb-1.5 font-bold">Genutzt von Bots</p>
                                 <div class="flex flex-wrap gap-1">${agents.map(a => `<span class="px-2 py-0.5 bg-green-500/10 border border-green-500/20 text-green-400 text-[10px] rounded-full">${a}</span>`).join('')}</div>
                             </div>` : `<p class="text-[10px] text-text-muted italic">Von keinem Agenten verwendet</p>`}
                         </div>
@@ -701,7 +722,8 @@
                             </div>
                             <h4 class="font-bold text-white text-sm mb-1">${ch.name}</h4>
                             <p class="text-[11px] text-text-muted leading-relaxed">${ch.description}</p>
-                            ${!active ? `<div class="mt-3 text-[10px] text-text-muted/60 italic">Kein Config-Key in .env gefunden</div>` : ''}
+                            <div class="mt-2 text-[10px] text-text-muted">Gateway: ${ch.state || 'UNKNOWN'} • Enabled: ${ch.enabled ? 'ON' : 'OFF'}</div>
+                            ${!active ? `<div class="mt-3 text-[10px] text-text-muted/60 italic">Kanal aktuell nicht live verbunden</div>` : ''}
                         </div>`;
                     });
                     html += `</div></div>`;
