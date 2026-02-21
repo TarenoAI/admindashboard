@@ -234,6 +234,7 @@
     <script>
         let currentTab = 'agents';
         let currentData = null;
+        let selectedProject = null;
 
         function switchTab(tabId, el) {
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -248,6 +249,16 @@
             container.innerHTML = '<div class="flex items-center justify-center h-full"><div class="loader"></div></div>';
 
             try {
+                if (currentTab === 'project-detail' && selectedProject?.id) {
+                    const response = await fetch('/api/projects');
+                    const data = await response.json();
+                    const refreshed = (data.projects || []).find(p => p.id === selectedProject.id) || selectedProject;
+                    selectedProject = refreshed;
+                    currentData = { project: refreshed };
+                    renderView(currentTab, currentData, container);
+                    return;
+                }
+
                 const response = await fetch(`/api/${currentTab}`);
                 const data = await response.json();
                 currentData = data;
@@ -554,10 +565,80 @@
                           <div class="bg-black/30 border border-white/5 rounded-lg p-2.5"><p class="text-[9px] text-text-muted uppercase">Blocker</p><p class="text-xs font-semibold ${blocked ? 'text-red-300' : 'text-green-300'} mt-1">${blocked}</p></div>
                         </div>
 
-                        <button onclick="openProjectModal(${idx})" class="w-full py-2 bg-brand/10 hover:bg-brand/20 border border-brand/20 hover:border-brand/40 rounded-lg text-xs font-bold tracking-wide transition-all text-brand hover:text-white">Projekt öffnen</button>
+                        <button onclick="openProjectDetail(${idx})" class="w-full py-2 bg-brand/10 hover:bg-brand/20 border border-brand/20 hover:border-brand/40 rounded-lg text-xs font-bold tracking-wide transition-all text-brand hover:text-white">Projekt öffnen</button>
                     </div>`;
                 });
                 html += '</div></div>';
+            }
+
+            else if (tab === 'project-detail') {
+                const p = data.project;
+                if (!p) {
+                    html = `<div class="glass-card p-8 text-center">
+                        <p class="text-text-muted">Kein Projekt ausgewählt.</p>
+                    </div>`;
+                } else {
+                    const tasks = p.tasks || [];
+                    const taskByState = {
+                        backlog: tasks.filter(t => t.status === 'backlog'),
+                        in_progress: tasks.filter(t => t.status === 'in_progress'),
+                        review: tasks.filter(t => t.status === 'review'),
+                        done: tasks.filter(t => t.status === 'done')
+                    };
+                    const safeContent = (p.content || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+                    html = `<div class="space-y-4">
+                        <div class="flex items-center gap-3">
+                            <button onclick="backToProjects()" class="px-3 py-1.5 rounded-lg text-xs border border-white/10 bg-white/5 hover:bg-white/10">← Zurück zu Projekte</button>
+                            <h3 class="text-lg font-semibold text-white">${p.name}</h3>
+                        </div>
+
+                        <div class="glass-card p-4">
+                            <h3 class="text-sm font-semibold mb-3">Projekt-Übersicht</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                                <div class="bg-black/30 border border-white/5 rounded-lg p-3"><p class="text-text-muted uppercase text-[10px]">Status</p><p class="text-white mt-1">${p.status || 'planning'}</p></div>
+                                <div class="bg-black/30 border border-white/5 rounded-lg p-3"><p class="text-text-muted uppercase text-[10px]">Priorität</p><p class="text-white mt-1">${p.priority || 'medium'}</p></div>
+                                <div class="bg-black/30 border border-white/5 rounded-lg p-3"><p class="text-text-muted uppercase text-[10px]">Last Update</p><p class="text-white mt-1">${p.lastUpdate || '—'}</p></div>
+                            </div>
+                            <p class="text-xs text-text-secondary mt-3">${p.preview || 'Keine Zusammenfassung vorhanden.'}</p>
+                        </div>
+
+                        <div class="glass-card p-4">
+                            <h3 class="text-sm font-semibold mb-3">Agent-Zuordnung</h3>
+                            ${(p.agents || []).length ? `<div class="grid grid-cols-1 md:grid-cols-3 gap-2">${p.agents.map(a => `<div class="bg-black/30 border border-white/5 rounded-lg p-3"><p class="text-xs font-semibold text-white">${a.name}</p><p class="text-[11px] text-text-muted mt-1 uppercase">${a.role}</p></div>`).join('')}</div>` : '<p class="text-xs text-text-muted">Keine Agenten zugewiesen.</p>'}
+                        </div>
+
+                        <div class="glass-card p-4">
+                            <h3 class="text-sm font-semibold mb-3">Tasks (Kanban)</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 text-xs">
+                                ${['backlog','in_progress','review','done'].map(state => `
+                                    <div class="bg-black/30 border border-white/5 rounded-lg p-3">
+                                        <p class="text-[10px] uppercase tracking-wider text-text-muted mb-2">${state.replace('_',' ')}</p>
+                                        <div class="space-y-2">
+                                            ${(taskByState[state] || []).map(t => `<div class="border border-white/10 rounded p-2 bg-black/20"><p class="font-semibold text-white">${t.id}: ${t.title}</p><p class="text-text-muted mt-1">${t.assignee || '—'} • ${t.priority || 'n/a'}</p>${t.blocker ? `<p class="text-red-300 mt-1">Blocker: ${t.blocker}</p>` : ''}</div>`).join('') || '<p class="text-text-muted">—</p>'}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="glass-card p-4">
+                                <h3 class="text-sm font-semibold mb-3">Datenquellen</h3>
+                                ${(p.dataRefs || []).length ? `<ul class="space-y-2 text-xs">${p.dataRefs.map(r => `<li class="bg-black/30 border border-white/5 rounded-lg p-2"><span class="text-white">${r.label}</span><p class="text-text-muted mt-1 font-mono">${r.path}</p></li>`).join('')}</ul>` : '<p class="text-xs text-text-muted">Keine Datenquellen hinterlegt.</p>'}
+                            </div>
+                            <div class="glass-card p-4">
+                                <h3 class="text-sm font-semibold mb-3">Meilensteine</h3>
+                                ${(p.milestones || []).length ? `<ul class="space-y-2 text-xs">${p.milestones.map(m => `<li class="bg-black/30 border border-white/5 rounded-lg p-2"><span class="text-white">${m.title}</span><p class="text-text-muted mt-1">${m.status || 'planned'} • due ${m.due || '—'}</p></li>`).join('')}</ul>` : '<p class="text-xs text-text-muted">Keine Milestones hinterlegt.</p>'}
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-4">
+                            <h3 class="text-sm font-semibold mb-3">Rohdaten (Markdown)</h3>
+                            <pre class="text-xs text-text-secondary whitespace-pre-wrap font-mono m-0 bg-transparent border-none p-0 leading-relaxed">${safeContent}</pre>
+                        </div>
+                    </div>`;
+                }
             }
 
             else if (tab === 'skills') {
@@ -631,79 +712,22 @@
             container.innerHTML = `<div class="animate-fade-in">${html}</div>`;
         }
 
-        // --- Modals ---
-        window.openProjectModal = (idx) => {
+        window.openProjectDetail = (idx) => {
             if (!currentData || !currentData.projects) return;
-            const p = currentData.projects[idx];
-            const tasks = p.tasks || [];
-            const taskByState = {
-                backlog: tasks.filter(t => t.status === 'backlog'),
-                in_progress: tasks.filter(t => t.status === 'in_progress'),
-                review: tasks.filter(t => t.status === 'review'),
-                done: tasks.filter(t => t.status === 'done')
-            };
-            const safeContent = (p.content || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            selectedProject = currentData.projects[idx] || null;
+            currentTab = 'project-detail';
+            document.getElementById('view-title').innerText = `Projekt • ${selectedProject?.name || ''}`.trim();
+            loadCurrentView();
+        };
 
-            const modal = document.createElement('div');
-            modal.id = 'project-modal';
-            modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80 backdrop-blur-md animate-fade-in';
-            modal.innerHTML = `
-                <div class="glass-card w-full max-w-6xl max-h-[92vh] flex flex-col bg-neutral-bg1 border border-border-default shadow-2xl relative overflow-hidden animate-slide-up">
-                    <button onclick="document.getElementById('project-modal').remove()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-red-500/80 text-white transition-colors z-10">✕</button>
-                    <div class="p-6 border-b border-white/5 bg-gradient-to-r from-brand/10 to-transparent relative">
-                        <h2 class="text-2xl font-bold text-white flex items-center gap-3"><span class="text-3xl">📂</span> ${p.name}</h2>
-                        <div class="text-xs text-text-muted mt-2 font-mono flex items-center gap-2"><span class="px-1.5 py-0.5 bg-black/40 rounded">PATH</span> ${p.file}</div>
-                    </div>
-
-                    <div class="flex-1 overflow-y-auto p-6 bg-[#0E0E11] space-y-6">
-                        <div class="glass-card p-4">
-                            <h3 class="text-sm font-semibold mb-3">Projekt-Übersicht</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-                                <div class="bg-black/30 border border-white/5 rounded-lg p-3"><p class="text-text-muted uppercase text-[10px]">Status</p><p class="text-white mt-1">${p.status || 'planning'}</p></div>
-                                <div class="bg-black/30 border border-white/5 rounded-lg p-3"><p class="text-text-muted uppercase text-[10px]">Priorität</p><p class="text-white mt-1">${p.priority || 'medium'}</p></div>
-                                <div class="bg-black/30 border border-white/5 rounded-lg p-3"><p class="text-text-muted uppercase text-[10px]">Last Update</p><p class="text-white mt-1">${p.lastUpdate || '—'}</p></div>
-                            </div>
-                            <p class="text-xs text-text-secondary mt-3">${p.preview || 'Keine Zusammenfassung vorhanden.'}</p>
-                        </div>
-
-                        <div class="glass-card p-4">
-                            <h3 class="text-sm font-semibold mb-3">Agent-Zuordnung</h3>
-                            ${(p.agents || []).length ? `<div class="grid grid-cols-1 md:grid-cols-3 gap-2">${p.agents.map(a => `<div class="bg-black/30 border border-white/5 rounded-lg p-3"><p class="text-xs font-semibold text-white">${a.name}</p><p class="text-[11px] text-text-muted mt-1 uppercase">${a.role}</p></div>`).join('')}</div>` : '<p class="text-xs text-text-muted">Keine Agenten zugewiesen.</p>'}
-                        </div>
-
-                        <div class="glass-card p-4">
-                            <h3 class="text-sm font-semibold mb-3">Tasks (Kanban)</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 text-xs">
-                                ${['backlog','in_progress','review','done'].map(state => `
-                                    <div class="bg-black/30 border border-white/5 rounded-lg p-3">
-                                        <p class="text-[10px] uppercase tracking-wider text-text-muted mb-2">${state.replace('_',' ')}</p>
-                                        <div class="space-y-2">
-                                            ${(taskByState[state] || []).map(t => `<div class="border border-white/10 rounded p-2 bg-black/20"><p class="font-semibold text-white">${t.id}: ${t.title}</p><p class="text-text-muted mt-1">${t.assignee || '—'} • ${t.priority || 'n/a'}</p>${t.blocker ? `<p class="text-red-300 mt-1">Blocker: ${t.blocker}</p>` : ''}</div>`).join('') || '<p class="text-text-muted">—</p>'}
-                                        </div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <div class="glass-card p-4">
-                                <h3 class="text-sm font-semibold mb-3">Datenquellen</h3>
-                                ${(p.dataRefs || []).length ? `<ul class="space-y-2 text-xs">${p.dataRefs.map(r => `<li class="bg-black/30 border border-white/5 rounded-lg p-2"><span class="text-white">${r.label}</span><p class="text-text-muted mt-1 font-mono">${r.path}</p></li>`).join('')}</ul>` : '<p class="text-xs text-text-muted">Keine Datenquellen hinterlegt.</p>'}
-                            </div>
-                            <div class="glass-card p-4">
-                                <h3 class="text-sm font-semibold mb-3">Meilensteine</h3>
-                                ${(p.milestones || []).length ? `<ul class="space-y-2 text-xs">${p.milestones.map(m => `<li class="bg-black/30 border border-white/5 rounded-lg p-2"><span class="text-white">${m.title}</span><p class="text-text-muted mt-1">${m.status || 'planned'} • due ${m.due || '—'}</p></li>`).join('')}</ul>` : '<p class="text-xs text-text-muted">Keine Milestones hinterlegt.</p>'}
-                            </div>
-                        </div>
-
-                        <div class="glass-card p-4">
-                            <h3 class="text-sm font-semibold mb-3">Rohdaten (Markdown)</h3>
-                            <pre class="text-xs text-text-secondary whitespace-pre-wrap font-mono m-0 bg-transparent border-none p-0 leading-relaxed">${safeContent}</pre>
-                        </div>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(modal);
+        window.backToProjects = () => {
+            selectedProject = null;
+            currentTab = 'projects';
+            document.getElementById('view-title').innerText = 'Projekte';
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const projectNav = Array.from(document.querySelectorAll('.nav-item')).find(n => n.innerText.includes('Projekte'));
+            if (projectNav) projectNav.classList.add('active');
+            loadCurrentView();
         };
 
         // Init first view
