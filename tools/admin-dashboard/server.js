@@ -277,8 +277,9 @@ app.get("/api/agents", async (_, res) => {
         const ws = resolveWorkspaceForAgent(a) || { name: String(a.key || a.id || a.name || 'workspace'), dir: WORKSPACE_ROOT };
         const meta = readAgentMeta(ws.dir) || {};
         return {
-            name: meta.soulTitle || a.name || a.identityName || a.id || a.key || "Unknown Agent",
+            name: a.name || a.identityName || a.id || a.key || meta.soulTitle || "Unknown Agent",
             key: a.key || a.id || null,
+            agentId: a.id || a.key || null,
             role: a.role || "Autonomous OpenClaw Agent",
             status: a.status || (matchingSession ? "active" : "idle"),
             model: matchingSession?.model || a.model || null,
