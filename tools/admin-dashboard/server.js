@@ -386,6 +386,27 @@ app.post('/api/projects/task-meta', (req, res) => {
     }
 });
 
+app.post('/api/projects/milestone', (req, res) => {
+    try {
+        const { projectId, index, title, due, status } = req.body || {};
+        if (!projectId || index == null) return res.status(400).json({ success: false, error: 'projectId, index required' });
+        const file = path.join(PROJECT_DATA_DIR, `${projectId}.json`);
+        const raw = readFileSafe(file);
+        if (!raw) return res.status(404).json({ success: false, error: 'Project data file missing' });
+        const data = JSON.parse(raw);
+        const m = (data.milestones || [])[Number(index)];
+        if (!m) return res.status(404).json({ success: false, error: 'Milestone not found' });
+        if (typeof title === 'string') m.title = title;
+        if (typeof due === 'string') m.due = due;
+        if (typeof status === 'string') m.status = status;
+        data.lastUpdate = new Date().toISOString().slice(0, 10);
+        fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n', 'utf8');
+        return ok(res, { updated: true, projectId, index, milestone: m });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
+});
+
 app.get('/api/file', (req, res) => {
     const target = String(req.query.path || '');
     if (!target) return res.status(400).json({ success: false, error: 'Missing ?path=' });
@@ -476,7 +497,28 @@ app.get("/api/projects", (_, res) => {
             lastUpdate: meta.lastUpdate || null
         };
     });
-    ok(res, { count: projects.length, projects });
+
+    const workloadByAgent = {};
+    projects.forEach(p => {
+        (p.tasks || []).forEach(t => {
+            const who = t.assignee || 'Unassigned';
+            if (!workloadByAgent[who]) workloadByAgent[who] = { assignee: who, total: 0, open: 0, done: 0, blocked: 0 };
+            workloadByAgent[who].total += 1;
+            if (t.status === 'done') workloadByAgent[who].done += 1; else workloadByAgent[who].open += 1;
+            if (t.blocker) workloadByAgent[who].blocked += 1;
+        });
+    });
+
+    ok(res, { count: projects.length, projects, workload: Object.values(workloadByAgent) });
+});
+
+app.get('/api/cron/runs', async (req, res) => {
+    const id = String(req.query.id || '').trim();
+    if (!id) return res.status(400).json({ success: false, error: 'Missing ?id=' });
+    const runs = await runCmd(`/usr/bin/openclaw --profile tareno cron runs --id ${id} --limit 10 --json`);
+    const parsed = tryParseJson(runs.stdout);
+    const entries = Array.isArray(parsed?.entries) ? parsed.entries : [];
+    return ok(res, { id, entries, raw: runs.stdout || runs.stderr || runs.error });
 });
 
 app.get("/api/channels", async (_, res) => {
@@ -555,7 +597,9 @@ app.get("/api/activity", async (_, res) => {
                     id: `mem-${ws.name}-${i}`,
                     target: ws.name,
                     result: isError ? 'error' : isWarning ? 'warning' : 'ok',
-                    details: line.trim()
+                    details: line.trim(),
+                    timestamp: new Date().toISOString(),
+                    taskType: 'routine'
                 });
             });
         }
@@ -596,8 +640,11 @@ app.get("/api/activity", async (_, res) => {
                 const isError = /error|fail|exception|critical/i.test(line);
                 const isWarning = /warn|timeout|retry/i.test(line);
                 const isSuccess = /success|done|started|running|active|ok|posted|sent|completed/i.test(line);
+                const isCron = /\bcron\b/i.test(line) || /cron:/i.test(line);
+                const isFix = /\bfix\b|bug|repair|hotfix/i.test(line);
                 const agentName = extractAgent(line);
                 const targetMatch = line.match(/(telegram:[^\s]+|discord:[^\s]+|whatsapp:[^\s]+|to\s+[\w:@\-\.]+)/i);
+                const tsMatch = line.match(/(\d{4}-\d{2}-\d{2}[T\s]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z)?)/);
                 return {
                     text: line.trim(),
                     type: isError ? "error" : isWarning ? "warning" : isSuccess ? "system" : "bot",
@@ -606,7 +653,9 @@ app.get("/api/activity", async (_, res) => {
                     id: `${source}-${i}`,
                     target: targetMatch ? targetMatch[1] : null,
                     result: isError ? 'error' : isWarning ? 'warning' : isSuccess ? 'ok' : 'info',
-                    details: line.trim()
+                    details: line.trim(),
+                    timestamp: tsMatch ? tsMatch[1].replace(' ', 'T') : new Date().toISOString(),
+                    taskType: isCron ? 'cron' : isFix ? 'fix' : 'routine'
                 };
             })
             .reverse();
@@ -614,14 +663,40 @@ app.get("/api/activity", async (_, res) => {
 
     const dashActivities = parseLogLines(dashLog.stdout, "dashboard.log");
     const clawActivities = parseLogLines(openclawLog.stdout, "openclaw");
-    const allActivities = [...clawActivities, ...agentMemoryEntries, ...dashActivities].slice(0, 60);
+
+    // Include recent local fixes/changes from git commits
+    const gitLog = await runCmd(`git -C ${WORKSPACE_ROOT} log -n 12 --pretty=format:'%H|%cI|%s'`);
+    const gitActivities = (gitLog.stdout || '').split('\n').filter(Boolean).map((line, i) => {
+        const [hash, ts, msg] = line.split('|');
+        const isFix = /fix|bug|repair|hotfix|dashboard/i.test(msg || '');
+        return {
+            id: `git-${i}-${hash?.slice(0,7)}`,
+            text: msg || 'commit',
+            details: `commit ${hash}`,
+            type: 'system',
+            agent: 'Luna',
+            target: 'workspace',
+            result: 'ok',
+            time: 'git',
+            timestamp: ts || new Date().toISOString(),
+            taskType: isFix ? 'fix' : 'routine'
+        };
+    });
+
+    const allActivities = [...gitActivities, ...clawActivities, ...agentMemoryEntries, ...dashActivities]
+        .sort((a, b) => String(b.timestamp || '').localeCompare(String(a.timestamp || '')))
+        .slice(0, 80);
 
     const fallbackActivities = allActivities.length === 0 ? [{
         text: "Kein Log-Output verfügbar. Agenten-Logs erscheinen hier sobald OpenClaw auf der VPS läuft.",
         type: "system",
         agent: null,
         time: new Date().toISOString(),
-        id: "fallback-0"
+        id: "fallback-0",
+        timestamp: new Date().toISOString(),
+        taskType: 'routine',
+        target: null,
+        result: 'info'
     }] : allActivities;
 
     ok(res, {

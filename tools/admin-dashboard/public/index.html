@@ -481,11 +481,15 @@
                 };
                 html = `<div class="glass-card p-6">
                     <h3 class="text-base font-semibold mb-4 flex items-center gap-2"><span>⚡</span> Letzte Systemaktivitäten <span class="ml-auto text-xs text-text-muted font-normal">${activities.length} Einträge</span></h3>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-2 mb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-2 mb-4">
                       <input id="activity-filter-text" placeholder="Suche Text/Bot/Ziel" class="bg-black/30 border border-white/10 rounded px-3 py-2 text-xs" />
                       <select id="activity-filter-result" class="bg-black/30 border border-white/10 rounded px-3 py-2 text-xs">
                         <option value="">Alle Ergebnisse</option>
                         <option value="ok">ok</option><option value="warning">warning</option><option value="error">error</option><option value="info">info</option>
+                      </select>
+                      <select id="activity-filter-tasktype" class="bg-black/30 border border-white/10 rounded px-3 py-2 text-xs">
+                        <option value="">Alle Tags</option>
+                        <option value="routine">Routine</option><option value="fix">Fixes</option><option value="cron">Cron</option>
                       </select>
                       <button onclick="applyActivityFilters()" class="bg-brand/20 border border-brand/30 rounded px-3 py-2 text-xs font-semibold">Filter anwenden</button>
                       <div class="flex gap-2">
@@ -497,20 +501,23 @@
                 activities.forEach(act => {
                     const c = colorMap[act.type] || colorMap.bot;
                     const timeStr = act.time ? act.time.replace('dashboard.log', 'log').replace('openclaw', 'claw') : '';
-                    html += `<details data-search="${`${act.text||''} ${act.agent||''} ${act.target||''}`.toLowerCase()}" data-result="${(act.result||'info').toLowerCase()}" class="p-3 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/5 transition-colors group">
+                    html += `<details data-search="${`${act.text||''} ${act.agent||''} ${act.target||''} ${act.taskType||''}`.toLowerCase()}" data-result="${(act.result||'info').toLowerCase()}" data-tasktype="${(act.taskType||'routine').toLowerCase()}" class="p-3 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/5 transition-colors group">
                         <summary class="flex items-start gap-3 cursor-pointer list-none">
                           <div class="mt-1.5 w-2 h-2 rounded-full flex-shrink-0 ${c.dot} shadow-[0_0_6px_currentColor]"></div>
                           <div class="flex-1 min-w-0">
                             <div class="text-xs text-text-secondary font-mono break-all leading-relaxed">${act.text}</div>
-                            <div class="flex items-center gap-2 mt-2">
-                               ${act.agent ? `<span class="px-2 py-0.5 border rounded-full text-[10px] font-bold tracking-wide bg-blue-500/10 text-blue-300 border-blue-500/30 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 shadow-[0_0_5px_rgba(96,165,250,0.8)]"></span> ${act.agent}</span>` : ''}
+                            <div class="flex items-center gap-2 mt-2 flex-wrap">
+                               ${act.agent ? `<span class="px-2 py-0.5 border rounded-full text-[10px] font-bold tracking-wide bg-blue-500/10 text-blue-300 border-blue-500/30 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 shadow-[0_0_5px_rgba(96,165,250,0.8)]"></span> ${act.agent}</span>` : '<span class="px-2 py-0.5 border rounded-full text-[10px] bg-white/5 border-white/10">Bot: n/a</span>'}
                                <span class="px-1.5 py-0.5 border rounded text-[9px] uppercase font-bold tracking-wider ${c.badge}">${act.type}</span>
-                               <span class="text-[10px] text-text-muted">${timeStr}</span>
+                               <span class="px-1.5 py-0.5 border rounded text-[9px] uppercase font-bold tracking-wider bg-white/5 border-white/10 text-text-secondary">${act.taskType || 'routine'}</span>
+                               <span class="text-[10px] text-text-muted">${act.timestamp || timeStr}</span>
                             </div>
                           </div>
                         </summary>
                         <div class="mt-3 ml-5 text-[11px] text-text-secondary space-y-1 border-l border-white/10 pl-3">
+                          <p><span class="text-text-muted">Uhrzeit:</span> ${act.timestamp || '—'}</p>
                           <p><span class="text-text-muted">Bot:</span> ${act.agent || 'unbekannt'}</p>
+                          <p><span class="text-text-muted">Tag:</span> ${act.taskType || 'routine'}</p>
                           <p><span class="text-text-muted">Ziel:</span> ${act.target || '—'}</p>
                           <p><span class="text-text-muted">Ergebnis:</span> ${act.result || 'info'}</p>
                           <p class="font-mono break-all"><span class="text-text-muted">Details:</span> ${act.details || act.text}</p>
@@ -558,6 +565,7 @@
                       <p><span class="text-text-muted">Ziel:</span> ${job.objective || '—'}</p>
                       <p><span class="text-text-muted">Letzter Lauf:</span> ${job.lastRunStatus || '—'}</p>
                       <p class="text-[10px] text-text-muted leading-relaxed">${job.lastRunSummary || 'Keine Run-Details'}</p>
+                      <button onclick="openCronRuns('${job.id}')" class="mt-2 text-[10px] px-2 py-1 rounded border border-white/20 bg-white/10">Run-Details</button>
                     </div>
                   </div>
                 `).join('')}
@@ -580,6 +588,13 @@
                 html += `<div class="glass-card p-4 flex flex-wrap items-center gap-3 text-xs text-text-secondary">
                     <span class="px-2 py-1 rounded border border-white/10 bg-black/20">Projekt-Hub</span>
                     <span>• Klick auf ein Projekt: Agenten, Tasks, Datenquellen, Meilensteine</span>
+                </div>`;
+                const workload = data.workload || [];
+                html += `<div class="glass-card p-4">
+                    <h4 class="text-sm font-semibold mb-3">Agent Workload</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
+                        ${workload.map(w => `<div class="bg-black/30 border border-white/10 rounded-lg p-3"><p class="font-semibold text-white">${w.assignee}</p><p class="text-text-muted mt-1">Open ${w.open} • Done ${w.done} • Blocked ${w.blocked}</p></div>`).join('') || '<p class="text-text-muted">Keine Daten</p>'}
+                    </div>
                 </div>`;
                 html += '<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">';
                 data.projects.forEach((p, idx) => {
@@ -668,7 +683,7 @@
                             </div>
                             <div class="glass-card p-4">
                                 <h3 class="text-sm font-semibold mb-3">Meilensteine</h3>
-                                ${(p.milestones || []).length ? `<ul class="space-y-2 text-xs">${p.milestones.map(m => `<li class="bg-black/30 border border-white/5 rounded-lg p-2"><span class="text-white">${m.title}</span><p class="text-text-muted mt-1">${m.status || 'planned'} • due ${m.due || '—'}</p></li>`).join('')}</ul>` : '<p class="text-xs text-text-muted">Keine Milestones hinterlegt.</p>'}
+                                ${(p.milestones || []).length ? `<ul class="space-y-2 text-xs">${p.milestones.map((m,mi) => `<li class="bg-black/30 border border-white/5 rounded-lg p-2"><input id="ms-title-${p.id}-${mi}" value="${(m.title||'').replace(/"/g,'&quot;')}" class="w-full bg-black/40 border border-white/10 rounded px-2 py-1 text-xs" /><div class="flex gap-2 mt-2"><input id="ms-due-${p.id}-${mi}" value="${m.due || ''}" class="flex-1 bg-black/40 border border-white/10 rounded px-2 py-1 text-xs" placeholder="YYYY-MM-DD" /><select id="ms-status-${p.id}-${mi}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-xs"><option value="planned" ${m.status==='planned'?'selected':''}>planned</option><option value="in_progress" ${m.status==='in_progress'?'selected':''}>in_progress</option><option value="done" ${m.status==='done'?'selected':''}>done</option><option value="at_risk" ${m.status==='at_risk'?'selected':''}>at_risk</option></select><button onclick="updateMilestone('${p.id}',${mi})" class="px-2 py-1 text-[10px] rounded border border-white/20 bg-white/10">Save</button></div></li>`).join('')}</ul>` : '<p class="text-xs text-text-muted">Keine Milestones hinterlegt.</p>'}
                             </div>
                         </div>
 
@@ -819,10 +834,12 @@
         window.applyActivityFilters = () => {
             const q = (document.getElementById('activity-filter-text')?.value || '').toLowerCase();
             const result = (document.getElementById('activity-filter-result')?.value || '').toLowerCase();
+            const taskType = (document.getElementById('activity-filter-tasktype')?.value || '').toLowerCase();
             document.querySelectorAll('#activity-list details').forEach(el => {
                 const matchesText = !q || (el.dataset.search || '').includes(q);
                 const matchesResult = !result || (el.dataset.result || '') === result;
-                el.style.display = (matchesText && matchesResult) ? '' : 'none';
+                const matchesTaskType = !taskType || (el.dataset.tasktype || '') === taskType;
+                el.style.display = (matchesText && matchesResult && matchesTaskType) ? '' : 'none';
             });
         };
 
@@ -871,6 +888,29 @@
             if (!w) return;
             w.document.write(`<pre style="white-space:pre-wrap;font-family:monospace;padding:16px;background:#111;color:#ddd;">${String(content).replace(/</g,'&lt;').replace(/>/g,'&gt;')}</pre>`);
             w.document.title = filePath;
+        };
+
+        window.updateMilestone = async (projectId, index) => {
+            const title = document.getElementById(`ms-title-${projectId}-${index}`)?.value || '';
+            const due = document.getElementById(`ms-due-${projectId}-${index}`)?.value || '';
+            const status = document.getElementById(`ms-status-${projectId}-${index}`)?.value || 'planned';
+            await fetch('/api/projects/milestone', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ projectId, index, title, due, status })
+            });
+            loadCurrentView();
+        };
+
+        window.openCronRuns = async (jobId) => {
+            const res = await fetch(`/api/cron/runs?id=${encodeURIComponent(jobId)}`);
+            const data = await res.json();
+            const entries = data.entries || data.data?.entries || [];
+            const w = window.open('', '_blank');
+            if (!w) return;
+            const rows = entries.map(e => `<div style="padding:8px;border-bottom:1px solid #333"><b>${e.status || '—'}</b> • ${e.runAtMs ? new Date(e.runAtMs).toISOString() : '—'}<br/><small>${(e.summary || '').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</small></div>`).join('') || '<p>Keine Runs gefunden</p>';
+            w.document.write(`<div style="font-family:system-ui;background:#111;color:#ddd;min-height:100vh;padding:16px"><h2>Cron Runs: ${jobId}</h2>${rows}</div>`);
+            w.document.title = `Cron Runs ${jobId}`;
         };
 
         // Init first view
