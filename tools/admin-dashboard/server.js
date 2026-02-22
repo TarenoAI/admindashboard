@@ -142,6 +142,46 @@ function getAgentWorkspace(agentId) {
     return found?.workspace || WORKSPACE_ROOT;
 }
 
+function writeProjectSnapshotToAgent(projectId, data, agentId) {
+    const permission = data.permissions?.[agentId] || 'read';
+    const ws = getAgentWorkspace(agentId);
+    const outDir = path.join(ws, 'projects', '_access');
+    fs.mkdirSync(outDir, { recursive: true });
+    const outFile = path.join(outDir, `${projectId}.md`);
+
+    const lines = [
+        `# Project Access Snapshot: ${data.name || projectId}`,
+        '',
+        `- Project ID: ${projectId}`,
+        `- Permission: ${permission}`,
+        `- Last Sync: ${new Date().toISOString()}`,
+        '',
+        '## Summary',
+        data.summary || '—',
+        '',
+        '## Tasks',
+        ...(Array.isArray(data.tasks) ? data.tasks.map(t => `- [${t.status}] ${t.id}: ${t.title} (prio: ${t.priority || 'n/a'}, assignee: ${t.assignee || '—'})`) : ['- —']),
+        '',
+        '## References',
+        ...(Array.isArray(data.dataRefs) ? data.dataRefs.map(r => `- ${r.label}: ${r.path} (${r.type || 'file'})`) : ['- —'])
+    ];
+
+    fs.writeFileSync(outFile, lines.join('\n') + '\n', 'utf8');
+    return { outFile, permission };
+}
+
+function syncAllAssignedAgents(projectId, data) {
+    const agents = Array.isArray(data.agents) ? data.agents : [];
+    return agents.map(a => {
+        try {
+            const result = writeProjectSnapshotToAgent(projectId, data, a.id);
+            return { agentId: a.id, ok: true, ...result };
+        } catch (e) {
+            return { agentId: a.id, ok: false, error: e.message };
+        }
+    });
+}
+
 function countTasksByState(tasks = []) {
     const states = { backlog: 0, in_progress: 0, review: 0, done: 0, blocked: 0 };
     tasks.forEach(t => {
@@ -502,7 +542,8 @@ app.post('/api/projects/task', (req, res) => {
         task.status = status;
         data.lastUpdate = new Date().toISOString().slice(0, 10);
         fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n', 'utf8');
-        return ok(res, { updated: true, projectId, taskId, status });
+        const sync = syncAllAssignedAgents(projectId, data);
+        return ok(res, { updated: true, projectId, taskId, status, sync });
     } catch (e) {
         return res.status(500).json({ success: false, error: e.message });
     }
@@ -523,7 +564,8 @@ app.post('/api/projects/task-meta', (req, res) => {
         if (typeof due === 'string') task.due = due;
         data.lastUpdate = new Date().toISOString().slice(0, 10);
         fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n', 'utf8');
-        return ok(res, { updated: true, projectId, taskId, title: task.title, priority: task.priority, due: task.due });
+        const sync = syncAllAssignedAgents(projectId, data);
+        return ok(res, { updated: true, projectId, taskId, title: task.title, priority: task.priority, due: task.due, sync });
     } catch (e) {
         return res.status(500).json({ success: false, error: e.message });
     }
@@ -544,7 +586,8 @@ app.post('/api/projects/milestone', (req, res) => {
         if (typeof status === 'string') m.status = status;
         data.lastUpdate = new Date().toISOString().slice(0, 10);
         fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n', 'utf8');
-        return ok(res, { updated: true, projectId, index, milestone: m });
+        const sync = syncAllAssignedAgents(projectId, data);
+        return ok(res, { updated: true, projectId, index, milestone: m, sync });
     } catch (e) {
         return res.status(500).json({ success: false, error: e.message });
     }
@@ -573,7 +616,8 @@ app.post('/api/projects/agent', (req, res) => {
         data.lastUpdate = new Date().toISOString().slice(0, 10);
         saveProjectMeta(projectId, data);
 
-        return ok(res, { updated: true, projectId, agentId, permission: perm });
+        const sync = syncAllAssignedAgents(projectId, data);
+        return ok(res, { updated: true, projectId, agentId, permission: perm, sync });
     } catch (e) {
         return res.status(500).json({ success: false, error: e.message });
     }
@@ -613,7 +657,8 @@ app.post('/api/projects/reference', (req, res) => {
         data.lastUpdate = new Date().toISOString().slice(0, 10);
         saveProjectMeta(projectId, data);
 
-        return ok(res, { added: true, projectId, referencePath: rel });
+        const sync = syncAllAssignedAgents(projectId, data);
+        return ok(res, { added: true, projectId, referencePath: rel, sync });
     } catch (e) {
         return res.status(500).json({ success: false, error: e.message });
     }
@@ -626,30 +671,7 @@ app.post('/api/projects/sync-agent', (req, res) => {
         const data = loadProjectMeta(projectId);
         if (!data) return res.status(404).json({ success: false, error: 'Project data file missing' });
 
-        const permission = data.permissions?.[agentId] || 'read';
-        const ws = getAgentWorkspace(agentId);
-        const outDir = path.join(ws, 'projects', '_access');
-        fs.mkdirSync(outDir, { recursive: true });
-        const outFile = path.join(outDir, `${projectId}.md`);
-
-        const lines = [
-            `# Project Access Snapshot: ${data.name || projectId}`,
-            '',
-            `- Project ID: ${projectId}`,
-            `- Permission: ${permission}`,
-            `- Last Sync: ${new Date().toISOString()}`,
-            '',
-            '## Summary',
-            data.summary || '—',
-            '',
-            '## Tasks',
-            ...(Array.isArray(data.tasks) ? data.tasks.map(t => `- [${t.status}] ${t.id}: ${t.title} (prio: ${t.priority || 'n/a'}, assignee: ${t.assignee || '—'})`) : ['- —']),
-            '',
-            '## References',
-            ...(Array.isArray(data.dataRefs) ? data.dataRefs.map(r => `- ${r.label}: ${r.path} (${r.type || 'file'})`) : ['- —'])
-        ];
-
-        fs.writeFileSync(outFile, lines.join('\n') + '\n', 'utf8');
+        const { outFile, permission } = writeProjectSnapshotToAgent(projectId, data, agentId);
         return ok(res, { synced: true, projectId, agentId, permission, outFile });
     } catch (e) {
         return res.status(500).json({ success: false, error: e.message });
