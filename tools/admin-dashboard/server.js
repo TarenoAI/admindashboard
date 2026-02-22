@@ -69,6 +69,10 @@ app.use((req, res, next) => {
 // --------------------------------------
 
 const WORKSPACE_ROOT = path.resolve(__dirname, "..", "..");
+const ALLOWED_WORKSPACES = [
+    WORKSPACE_ROOT,
+    "/root/.openclaw/workspace-blog"
+].map(p => path.resolve(p));
 const MEMORY_DIR = path.join(WORKSPACE_ROOT, "memory");
 const SKILLS_DIR = "/usr/lib/node_modules/openclaw/skills";
 const PROJECT_DATA_DIR = path.join(WORKSPACE_ROOT, "data", "projects");
@@ -76,6 +80,11 @@ const SKILL_POLICY_FILE = path.join(WORKSPACE_ROOT, "data", "skills-policy.json"
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
+
+function isAllowedWorkspacePath(absPath) {
+    const resolved = path.resolve(absPath);
+    return ALLOWED_WORKSPACES.some(root => resolved === root || resolved.startsWith(root + path.sep));
+}
 
 function readFileSafe(filePath) {
     try { return fs.readFileSync(filePath, "utf8"); } catch { return null; }
@@ -804,8 +813,8 @@ app.post('/api/projects/reference', (req, res) => {
         if (!hasProjectWritePermission(data, actorAgentId)) return res.status(403).json({ success: false, error: `Agent ${actorAgentId} has no write permission for project ${projectId}` });
 
         const absSource = path.resolve(sourcePath);
-        if (!absSource.startsWith(WORKSPACE_ROOT)) {
-            return res.status(403).json({ success: false, error: 'sourcePath outside workspace blocked' });
+        if (!isAllowedWorkspacePath(absSource)) {
+            return res.status(403).json({ success: false, error: 'sourcePath outside allowed workspaces blocked' });
         }
         if (!fs.existsSync(absSource)) {
             return res.status(404).json({ success: false, error: 'sourcePath not found' });
@@ -855,7 +864,7 @@ app.get('/api/file', (req, res) => {
     const target = String(req.query.path || '');
     if (!target) return res.status(400).json({ success: false, error: 'Missing ?path=' });
     const abs = path.resolve(target);
-    if (!abs.startsWith(WORKSPACE_ROOT)) return res.status(403).json({ success: false, error: 'Path outside workspace blocked' });
+    if (!isAllowedWorkspacePath(abs)) return res.status(403).json({ success: false, error: 'Path outside allowed workspaces blocked' });
     const content = readFileSafe(abs);
     if (content == null) return res.status(404).json({ success: false, error: 'File not found' });
     return ok(res, { path: abs, content });
@@ -865,7 +874,7 @@ app.get('/api/file/raw', (req, res) => {
     const target = String(req.query.path || '');
     if (!target) return res.status(400).send('Missing ?path=');
     const abs = path.resolve(target);
-    if (!abs.startsWith(WORKSPACE_ROOT)) return res.status(403).send('Path outside workspace blocked');
+    if (!isAllowedWorkspacePath(abs)) return res.status(403).send('Path outside allowed workspaces blocked');
     if (!fs.existsSync(abs)) return res.status(404).send('File not found');
     return res.sendFile(abs);
 });

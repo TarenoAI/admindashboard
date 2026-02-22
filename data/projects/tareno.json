@@ -60,15 +60,6 @@
       "assignee": "Luna",
       "due": "2026-02-23",
       "blocker": null
-    },
-    {
-      "id": "TAR-4",
-      "title": "X/Twitter Session für LigaMonitor erneuern",
-      "status": "backlog",
-      "priority": "medium",
-      "assignee": "MiracleSocial",
-      "due": "2026-02-22",
-      "blocker": "Manueller Login erforderlich"
     }
   ],
   "dataRefs": [
@@ -87,6 +78,24 @@
       "path": "projects/_knowledge/tareno/2026-02-22T12-12-54-846Z-ND-Live-Test-001.md",
       "type": "md",
       "addedAt": "2026-02-22T12:12:54.846Z"
+    },
+    {
+      "label": "Live test probe",
+      "path": "projects/_knowledge/tareno/2026-02-22T12-28-07-077Z-Live-test-probe.txt",
+      "type": "txt",
+      "addedAt": "2026-02-22T12:28:07.078Z"
+    },
+    {
+      "label": "Live test probe",
+      "path": "projects/_knowledge/tareno/2026-02-22T12-28-07-099Z-Live-test-probe.txt",
+      "type": "txt",
+      "addedAt": "2026-02-22T12:28:07.099Z"
+    },
+    {
+      "label": "BLOG_BLUEPRINT",
+      "path": "data/project-refs/tareno/BLOG_BLUEPRINT.md",
+      "type": "file",
+      "addedAt": "2026-02-22T17:05:30.044Z"
     }
   ],
   "notes": "Sam liefert operative Updates; Luna validiert Struktur und Qualität.",
