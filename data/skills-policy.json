@@ -6,6 +6,12 @@
       "agents": [
         "*"
       ]
+    },
+    "proactive-agent": {
+      "enabled": true,
+      "agents": [
+        "*"
+      ]
     }
   }
 }
