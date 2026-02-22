@@ -349,6 +349,7 @@
                     selectedProject = refreshed;
                     currentData = { project: refreshed, projects: data.projects || [] };
                     renderView(currentTab, currentData, container);
+                    setTimeout(() => runCapabilityChecksForProject(refreshed.id), 120);
                     return;
                 }
 
@@ -1148,6 +1149,13 @@
             });
             const data = await res.json();
             if (out) out.innerText = data.ok ? '✅ Write möglich' : `❌ ${data.reason || 'nicht möglich'}`;
+        };
+
+        window.runCapabilityChecksForProject = async (projectId) => {
+            const agents = currentData?.project?.agents || [];
+            for (const a of agents) {
+                await window.checkProjectCapability(projectId, a.id);
+            }
         };
 
         window.addProjectReference = async (projectId) => {
