@@ -151,6 +151,35 @@
             animation: spin 1s linear infinite;
         }
 
+        @media (max-width: 768px) {
+            body {
+                overflow: auto;
+            }
+
+            #sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                transform: translateX(-100%);
+                transition: transform 0.25s ease;
+                width: 82vw;
+                max-width: 320px;
+            }
+
+            #sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            main {
+                width: 100%;
+            }
+
+            #content-area {
+                padding: 1rem;
+            }
+        }
+
         @keyframes spin {
             to {
                 transform: rotate(360deg);
@@ -162,7 +191,7 @@
 <body class="bg-neutral-bg1 text-text-primary flex h-screen font-sans antialiased text-sm">
 
     <!-- Sidebar -->
-    <aside class="glass-sidebar w-64 flex flex-col h-full z-10">
+    <aside id="sidebar" class="glass-sidebar w-64 flex flex-col h-full z-20">
         <div class="px-6 py-8">
             <h1
                 class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-brand to-blue-400 flex items-center gap-2">
@@ -219,10 +248,13 @@
     <!-- Main Content -->
     <main class="flex-1 flex flex-col h-full overflow-hidden relative z-0">
         <header
-            class="h-16 flex items-center justify-between px-8 border-b border-border-subtle backdrop-blur-md bg-transparent z-10">
-            <h2 id="view-title" class="text-lg font-semibold tracking-wide">Alle Agenten</h2>
+            class="h-16 flex items-center justify-between px-4 md:px-8 border-b border-border-subtle backdrop-blur-md bg-transparent z-10 gap-2">
+            <div class="flex items-center gap-2">
+                <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden bg-white/5 hover:bg-white/10 border border-white/10 text-white px-2.5 py-1.5 rounded-lg text-xs">☰</button>
+                <h2 id="view-title" class="text-base md:text-lg font-semibold tracking-wide">Alle Agenten</h2>
+            </div>
             <button onclick="loadCurrentView()"
-                class="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-4 py-1.5 rounded-lg text-xs font-medium transition-all focus:ring-2 focus:ring-brand">
+                class="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-3 md:px-4 py-1.5 rounded-lg text-xs font-medium transition-all focus:ring-2 focus:ring-brand whitespace-nowrap">
                 Refresh Data
             </button>
         </header>
@@ -248,6 +280,13 @@
             document.getElementById('view-title').innerText = el.innerText.substring(2).trim(); // Remove emoji
             configureAutoRefreshForTab();
             loadCurrentView();
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar')?.classList.remove('mobile-open');
+            }
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('sidebar')?.classList.toggle('mobile-open');
         }
 
         function configureAutoRefreshForTab() {
