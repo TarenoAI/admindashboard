@@ -1,0 +1,11 @@
+{
+  "globalEnabled": true,
+  "skills": {
+    "self-improving-agent": {
+      "enabled": true,
+      "agents": [
+        "*"
+      ]
+    }
+  }
+}
