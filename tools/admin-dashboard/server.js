@@ -7,6 +7,12 @@ const os = require("os");
 const app = express();
 const PORT = process.env.PORT || 3477;
 
+// BasicAuth brute-force protection (in-memory)
+const AUTH_WINDOW_MS = 15 * 60 * 1000; // 15 min
+const AUTH_MAX_FAILS = 6;
+const AUTH_COOLDOWN_MS = 15 * 60 * 1000; // 15 min lock
+const authAttempts = new Map();
+
 // --- SECURITY: Basic Authentication ---
 // Reads credentials from dashboard-auth.json in the same folder,
 // then falls back to env vars, then to built-in defaults.
@@ -27,13 +33,38 @@ const authCfg = loadAuthConfig();
 console.log(`[Auth] Dashboard-Login: user="${authCfg.user}", pass-source=${fs.existsSync(path.join(__dirname, 'dashboard-auth.json')) ? 'dashboard-auth.json' : 'env/default'}`);
 
 app.use((req, res, next) => {
+    const ip = (req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown').toString().split(',')[0].trim();
+    const now = Date.now();
+    const state = authAttempts.get(ip) || { fails: [], lockedUntil: 0 };
+
+    // active cooldown
+    if (state.lockedUntil && now < state.lockedUntil) {
+        const retryAfterSec = Math.ceil((state.lockedUntil - now) / 1000);
+        res.set('Retry-After', String(retryAfterSec));
+        return res.status(429).send(`Too many failed login attempts. Retry in ${retryAfterSec}s.`);
+    }
+
     const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
     const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':');
     if (login && password && login === authCfg.user && password === authCfg.pass) {
+        authAttempts.delete(ip); // reset on successful auth
         return next();
     }
+
+    // register failure in rolling window
+    const freshFails = (state.fails || []).filter(ts => now - ts <= AUTH_WINDOW_MS);
+    freshFails.push(now);
+    state.fails = freshFails;
+
+    if (freshFails.length >= AUTH_MAX_FAILS) {
+        state.lockedUntil = now + AUTH_COOLDOWN_MS;
+    } else {
+        state.lockedUntil = 0;
+    }
+
+    authAttempts.set(ip, state);
     res.set('WWW-Authenticate', 'Basic realm="OpenClaw Admin Dashboard"');
-    res.status(401).send('Authentication required.');
+    return res.status(401).send('Authentication required.');
 });
 // --------------------------------------
 
