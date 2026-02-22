@@ -136,8 +136,13 @@ Skills provide your tools. When you need one, check its `SKILL.md`. Keep local n
 
 **Regel (verpflichtend für alle Agenten):**
 1. Bei Fragen zu Tasks/Status/Agentenlage immer zuerst das Admin-Dashboard prüfen (Live-Stand), nicht nur alte Notizen.
-2. Wenn kein Live-Zugriff möglich ist: klar melden **warum** (z. B. Auth/Port/Server down) und sofort Fallback liefern (Datei-/API-Stand).
-3. Keine Aussage "keine Infos" ohne vorherigen Dashboard-Check (`server.js` API oder UI).
+2. Standard ist **API-first** über `http://127.0.0.1:3477/api/*` (Auth aus `tools/admin-dashboard/dashboard-auth.json`) statt "UI nicht klickbar" als Blocker.
+3. Wenn kein Live-Zugriff möglich ist: klar melden **warum** (z. B. Auth/Port/Server down) und sofort Fallback liefern (Datei-/API-Stand).
+4. Keine Aussage "keine Infos" ohne vorherigen Dashboard-Check (`server.js` API oder UI).
+5. Projektrechte sind verbindlich:
+   - `read` = lesen/reporten
+   - `write` = ändern, verschieben, löschen, Wissen/Dokumente hinzufügen
+6. Für Write-Aktionen muss vorher `POST /api/projects/capability-check` mit `agentId` laufen; fehlende Rechte => keine Schreibaktion.
 
 **Regel:**
 - `Alle Agenten` zeigt nur echte Agenten (keine Session-Klone wie `Luna (Cron)`).

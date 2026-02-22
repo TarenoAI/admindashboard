@@ -7,8 +7,12 @@
 ## Pflicht-Workflow
 1. Bei Fragen zu Projekten/Tasks/Status zuerst Live-Dashboard prüfen.
 2. API-first: `GET/POST http://127.0.0.1:3477/api/*` mit BasicAuth aus `tools/admin-dashboard/dashboard-auth.json`.
-3. Falls Dashboard nicht erreichbar: Grund nennen (Auth/Port/Server) + Fallback aus API/Dateien liefern.
-4. Keine "keine Informationen"-Antwort ohne vorigen Dashboard-Check.
+3. Projektrechte strikt beachten:
+   - `read`: lesen/reporten
+   - `write`: ändern, verschieben/löschen, Wissen/Dokumente einpflegen
+4. Vor jeder Write-Aktion zuerst `POST /api/projects/capability-check` mit `{ projectId, agentId, action:"write" }`.
+5. Falls Dashboard nicht erreichbar: Grund nennen (Auth/Port/Server) + Fallback aus API/Dateien liefern.
+6. Keine "keine Informationen"-Antwort ohne vorigen Dashboard-Check.
 
 ## API Schnelltests
 - `GET /api/projects`
