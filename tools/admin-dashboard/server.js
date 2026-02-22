@@ -571,6 +571,92 @@ app.post('/api/projects/task-meta', (req, res) => {
     }
 });
 
+app.post('/api/projects/task-delete', (req, res) => {
+    try {
+        const { projectId, taskId } = req.body || {};
+        if (!projectId || !taskId) return res.status(400).json({ success: false, error: 'projectId, taskId required' });
+        const data = loadProjectMeta(projectId);
+        if (!data) return res.status(404).json({ success: false, error: 'Project data file missing' });
+
+        const before = Array.isArray(data.tasks) ? data.tasks.length : 0;
+        data.tasks = (data.tasks || []).filter(t => t.id !== taskId);
+        if (data.tasks.length === before) return res.status(404).json({ success: false, error: 'Task not found' });
+
+        data.lastUpdate = new Date().toISOString().slice(0, 10);
+        saveProjectMeta(projectId, data);
+        const sync = syncAllAssignedAgents(projectId, data);
+        return ok(res, { deleted: true, projectId, taskId, sync });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
+});
+
+app.post('/api/projects/task-move', (req, res) => {
+    try {
+        const { fromProjectId, toProjectId, taskId } = req.body || {};
+        if (!fromProjectId || !toProjectId || !taskId) return res.status(400).json({ success: false, error: 'fromProjectId, toProjectId, taskId required' });
+        if (fromProjectId === toProjectId) return res.status(400).json({ success: false, error: 'Source and target project must differ' });
+
+        const source = loadProjectMeta(fromProjectId);
+        const target = loadProjectMeta(toProjectId);
+        if (!source || !target) return res.status(404).json({ success: false, error: 'Project data file missing' });
+
+        const idx = (source.tasks || []).findIndex(t => t.id === taskId);
+        if (idx < 0) return res.status(404).json({ success: false, error: 'Task not found in source project' });
+
+        const [task] = source.tasks.splice(idx, 1);
+        target.tasks = Array.isArray(target.tasks) ? target.tasks : [];
+        target.tasks.push(task);
+
+        const now = new Date().toISOString().slice(0, 10);
+        source.lastUpdate = now;
+        target.lastUpdate = now;
+        saveProjectMeta(fromProjectId, source);
+        saveProjectMeta(toProjectId, target);
+
+        const syncFrom = syncAllAssignedAgents(fromProjectId, source);
+        const syncTo = syncAllAssignedAgents(toProjectId, target);
+
+        return ok(res, { moved: true, fromProjectId, toProjectId, taskId, syncFrom, syncTo });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
+});
+
+app.post('/api/projects/knowledge', (req, res) => {
+    try {
+        const { projectId, title, content, kind } = req.body || {};
+        if (!projectId || !content) return res.status(400).json({ success: false, error: 'projectId, content required' });
+        const data = loadProjectMeta(projectId);
+        if (!data) return res.status(404).json({ success: false, error: 'Project data file missing' });
+
+        const knowledgeDir = path.join(WORKSPACE_ROOT, 'projects', '_knowledge', projectId);
+        fs.mkdirSync(knowledgeDir, { recursive: true });
+        const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const safeTitle = String(title || 'knowledge').replace(/[^a-zA-Z0-9_-]+/g, '-').slice(0, 40) || 'knowledge';
+        const ext = String(kind || '').toLowerCase() === 'md' ? 'md' : 'txt';
+        const fileName = `${stamp}-${safeTitle}.${ext}`;
+        const abs = path.join(knowledgeDir, fileName);
+        fs.writeFileSync(abs, content + '\n', 'utf8');
+
+        const rel = path.relative(WORKSPACE_ROOT, abs);
+        data.dataRefs = Array.isArray(data.dataRefs) ? data.dataRefs : [];
+        data.dataRefs.push({
+            label: title || `Knowledge ${stamp}`,
+            path: rel,
+            type: ext,
+            addedAt: new Date().toISOString()
+        });
+        data.lastUpdate = new Date().toISOString().slice(0, 10);
+        saveProjectMeta(projectId, data);
+
+        const sync = syncAllAssignedAgents(projectId, data);
+        return ok(res, { added: true, projectId, path: rel, sync });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
+});
+
 app.post('/api/projects/milestone', (req, res) => {
     try {
         const { projectId, index, title, due, status } = req.body || {};

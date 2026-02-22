@@ -347,7 +347,7 @@
                     const data = await response.json();
                     const refreshed = (data.projects || []).find(p => p.id === selectedProject.id) || selectedProject;
                     selectedProject = refreshed;
-                    currentData = { project: refreshed };
+                    currentData = { project: refreshed, projects: data.projects || [] };
                     renderView(currentTab, currentData, container);
                     return;
                 }
@@ -812,7 +812,7 @@
                                     <div class="bg-black/30 border border-white/5 rounded-lg p-3">
                                         <p class="text-[10px] uppercase tracking-wider text-text-muted mb-2">${state.replace('_',' ')}</p>
                                         <div class="space-y-2">
-                                            ${(taskByState[state] || []).map(t => `<div class="border border-white/10 rounded p-2 bg-black/20"><p class="font-semibold text-white">${t.id}: ${t.title}</p><p class="text-text-muted mt-1">${t.assignee || '—'} • ${t.priority || 'n/a'}</p>${t.blocker ? `<p class="text-red-300 mt-1">Blocker: ${t.blocker}</p>` : ''}<div class="mt-2 grid grid-cols-1 gap-2"><input id="task-title-${p.id}-${t.id}" value="${(t.title||'').replace(/"/g,'&quot;')}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px]" /><div class="flex gap-2"><select id="task-priority-${p.id}-${t.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px]"><option value="low" ${t.priority==='low'?'selected':''}>low</option><option value="medium" ${t.priority==='medium'?'selected':''}>medium</option><option value="high" ${t.priority==='high'?'selected':''}>high</option></select><input id="task-due-${p.id}-${t.id}" value="${t.due || ''}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px]" placeholder="YYYY-MM-DD" /></div><div class="flex gap-2"><select id="task-${p.id}-${t.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px]"><option value="backlog" ${t.status==='backlog'?'selected':''}>backlog</option><option value="in_progress" ${t.status==='in_progress'?'selected':''}>in_progress</option><option value="review" ${t.status==='review'?'selected':''}>review</option><option value="done" ${t.status==='done'?'selected':''}>done</option></select><button onclick="updateTaskStatus('${p.id}','${t.id}')" class="text-[10px] px-2 py-1 rounded border border-brand/30 bg-brand/20">Status</button><button onclick="updateTaskMeta('${p.id}','${t.id}')" class="text-[10px] px-2 py-1 rounded border border-white/20 bg-white/10">Meta</button></div></div></div>`).join('') || '<p class="text-text-muted">—</p>'}
+                                            ${(taskByState[state] || []).map(t => `<div class="border border-white/10 rounded p-2 bg-black/20"><p class="font-semibold text-white">${t.id}: ${t.title}</p><p class="text-text-muted mt-1">${t.assignee || '—'} • ${t.priority || 'n/a'}</p>${t.blocker ? `<p class="text-red-300 mt-1">Blocker: ${t.blocker}</p>` : ''}<div class="mt-2 grid grid-cols-1 gap-2"><input id="task-title-${p.id}-${t.id}" value="${(t.title||'').replace(/"/g,'&quot;')}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px]" /><div class="flex gap-2"><select id="task-priority-${p.id}-${t.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px]"><option value="low" ${t.priority==='low'?'selected':''}>low</option><option value="medium" ${t.priority==='medium'?'selected':''}>medium</option><option value="high" ${t.priority==='high'?'selected':''}>high</option></select><input id="task-due-${p.id}-${t.id}" value="${t.due || ''}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px]" placeholder="YYYY-MM-DD" /></div><div class="flex gap-2"><select id="task-${p.id}-${t.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px]"><option value="backlog" ${t.status==='backlog'?'selected':''}>backlog</option><option value="in_progress" ${t.status==='in_progress'?'selected':''}>in_progress</option><option value="review" ${t.status==='review'?'selected':''}>review</option><option value="done" ${t.status==='done'?'selected':''}>done</option></select><button onclick="updateTaskStatus('${p.id}','${t.id}')" class="text-[10px] px-2 py-1 rounded border border-brand/30 bg-brand/20">Status</button><button onclick="updateTaskMeta('${p.id}','${t.id}')" class="text-[10px] px-2 py-1 rounded border border-white/20 bg-white/10">Meta</button></div><div class="flex gap-2"><select id="task-move-${p.id}-${t.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px]"><option value="">Nach Projekt verschieben…</option>${(currentData?.projects || []).filter(pp => pp.id !== p.id).map(pp => `<option value="${pp.id}">${pp.name}</option>`).join('')}</select><button onclick="moveTaskToProject('${p.id}','${t.id}')" class="text-[10px] px-2 py-1 rounded border border-yellow-500/30 bg-yellow-500/20">Verschieben</button><button onclick="deleteTask('${p.id}','${t.id}')" class="text-[10px] px-2 py-1 rounded border border-red-500/30 bg-red-500/20">Löschen</button></div></div></div>`).join('') || '<p class="text-text-muted">—</p>'}
                                         </div>
                                     </div>
                                 `).join('')}
@@ -841,6 +841,18 @@
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
                                 <input id="proj-sync-agent-${p.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1" placeholder="agent id (z.B. kimikimbo)" />
                                 <button onclick="syncProjectToAgent('${p.id}')" class="px-2 py-1 rounded border border-green-500/30 bg-green-500/20">Projekt zu Agent syncen</button>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-4">
+                            <h3 class="text-sm font-semibold mb-3">Projektwissen / ND direkt ablegen</h3>
+                            <div class="grid grid-cols-1 gap-2 text-xs">
+                                <input id="proj-knowledge-title-${p.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1" placeholder="Titel (z.B. ND Kundenbriefing)" />
+                                <textarea id="proj-knowledge-content-${p.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1 min-h-[120px]" placeholder="Inhalt einfügen..."></textarea>
+                                <div class="flex gap-2">
+                                    <select id="proj-knowledge-kind-${p.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1"><option value="md">Markdown</option><option value="txt">Text</option></select>
+                                    <button onclick="addProjectKnowledge('${p.id}')" class="px-2 py-1 rounded border border-brand/30 bg-brand/20">Wissen speichern + alle Agenten syncen</button>
+                                </div>
                             </div>
                         </div>
 
@@ -1145,6 +1157,41 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ projectId, agentId })
+            });
+            loadCurrentView();
+        };
+
+        window.deleteTask = async (projectId, taskId) => {
+            if (!confirm(`Task ${taskId} wirklich löschen?`)) return;
+            await fetch('/api/projects/task-delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ projectId, taskId })
+            });
+            loadCurrentView();
+        };
+
+        window.moveTaskToProject = async (fromProjectId, taskId) => {
+            const sel = document.getElementById(`task-move-${fromProjectId}-${taskId}`);
+            const toProjectId = sel?.value;
+            if (!toProjectId) return;
+            await fetch('/api/projects/task-move', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fromProjectId, toProjectId, taskId })
+            });
+            loadCurrentView();
+        };
+
+        window.addProjectKnowledge = async (projectId) => {
+            const title = document.getElementById(`proj-knowledge-title-${projectId}`)?.value?.trim();
+            const content = document.getElementById(`proj-knowledge-content-${projectId}`)?.value?.trim();
+            const kind = document.getElementById(`proj-knowledge-kind-${projectId}`)?.value || 'md';
+            if (!content) return;
+            await fetch('/api/projects/knowledge', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ projectId, title, content, kind })
             });
             loadCurrentView();
         };
