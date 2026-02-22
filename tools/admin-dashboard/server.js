@@ -182,6 +182,12 @@ function syncAllAssignedAgents(projectId, data) {
     });
 }
 
+function hasProjectWritePermission(projectData, agentId) {
+    if (!agentId) return true; // dashboard/manual calls without actor are allowed
+    const perms = (projectData && typeof projectData.permissions === 'object') ? projectData.permissions : {};
+    return String(perms[agentId] || 'read').toLowerCase() === 'write';
+}
+
 function countTasksByState(tasks = []) {
     const states = { backlog: 0, in_progress: 0, review: 0, done: 0, blocked: 0 };
     tasks.forEach(t => {
@@ -531,12 +537,13 @@ app.post('/api/agent-builder/create', async (req, res) => {
 
 app.post('/api/projects/task', (req, res) => {
     try {
-        const { projectId, taskId, status } = req.body || {};
+        const { projectId, taskId, status, actorAgentId } = req.body || {};
         if (!projectId || !taskId || !status) return res.status(400).json({ success: false, error: 'projectId, taskId, status required' });
         const file = path.join(PROJECT_DATA_DIR, `${projectId}.json`);
         const raw = readFileSafe(file);
         if (!raw) return res.status(404).json({ success: false, error: 'Project data file missing' });
         const data = JSON.parse(raw);
+        if (!hasProjectWritePermission(data, actorAgentId)) return res.status(403).json({ success: false, error: `Agent ${actorAgentId} has no write permission for project ${projectId}` });
         const task = (data.tasks || []).find(t => t.id === taskId);
         if (!task) return res.status(404).json({ success: false, error: 'Task not found' });
         task.status = status;
@@ -551,12 +558,13 @@ app.post('/api/projects/task', (req, res) => {
 
 app.post('/api/projects/task-meta', (req, res) => {
     try {
-        const { projectId, taskId, title, priority, due } = req.body || {};
+        const { projectId, taskId, title, priority, due, actorAgentId } = req.body || {};
         if (!projectId || !taskId) return res.status(400).json({ success: false, error: 'projectId, taskId required' });
         const file = path.join(PROJECT_DATA_DIR, `${projectId}.json`);
         const raw = readFileSafe(file);
         if (!raw) return res.status(404).json({ success: false, error: 'Project data file missing' });
         const data = JSON.parse(raw);
+        if (!hasProjectWritePermission(data, actorAgentId)) return res.status(403).json({ success: false, error: `Agent ${actorAgentId} has no write permission for project ${projectId}` });
         const task = (data.tasks || []).find(t => t.id === taskId);
         if (!task) return res.status(404).json({ success: false, error: 'Task not found' });
         if (typeof title === 'string') task.title = title;
@@ -573,10 +581,11 @@ app.post('/api/projects/task-meta', (req, res) => {
 
 app.post('/api/projects/task-delete', (req, res) => {
     try {
-        const { projectId, taskId } = req.body || {};
+        const { projectId, taskId, actorAgentId } = req.body || {};
         if (!projectId || !taskId) return res.status(400).json({ success: false, error: 'projectId, taskId required' });
         const data = loadProjectMeta(projectId);
         if (!data) return res.status(404).json({ success: false, error: 'Project data file missing' });
+        if (!hasProjectWritePermission(data, actorAgentId)) return res.status(403).json({ success: false, error: `Agent ${actorAgentId} has no write permission for project ${projectId}` });
 
         const before = Array.isArray(data.tasks) ? data.tasks.length : 0;
         data.tasks = (data.tasks || []).filter(t => t.id !== taskId);
@@ -593,13 +602,14 @@ app.post('/api/projects/task-delete', (req, res) => {
 
 app.post('/api/projects/task-move', (req, res) => {
     try {
-        const { fromProjectId, toProjectId, taskId } = req.body || {};
+        const { fromProjectId, toProjectId, taskId, actorAgentId } = req.body || {};
         if (!fromProjectId || !toProjectId || !taskId) return res.status(400).json({ success: false, error: 'fromProjectId, toProjectId, taskId required' });
         if (fromProjectId === toProjectId) return res.status(400).json({ success: false, error: 'Source and target project must differ' });
 
         const source = loadProjectMeta(fromProjectId);
         const target = loadProjectMeta(toProjectId);
         if (!source || !target) return res.status(404).json({ success: false, error: 'Project data file missing' });
+        if (!hasProjectWritePermission(source, actorAgentId)) return res.status(403).json({ success: false, error: `Agent ${actorAgentId} has no write permission for project ${fromProjectId}` });
 
         const idx = (source.tasks || []).findIndex(t => t.id === taskId);
         if (idx < 0) return res.status(404).json({ success: false, error: 'Task not found in source project' });
@@ -625,10 +635,11 @@ app.post('/api/projects/task-move', (req, res) => {
 
 app.post('/api/projects/knowledge', (req, res) => {
     try {
-        const { projectId, title, content, kind } = req.body || {};
+        const { projectId, title, content, kind, actorAgentId } = req.body || {};
         if (!projectId || !content) return res.status(400).json({ success: false, error: 'projectId, content required' });
         const data = loadProjectMeta(projectId);
         if (!data) return res.status(404).json({ success: false, error: 'Project data file missing' });
+        if (!hasProjectWritePermission(data, actorAgentId)) return res.status(403).json({ success: false, error: `Agent ${actorAgentId} has no write permission for project ${projectId}` });
 
         const knowledgeDir = path.join(WORKSPACE_ROOT, 'projects', '_knowledge', projectId);
         fs.mkdirSync(knowledgeDir, { recursive: true });
@@ -659,12 +670,13 @@ app.post('/api/projects/knowledge', (req, res) => {
 
 app.post('/api/projects/milestone', (req, res) => {
     try {
-        const { projectId, index, title, due, status } = req.body || {};
+        const { projectId, index, title, due, status, actorAgentId } = req.body || {};
         if (!projectId || index == null) return res.status(400).json({ success: false, error: 'projectId, index required' });
         const file = path.join(PROJECT_DATA_DIR, `${projectId}.json`);
         const raw = readFileSafe(file);
         if (!raw) return res.status(404).json({ success: false, error: 'Project data file missing' });
         const data = JSON.parse(raw);
+        if (!hasProjectWritePermission(data, actorAgentId)) return res.status(403).json({ success: false, error: `Agent ${actorAgentId} has no write permission for project ${projectId}` });
         const m = (data.milestones || [])[Number(index)];
         if (!m) return res.status(404).json({ success: false, error: 'Milestone not found' });
         if (typeof title === 'string') m.title = title;
@@ -704,6 +716,49 @@ app.post('/api/projects/agent', (req, res) => {
 
         const sync = syncAllAssignedAgents(projectId, data);
         return ok(res, { updated: true, projectId, agentId, permission: perm, sync });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
+});
+
+app.post('/api/projects/capability-check', (req, res) => {
+    try {
+        const { projectId, agentId, action } = req.body || {};
+        if (!projectId || !agentId) return res.status(400).json({ success: false, error: 'projectId, agentId required' });
+        const data = loadProjectMeta(projectId);
+        if (!data) return res.status(404).json({ success: false, error: 'Project data file missing' });
+
+        const assigned = (data.agents || []).some(a => String(a.id).toLowerCase() === String(agentId).toLowerCase());
+        const permission = (data.permissions && data.permissions[agentId]) ? data.permissions[agentId] : 'read';
+        const canWrite = hasProjectWritePermission(data, agentId);
+
+        const ws = getAgentWorkspace(agentId);
+        const accessDir = path.join(ws, 'projects', '_access');
+        let writable = false;
+        let writeProbeError = null;
+        try {
+            fs.mkdirSync(accessDir, { recursive: true });
+            const probe = path.join(accessDir, `.capability-${projectId}.tmp`);
+            fs.writeFileSync(probe, `probe ${new Date().toISOString()}\n`, 'utf8');
+            fs.unlinkSync(probe);
+            writable = true;
+        } catch (e) {
+            writeProbeError = e.message;
+        }
+
+        const okAction = (action || 'write') === 'write' ? (assigned && canWrite && writable) : assigned;
+
+        return ok(res, {
+            projectId,
+            agentId,
+            action: action || 'write',
+            assigned,
+            permission,
+            canWrite,
+            writable,
+            ok: okAction,
+            reason: okAction ? 'ok' : (assigned ? (canWrite ? (writeProbeError || 'workspace not writable') : 'permission is read-only') : 'agent not assigned to project')
+        });
     } catch (e) {
         return res.status(500).json({ success: false, error: e.message });
     }
