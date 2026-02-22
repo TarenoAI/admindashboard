@@ -130,6 +130,14 @@ Skills provide your tools. When you need one, check its `SKILL.md`. Keep local n
 - UI: `tools/admin-dashboard/public/index.html`
 - API backend: `tools/admin-dashboard/server.js`
 - Start/Run (falls nötig): im Ordner `tools/admin-dashboard` den Node-Server starten.
+- Live URL lokal: `http://127.0.0.1:3477`
+- Extern (wenn Port offen): `http://31.97.32.40:3477`
+- Auth-Datei: `tools/admin-dashboard/dashboard-auth.json`
+
+**Regel (verpflichtend für alle Agenten):**
+1. Bei Fragen zu Tasks/Status/Agentenlage immer zuerst das Admin-Dashboard prüfen (Live-Stand), nicht nur alte Notizen.
+2. Wenn kein Live-Zugriff möglich ist: klar melden **warum** (z. B. Auth/Port/Server down) und sofort Fallback liefern (Datei-/API-Stand).
+3. Keine Aussage "keine Infos" ohne vorherigen Dashboard-Check (`server.js` API oder UI).
 
 **Regel:**
 - `Alle Agenten` zeigt nur echte Agenten (keine Session-Klone wie `Luna (Cron)`).
