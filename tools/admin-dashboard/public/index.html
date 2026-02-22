@@ -833,7 +833,11 @@
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             <div class="glass-card p-4">
                                 <h3 class="text-sm font-semibold mb-3">Datenquellen & Referenzen</h3>
-                                ${(p.dataRefs || []).length ? `<ul class="space-y-2 text-xs">${p.dataRefs.map(r => `<li class="bg-black/30 border border-white/5 rounded-lg p-2"><span class="text-white">${r.label}</span><p class="text-text-muted mt-1 font-mono">${r.path}</p></li>`).join('')}</ul>` : '<p class="text-xs text-text-muted">Keine Datenquellen hinterlegt.</p>'}
+                                ${(p.dataRefs || []).length ? `<ul class="space-y-2 text-xs">${p.dataRefs.map((r,ri) => {
+                                    const isImage = /\.(png|jpe?g|gif|webp|svg)$/i.test(r.path || '');
+                                    const safePath = String(r.path || '').replace(/"/g,'&quot;');
+                                    return `<li class="bg-black/30 border border-white/5 rounded-lg p-2"><span class="text-white">${r.label}</span><p class="text-text-muted mt-1 font-mono break-all">${r.path}</p><div class="mt-2 flex gap-2"><button onclick="openProjectRef('${safePath}')" class="text-[10px] px-2 py-1 rounded border border-blue-500/30 bg-blue-500/20">Öffnen</button>${isImage ? `<button onclick="previewProjectImage('${safePath}','img-${p.id}-${ri}')" class="text-[10px] px-2 py-1 rounded border border-purple-500/30 bg-purple-500/20">Bild anzeigen</button>` : ''}</div><div id="img-${p.id}-${ri}" class="mt-2"></div></li>`;
+                                }).join('')}</ul>` : '<p class="text-xs text-text-muted">Keine Datenquellen hinterlegt.</p>'}
                                 <div class="mt-3 grid grid-cols-1 gap-2 text-xs">
                                   <input id="proj-ref-label-${p.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1" placeholder="Label (z.B. API Spec)" />
                                   <input id="proj-ref-path-${p.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1" placeholder="Workspace-Pfad (z.B. /root/.openclaw/workspace-tareno/docs/spec.md)" />
@@ -1195,6 +1199,21 @@
                 body: JSON.stringify({ projectId, label, sourcePath })
             });
             loadCurrentView();
+        };
+
+        window.openProjectRef = (relPath) => {
+            if (!relPath) return;
+            const abs = relPath.startsWith('/') ? relPath : `/root/.openclaw/workspace-tareno/${relPath}`;
+            const url = `/api/file/raw?path=${encodeURIComponent(abs)}`;
+            window.open(url, '_blank');
+        };
+
+        window.previewProjectImage = (relPath, targetId) => {
+            const box = document.getElementById(targetId);
+            if (!box) return;
+            const abs = relPath.startsWith('/') ? relPath : `/root/.openclaw/workspace-tareno/${relPath}`;
+            const url = `/api/file/raw?path=${encodeURIComponent(abs)}`;
+            box.innerHTML = `<img src="${url}" alt="preview" class="max-h-48 rounded border border-white/10" />`;
         };
 
         window.syncProjectToAgent = async (projectId) => {

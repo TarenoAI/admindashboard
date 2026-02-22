@@ -766,10 +766,11 @@ app.post('/api/projects/capability-check', (req, res) => {
 
 app.post('/api/projects/reference', (req, res) => {
     try {
-        const { projectId, label, sourcePath, type } = req.body || {};
+        const { projectId, label, sourcePath, type, actorAgentId } = req.body || {};
         if (!projectId || !sourcePath) return res.status(400).json({ success: false, error: 'projectId, sourcePath required' });
         const data = loadProjectMeta(projectId);
         if (!data) return res.status(404).json({ success: false, error: 'Project data file missing' });
+        if (!hasProjectWritePermission(data, actorAgentId)) return res.status(403).json({ success: false, error: `Agent ${actorAgentId} has no write permission for project ${projectId}` });
 
         const absSource = path.resolve(sourcePath);
         if (!absSource.startsWith(WORKSPACE_ROOT)) {
@@ -827,6 +828,15 @@ app.get('/api/file', (req, res) => {
     const content = readFileSafe(abs);
     if (content == null) return res.status(404).json({ success: false, error: 'File not found' });
     return ok(res, { path: abs, content });
+});
+
+app.get('/api/file/raw', (req, res) => {
+    const target = String(req.query.path || '');
+    if (!target) return res.status(400).send('Missing ?path=');
+    const abs = path.resolve(target);
+    if (!abs.startsWith(WORKSPACE_ROOT)) return res.status(403).send('Path outside workspace blocked');
+    if (!fs.existsSync(abs)) return res.status(404).send('File not found');
+    return res.sendFile(abs);
 });
 
 app.get("/api/cron", async (_, res) => {
