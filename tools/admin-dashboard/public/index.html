@@ -1201,9 +1201,14 @@
             loadCurrentView();
         };
 
-        window.openProjectRef = (relPath) => {
+        window.openProjectRef = async (relPath) => {
             if (!relPath) return;
             const abs = relPath.startsWith('/') ? relPath : `/root/.openclaw/workspace-tareno/${relPath}`;
+            const isMarkdown = /\.md$/i.test(abs);
+            if (isMarkdown) {
+                await openFullFile(abs);
+                return;
+            }
             const url = `/api/file/raw?path=${encodeURIComponent(abs)}`;
             window.open(url, '_blank');
         };
