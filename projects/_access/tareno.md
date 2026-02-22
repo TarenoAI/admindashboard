@@ -1,8 +1,8 @@
 # Project Access Snapshot: Tareno
 
 - Project ID: tareno
-- Permission: write
-- Last Sync: 2026-02-22T00:00:00Z
+- Permission: read
+- Last Sync: 2026-02-22T12:12:54.847Z
 
 ## Summary
 SaaS-Marketing & Blog-Operations für tareno.co mit Fokus auf planbare Content-Pipeline.
@@ -16,3 +16,4 @@ SaaS-Marketing & Blog-Operations für tareno.co mit Fokus auf planbare Content-P
 ## References
 - Project Notes: projects/tareno.md (markdown)
 - Heartbeat Status: HEARTBEAT.md (markdown)
+- ND-Live-Test-001: projects/_knowledge/tareno/2026-02-22T12-12-54-846Z-ND-Live-Test-001.md (md)
