@@ -276,7 +276,7 @@ app.get("/api/projects", async (_, res) => {
         const projectId = f.replace(/\.json$/, "");
         try {
             const data = JSON.parse(content);
-            return {
+            const result = {
                 id: projectId,
                 name: data.name || projectId,
                 summary: data.summary || "",
@@ -286,6 +286,7 @@ app.get("/api/projects", async (_, res) => {
                 tasks: data.tasks || [],
                 milestones: data.milestones || [],
                 dataRefs: data.dataRefs || [],
+                contentPipeline: data.contentPipeline || [],
             };
 
             // Count words for final review step
