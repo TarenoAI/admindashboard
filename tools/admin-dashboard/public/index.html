@@ -855,7 +855,7 @@
                                     <div class="w-2 h-2 rounded-full flex-shrink-0 ${sa.status === 'active' ? 'bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.6)]' : 'bg-neutral-500'}"></div>
                                 </div>
                                 ${sa.description ? `<p class="text-[9px] text-text-muted leading-relaxed mb-2">${sa.description}</p>` : ''}
-                                ${sa.output ? `<div class="text-[9px] bg-black/30 border border-white/5 rounded px-2 py-1.5 text-text-muted leading-relaxed mb-2"><span class="text-brand/70 font-bold">📄 Output: </span>${sa.output}</div>` : ''}
+                                ${sa.output ? (sa.outputPath ? `<div onclick="openProjectRef('${sa.outputPath}')" class="text-[9px] bg-black/30 border border-brand/20 rounded px-2 py-1.5 text-text-muted leading-relaxed mb-2 cursor-pointer hover:bg-brand/10 hover:border-brand/40 transition-all group/out"><span class="text-brand/70 font-bold group-hover/out:text-brand transition-colors">📄 Output: </span>${sa.output}<span class="ml-1 opacity-0 group-hover/out:opacity-100 text-brand text-[9px] transition-opacity">→ öffnen</span></div>` : `<div class="text-[9px] bg-black/30 border border-white/5 rounded px-2 py-1.5 text-text-muted leading-relaxed mb-2"><span class="text-brand/70 font-bold">📄 Output: </span>${sa.output}</div>`) : ''}
                                 ${sa.hardRules && sa.hardRules.length ? `<div class="flex flex-col gap-1">${sa.hardRules.map(r => `<div class="text-[8px] flex items-start gap-1.5 text-red-400/70"><span class="flex-shrink-0">⚑</span><span>${r}</span></div>`).join('')}</div>` : ''}
                             </div>
                         `).join('');
