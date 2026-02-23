@@ -281,6 +281,7 @@ app.get("/api/projects", async (_, res) => {
                 summary: data.summary || "",
                 status: data.status || "planned",
                 agents: data.agents || [],
+                subagents: data.subagents || [],
                 tasks: data.tasks || [],
                 milestones: data.milestones || [],
                 dataRefs: data.dataRefs || [],
