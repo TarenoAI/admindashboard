@@ -1017,10 +1017,17 @@
                                     <tbody class="divide-y divide-white/5">
                                         ${p.contentPipeline.map(cp => `
                                         <tr class="hover:bg-brand/5 hover:bg-opacity-10 transition-colors group">
-                                            <td class="p-5">
-                                                <p class="font-bold text-white text-sm bg-white/10 inline-block px-2 py-0.5 rounded mb-1">${cp.day}</p>
-                                                <p class="text-xs text-text-secondary font-medium md:max-w-[200px] truncate">${cp.topic}</p>
-                                                <p class="text-[9px] text-text-muted mt-1 uppercase tracking-wider">${cp.date}</p>
+                                            <td class="p-5 align-top">
+                                                <div class="flex items-center gap-2 mb-1.5">
+                                                    <span class="font-bold text-white text-xs bg-brand/20 text-brand px-2 py-0.5 rounded border border-brand/30 shadow-[0_0_10px_rgba(130,81,238,0.2)]">${cp.day}</span>
+                                                    <span class="text-[9px] uppercase tracking-wider text-text-muted bg-white/5 px-2 py-0.5 rounded border border-white/5">${cp.date}</span>
+                                                </div>
+                                                <p class="text-xs text-white font-semibold md:max-w-[220px] leading-snug mb-2.5">${cp.topic}</p>
+                                                <div class="flex flex-col gap-1">
+                                                    ${cp.keyword && cp.keyword !== 'nan' ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">KW:</span><span class="text-[10px] text-brand/80 leading-tight line-clamp-1" title="${cp.keyword}">${cp.keyword}</span></div>` : ''}
+                                                    ${cp.feature && cp.feature !== 'nan' ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">Tool:</span><span class="text-[10px] text-text-secondary leading-tight line-clamp-1" title="${cp.feature}">${cp.feature}</span></div>` : ''}
+                                                    ${cp.author && cp.author !== 'nan' ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">Aut:</span><span class="text-[10px] text-text-secondary leading-tight line-clamp-1">${cp.author}</span></div>` : ''}
+                                                </div>
                                             </td>
                                             ${['content_research', 'structure', 'drafting', 'feature_inserts', 'editing', 'geo_polish', 'final'].map(step => {
                         const stepData = cp.steps?.[step] || { status: 'pending', doc: null };

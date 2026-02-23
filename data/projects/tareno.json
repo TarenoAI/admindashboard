@@ -1,6 +1,6 @@
 {
   "name": "Tareno",
-  "summary": "SaaS-Marketing & Blog-Operations für tareno.co mit Fokus auf planbare Content-Pipeline.",
+  "summary": "SaaS-Marketing & Blog-Operations f\u00fcr tareno.co mit Fokus auf planbare Content-Pipeline.",
   "status": "on_track",
   "priority": "high",
   "lastUpdate": "2026-02-23",
@@ -9,19 +9,19 @@
       "id": "tarenoblog",
       "name": "Sam",
       "role": "lead",
-      "description": "Verantwortlich für die gesamte Content-Pipeline, Redaktionsplan & finale Freigaben."
+      "description": "Verantwortlich f\u00fcr die gesamte Content-Pipeline, Redaktionsplan & finale Freigaben."
     },
     {
       "id": "main",
       "name": "Luna",
       "role": "reviewer",
-      "description": "Prüft alle Blogbeiträge auf Compliance und SEO-Struktur."
+      "description": "Pr\u00fcft alle Blogbeitr\u00e4ge auf Compliance und SEO-Struktur."
     },
     {
       "id": "social",
       "name": "MiracleSocial",
       "role": "support",
-      "description": "Cross-Posting über Twitter und LinkedIn zur Content-Distribution."
+      "description": "Cross-Posting \u00fcber Twitter und LinkedIn zur Content-Distribution."
     }
   ],
   "subagents": [
@@ -69,68 +69,92 @@
     }
   ],
   "blogPipeline": {
-    "totalBlogs": 30,
+    "totalBlogs": 68,
     "completed": 0,
     "inProgress": 1,
-    "planned": 29,
+    "planned": 67,
     "currentFocus": "TAG-01",
     "currentStage": "Final Review",
     "blogs": [
       {
         "id": "TAG-01",
-        "title": "Social Media Automation für Anfänger",
-        "status": "ready_for_publish",
-        "progress": 100,
-        "stepsCompleted": 6,
-        "stepsTotal": 6
+        "title": "Bio-Link Optimierung: Der erste Schritt im SEO-Funnel",
+        "status": "in_progress",
+        "progress": 80,
+        "stepsCompleted": 5,
+        "stepsTotal": 7
       },
       {
         "id": "TAG-02",
-        "title": "Content Batching Guide 2026",
+        "title": "Community Management: Wie du Trolle in Fans verwandelst",
         "status": "planned",
         "progress": 0,
         "stepsCompleted": 0,
-        "stepsTotal": 6
+        "stepsTotal": 7
       },
       {
         "id": "TAG-03",
-        "title": "Die 5 besten Social Media Planungstools",
+        "title": "Instagram Automation: Was erlaubt ist und was zum Ban f\u00fchrt (2026 Update)",
         "status": "planned",
         "progress": 0,
         "stepsCompleted": 0,
-        "stepsTotal": 6
+        "stepsTotal": 7
       },
       {
         "id": "TAG-04",
-        "title": "Warum manuelles Posten Reichweite killt",
+        "title": "Omnipr\u00e4senz-Strategie: Wie Creator Y mit Repurposing 1M Views erreichte",
         "status": "planned",
         "progress": 0,
         "stepsCompleted": 0,
-        "stepsTotal": 6
+        "stepsTotal": 7
       },
       {
         "id": "TAG-05",
-        "title": "Smart Scheduling: Beste Zeit zum Posten",
+        "title": "Threads ein Jahr sp\u00e4ter: Lohnt es sich f\u00fcr Brands?",
         "status": "planned",
         "progress": 0,
         "stepsCompleted": 0,
-        "stepsTotal": 6
+        "stepsTotal": 7
       },
       {
         "id": "TAG-06",
-        "title": "Workflow-Hacks für schnelle Posts",
+        "title": "Musikrechte auf Instagram: So vermeidest du Abmahnungen",
         "status": "planned",
         "progress": 0,
         "stepsCompleted": 0,
-        "stepsTotal": 6
+        "stepsTotal": 7
       },
       {
         "id": "TAG-07",
-        "title": "Tech-Stack für stressfreies Social Media",
+        "title": "Warum deine Facebook Ads abgelehnt werden (und wie du es fixst)",
         "status": "planned",
         "progress": 0,
         "stepsCompleted": 0,
-        "stepsTotal": 6
+        "stepsTotal": 7
+      },
+      {
+        "id": "TAG-08",
+        "title": "UGC (User Generated Content): Der heilige Gral f\u00fcr Trust?",
+        "status": "planned",
+        "progress": 0,
+        "stepsCompleted": 0,
+        "stepsTotal": 7
+      },
+      {
+        "id": "TAG-09",
+        "title": "Der perfekte Social Media Tech Stack 2026 (unter 100\u20ac)",
+        "status": "planned",
+        "progress": 0,
+        "stepsCompleted": 0,
+        "stepsTotal": 7
+      },
+      {
+        "id": "TAG-10",
+        "title": "Content Recycling 2.0: Wie du einen Blogpost in 20 Social Assets verwandelst",
+        "status": "planned",
+        "progress": 0,
+        "stepsCompleted": 0,
+        "stepsTotal": 7
       }
     ]
   },
@@ -148,7 +172,7 @@
       "note": "Alle 6 Subagent-Schritte abgeschlossen"
     },
     {
-      "title": "TAG-01 veröffentlichen",
+      "title": "TAG-01 ver\u00f6ffentlichen",
       "due": "2026-02-24",
       "status": "in_progress",
       "note": "Ready for final review"
@@ -202,7 +226,7 @@
       "assignee": "Sam",
       "due": "2026-02-23",
       "completedAt": "2026-02-23",
-      "note": "Alle Artefakte erstellt: Research→Final"
+      "note": "Alle Artefakte erstellt: Research\u2192Final"
     },
     {
       "id": "TAR-5",
@@ -276,7 +300,7 @@
       "path": "projects/blog-artifacts/TARENO_BLOG_ARTEFAKTE.md",
       "type": "md",
       "category": "Artefakte",
-      "note": "Index über alle 30 Blogs mit 6 Subagent-Artefakten pro Blog"
+      "note": "Index \u00fcber alle 30 Blogs mit 6 Subagent-Artefakten pro Blog"
     },
     {
       "label": "TAG-01 Final (aktuell)",
@@ -287,7 +311,7 @@
       "blogId": "TAG-01"
     }
   ],
-  "notes": "Sam liefert operative Updates; Luna validiert Struktur und Qualität. TAG-01 alle 6 Schritte abgeschlossen, bereit für Luna's Final Review.",
+  "notes": "Sam liefert operative Updates; Luna validiert Struktur und Qualit\u00e4t. TAG-01 alle 6 Schritte abgeschlossen, bereit f\u00fcr Luna's Final Review.",
   "lastStatusUpdate": {
     "timestamp": "2026-02-23T10:55:00Z",
     "agent": "tarenoblog",
@@ -311,7 +335,12 @@
     {
       "day": "Tag 1",
       "date": "2026-02-23",
-      "topic": "Was ist Agentic Workflow?",
+      "topic": "Bio-Link Optimierung: Der erste Schritt im SEO-Funnel",
+      "keyword": "Bio Link SEO",
+      "author": "Mia (Creative)",
+      "feature": "Links Modul (Bio Link Builder)",
+      "cluster": "PILLAR 3: DISCOVERY (GEO)",
+      "wordTarget": "2000",
       "steps": {
         "content_research": {
           "status": "done",
@@ -319,19 +348,19 @@
         },
         "structure": {
           "status": "done",
-          "doc": "02_seo.md"
+          "doc": "01_seo.md"
         },
         "drafting": {
           "status": "done",
-          "doc": "03_draft.md"
+          "doc": "01_draft.md"
         },
         "feature_inserts": {
           "status": "done",
-          "doc": "04_product.md"
+          "doc": "01_product.md"
         },
         "editing": {
           "status": "review",
-          "doc": "05_edit.md"
+          "doc": "01_edit.md"
         },
         "geo_polish": {
           "status": "pending",
@@ -346,11 +375,16 @@
     {
       "day": "Tag 2",
       "date": "2026-02-24",
-      "topic": "Use Cases für kleine Teams",
+      "topic": "Community Management: Wie du Trolle in Fans verwandelst",
+      "keyword": "Community Management Tips",
+      "author": "Sarah (Growth)",
+      "feature": "Inbox / Comments",
+      "cluster": "PILLAR 5: PSYCHOLOGY",
+      "wordTarget": "2000",
       "steps": {
         "content_research": {
           "status": "review",
-          "doc": "01_research.md"
+          "doc": "02_research.md"
         },
         "structure": {
           "status": "pending",
@@ -381,7 +415,2612 @@
     {
       "day": "Tag 3",
       "date": "2026-02-25",
-      "topic": "Kosten sparen mit KI-Mitarbeitern",
+      "topic": "Instagram Automation: Was erlaubt ist und was zum Ban f\u00fchrt (2026 Update)",
+      "keyword": "Instagram Automation Rules",
+      "author": "Alex (Tech Lead)",
+      "feature": "Channel Management (Safe API)",
+      "cluster": "PILLAR 1: AUTOMATION",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 4",
+      "date": "2026-02-26",
+      "topic": "Omnipr\u00e4senz-Strategie: Wie Creator Y mit Repurposing 1M Views erreichte",
+      "keyword": "Social Media Omnipresence",
+      "author": "Sarah (Growth)",
+      "feature": "Analytics Suite (Cross-Platform)",
+      "cluster": "PILLAR 2: REPURPOSING",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 5",
+      "date": "2026-02-27",
+      "topic": "Threads ein Jahr sp\u00e4ter: Lohnt es sich f\u00fcr Brands?",
+      "keyword": "Threads Marketing Strategy",
+      "author": "Sarah (Growth)",
+      "feature": "Threads Post Generator",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 6",
+      "date": "2026-02-28",
+      "topic": "Musikrechte auf Instagram: So vermeidest du Abmahnungen",
+      "keyword": "Instagram Music Copyright",
+      "author": "Alex (Tech Lead)",
+      "feature": "Post Composer (Compliance)",
+      "cluster": "PILLAR 6: POSTPLANIFY INSIGHTS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 7",
+      "date": "2026-03-01",
+      "topic": "Warum deine Facebook Ads abgelehnt werden (und wie du es fixst)",
+      "keyword": "Facebook Ads Ban",
+      "author": "Sarah (Growth)",
+      "feature": "Ad Copy Generator",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 8",
+      "date": "2026-03-02",
+      "topic": "UGC (User Generated Content): Der heilige Gral f\u00fcr Trust?",
+      "keyword": "UGC Strategy Guide",
+      "author": "Sarah (Growth)",
+      "feature": "Media Library (Tagging)",
+      "cluster": "PILLAR 5: PSYCHOLOGY",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 9",
+      "date": "2026-03-03",
+      "topic": "Der perfekte Social Media Tech Stack 2026 (unter 100\u20ac)",
+      "keyword": "Social Media Tool Stack",
+      "author": "Alex (Tech Lead)",
+      "feature": "All Features",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 10",
+      "date": "2026-03-04",
+      "topic": "Content Recycling 2.0: Wie du einen Blogpost in 20 Social Assets verwandelst",
+      "keyword": "Content Repurposing Strategy",
+      "author": "Mia (Creative)",
+      "feature": "AI Assist + Repost Queue",
+      "cluster": "PILLAR 1: AUTOMATION",
+      "wordTarget": "3500",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 11",
+      "date": "2026-03-05",
+      "topic": "Content Batching f\u00fcr Solopreneure: 1 Monat in 1 Tag",
+      "keyword": "Content Batching Guide",
+      "author": "Mia (Creative)",
+      "feature": "Workflow Builder",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 12",
+      "date": "2026-03-06",
+      "topic": "Voice Search & Social Media: Optimierung f\u00fcr gesprochene Suchanfragen",
+      "keyword": "Voice Search Social Media",
+      "author": "Alex (Tech Lead)",
+      "feature": "YouTube/TikTok Transcript Extractor (Free Tools)",
+      "cluster": "PILLAR 3: DISCOVERY (GEO)",
+      "wordTarget": "3500",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 13",
+      "date": "2026-03-07",
+      "topic": "TikTok zu Reels zu Shorts: Der wasserzeichenfreie Workflow",
+      "keyword": "Short Form Repurposing",
+      "author": "Mia (Creative)",
+      "feature": "TikTok Transcript Extractor (Free Tool)",
+      "cluster": "PILLAR 2: REPURPOSING",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 14",
+      "date": "2026-03-08",
+      "topic": "LinkedIn Algorithmus 2026: Was jetzt wirklich z\u00e4hlt",
+      "keyword": "LinkedIn Algorithm 2026",
+      "author": "Sarah (Growth)",
+      "feature": "LinkedIn Post Generator",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "3500",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 15",
+      "date": "2026-03-09",
+      "topic": "7 Tools f\u00fcr bessere Instagram Stories (die nicht Instagram sind)",
+      "keyword": "Instagram Story Tools",
+      "author": "Mia (Creative)",
+      "feature": "Media Library (Editor)",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 16",
+      "date": "2026-03-10",
+      "topic": "Wie der TikTok Algorithmus *wirklich* funktioniert (Leaked Docs)",
+      "keyword": "TikTok Algorithm Secrets",
+      "author": "Alex (Tech Lead)",
+      "feature": "TikTok Hook Generator",
+      "cluster": "PILLAR 6: POSTPLANIFY INSIGHTS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 17",
+      "date": "2026-03-11",
+      "topic": "Video zu Text: Wie du aus YouTube-Videos Blogartikel machst (in Minuten)",
+      "keyword": "Video to Blog AI",
+      "author": "Mia (Creative)",
+      "feature": "YouTube Transcript Extractor (Free Tool)",
+      "cluster": "PILLAR 2: REPURPOSING",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 18",
+      "date": "2026-03-12",
+      "topic": "Instagram SEO: Keywords statt Hashtags (Der neue Standard)",
+      "keyword": "Instagram SEO 2026",
+      "author": "Mia (Creative)",
+      "feature": "Instagram Caption Generator (Free Tool)",
+      "cluster": "PILLAR 3: DISCOVERY (GEO)",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 19",
+      "date": "2026-03-13",
+      "topic": "Zapier vs. Make vs. Native Integrationen: Der gro\u00dfe Vergleich f\u00fcr Social Media",
+      "keyword": "Social Media Integrations",
+      "author": "Alex (Tech Lead)",
+      "feature": "Developer API + n8n Node",
+      "cluster": "PILLAR 1: AUTOMATION",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 20",
+      "date": "2026-03-14",
+      "topic": "Gewinnspiele richtig machen: Wachstum oder Karteileichen?",
+      "keyword": "Social Media Contest Strategy",
+      "author": "Sarah (Growth)",
+      "feature": "Comments Manager",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 21",
+      "date": "2026-03-15",
+      "topic": "Automatisierte Antworten: Segen oder Fluch?",
+      "keyword": "Auto Reply Best Practices",
+      "author": "Alex (Tech Lead)",
+      "feature": "Inbox Automation",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 22",
+      "date": "2026-03-16",
+      "topic": "Burnout bei Social Media Managern: Warnsignale & Pr\u00e4vention",
+      "keyword": "Social Media Burnout",
+      "author": "Sarah (Growth)",
+      "feature": "Team Management (Workload)",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 23",
+      "date": "2026-03-17",
+      "topic": "Dark Mode Content: Warum du dunkle Designs brauchst",
+      "keyword": "Dark Mode Social Media Design",
+      "author": "Mia (Creative)",
+      "feature": "Brand Kit",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 24",
+      "date": "2026-03-18",
+      "topic": "AI Agents im Social Media Management: Die Zukunft ist da",
+      "keyword": "AI Social Media Agents",
+      "author": "Alex (Tech Lead)",
+      "feature": "AI Content Strategy",
+      "cluster": "PILLAR 1: AUTOMATION",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 25",
+      "date": "2026-03-19",
+      "topic": "Warum deine Follower nicht kaufen (Der 'Trust Gap')",
+      "keyword": "Social Selling Mistakes",
+      "author": "Sarah (Growth)",
+      "feature": "Links Modul (Bio Link)",
+      "cluster": "PILLAR 6: POSTPLANIFY INSIGHTS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 26",
+      "date": "2026-03-20",
+      "topic": "Instagram Shadowban: Mythos oder Realit\u00e4t? Der Test.",
+      "keyword": "Instagram Shadowban Check",
+      "author": "Alex (Tech Lead)",
+      "feature": "Analytics Suite",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 27",
+      "date": "2026-03-21",
+      "topic": "Social SEO & GEO 2026: Wie du in KI-Antworten und Feeds gefunden wirst",
+      "keyword": "Social Media SEO Guide",
+      "author": "Sarah (Growth)",
+      "feature": "All Generator Tools + Hashtag Dashboard",
+      "cluster": "PILLAR 3: DISCOVERY (GEO)",
+      "wordTarget": "3500",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 28",
+      "date": "2026-03-22",
+      "topic": "Alt Text auf Social Media: SEO-Goldgrube oder Zeitverschwendung?",
+      "keyword": "Social Media Alt Text SEO",
+      "author": "Alex (Tech Lead)",
+      "feature": "Post Composer (Accessibility)",
+      "cluster": "PILLAR 6: POSTPLANIFY INSIGHTS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 29",
+      "date": "2026-03-23",
+      "topic": "Story Highlights Cover: Warum sie wichtiger sind als du denkst",
+      "keyword": "Instagram Highlight Covers",
+      "author": "Mia (Creative)",
+      "feature": "Brand Kit",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 30",
+      "date": "2026-03-24",
+      "topic": "Newsletter Growth via Social: Von Followern zu Abonnenten",
+      "keyword": "Social to Email Funnel",
+      "author": "Sarah (Growth)",
+      "feature": "Links Modul",
+      "cluster": "PILLAR 6: POSTPLANIFY INSIGHTS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 31",
+      "date": "2026-03-25",
+      "topic": "DM Sales: Verkaufen ohne nervig zu sein",
+      "keyword": "Social Selling DMs",
+      "author": "Sarah (Growth)",
+      "feature": "Inbox (Coming Soon)",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 32",
+      "date": "2026-03-26",
+      "topic": "Die Psychologie der Farben im Feed: 30% mehr Klicks?",
+      "keyword": "Color Psychology Marketing",
+      "author": "Mia (Creative)",
+      "feature": "Brand Kit",
+      "cluster": "PILLAR 5: PSYCHOLOGY",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 33",
+      "date": "2026-03-27",
+      "topic": "Corporate Influencing: Mitarbeiter zu Markenbotschaftern machen",
+      "keyword": "Corporate Influencer Program",
+      "author": "Sarah (Growth)",
+      "feature": "Team Management",
+      "cluster": "PILLAR 6: POSTPLANIFY INSIGHTS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 34",
+      "date": "2026-03-28",
+      "topic": "Warum du deine LinkedIn Posts auch auf Threads teilen musst",
+      "keyword": "LinkedIn to Threads Repurposing",
+      "author": "Sarah (Growth)",
+      "feature": "Threads Post Generator (Free Tool)",
+      "cluster": "PILLAR 2: REPURPOSING",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 35",
+      "date": "2026-03-29",
+      "topic": "Das 1.000 Follower Playbook: Von 0 auf 1k in 30 Tagen",
+      "keyword": "Get first 1000 followers",
+      "author": "Sarah (Growth)",
+      "feature": "Analytics Suite (Growth)",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 36",
+      "date": "2026-03-30",
+      "topic": "Die Content-Maschine: Einmal erstellen 20x posten (Omnipr\u00e4senz Guide)",
+      "keyword": "Content Repurposing Guide",
+      "author": "Mia (Creative)",
+      "feature": "Multi-Platform Publishing + Repost Queue",
+      "cluster": "PILLAR 2: REPURPOSING",
+      "wordTarget": "3500",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 37",
+      "date": "2026-03-31",
+      "topic": "Evergreen Content: Alte Posts automatisch neu beleben (ohne Spam)",
+      "keyword": "Evergreen Content Strategy",
+      "author": "Mia (Creative)",
+      "feature": "Repost Queue (Evergreen Engine)",
+      "cluster": "PILLAR 2: REPURPOSING",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 38",
+      "date": "2026-04-01",
+      "topic": "Generative Engine Optimization (GEO): Content f\u00fcr ChatGPT optimieren",
+      "keyword": "GEO Marketing Strategy",
+      "author": "Sarah (Growth)",
+      "feature": "Tareno Knowledge Base (Internal)",
+      "cluster": "PILLAR 3: DISCOVERY (GEO)",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 39",
+      "date": "2026-04-02",
+      "topic": "Hashtag-Strategie 2026: Qualit\u00e4t vor Quantit\u00e4t (Daten-Analyse)",
+      "keyword": "Hashtag Strategy 2026",
+      "author": "Mia (Creative)",
+      "feature": "Hashtag Dashboard (AI Generated)",
+      "cluster": "PILLAR 3: DISCOVERY (GEO)",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 40",
+      "date": "2026-04-03",
+      "topic": "Bulk Scheduling: 100 Posts in 5 Minuten planen (Schritt-f\u00fcr-Schritt)",
+      "keyword": "Bulk Social Media Posting",
+      "author": "Alex (Tech Lead)",
+      "feature": "Post Composer (Bulk Upload)",
+      "cluster": "PILLAR 1: AUTOMATION",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 41",
+      "date": "2026-04-04",
+      "topic": "Warum manuelle Content-Planung Agenturen ruiniert (Die versteckten Kosten)",
+      "keyword": "Agentur Skalierung Probleme",
+      "author": "Sarah (Growth)",
+      "feature": "Analytics Suite (Team Performance)",
+      "cluster": "PILLAR 1: AUTOMATION",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 42",
+      "date": "2026-04-05",
+      "topic": "Der perfekte Approval-Workflow: Wie du Freigabeschleifen halbierst",
+      "keyword": "Social Media Approval Workflow",
+      "author": "Sarah (Growth)",
+      "feature": "Team Management + Approvals (Beta)",
+      "cluster": "PILLAR 1: AUTOMATION",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 43",
+      "date": "2026-04-06",
+      "topic": "Der definitive Guide zu Social Media Automation 2026: Strategien Tools & Workflows",
+      "keyword": "Social Media Automation Guide",
+      "author": "Alex (Tech Lead)",
+      "feature": "Workflow Builder + Automations-Engine",
+      "cluster": "PILLAR 1: AUTOMATION",
+      "wordTarget": "3500",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 44",
+      "date": "2026-04-07",
+      "topic": "LinkedIn Automation f\u00fcr B2B: Leads auf Autopilot?",
+      "keyword": "LinkedIn B2B Automation",
+      "author": "Sarah (Growth)",
+      "feature": "LinkedIn Post Generator (Free Tool)",
+      "cluster": "PILLAR 1: AUTOMATION",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 45",
+      "date": "2026-04-08",
+      "topic": "AI Disclaimer: Muss ich kennzeichnen, dass ChatGPT schrieb?",
+      "keyword": "AI Content Labeling",
+      "author": "Alex (Tech Lead)",
+      "feature": "Post Composer (AI Tag)",
+      "cluster": "PILLAR 6: POSTPLANIFY INSIGHTS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 46",
+      "date": "2026-04-09",
+      "topic": "Die Zero-Click Content Strategie: Plattform-native Inhalte skalieren",
+      "keyword": "Zero Click Content",
+      "author": "Sarah (Growth)",
+      "feature": "Brand Kit",
+      "cluster": "PILLAR 2: REPURPOSING",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 47",
+      "date": "2026-04-10",
+      "topic": "Sound Design f\u00fcr Reels: ASMR und Sound Effects nutzen",
+      "keyword": "Reels Sound Design",
+      "author": "Mia (Creative)",
+      "feature": "Media Library",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 48",
+      "date": "2026-04-11",
+      "topic": "Impressumspflicht auf Social Media: Die 5-Sekunden-Regel",
+      "keyword": "Social Media Impressum",
+      "author": "Alex (Tech Lead)",
+      "feature": "Brand Kit (Legal)",
+      "cluster": "PILLAR 6: POSTPLANIFY INSIGHTS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 49",
+      "date": "2026-04-12",
+      "topic": "TikTok SEO: Wie du f\u00fcr How-To Suchanfragen rankst",
+      "keyword": "TikTok SEO Strategy",
+      "author": "Mia (Creative)",
+      "feature": "TikTok Hook Generator (Free Tool)",
+      "cluster": "PILLAR 3: DISCOVERY (GEO)",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 50",
+      "date": "2026-04-13",
+      "topic": "YouTube Studio f\u00fcr Anf\u00e4nger: Was die Charts wirklich bedeuten",
+      "keyword": "YouTube Analytics Guide",
+      "author": "Alex (Tech Lead)",
+      "feature": "Analytics Suite (YouTube)",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 51",
+      "date": "2026-04-14",
+      "topic": "2-Faktor-Authentifizierung: Warum dein Account morgen weg sein k\u00f6nnte",
+      "keyword": "Social Media Security",
+      "author": "Alex (Tech Lead)",
+      "feature": "Settings (Security)",
+      "cluster": "PILLAR 6: POSTPLANIFY INSIGHTS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 52",
+      "date": "2026-04-15",
+      "topic": "CapCut vs. InShot: Der ultimative Vergleich f\u00fcr Creator",
+      "keyword": "Video Editor App Vergleich",
+      "author": "Mia (Creative)",
+      "feature": "Media Library",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 53",
+      "date": "2026-04-16",
+      "topic": "Podcast Snippets: Der einfachste Weg zu Video Content",
+      "keyword": "Podcast Repurposing Video",
+      "author": "Mia (Creative)",
+      "feature": "Media Library (Audio)",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 54",
+      "date": "2026-04-17",
+      "topic": "YouTube SEO: Titel & Beschreibungen die Klicks bringen",
+      "keyword": "YouTube SEO Tools",
+      "author": "Alex (Tech Lead)",
+      "feature": "YouTube Title Generator (Free Tool)",
+      "cluster": "PILLAR 3: DISCOVERY (GEO)",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 55",
+      "date": "2026-04-18",
+      "topic": "Visuelles Repurposing: Infografiken aus Datenstudien erstellen",
+      "keyword": "Data Visualization Social Media",
+      "author": "Mia (Creative)",
+      "feature": "Canva Integration + Media Library",
+      "cluster": "PILLAR 2: REPURPOSING",
+      "wordTarget": "3500",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 56",
+      "date": "2026-04-19",
+      "topic": "Der Content Waterfall: Von Longform zu Shortform (Template)",
+      "keyword": "Content Waterfall Strategy",
+      "author": "Alex (Tech Lead)",
+      "feature": "Workflow Builder",
+      "cluster": "PILLAR 2: REPURPOSING",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 57",
+      "date": "2026-04-20",
+      "topic": "FOMO Marketing: Wie du Verknappung ethisch nutzt",
+      "keyword": "Scarcity Marketing",
+      "author": "Sarah (Growth)",
+      "feature": "Post Composer (Countdown)",
+      "cluster": "PILLAR 5: PSYCHOLOGY",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 58",
+      "date": "2026-04-21",
+      "topic": "Trend Spotting: Wie du Trends erkennst, bevor sie viral gehen",
+      "keyword": "Viral Trend Research",
+      "author": "Mia (Creative)",
+      "feature": "Hashtag Dashboard",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 59",
+      "date": "2026-04-22",
+      "topic": "Pinterest SEO: Die untersch\u00e4tzte Suchmaschine f\u00fcr Traffic",
+      "keyword": "Pinterest SEO Guide",
+      "author": "Sarah (Growth)",
+      "feature": "Pinterest Pin Title Generator (Free Tool)",
+      "cluster": "PILLAR 3: DISCOVERY (GEO)",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 60",
+      "date": "2026-04-23",
+      "topic": "Blog zu Social Media: 5 Posts aus einem Artikel generieren (Prompt Guide)",
+      "keyword": "Blog to Social Media AI",
+      "author": "Alex (Tech Lead)",
+      "feature": "AI Assist (Custom Prompts)",
+      "cluster": "PILLAR 2: REPURPOSING",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 61",
+      "date": "2026-04-24",
+      "topic": "Die ultimative Automation-Checkliste f\u00fcr Social Media Manager (Download)",
+      "keyword": "Social Media Automation Checklist",
+      "author": "Sarah (Growth)",
+      "feature": "Reports Center (Export)",
+      "cluster": "PILLAR 1: AUTOMATION",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 62",
+      "date": "2026-04-25",
+      "topic": "Bio Link Tricks: Wie du mehr Traffic aus Instagram holst",
+      "keyword": "Link in Bio Optimization",
+      "author": "Mia (Creative)",
+      "feature": "Links Modul",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 63",
+      "date": "2026-04-26",
+      "topic": "Lokales SEO mit Google Business Profile & Social Signals",
+      "keyword": "Local SEO Social Media",
+      "author": "Sarah (Growth)",
+      "feature": "Channel Management (Google Business)",
+      "cluster": "PILLAR 3: DISCOVERY (GEO)",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 64",
+      "date": "2026-04-27",
+      "topic": "Memes f\u00fcr B2B: Cringe oder Genial?",
+      "keyword": "B2B Meme Marketing",
+      "author": "Sarah (Growth)",
+      "feature": "Media Library",
+      "cluster": "PILLAR 5: PSYCHOLOGY",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 65",
+      "date": "2026-04-28",
+      "topic": "Warum Social Media Automation f\u00fcr Anf\u00e4nger oft schiefgeht (und wie man es richtig macht)",
+      "keyword": "Social Media Automation Anf\u00e4ngerfehler",
+      "author": "Alex (Tech Lead)",
+      "feature": "Workflow Builder",
+      "cluster": "PILLAR 1: AUTOMATION",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 66",
+      "date": "2026-04-29",
+      "topic": "3 einfache Video-Ideen f\u00fcr mehr Reichweite (ohne Tanzen)",
+      "keyword": "Video Content Ideen ohne Gesicht",
+      "author": "Mia (Creative)",
+      "feature": "Media Library (Stock)",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 67",
+      "date": "2026-04-30",
+      "topic": "Audio-Content: Warum du 2026 nicht mehr ohne Voiceover posten solltest",
+      "keyword": "Social Media Audio Trends",
+      "author": "Mia (Creative)",
+      "feature": "Media Library (Audio)",
+      "cluster": "PILLAR 2: REPURPOSING",
+      "wordTarget": "2000",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 68",
+      "date": "2026-05-01",
+      "topic": "Zeitmanagement f\u00fcr Social Media Manager: Tools statt \u00dcberstunden",
+      "keyword": "Social Media Zeitmanagement",
+      "author": "Sarah (Growth)",
+      "feature": "Workflow Builder + Calendar",
+      "cluster": "PILLAR 1: AUTOMATION",
+      "wordTarget": "2000",
       "steps": {
         "content_research": {
           "status": "pending",
