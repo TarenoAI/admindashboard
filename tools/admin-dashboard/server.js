@@ -286,9 +286,24 @@ app.get("/api/projects", async (_, res) => {
                 tasks: data.tasks || [],
                 milestones: data.milestones || [],
                 dataRefs: data.dataRefs || [],
-                contentPipeline: data.contentPipeline || [],
-                file: full
             };
+
+            // Count words for final review step
+            if (result.contentPipeline) {
+                for (const cp of result.contentPipeline) {
+                    if (cp.steps?.final?.doc) {
+                        try {
+                            const p = path.join(WORKSPACE_ROOT, cp.steps.final.doc);
+                            if (fs.existsSync(p)) {
+                                const text = fs.readFileSync(p, 'utf8');
+                                cp.steps.final.wordCount = text.trim().split(/\s+/).length || 0;
+                            }
+                        } catch (e) { /* ignore missing files */ }
+                    }
+                }
+            }
+
+            return result;
         } catch (e) {
             return {
                 id: projectId,
@@ -302,6 +317,35 @@ app.get("/api/projects", async (_, res) => {
     ok(res, { count: projects.length, projects });
 });
 
+// Pipeline Status API
+app.post("/api/projects/:projectId/pipeline/:cpIndex/:stepId", express.json({ limit: '50mb' }), async (req, res) => {
+    const { projectId, cpIndex, stepId } = req.params;
+    const { status, reason } = req.body;
+
+    const projectFile = path.join(WORKSPACE_ROOT, "data", "projects", `${projectId}.json`);
+    if (!fs.existsSync(projectFile)) return res.status(404).json({ success: false, error: "Project not found" });
+
+    try {
+        const data = JSON.parse(fs.readFileSync(projectFile, 'utf8'));
+        if (!data.contentPipeline || !data.contentPipeline[cpIndex]) {
+            return res.status(404).json({ success: false, error: "Pipeline row not found" });
+        }
+        const step = data.contentPipeline[cpIndex].steps[stepId];
+        if (!step) {
+            return res.status(404).json({ success: false, error: "Step not found" });
+        }
+
+        step.status = status;
+        if (reason !== undefined) {
+            step.rejectReason = reason;
+        }
+
+        fs.writeFileSync(projectFile, JSON.stringify(data, null, 2), 'utf8');
+        ok(res, { message: "Pipeline status updated successfully" });
+    } catch (e) {
+        res.status(500).json({ success: false, error: e.message });
+    }
+});
 // Kanban Task Move API
 app.post("/api/projects/:projectId/tasks/:taskId/move", express.json({ limit: '50mb' }), async (req, res) => {
     const { projectId, taskId } = req.params;
