@@ -49,7 +49,6 @@
       "currentTask": "TAG-01 fertig, TAG-02 vorbereitet",
       "description": "Erstellt kompakten Kontext aus der 500+ Artikel Competitor-KB, ohne den Token-Rahmen zu sprengen.",
       "output": "01_kb_pack.md – Top 10–30 Titel + 3–6 Bullet-Insights, max. 800–1200 Wörter",
-      "outputPath": "projects/blog-artifacts/tag01/01_kb_pack.md",
       "hardRules": [
         "Kein Copy langer Absätze, nur Pattern-Mining",
         "Keine erfundenen Quellen"
@@ -64,7 +63,6 @@
       "currentTask": "TAG-01 fertig, TAG-02 vorbereitet",
       "description": "Synthetisiert Wissen aus KB-Pack + Jobdaten, findet Lücken, liefert Competitive-Gap-Analyse.",
       "output": "02_research.md – Search Intent, Audience, Patterns, Gaps, Differentiation Angles, Volatile Claim Zones",
-      "outputPath": "projects/blog-artifacts/tag01/02_research.md",
       "hardRules": [
         "Keine Prosa / kein Artikelschreiben",
         "Keine Zahlen ohne sichere Quelle",
@@ -80,7 +78,6 @@
       "currentTask": "TAG-01 fertig",
       "description": "Baut GEO-optimierte Outline: Intent-erfüllend, mit GAP/DIFF-Abschnitten, erzwingt TL;DR, Framework, Definition, FAQ≥5.",
       "output": "03_outline.md – Article Blueprint mit [CORE]/[GAP]/[DIFF] H2-Tags, max. 10–14 H2",
-      "outputPath": "projects/blog-artifacts/tag01/03_outline.md",
       "hardRules": [
         "Keine exakten Preise in Outline",
         "Definition + Framework früh ansetzen",
@@ -96,7 +93,6 @@
       "currentTask": "TAG-01 fertig",
       "description": "Schreibt Abschnitte in Chunks (350–600 Wörter/Spawn). Produktion, nicht Recherche.",
       "output": "04_sections/section_XX.md – ein Abschnitt pro Spawn",
-      "outputPath": "projects/blog-artifacts/tag01/04_draft.md",
       "hardRules": [
         "Volatile Claims weich formulieren ('starts around…')",
         "Keine neuen Studien ohne Link",
@@ -112,7 +108,6 @@
       "currentTask": "TAG-01 fertig",
       "description": "Setzt Tareno als Workflow-Enabler ein – editorial, nicht werblich. Max. 3 Inserts à 80–120 Wörter.",
       "output": "05_product_inserts.md – max. 3 Inserts mit Platzierungsangabe",
-      "outputPath": "projects/blog-artifacts/tag01/05_product.md",
       "hardRules": [
         "Keine Superlative",
         "Keine 'unlimited' Claims ohne Plan-Details",
@@ -128,7 +123,6 @@
       "currentTask": "TAG-01 fertig",
       "description": "Finale Qualität + Vertrauensaufbau + Halluzinationsschutz. Gatekeeper: hält harte Zahlen zurück, prüft E-E-A-T.",
       "output": "06_edited.md – bereinigtes, E-E-A-T-konformes Draft",
-      "outputPath": "projects/blog-artifacts/tag01/06_edited.md",
       "hardRules": [
         "Hard-Fail bei fehlendem H1, Script-Tags, sichtbarem Frontmatter",
         "Hard-Fail bei Preis-Claims ohne Quelle",
@@ -144,7 +138,6 @@
       "currentTask": "TAG-01 fertig",
       "description": "Macht Artikel GEO-zitierbar: poliert Definitionen, benennt Frameworks, schärft TL;DR + Key Takeaways – ohne neue Fakten.",
       "output": "07_geo_polish.md – finaler polierter Draft",
-      "outputPath": "projects/blog-artifacts/tag01/07_geo_polish.md",
       "hardRules": [
         "Keine neuen Zahlen/Studien",
         "Keine neuen Produktclaims",
@@ -349,8 +342,8 @@
     },
     {
       "label": "Heartbeat Status",
-      "path": "HEARTBEAT.md",
-      "type": "markdown",
+      "path": "projects/_knowledge/tareno/2026-02-23T12-29-23-554Z-DRIVE_HEARTBEAT-md.md",
+      "type": "md",
       "category": "Prozess"
     },
     {
@@ -378,21 +371,6 @@
       "path": "projects/_knowledge/tareno/2026-02-23T10-51-35-473Z-BLOG_STATUS_BOARD_30_TAGE.md",
       "type": "md",
       "addedAt": "2026-02-23T10:51:35.474Z"
-    },
-    {
-      "label": "BLOG_ARTEFAKTE_INDEX",
-      "path": "projects/blog-artifacts/TARENO_BLOG_ARTEFAKTE.md",
-      "type": "md",
-      "category": "Artefakte",
-      "note": "Index \u00fcber alle 30 Blogs mit 6 Subagent-Artefakten pro Blog"
-    },
-    {
-      "label": "TAG-01 Final (aktuell)",
-      "path": "projects/blog-artifacts/tag01/06_final_tag01.md",
-      "type": "md",
-      "category": "Artefakt",
-      "status": "ready_for_publish",
-      "blogId": "TAG-01"
     }
   ],
   "notes": "Sam liefert operative Updates; Luna validiert Struktur und Qualit\u00e4t. TAG-01 alle 6 Schritte abgeschlossen, bereit f\u00fcr Luna's Final Review.",
