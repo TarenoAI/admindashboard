@@ -284,6 +284,8 @@
             if (window.innerWidth <= 768) {
                 document.getElementById('sidebar')?.classList.remove('mobile-open');
             }
+            // Update URL hash for direct linking
+            window.location.hash = '#' + tabId;
         }
 
         function toggleMobileMenu() {
@@ -1559,7 +1561,19 @@
             loadCurrentView();
         };
 
-        // Init first view
+        // Init first view - check URL hash for direct navigation
+        function initFromHash() {
+            const hash = window.location.hash.replace('#', '');
+            const validTabs = ['agents', 'organization', 'activity', 'cron', 'projects', 'skills', 'agent-builder'];
+            if (hash && validTabs.includes(hash)) {
+                currentTab = hash;
+                document.getElementById('view-title').innerText = hash.charAt(0).toUpperCase() + hash.slice(1);
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                const nav = Array.from(document.querySelectorAll('.nav-item')).find(n => n.getAttribute('onclick')?.includes(`'${hash}'`));
+                if (nav) nav.classList.add('active');
+            }
+        }
+        initFromHash();
         configureAutoRefreshForTab();
         loadCurrentView();
     </script>
