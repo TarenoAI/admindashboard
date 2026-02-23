@@ -8,17 +8,20 @@
     {
       "id": "tarenoblog",
       "name": "Sam",
-      "role": "lead"
+      "role": "lead",
+      "description": "Verantwortlich für die gesamte Content-Pipeline, Redaktionsplan & finale Freigaben."
     },
     {
       "id": "main",
       "name": "Luna",
-      "role": "reviewer"
+      "role": "reviewer",
+      "description": "Prüft alle Blogbeiträge auf Compliance und SEO-Struktur."
     },
     {
       "id": "social",
       "name": "MiracleSocial",
-      "role": "support"
+      "role": "support",
+      "description": "Cross-Posting über Twitter und LinkedIn zur Content-Distribution."
     }
   ],
   "milestones": [
