@@ -3,7 +3,7 @@
   "summary": "SaaS-Marketing & Blog-Operations für tareno.co mit Fokus auf planbare Content-Pipeline.",
   "status": "on_track",
   "priority": "high",
-  "lastUpdate": "2026-02-22",
+  "lastUpdate": "2026-02-23",
   "agents": [
     {
       "id": "tarenoblog",
@@ -24,11 +24,139 @@
       "description": "Cross-Posting über Twitter und LinkedIn zur Content-Distribution."
     }
   ],
+  "subagents": [
+    {
+      "id": "research",
+      "name": "Research Synthesizer",
+      "role": "content_research",
+      "status": "active",
+      "currentTask": "TAG-01 fertig, TAG-02 vorbereitet"
+    },
+    {
+      "id": "outline",
+      "name": "SEO & Outline Architect",
+      "role": "structure",
+      "status": "active",
+      "currentTask": "TAG-01 fertig"
+    },
+    {
+      "id": "writer",
+      "name": "Longform Writer",
+      "role": "drafting",
+      "status": "active",
+      "currentTask": "TAG-01 fertig"
+    },
+    {
+      "id": "product",
+      "name": "Product-Native Integration",
+      "role": "feature_inserts",
+      "status": "active",
+      "currentTask": "TAG-01 fertig"
+    },
+    {
+      "id": "editor",
+      "name": "Editor & E-E-A-T",
+      "role": "editing",
+      "status": "active",
+      "currentTask": "TAG-01 fertig"
+    },
+    {
+      "id": "entity",
+      "name": "Entity/Linkability Architect",
+      "role": "geo_polish",
+      "status": "active",
+      "currentTask": "TAG-01 fertig"
+    }
+  ],
+  "blogPipeline": {
+    "totalBlogs": 30,
+    "completed": 0,
+    "inProgress": 1,
+    "planned": 29,
+    "currentFocus": "TAG-01",
+    "currentStage": "Final Review",
+    "blogs": [
+      {
+        "id": "TAG-01",
+        "title": "Social Media Automation für Anfänger",
+        "status": "ready_for_publish",
+        "progress": 100,
+        "stepsCompleted": 6,
+        "stepsTotal": 6
+      },
+      {
+        "id": "TAG-02",
+        "title": "Content Batching Guide 2026",
+        "status": "planned",
+        "progress": 0,
+        "stepsCompleted": 0,
+        "stepsTotal": 6
+      },
+      {
+        "id": "TAG-03",
+        "title": "Die 5 besten Social Media Planungstools",
+        "status": "planned",
+        "progress": 0,
+        "stepsCompleted": 0,
+        "stepsTotal": 6
+      },
+      {
+        "id": "TAG-04",
+        "title": "Warum manuelles Posten Reichweite killt",
+        "status": "planned",
+        "progress": 0,
+        "stepsCompleted": 0,
+        "stepsTotal": 6
+      },
+      {
+        "id": "TAG-05",
+        "title": "Smart Scheduling: Beste Zeit zum Posten",
+        "status": "planned",
+        "progress": 0,
+        "stepsCompleted": 0,
+        "stepsTotal": 6
+      },
+      {
+        "id": "TAG-06",
+        "title": "Workflow-Hacks für schnelle Posts",
+        "status": "planned",
+        "progress": 0,
+        "stepsCompleted": 0,
+        "stepsTotal": 6
+      },
+      {
+        "id": "TAG-07",
+        "title": "Tech-Stack für stressfreies Social Media",
+        "status": "planned",
+        "progress": 0,
+        "stepsCompleted": 0,
+        "stepsTotal": 6
+      }
+    ]
+  },
   "milestones": [
     {
       "title": "Content-System strukturieren",
       "due": "2026-02-23",
-      "status": "in_progress"
+      "status": "done",
+      "note": "Subagent-Pipeline etabliert"
+    },
+    {
+      "title": "TAG-01 fertigstellen",
+      "due": "2026-02-23",
+      "status": "done",
+      "note": "Alle 6 Subagent-Schritte abgeschlossen"
+    },
+    {
+      "title": "TAG-01 veröffentlichen",
+      "due": "2026-02-24",
+      "status": "in_progress",
+      "note": "Ready for final review"
+    },
+    {
+      "title": "TAG-02-03 in Produktion",
+      "due": "2026-02-25",
+      "status": "planned"
     },
     {
       "title": "Erste 7 Tage Content vorausgeplant",
@@ -49,19 +177,58 @@
     {
       "id": "TAR-2",
       "title": "30-Tage Redaktionsplan erstellen",
-      "status": "in_progress",
+      "status": "done",
       "priority": "high",
       "assignee": "Sam",
       "due": "2026-02-22",
-      "blocker": null
+      "completedAt": "2026-02-23",
+      "note": "Mit Subagenten-Pipeline und Status-Tracking"
     },
     {
       "id": "TAR-3",
       "title": "Posting-Workflow mit Review-Regel dokumentieren",
-      "status": "review",
+      "status": "done",
       "priority": "medium",
       "assignee": "Luna",
       "due": "2026-02-23",
+      "completedAt": "2026-02-23",
+      "note": "6-Schritte-Prozess mit Quality Gates"
+    },
+    {
+      "id": "TAR-4",
+      "title": "TAG-01: Social Media Automation Artikel",
+      "status": "done",
+      "priority": "high",
+      "assignee": "Sam",
+      "due": "2026-02-23",
+      "completedAt": "2026-02-23",
+      "note": "Alle Artefakte erstellt: Research→Final"
+    },
+    {
+      "id": "TAR-5",
+      "title": "TAG-01 Final Review & Freigabe",
+      "status": "in_progress",
+      "priority": "high",
+      "assignee": "Luna",
+      "due": "2026-02-24",
+      "blocker": null
+    },
+    {
+      "id": "TAR-6",
+      "title": "TAG-02: Content Batching Guide recherchieren",
+      "status": "backlog",
+      "priority": "high",
+      "assignee": "Sam",
+      "due": "2026-02-25",
+      "blocker": null
+    },
+    {
+      "id": "TAR-7",
+      "title": "TAG-03-07: Woche 1 Content vorbereiten",
+      "status": "backlog",
+      "priority": "medium",
+      "assignee": "Sam",
+      "due": "2026-02-28",
       "blocker": null
     }
   ],
@@ -86,29 +253,58 @@
       "category": "Wissensbank"
     },
     {
-      "label": "Live test probe",
-      "path": "projects/_knowledge/tareno/2026-02-22T12-28-07-077Z-Live-test-probe.txt",
-      "type": "txt",
-      "addedAt": "2026-02-22T12:28:07.078Z",
-      "category": "Sonstiges"
-    },
-    {
-      "label": "Live test probe",
-      "path": "projects/_knowledge/tareno/2026-02-22T12-28-07-099Z-Live-test-probe.txt",
-      "type": "txt",
-      "addedAt": "2026-02-22T12:28:07.099Z",
-      "category": "Sonstiges"
-    },
-    {
       "label": "BLOG_BLUEPRINT",
       "path": "data/project-refs/tareno/BLOG_BLUEPRINT.md",
       "type": "file",
       "addedAt": "2026-02-22T17:05:30.044Z",
       "category": "Prozess"
+    },
+    {
+      "label": "REDAKTIONSPLAN_30_TAGE_SUBAGENTS",
+      "path": "projects/_knowledge/tareno/2026-02-23T00-44-16-446Z-REDAKTIONSPLAN_30_TAGE_SUBAGENTS.md",
+      "type": "md",
+      "addedAt": "2026-02-23T00:44:16.447Z"
+    },
+    {
+      "label": "BLOG_STATUS_BOARD_30_TAGE",
+      "path": "projects/_knowledge/tareno/2026-02-23T10-51-35-473Z-BLOG_STATUS_BOARD_30_TAGE.md",
+      "type": "md",
+      "addedAt": "2026-02-23T10:51:35.474Z"
+    },
+    {
+      "label": "BLOG_ARTEFAKTE_INDEX",
+      "path": "projects/blog-artifacts/TARENO_BLOG_ARTEFAKTE.md",
+      "type": "md",
+      "category": "Artefakte",
+      "note": "Index über alle 30 Blogs mit 6 Subagent-Artefakten pro Blog"
+    },
+    {
+      "label": "TAG-01 Final (aktuell)",
+      "path": "projects/blog-artifacts/tag01/06_final_tag01.md",
+      "type": "md",
+      "category": "Artefakt",
+      "status": "ready_for_publish",
+      "blogId": "TAG-01"
     }
   ],
-  "notes": "Sam liefert operative Updates; Luna validiert Struktur und Qualität.",
+  "notes": "Sam liefert operative Updates; Luna validiert Struktur und Qualität. TAG-01 alle 6 Schritte abgeschlossen, bereit für Luna's Final Review.",
+  "lastStatusUpdate": {
+    "timestamp": "2026-02-23T10:55:00Z",
+    "agent": "tarenoblog",
+    "summary": "TAG-01: Alle 6 Subagent-Schritte fertig. TAR-2 + TAR-3 auf done. TAR-5 (Final Review) jetzt aktiv."
+  },
   "permissions": {
-    "tarenoblog": "write"
+    "tarenoblog": "write",
+    "main": "read",
+    "social": "read"
+  },
+  "dashboardView": {
+    "activeView": "blogPipeline",
+    "sections": [
+      "subagents",
+      "blogProgress",
+      "milestones",
+      "tasks"
+    ]
   }
 }
