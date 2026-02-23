@@ -326,7 +326,7 @@ app.post("/api/projects/:projectId/tasks/:taskId/move", express.json(), async (r
 // Knowledge Upload API
 app.post("/api/projects/:projectId/knowledge", express.json(), async (req, res) => {
     const { projectId } = req.params;
-    const { title, content, type } = req.body; // type e.g. 'md' or 'txt'
+    const { title, content, type, category } = req.body; // type e.g. 'md' or 'txt'
 
     if (!title || !content) return res.status(400).json({ success: false, error: "title and content required" });
 
@@ -351,6 +351,7 @@ app.post("/api/projects/:projectId/knowledge", express.json(), async (req, res) 
             label: title,
             path: `projects/_knowledge/${projectId}/${fileName}`,
             type: ext,
+            category: category || 'Wissensbank',
             addedAt: new Date().toISOString()
         });
 

@@ -69,36 +69,42 @@
     {
       "label": "Project Notes",
       "path": "projects/tareno.md",
-      "type": "markdown"
+      "type": "markdown",
+      "category": "Allgemein"
     },
     {
       "label": "Heartbeat Status",
       "path": "HEARTBEAT.md",
-      "type": "markdown"
+      "type": "markdown",
+      "category": "Prozess"
     },
     {
       "label": "ND-Live-Test-001",
       "path": "projects/_knowledge/tareno/2026-02-22T12-12-54-846Z-ND-Live-Test-001.md",
       "type": "md",
-      "addedAt": "2026-02-22T12:12:54.846Z"
+      "addedAt": "2026-02-22T12:12:54.846Z",
+      "category": "Wissensbank"
     },
     {
       "label": "Live test probe",
       "path": "projects/_knowledge/tareno/2026-02-22T12-28-07-077Z-Live-test-probe.txt",
       "type": "txt",
-      "addedAt": "2026-02-22T12:28:07.078Z"
+      "addedAt": "2026-02-22T12:28:07.078Z",
+      "category": "Sonstiges"
     },
     {
       "label": "Live test probe",
       "path": "projects/_knowledge/tareno/2026-02-22T12-28-07-099Z-Live-test-probe.txt",
       "type": "txt",
-      "addedAt": "2026-02-22T12:28:07.099Z"
+      "addedAt": "2026-02-22T12:28:07.099Z",
+      "category": "Sonstiges"
     },
     {
       "label": "BLOG_BLUEPRINT",
       "path": "data/project-refs/tareno/BLOG_BLUEPRINT.md",
       "type": "file",
-      "addedAt": "2026-02-22T17:05:30.044Z"
+      "addedAt": "2026-02-22T17:05:30.044Z",
+      "category": "Prozess"
     }
   ],
   "notes": "Sam liefert operative Updates; Luna validiert Struktur und Qualität.",
