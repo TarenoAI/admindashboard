@@ -9,63 +9,140 @@
       "id": "tarenoblog",
       "name": "Sam",
       "role": "lead",
-      "description": "Verantwortlich f\u00fcr die gesamte Content-Pipeline, Redaktionsplan & finale Freigaben."
+      "agentIndex": 0,
+      "description": "Main Orchestrator & QA Controller – Produktionsleitung. Nur Orchestrierung, Persistenz, QA und Recovery. Schreibt keine Inhalte selbst.",
+      "responsibilities": [
+        "Job aus Excel-Zeile laden (Topic + Meta)",
+        "KB-Kontext packen (kb_pack)",
+        "Agenten sequenziell ausführen",
+        "Artefakte nach jedem Schritt speichern & verifizieren",
+        "Fehler (Timeout/429) mit Retry/Backoff behandeln",
+        "Finale Merge + Publish-Paket erzeugen (FINAL.md)"
+      ],
+      "hardRules": [
+        "Nie selbst schreiben",
+        "Nie mehrere Rollen in einem Sub-Agent-Spawn bündeln",
+        "429-Policy: Retry 4x (30s → 60s → 120s → 240s)",
+        "Bei Timeout: Scope halbieren, max. 3 Reductions pro Section"
+      ]
     },
     {
       "id": "main",
       "name": "Luna",
       "role": "reviewer",
-      "description": "Pr\u00fcft alle Blogbeitr\u00e4ge auf Compliance und SEO-Struktur."
+      "description": "Final Gatekeeper – prüft alle Blogbeiträge auf E-E-A-T, Compliance und SEO-Struktur vor Publish."
     },
     {
       "id": "social",
       "name": "MiracleSocial",
       "role": "support",
-      "description": "Cross-Posting \u00fcber Twitter und LinkedIn zur Content-Distribution."
+      "description": "Cross-Posting über Twitter und LinkedIn zur Content-Distribution nach Freigabe."
     }
   ],
   "subagents": [
     {
-      "id": "research",
-      "name": "Research Synthesizer",
+      "id": "kb_retriever",
+      "name": "KB Retriever",
+      "agentKey": "Agent 0a",
       "role": "content_research",
       "status": "active",
-      "currentTask": "TAG-01 fertig, TAG-02 vorbereitet"
+      "currentTask": "TAG-01 fertig, TAG-02 vorbereitet",
+      "description": "Erstellt kompakten Kontext aus der 500+ Artikel Competitor-KB, ohne den Token-Rahmen zu sprengen.",
+      "output": "01_kb_pack.md – Top 10–30 Titel + 3–6 Bullet-Insights, max. 800–1200 Wörter",
+      "hardRules": [
+        "Kein Copy langer Absätze, nur Pattern-Mining",
+        "Keine erfundenen Quellen"
+      ]
+    },
+    {
+      "id": "research",
+      "name": "Research Synthesizer",
+      "agentKey": "Agent 1",
+      "role": "content_research",
+      "status": "active",
+      "currentTask": "TAG-01 fertig, TAG-02 vorbereitet",
+      "description": "Synthetisiert Wissen aus KB-Pack + Jobdaten, findet Lücken, liefert Competitive-Gap-Analyse.",
+      "output": "02_research.md – Search Intent, Audience, Patterns, Gaps, Differentiation Angles, Volatile Claim Zones",
+      "hardRules": [
+        "Keine Prosa / kein Artikelschreiben",
+        "Keine Zahlen ohne sichere Quelle",
+        "Max. 30 Bullets/Block, max. 900 Wörter"
+      ]
     },
     {
       "id": "outline",
       "name": "SEO & Outline Architect",
+      "agentKey": "Agent 2",
       "role": "structure",
       "status": "active",
-      "currentTask": "TAG-01 fertig"
+      "currentTask": "TAG-01 fertig",
+      "description": "Baut GEO-optimierte Outline: Intent-erfüllend, mit GAP/DIFF-Abschnitten, erzwingt TL;DR, Framework, Definition, FAQ≥5.",
+      "output": "03_outline.md – Article Blueprint mit [CORE]/[GAP]/[DIFF] H2-Tags, max. 10–14 H2",
+      "hardRules": [
+        "Keine exakten Preise in Outline",
+        "Definition + Framework früh ansetzen",
+        "Kein zweites H1"
+      ]
     },
     {
       "id": "writer",
       "name": "Longform Writer",
+      "agentKey": "Agent 3",
       "role": "drafting",
       "status": "active",
-      "currentTask": "TAG-01 fertig"
+      "currentTask": "TAG-01 fertig",
+      "description": "Schreibt Abschnitte in Chunks (350–600 Wörter/Spawn). Produktion, nicht Recherche.",
+      "output": "04_sections/section_XX.md – ein Abschnitt pro Spawn",
+      "hardRules": [
+        "Volatile Claims weich formulieren ('starts around…')",
+        "Keine neuen Studien ohne Link",
+        "Erste 300 Wörter factual & skimmable"
+      ]
     },
     {
       "id": "product",
       "name": "Product-Native Integration",
+      "agentKey": "Agent 4",
       "role": "feature_inserts",
       "status": "active",
-      "currentTask": "TAG-01 fertig"
+      "currentTask": "TAG-01 fertig",
+      "description": "Setzt Tareno als Workflow-Enabler ein – editorial, nicht werblich. Max. 3 Inserts à 80–120 Wörter.",
+      "output": "05_product_inserts.md – max. 3 Inserts mit Platzierungsangabe",
+      "hardRules": [
+        "Keine Superlative",
+        "Keine 'unlimited' Claims ohne Plan-Details",
+        "CTA minimal & editorial"
+      ]
     },
     {
       "id": "editor",
-      "name": "Editor & E-E-A-T",
+      "name": "Editor & E-E-A-T + Claim Hygiene",
+      "agentKey": "Agent 5",
       "role": "editing",
       "status": "active",
-      "currentTask": "TAG-01 fertig"
+      "currentTask": "TAG-01 fertig",
+      "description": "Finale Qualität + Vertrauensaufbau + Halluzinationsschutz. Gatekeeper: hält harte Zahlen zurück, prüft E-E-A-T.",
+      "output": "06_edited.md – bereinigtes, E-E-A-T-konformes Draft",
+      "hardRules": [
+        "Hard-Fail bei fehlendem H1, Script-Tags, sichtbarem Frontmatter",
+        "Hard-Fail bei Preis-Claims ohne Quelle",
+        "Hard-Fail wenn Definition/Framework/FAQ laut Outline fehlt"
+      ]
     },
     {
       "id": "entity",
-      "name": "Entity/Linkability Architect",
+      "name": "Entity & Linkability Architect",
+      "agentKey": "Agent 6",
       "role": "geo_polish",
       "status": "active",
-      "currentTask": "TAG-01 fertig"
+      "currentTask": "TAG-01 fertig",
+      "description": "Macht Artikel GEO-zitierbar: poliert Definitionen, benennt Frameworks, schärft TL;DR + Key Takeaways – ohne neue Fakten.",
+      "output": "07_geo_polish.md – finaler polierter Draft",
+      "hardRules": [
+        "Keine neuen Zahlen/Studien",
+        "Keine neuen Produktclaims",
+        "Kein Umschreiben ganzer Kapitel – nur Blocks"
+      ]
     }
   ],
   "blogPipeline": {

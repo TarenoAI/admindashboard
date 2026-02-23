@@ -842,15 +842,21 @@
                         agentHtml += `<div class="flex justify-center -my-1.5"><div class="w-px h-3 bg-dashed border-l border-white/10 border-dashed"></div></div>`;
                         agentHtml += `<div class="pl-6 border-l-2 border-white/5 border-dashed space-y-2">`;
                         agentHtml += p.subagents.map(sa => `
-                            <div class="flex items-center gap-3 bg-black/20 border border-white/5 border-dashed rounded-lg p-2 hover:bg-white/5 transition-colors group">
-                                <div class="w-6 h-6 rounded bg-neutral-500/10 flex items-center justify-center text-xs text-neutral-400 font-bold border border-neutral-500/20">${(sa.name || 'S').charAt(0)}</div>
-                                <div class="flex-1 min-w-0">
-                                    <div class="flex items-center gap-2">
-                                        <p class="text-xs font-semibold text-white leading-tight truncate">${sa.name}</p>
-                                        <span class="text-[8px] text-text-muted uppercase tracking-wider">${sa.role || 'sub-agent'}</span>
+                            <div class="bg-black/20 border border-white/5 border-dashed rounded-xl p-3 hover:bg-white/5 hover:border-brand/20 transition-all group cursor-default">
+                                <div class="flex items-center gap-2.5 mb-2">
+                                    <div class="w-7 h-7 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center text-xs text-brand font-bold flex-shrink-0 shadow-sm">${sa.agentKey ? sa.agentKey.replace('Agent ', '') : (sa.name || 'S').charAt(0)}</div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center gap-2 flex-wrap">
+                                            <p class="text-xs font-bold text-white leading-tight">${sa.name}</p>
+                                            ${sa.agentKey ? `<span class="text-[8px] text-brand/70 bg-brand/10 px-1.5 py-0.5 rounded border border-brand/20 font-bold uppercase tracking-wider">${sa.agentKey}</span>` : ''}
+                                        </div>
+                                        <span class="text-[8px] text-text-muted uppercase tracking-wider">${(sa.role || 'sub-agent').replace('_', ' ')}</span>
                                     </div>
-                                    ${sa.description ? `<p class="text-[9px] text-text-muted mt-1 truncate">${sa.description}</p>` : ''}
+                                    <div class="w-2 h-2 rounded-full flex-shrink-0 ${sa.status === 'active' ? 'bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.6)]' : 'bg-neutral-500'}"></div>
                                 </div>
+                                ${sa.description ? `<p class="text-[9px] text-text-muted leading-relaxed mb-2">${sa.description}</p>` : ''}
+                                ${sa.output ? `<div class="text-[9px] bg-black/30 border border-white/5 rounded px-2 py-1.5 text-text-muted leading-relaxed mb-2"><span class="text-brand/70 font-bold">📄 Output: </span>${sa.output}</div>` : ''}
+                                ${sa.hardRules && sa.hardRules.length ? `<div class="flex flex-col gap-1">${sa.hardRules.map(r => `<div class="text-[8px] flex items-start gap-1.5 text-red-400/70"><span class="flex-shrink-0">⚑</span><span>${r}</span></div>`).join('')}</div>` : ''}
                             </div>
                         `).join('');
                         agentHtml += `</div>`;
