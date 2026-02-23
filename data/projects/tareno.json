@@ -313,27 +313,31 @@
       "date": "2026-02-23",
       "topic": "Was ist Agentic Workflow?",
       "steps": {
-        "research": {
+        "content_research": {
           "status": "done",
-          "doc": "research_01.md"
+          "doc": "01_research.md"
         },
-        "seo": {
+        "structure": {
           "status": "done",
-          "doc": "seo_01.md"
+          "doc": "02_seo.md"
         },
-        "outline": {
+        "drafting": {
+          "status": "done",
+          "doc": "03_draft.md"
+        },
+        "feature_inserts": {
+          "status": "done",
+          "doc": "04_product.md"
+        },
+        "editing": {
           "status": "review",
-          "doc": "outline_01.md"
+          "doc": "05_edit.md"
         },
-        "writer": {
+        "geo_polish": {
           "status": "pending",
           "doc": null
         },
-        "review": {
-          "status": "pending",
-          "doc": null
-        },
-        "publish": {
+        "final": {
           "status": "pending",
           "doc": null
         }
@@ -344,27 +348,31 @@
       "date": "2026-02-24",
       "topic": "Use Cases für kleine Teams",
       "steps": {
-        "research": {
+        "content_research": {
           "status": "review",
-          "doc": "research_02.md"
+          "doc": "01_research.md"
         },
-        "seo": {
+        "structure": {
           "status": "pending",
           "doc": null
         },
-        "outline": {
+        "drafting": {
           "status": "pending",
           "doc": null
         },
-        "writer": {
+        "feature_inserts": {
           "status": "pending",
           "doc": null
         },
-        "review": {
+        "editing": {
           "status": "pending",
           "doc": null
         },
-        "publish": {
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
           "status": "pending",
           "doc": null
         }
@@ -375,27 +383,31 @@
       "date": "2026-02-25",
       "topic": "Kosten sparen mit KI-Mitarbeitern",
       "steps": {
-        "research": {
+        "content_research": {
           "status": "pending",
           "doc": null
         },
-        "seo": {
+        "structure": {
           "status": "pending",
           "doc": null
         },
-        "outline": {
+        "drafting": {
           "status": "pending",
           "doc": null
         },
-        "writer": {
+        "feature_inserts": {
           "status": "pending",
           "doc": null
         },
-        "review": {
+        "editing": {
           "status": "pending",
           "doc": null
         },
-        "publish": {
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
           "status": "pending",
           "doc": null
         }

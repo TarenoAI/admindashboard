@@ -1003,14 +1003,14 @@
                         <div class="glass-card mt-6 p-0 overflow-hidden shadow-2xl border border-white/10 bg-black/40">
                             <div class="p-6 md:p-8 border-b border-white/5 bg-gradient-to-r from-brand/10 to-transparent relative">
                                 <h4 class="text-xs uppercase tracking-widest text-brand font-extrabold flex items-center gap-2">🗓️ Content Pipeline & Approvals</h4>
-                                <p class="text-xs text-text-muted mt-2">Detaillierte Schritt-für-Schritt Freigabe für 6-Schritte Blog Pipeline je Tag in den Untersegmenten ablehnen oder komplett zustimmen.</p>
+                                <p class="text-xs text-text-muted mt-2">Detaillierte Schritt-für-Schritt Freigabe für die 7-stufige Agentic Content Pipeline (inkl. Final Review durch Sam) je Tag.</p>
                             </div>
                             <div class="overflow-x-auto">
                                 <table class="w-full text-left text-xs text-white">
                                     <thead class="bg-black/60 border-b border-white/10 uppercase text-[9px] text-text-muted font-bold tracking-wider">
                                         <tr>
                                             <th class="p-5 min-w-[180px]">Tag / Thema</th>
-                                            ${['Research', 'SEO', 'Outline', 'Long-Form', 'Review', 'Publish'].map(s => `<th class="p-5 text-center px-2">${s}</th>`).join('')}
+                                            ${['Research', 'Structure', 'Drafting', 'Features', 'Editing', 'Geo-Polish', 'Final Review'].map(s => `<th class="p-5 text-center px-2">${s}</th>`).join('')}
                                             <th class="p-5 text-center">Row Actions</th>
                                         </tr>
                                     </thead>
@@ -1022,7 +1022,7 @@
                                                 <p class="text-xs text-text-secondary font-medium md:max-w-[200px] truncate">${cp.topic}</p>
                                                 <p class="text-[9px] text-text-muted mt-1 uppercase tracking-wider">${cp.date}</p>
                                             </td>
-                                            ${['research', 'seo', 'outline', 'writer', 'review', 'publish'].map(step => {
+                                            ${['content_research', 'structure', 'drafting', 'feature_inserts', 'editing', 'geo_polish', 'final'].map(step => {
                         const stepData = cp.steps?.[step] || { status: 'pending', doc: null };
                         let btnHtml = '';
                         let iconClr = 'text-white/20';
