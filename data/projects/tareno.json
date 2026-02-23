@@ -333,7 +333,7 @@
   },
   "contentPipeline": [
     {
-      "day": "Tag 1",
+      "day": "Tag 1 (Post 1)",
       "date": "2026-02-23",
       "topic": "Bio-Link Optimierung: Der erste Schritt im SEO-Funnel",
       "keyword": "Bio Link SEO",
@@ -373,8 +373,8 @@
       }
     },
     {
-      "day": "Tag 2",
-      "date": "2026-02-24",
+      "day": "Tag 1 (Post 2)",
+      "date": "2026-02-23",
       "topic": "Community Management: Wie du Trolle in Fans verwandelst",
       "keyword": "Community Management Tips",
       "author": "Sarah (Growth)",
@@ -413,8 +413,8 @@
       }
     },
     {
-      "day": "Tag 3",
-      "date": "2026-02-25",
+      "day": "Tag 2 (Post 1)",
+      "date": "2026-02-24",
       "topic": "Instagram Automation: Was erlaubt ist und was zum Ban f\u00fchrt (2026 Update)",
       "keyword": "Instagram Automation Rules",
       "author": "Alex (Tech Lead)",
@@ -453,8 +453,8 @@
       }
     },
     {
-      "day": "Tag 4",
-      "date": "2026-02-26",
+      "day": "Tag 2 (Post 2)",
+      "date": "2026-02-24",
       "topic": "Omnipr\u00e4senz-Strategie: Wie Creator Y mit Repurposing 1M Views erreichte",
       "keyword": "Social Media Omnipresence",
       "author": "Sarah (Growth)",
@@ -493,8 +493,8 @@
       }
     },
     {
-      "day": "Tag 5",
-      "date": "2026-02-27",
+      "day": "Tag 3 (Post 1)",
+      "date": "2026-02-25",
       "topic": "Threads ein Jahr sp\u00e4ter: Lohnt es sich f\u00fcr Brands?",
       "keyword": "Threads Marketing Strategy",
       "author": "Sarah (Growth)",
@@ -533,8 +533,8 @@
       }
     },
     {
-      "day": "Tag 6",
-      "date": "2026-02-28",
+      "day": "Tag 3 (Post 2)",
+      "date": "2026-02-25",
       "topic": "Musikrechte auf Instagram: So vermeidest du Abmahnungen",
       "keyword": "Instagram Music Copyright",
       "author": "Alex (Tech Lead)",
@@ -573,8 +573,8 @@
       }
     },
     {
-      "day": "Tag 7",
-      "date": "2026-03-01",
+      "day": "Tag 4 (Post 1)",
+      "date": "2026-02-26",
       "topic": "Warum deine Facebook Ads abgelehnt werden (und wie du es fixst)",
       "keyword": "Facebook Ads Ban",
       "author": "Sarah (Growth)",
@@ -613,8 +613,8 @@
       }
     },
     {
-      "day": "Tag 8",
-      "date": "2026-03-02",
+      "day": "Tag 4 (Post 2)",
+      "date": "2026-02-26",
       "topic": "UGC (User Generated Content): Der heilige Gral f\u00fcr Trust?",
       "keyword": "UGC Strategy Guide",
       "author": "Sarah (Growth)",
@@ -653,8 +653,8 @@
       }
     },
     {
-      "day": "Tag 9",
-      "date": "2026-03-03",
+      "day": "Tag 5 (Post 1)",
+      "date": "2026-02-27",
       "topic": "Der perfekte Social Media Tech Stack 2026 (unter 100\u20ac)",
       "keyword": "Social Media Tool Stack",
       "author": "Alex (Tech Lead)",
@@ -693,8 +693,8 @@
       }
     },
     {
-      "day": "Tag 10",
-      "date": "2026-03-04",
+      "day": "Tag 5 (Post 2)",
+      "date": "2026-02-27",
       "topic": "Content Recycling 2.0: Wie du einen Blogpost in 20 Social Assets verwandelst",
       "keyword": "Content Repurposing Strategy",
       "author": "Mia (Creative)",
@@ -733,8 +733,8 @@
       }
     },
     {
-      "day": "Tag 11",
-      "date": "2026-03-05",
+      "day": "Tag 6 (Post 1)",
+      "date": "2026-02-28",
       "topic": "Content Batching f\u00fcr Solopreneure: 1 Monat in 1 Tag",
       "keyword": "Content Batching Guide",
       "author": "Mia (Creative)",
@@ -773,8 +773,8 @@
       }
     },
     {
-      "day": "Tag 12",
-      "date": "2026-03-06",
+      "day": "Tag 6 (Post 2)",
+      "date": "2026-02-28",
       "topic": "Voice Search & Social Media: Optimierung f\u00fcr gesprochene Suchanfragen",
       "keyword": "Voice Search Social Media",
       "author": "Alex (Tech Lead)",
@@ -813,8 +813,8 @@
       }
     },
     {
-      "day": "Tag 13",
-      "date": "2026-03-07",
+      "day": "Tag 7 (Post 1)",
+      "date": "2026-03-01",
       "topic": "TikTok zu Reels zu Shorts: Der wasserzeichenfreie Workflow",
       "keyword": "Short Form Repurposing",
       "author": "Mia (Creative)",
@@ -853,8 +853,8 @@
       }
     },
     {
-      "day": "Tag 14",
-      "date": "2026-03-08",
+      "day": "Tag 7 (Post 2)",
+      "date": "2026-03-01",
       "topic": "LinkedIn Algorithmus 2026: Was jetzt wirklich z\u00e4hlt",
       "keyword": "LinkedIn Algorithm 2026",
       "author": "Sarah (Growth)",
@@ -893,8 +893,8 @@
       }
     },
     {
-      "day": "Tag 15",
-      "date": "2026-03-09",
+      "day": "Tag 8 (Post 1)",
+      "date": "2026-03-02",
       "topic": "7 Tools f\u00fcr bessere Instagram Stories (die nicht Instagram sind)",
       "keyword": "Instagram Story Tools",
       "author": "Mia (Creative)",
@@ -933,8 +933,8 @@
       }
     },
     {
-      "day": "Tag 16",
-      "date": "2026-03-10",
+      "day": "Tag 8 (Post 2)",
+      "date": "2026-03-02",
       "topic": "Wie der TikTok Algorithmus *wirklich* funktioniert (Leaked Docs)",
       "keyword": "TikTok Algorithm Secrets",
       "author": "Alex (Tech Lead)",
@@ -973,8 +973,8 @@
       }
     },
     {
-      "day": "Tag 17",
-      "date": "2026-03-11",
+      "day": "Tag 9 (Post 1)",
+      "date": "2026-03-03",
       "topic": "Video zu Text: Wie du aus YouTube-Videos Blogartikel machst (in Minuten)",
       "keyword": "Video to Blog AI",
       "author": "Mia (Creative)",
@@ -1013,8 +1013,8 @@
       }
     },
     {
-      "day": "Tag 18",
-      "date": "2026-03-12",
+      "day": "Tag 9 (Post 2)",
+      "date": "2026-03-03",
       "topic": "Instagram SEO: Keywords statt Hashtags (Der neue Standard)",
       "keyword": "Instagram SEO 2026",
       "author": "Mia (Creative)",
@@ -1053,8 +1053,8 @@
       }
     },
     {
-      "day": "Tag 19",
-      "date": "2026-03-13",
+      "day": "Tag 10 (Post 1)",
+      "date": "2026-03-04",
       "topic": "Zapier vs. Make vs. Native Integrationen: Der gro\u00dfe Vergleich f\u00fcr Social Media",
       "keyword": "Social Media Integrations",
       "author": "Alex (Tech Lead)",
@@ -1093,8 +1093,8 @@
       }
     },
     {
-      "day": "Tag 20",
-      "date": "2026-03-14",
+      "day": "Tag 10 (Post 2)",
+      "date": "2026-03-04",
       "topic": "Gewinnspiele richtig machen: Wachstum oder Karteileichen?",
       "keyword": "Social Media Contest Strategy",
       "author": "Sarah (Growth)",
@@ -1133,8 +1133,8 @@
       }
     },
     {
-      "day": "Tag 21",
-      "date": "2026-03-15",
+      "day": "Tag 11 (Post 1)",
+      "date": "2026-03-05",
       "topic": "Automatisierte Antworten: Segen oder Fluch?",
       "keyword": "Auto Reply Best Practices",
       "author": "Alex (Tech Lead)",
@@ -1173,8 +1173,8 @@
       }
     },
     {
-      "day": "Tag 22",
-      "date": "2026-03-16",
+      "day": "Tag 11 (Post 2)",
+      "date": "2026-03-05",
       "topic": "Burnout bei Social Media Managern: Warnsignale & Pr\u00e4vention",
       "keyword": "Social Media Burnout",
       "author": "Sarah (Growth)",
@@ -1213,8 +1213,8 @@
       }
     },
     {
-      "day": "Tag 23",
-      "date": "2026-03-17",
+      "day": "Tag 12 (Post 1)",
+      "date": "2026-03-06",
       "topic": "Dark Mode Content: Warum du dunkle Designs brauchst",
       "keyword": "Dark Mode Social Media Design",
       "author": "Mia (Creative)",
@@ -1253,8 +1253,8 @@
       }
     },
     {
-      "day": "Tag 24",
-      "date": "2026-03-18",
+      "day": "Tag 12 (Post 2)",
+      "date": "2026-03-06",
       "topic": "AI Agents im Social Media Management: Die Zukunft ist da",
       "keyword": "AI Social Media Agents",
       "author": "Alex (Tech Lead)",
@@ -1293,8 +1293,8 @@
       }
     },
     {
-      "day": "Tag 25",
-      "date": "2026-03-19",
+      "day": "Tag 13 (Post 1)",
+      "date": "2026-03-07",
       "topic": "Warum deine Follower nicht kaufen (Der 'Trust Gap')",
       "keyword": "Social Selling Mistakes",
       "author": "Sarah (Growth)",
@@ -1333,8 +1333,8 @@
       }
     },
     {
-      "day": "Tag 26",
-      "date": "2026-03-20",
+      "day": "Tag 13 (Post 2)",
+      "date": "2026-03-07",
       "topic": "Instagram Shadowban: Mythos oder Realit\u00e4t? Der Test.",
       "keyword": "Instagram Shadowban Check",
       "author": "Alex (Tech Lead)",
@@ -1373,8 +1373,8 @@
       }
     },
     {
-      "day": "Tag 27",
-      "date": "2026-03-21",
+      "day": "Tag 14 (Post 1)",
+      "date": "2026-03-08",
       "topic": "Social SEO & GEO 2026: Wie du in KI-Antworten und Feeds gefunden wirst",
       "keyword": "Social Media SEO Guide",
       "author": "Sarah (Growth)",
@@ -1413,8 +1413,8 @@
       }
     },
     {
-      "day": "Tag 28",
-      "date": "2026-03-22",
+      "day": "Tag 14 (Post 2)",
+      "date": "2026-03-08",
       "topic": "Alt Text auf Social Media: SEO-Goldgrube oder Zeitverschwendung?",
       "keyword": "Social Media Alt Text SEO",
       "author": "Alex (Tech Lead)",
@@ -1453,8 +1453,8 @@
       }
     },
     {
-      "day": "Tag 29",
-      "date": "2026-03-23",
+      "day": "Tag 15 (Post 1)",
+      "date": "2026-03-09",
       "topic": "Story Highlights Cover: Warum sie wichtiger sind als du denkst",
       "keyword": "Instagram Highlight Covers",
       "author": "Mia (Creative)",
@@ -1493,8 +1493,8 @@
       }
     },
     {
-      "day": "Tag 30",
-      "date": "2026-03-24",
+      "day": "Tag 15 (Post 2)",
+      "date": "2026-03-09",
       "topic": "Newsletter Growth via Social: Von Followern zu Abonnenten",
       "keyword": "Social to Email Funnel",
       "author": "Sarah (Growth)",
@@ -1533,8 +1533,8 @@
       }
     },
     {
-      "day": "Tag 31",
-      "date": "2026-03-25",
+      "day": "Tag 16 (Post 1)",
+      "date": "2026-03-10",
       "topic": "DM Sales: Verkaufen ohne nervig zu sein",
       "keyword": "Social Selling DMs",
       "author": "Sarah (Growth)",
@@ -1573,8 +1573,8 @@
       }
     },
     {
-      "day": "Tag 32",
-      "date": "2026-03-26",
+      "day": "Tag 16 (Post 2)",
+      "date": "2026-03-10",
       "topic": "Die Psychologie der Farben im Feed: 30% mehr Klicks?",
       "keyword": "Color Psychology Marketing",
       "author": "Mia (Creative)",
@@ -1613,8 +1613,8 @@
       }
     },
     {
-      "day": "Tag 33",
-      "date": "2026-03-27",
+      "day": "Tag 17 (Post 1)",
+      "date": "2026-03-11",
       "topic": "Corporate Influencing: Mitarbeiter zu Markenbotschaftern machen",
       "keyword": "Corporate Influencer Program",
       "author": "Sarah (Growth)",
@@ -1653,8 +1653,8 @@
       }
     },
     {
-      "day": "Tag 34",
-      "date": "2026-03-28",
+      "day": "Tag 17 (Post 2)",
+      "date": "2026-03-11",
       "topic": "Warum du deine LinkedIn Posts auch auf Threads teilen musst",
       "keyword": "LinkedIn to Threads Repurposing",
       "author": "Sarah (Growth)",
@@ -1693,8 +1693,8 @@
       }
     },
     {
-      "day": "Tag 35",
-      "date": "2026-03-29",
+      "day": "Tag 18 (Post 1)",
+      "date": "2026-03-12",
       "topic": "Das 1.000 Follower Playbook: Von 0 auf 1k in 30 Tagen",
       "keyword": "Get first 1000 followers",
       "author": "Sarah (Growth)",
@@ -1733,8 +1733,8 @@
       }
     },
     {
-      "day": "Tag 36",
-      "date": "2026-03-30",
+      "day": "Tag 18 (Post 2)",
+      "date": "2026-03-12",
       "topic": "Die Content-Maschine: Einmal erstellen 20x posten (Omnipr\u00e4senz Guide)",
       "keyword": "Content Repurposing Guide",
       "author": "Mia (Creative)",
@@ -1773,8 +1773,8 @@
       }
     },
     {
-      "day": "Tag 37",
-      "date": "2026-03-31",
+      "day": "Tag 19 (Post 1)",
+      "date": "2026-03-13",
       "topic": "Evergreen Content: Alte Posts automatisch neu beleben (ohne Spam)",
       "keyword": "Evergreen Content Strategy",
       "author": "Mia (Creative)",
@@ -1813,8 +1813,8 @@
       }
     },
     {
-      "day": "Tag 38",
-      "date": "2026-04-01",
+      "day": "Tag 19 (Post 2)",
+      "date": "2026-03-13",
       "topic": "Generative Engine Optimization (GEO): Content f\u00fcr ChatGPT optimieren",
       "keyword": "GEO Marketing Strategy",
       "author": "Sarah (Growth)",
@@ -1853,8 +1853,8 @@
       }
     },
     {
-      "day": "Tag 39",
-      "date": "2026-04-02",
+      "day": "Tag 20 (Post 1)",
+      "date": "2026-03-14",
       "topic": "Hashtag-Strategie 2026: Qualit\u00e4t vor Quantit\u00e4t (Daten-Analyse)",
       "keyword": "Hashtag Strategy 2026",
       "author": "Mia (Creative)",
@@ -1893,8 +1893,8 @@
       }
     },
     {
-      "day": "Tag 40",
-      "date": "2026-04-03",
+      "day": "Tag 20 (Post 2)",
+      "date": "2026-03-14",
       "topic": "Bulk Scheduling: 100 Posts in 5 Minuten planen (Schritt-f\u00fcr-Schritt)",
       "keyword": "Bulk Social Media Posting",
       "author": "Alex (Tech Lead)",
@@ -1933,8 +1933,8 @@
       }
     },
     {
-      "day": "Tag 41",
-      "date": "2026-04-04",
+      "day": "Tag 21 (Post 1)",
+      "date": "2026-03-15",
       "topic": "Warum manuelle Content-Planung Agenturen ruiniert (Die versteckten Kosten)",
       "keyword": "Agentur Skalierung Probleme",
       "author": "Sarah (Growth)",
@@ -1973,8 +1973,8 @@
       }
     },
     {
-      "day": "Tag 42",
-      "date": "2026-04-05",
+      "day": "Tag 21 (Post 2)",
+      "date": "2026-03-15",
       "topic": "Der perfekte Approval-Workflow: Wie du Freigabeschleifen halbierst",
       "keyword": "Social Media Approval Workflow",
       "author": "Sarah (Growth)",
@@ -2013,8 +2013,8 @@
       }
     },
     {
-      "day": "Tag 43",
-      "date": "2026-04-06",
+      "day": "Tag 22 (Post 1)",
+      "date": "2026-03-16",
       "topic": "Der definitive Guide zu Social Media Automation 2026: Strategien Tools & Workflows",
       "keyword": "Social Media Automation Guide",
       "author": "Alex (Tech Lead)",
@@ -2053,8 +2053,8 @@
       }
     },
     {
-      "day": "Tag 44",
-      "date": "2026-04-07",
+      "day": "Tag 22 (Post 2)",
+      "date": "2026-03-16",
       "topic": "LinkedIn Automation f\u00fcr B2B: Leads auf Autopilot?",
       "keyword": "LinkedIn B2B Automation",
       "author": "Sarah (Growth)",
@@ -2093,8 +2093,8 @@
       }
     },
     {
-      "day": "Tag 45",
-      "date": "2026-04-08",
+      "day": "Tag 23 (Post 1)",
+      "date": "2026-03-17",
       "topic": "AI Disclaimer: Muss ich kennzeichnen, dass ChatGPT schrieb?",
       "keyword": "AI Content Labeling",
       "author": "Alex (Tech Lead)",
@@ -2133,8 +2133,8 @@
       }
     },
     {
-      "day": "Tag 46",
-      "date": "2026-04-09",
+      "day": "Tag 23 (Post 2)",
+      "date": "2026-03-17",
       "topic": "Die Zero-Click Content Strategie: Plattform-native Inhalte skalieren",
       "keyword": "Zero Click Content",
       "author": "Sarah (Growth)",
@@ -2173,8 +2173,8 @@
       }
     },
     {
-      "day": "Tag 47",
-      "date": "2026-04-10",
+      "day": "Tag 24 (Post 1)",
+      "date": "2026-03-18",
       "topic": "Sound Design f\u00fcr Reels: ASMR und Sound Effects nutzen",
       "keyword": "Reels Sound Design",
       "author": "Mia (Creative)",
@@ -2213,8 +2213,8 @@
       }
     },
     {
-      "day": "Tag 48",
-      "date": "2026-04-11",
+      "day": "Tag 24 (Post 2)",
+      "date": "2026-03-18",
       "topic": "Impressumspflicht auf Social Media: Die 5-Sekunden-Regel",
       "keyword": "Social Media Impressum",
       "author": "Alex (Tech Lead)",
@@ -2253,8 +2253,8 @@
       }
     },
     {
-      "day": "Tag 49",
-      "date": "2026-04-12",
+      "day": "Tag 25 (Post 1)",
+      "date": "2026-03-19",
       "topic": "TikTok SEO: Wie du f\u00fcr How-To Suchanfragen rankst",
       "keyword": "TikTok SEO Strategy",
       "author": "Mia (Creative)",
@@ -2293,8 +2293,8 @@
       }
     },
     {
-      "day": "Tag 50",
-      "date": "2026-04-13",
+      "day": "Tag 25 (Post 2)",
+      "date": "2026-03-19",
       "topic": "YouTube Studio f\u00fcr Anf\u00e4nger: Was die Charts wirklich bedeuten",
       "keyword": "YouTube Analytics Guide",
       "author": "Alex (Tech Lead)",
@@ -2333,8 +2333,8 @@
       }
     },
     {
-      "day": "Tag 51",
-      "date": "2026-04-14",
+      "day": "Tag 26 (Post 1)",
+      "date": "2026-03-20",
       "topic": "2-Faktor-Authentifizierung: Warum dein Account morgen weg sein k\u00f6nnte",
       "keyword": "Social Media Security",
       "author": "Alex (Tech Lead)",
@@ -2373,8 +2373,8 @@
       }
     },
     {
-      "day": "Tag 52",
-      "date": "2026-04-15",
+      "day": "Tag 26 (Post 2)",
+      "date": "2026-03-20",
       "topic": "CapCut vs. InShot: Der ultimative Vergleich f\u00fcr Creator",
       "keyword": "Video Editor App Vergleich",
       "author": "Mia (Creative)",
@@ -2413,8 +2413,8 @@
       }
     },
     {
-      "day": "Tag 53",
-      "date": "2026-04-16",
+      "day": "Tag 27 (Post 1)",
+      "date": "2026-03-21",
       "topic": "Podcast Snippets: Der einfachste Weg zu Video Content",
       "keyword": "Podcast Repurposing Video",
       "author": "Mia (Creative)",
@@ -2453,8 +2453,8 @@
       }
     },
     {
-      "day": "Tag 54",
-      "date": "2026-04-17",
+      "day": "Tag 27 (Post 2)",
+      "date": "2026-03-21",
       "topic": "YouTube SEO: Titel & Beschreibungen die Klicks bringen",
       "keyword": "YouTube SEO Tools",
       "author": "Alex (Tech Lead)",
@@ -2493,8 +2493,8 @@
       }
     },
     {
-      "day": "Tag 55",
-      "date": "2026-04-18",
+      "day": "Tag 28 (Post 1)",
+      "date": "2026-03-22",
       "topic": "Visuelles Repurposing: Infografiken aus Datenstudien erstellen",
       "keyword": "Data Visualization Social Media",
       "author": "Mia (Creative)",
@@ -2533,8 +2533,8 @@
       }
     },
     {
-      "day": "Tag 56",
-      "date": "2026-04-19",
+      "day": "Tag 28 (Post 2)",
+      "date": "2026-03-22",
       "topic": "Der Content Waterfall: Von Longform zu Shortform (Template)",
       "keyword": "Content Waterfall Strategy",
       "author": "Alex (Tech Lead)",
@@ -2573,8 +2573,8 @@
       }
     },
     {
-      "day": "Tag 57",
-      "date": "2026-04-20",
+      "day": "Tag 29 (Post 1)",
+      "date": "2026-03-23",
       "topic": "FOMO Marketing: Wie du Verknappung ethisch nutzt",
       "keyword": "Scarcity Marketing",
       "author": "Sarah (Growth)",
@@ -2613,8 +2613,8 @@
       }
     },
     {
-      "day": "Tag 58",
-      "date": "2026-04-21",
+      "day": "Tag 29 (Post 2)",
+      "date": "2026-03-23",
       "topic": "Trend Spotting: Wie du Trends erkennst, bevor sie viral gehen",
       "keyword": "Viral Trend Research",
       "author": "Mia (Creative)",
@@ -2653,8 +2653,8 @@
       }
     },
     {
-      "day": "Tag 59",
-      "date": "2026-04-22",
+      "day": "Tag 30 (Post 1)",
+      "date": "2026-03-24",
       "topic": "Pinterest SEO: Die untersch\u00e4tzte Suchmaschine f\u00fcr Traffic",
       "keyword": "Pinterest SEO Guide",
       "author": "Sarah (Growth)",
@@ -2693,8 +2693,8 @@
       }
     },
     {
-      "day": "Tag 60",
-      "date": "2026-04-23",
+      "day": "Tag 30 (Post 2)",
+      "date": "2026-03-24",
       "topic": "Blog zu Social Media: 5 Posts aus einem Artikel generieren (Prompt Guide)",
       "keyword": "Blog to Social Media AI",
       "author": "Alex (Tech Lead)",
@@ -2733,8 +2733,8 @@
       }
     },
     {
-      "day": "Tag 61",
-      "date": "2026-04-24",
+      "day": "Tag 31 (Post 1)",
+      "date": "2026-03-25",
       "topic": "Die ultimative Automation-Checkliste f\u00fcr Social Media Manager (Download)",
       "keyword": "Social Media Automation Checklist",
       "author": "Sarah (Growth)",
@@ -2773,8 +2773,8 @@
       }
     },
     {
-      "day": "Tag 62",
-      "date": "2026-04-25",
+      "day": "Tag 31 (Post 2)",
+      "date": "2026-03-25",
       "topic": "Bio Link Tricks: Wie du mehr Traffic aus Instagram holst",
       "keyword": "Link in Bio Optimization",
       "author": "Mia (Creative)",
@@ -2813,8 +2813,8 @@
       }
     },
     {
-      "day": "Tag 63",
-      "date": "2026-04-26",
+      "day": "Tag 32 (Post 1)",
+      "date": "2026-03-26",
       "topic": "Lokales SEO mit Google Business Profile & Social Signals",
       "keyword": "Local SEO Social Media",
       "author": "Sarah (Growth)",
@@ -2853,8 +2853,8 @@
       }
     },
     {
-      "day": "Tag 64",
-      "date": "2026-04-27",
+      "day": "Tag 32 (Post 2)",
+      "date": "2026-03-26",
       "topic": "Memes f\u00fcr B2B: Cringe oder Genial?",
       "keyword": "B2B Meme Marketing",
       "author": "Sarah (Growth)",
@@ -2893,8 +2893,8 @@
       }
     },
     {
-      "day": "Tag 65",
-      "date": "2026-04-28",
+      "day": "Tag 33 (Post 1)",
+      "date": "2026-03-27",
       "topic": "Warum Social Media Automation f\u00fcr Anf\u00e4nger oft schiefgeht (und wie man es richtig macht)",
       "keyword": "Social Media Automation Anf\u00e4ngerfehler",
       "author": "Alex (Tech Lead)",
@@ -2933,8 +2933,8 @@
       }
     },
     {
-      "day": "Tag 66",
-      "date": "2026-04-29",
+      "day": "Tag 33 (Post 2)",
+      "date": "2026-03-27",
       "topic": "3 einfache Video-Ideen f\u00fcr mehr Reichweite (ohne Tanzen)",
       "keyword": "Video Content Ideen ohne Gesicht",
       "author": "Mia (Creative)",
@@ -2973,8 +2973,8 @@
       }
     },
     {
-      "day": "Tag 67",
-      "date": "2026-04-30",
+      "day": "Tag 34 (Post 1)",
+      "date": "2026-03-28",
       "topic": "Audio-Content: Warum du 2026 nicht mehr ohne Voiceover posten solltest",
       "keyword": "Social Media Audio Trends",
       "author": "Mia (Creative)",
@@ -3013,8 +3013,8 @@
       }
     },
     {
-      "day": "Tag 68",
-      "date": "2026-05-01",
+      "day": "Tag 34 (Post 2)",
+      "date": "2026-03-28",
       "topic": "Zeitmanagement f\u00fcr Social Media Manager: Tools statt \u00dcberstunden",
       "keyword": "Social Media Zeitmanagement",
       "author": "Sarah (Growth)",

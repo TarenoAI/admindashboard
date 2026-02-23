@@ -13,9 +13,11 @@ pipeline = []
 start_date = datetime.now()
 
 for i, row in df.iterrows():
-    date_str = (start_date + timedelta(days=i)).strftime("%Y-%m-%d")
+    day_index = i // 2
+    post_in_day = (i % 2) + 1
+    date_str = (start_date + timedelta(days=day_index)).strftime("%Y-%m-%d")
     item = {
-        "day": f"Tag {i+1}",
+        "day": f"Tag {day_index+1} (Post {post_in_day})",
         "date": date_str,
         "topic": str(row.get("Titel (Arbeitstitel)", "")),
         "keyword": str(row.get("Fokus-Keyword", "")),
