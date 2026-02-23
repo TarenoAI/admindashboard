@@ -285,6 +285,7 @@ app.get("/api/projects", async (_, res) => {
                 tasks: data.tasks || [],
                 milestones: data.milestones || [],
                 dataRefs: data.dataRefs || [],
+                contentPipeline: data.contentPipeline || [],
                 file: full
             };
         } catch (e) {

@@ -306,5 +306,100 @@
       "milestones",
       "tasks"
     ]
-  }
+  },
+  "contentPipeline": [
+    {
+      "day": "Tag 1",
+      "date": "2026-02-23",
+      "topic": "Was ist Agentic Workflow?",
+      "steps": {
+        "research": {
+          "status": "done",
+          "doc": "research_01.md"
+        },
+        "seo": {
+          "status": "done",
+          "doc": "seo_01.md"
+        },
+        "outline": {
+          "status": "review",
+          "doc": "outline_01.md"
+        },
+        "writer": {
+          "status": "pending",
+          "doc": null
+        },
+        "review": {
+          "status": "pending",
+          "doc": null
+        },
+        "publish": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 2",
+      "date": "2026-02-24",
+      "topic": "Use Cases für kleine Teams",
+      "steps": {
+        "research": {
+          "status": "review",
+          "doc": "research_02.md"
+        },
+        "seo": {
+          "status": "pending",
+          "doc": null
+        },
+        "outline": {
+          "status": "pending",
+          "doc": null
+        },
+        "writer": {
+          "status": "pending",
+          "doc": null
+        },
+        "review": {
+          "status": "pending",
+          "doc": null
+        },
+        "publish": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "day": "Tag 3",
+      "date": "2026-02-25",
+      "topic": "Kosten sparen mit KI-Mitarbeitern",
+      "steps": {
+        "research": {
+          "status": "pending",
+          "doc": null
+        },
+        "seo": {
+          "status": "pending",
+          "doc": null
+        },
+        "outline": {
+          "status": "pending",
+          "doc": null
+        },
+        "writer": {
+          "status": "pending",
+          "doc": null
+        },
+        "review": {
+          "status": "pending",
+          "doc": null
+        },
+        "publish": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    }
+  ]
 }

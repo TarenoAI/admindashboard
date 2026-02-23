@@ -862,24 +862,31 @@
                         agentHtml = '<p class="text-xs text-text-muted italic">Keine Agenten zugewiesen</p>';
                     }
 
-                    const milestonesHtml = (p.milestones || []).map((m, i) => {
+                    const horizontalMilestones = (p.milestones || []).map((m, i) => {
                         const done = m.status === 'done';
                         const active = m.status === 'in_progress';
                         return `
-                        <div class="flex items-start gap-4 relative">
-                            ${i !== p.milestones.length - 1 ? `<div class="absolute left-2.5 top-6 bottom-[-20px] w-px ${done ? 'bg-green-500/30 border-dashed border-l' : 'bg-white/10'}" style="${done ? 'background:transparent' : ''}"></div>` : ''}
-                            <div class="w-5 h-5 rounded-full flex-shrink-0 mt-1 flex items-center justify-center ${done ? 'bg-green-500/20 text-green-400 border border-green-500/30' : active ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30 shadow-[0_0_8px_rgba(59,130,246,0.5)]' : 'bg-black/50 border border-white/10 text-text-muted'} z-10">
+                        <div class="flex flex-col flex-1 relative text-center min-w-[120px] max-w-[200px] mb-4 md:mb-0">
+                            ${i !== p.milestones.length - 1 ? `<div class="hidden md:block absolute top-[14px] left-[50%] right-[-50%] h-px ${done ? 'bg-green-500/30 border-dashed border-t' : 'bg-white/10'} z-0"></div>` : ''}
+                            <div class="w-7 h-7 mx-auto rounded-full flex-shrink-0 flex items-center justify-center ${done ? 'bg-green-500/20 text-green-400 border border-green-500/30' : active ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30 shadow-[0_0_8px_rgba(59,130,246,0.5)]' : 'bg-black/50 border border-white/10 text-text-muted'} z-10 mb-3 relative bg-neutral-bg2">
                                 ${done ? '✓' : active ? '●' : '○'}
                             </div>
-                            <div class="bg-black/20 border border-white/5 hover:border-white/10 transition-colors rounded-lg p-3 flex-1 mb-2">
-                                <div class="flex items-center justify-between mb-1">
-                                    <p class="text-sm font-semibold text-white">${m.title}</p>
-                                    <p class="text-[10px] text-text-muted bg-white/5 px-2 py-0.5 rounded font-mono">${m.due}</p>
-                                </div>
-                                <p class="text-[10px] uppercase font-bold tracking-wider ${done ? 'text-green-400' : active ? 'text-blue-400' : 'text-text-muted'}">${m.status.replace('_', ' ')}</p>
+                            <div class="relative z-10 px-2">
+                                <p class="text-[11px] font-semibold text-white mb-1.5 leading-snug break-words">${m.title}</p>
+                                <p class="text-[9px] text-text-muted bg-white/5 px-2 py-0.5 rounded font-mono inline-block mb-1 border border-white/5">${m.due}</p>
+                                <p class="text-[8px] uppercase font-bold tracking-wider block ${done ? 'text-green-400' : active ? 'text-blue-400' : 'text-text-muted'}">${m.status.replace('_', ' ')}</p>
                             </div>
-                        </div>`
-                    }).join('') || '<p class="text-xs text-text-muted italic">Keine Meilensteine definiert</p>';
+                        </div>`;
+                    }).join('');
+
+                    const milestonesCard = (p.milestones || []).length > 0 ? `
+                        <div class="border-b border-light border-white/5 bg-black/20 p-6 relative overflow-hidden">
+                            <h4 class="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-6 flex items-center gap-2">🎯 Milestones Timeline</h4>
+                            <div class="flex flex-wrap md:flex-nowrap justify-start lg:justify-between items-start w-full relative">
+                                ${horizontalMilestones}
+                            </div>
+                        </div>
+                    ` : '';
 
                     const refsByCategory = {};
                     (p.dataRefs || []).forEach(r => {
@@ -949,18 +956,17 @@
                                 <p class="text-sm text-text-secondary max-w-3xl leading-relaxed text-balance">${p.summary}</p>
                             </div>
 
+                            <!-- Milestones Card Top -->
+                            ${milestonesCard}
+
                             <!-- Project Dashboard Grid -->
-                            <div class="grid grid-cols-1 xl:grid-cols-4 gap-0 divide-y xl:divide-y-0 xl:divide-x divide-white/5 min-h-[600px]">
+                            <div class="grid grid-cols-1 xl:grid-cols-4 gap-0 divide-y xl:divide-y-0 min-h-[500px]">
                                 
                                 <!-- Meta Sidebar (Agents & Milestones) -->
-                                <div class="p-6 flex flex-col gap-10 bg-black/40">
+                                <div class="p-6 md:p-8 flex flex-col gap-10 bg-black/40 border-r border-white/5">
                                     <div>
                                         <h4 class="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-4 flex items-center gap-2 pb-2 border-b border-white/5">👥 Core Team</h4>
                                         <div class="flex flex-col gap-2">${agentHtml}</div>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-4 flex items-center gap-2 pb-2 border-b border-white/5">🎯 Milestones Timeline</h4>
-                                        <div class="flex flex-col">${milestonesHtml}</div>
                                     </div>
                                     <div>
                                         <h4 class="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-4 flex items-center justify-between pb-2 border-b border-white/5">
@@ -997,6 +1003,65 @@
                                 </div>
                             </div>
                         </div>
+
+                        ${p.contentPipeline && p.contentPipeline.length > 0 ? `
+                        <div class="glass-card mt-6 p-0 overflow-hidden shadow-2xl border border-white/10 bg-black/40">
+                            <div class="p-6 md:p-8 border-b border-white/5 bg-gradient-to-r from-brand/10 to-transparent relative">
+                                <h4 class="text-xs uppercase tracking-widest text-brand font-extrabold flex items-center gap-2">🗓️ Content Pipeline & Approvals</h4>
+                                <p class="text-xs text-text-muted mt-2">Detaillierte Schritt-für-Schritt Freigabe für 6-Schritte Blog Pipeline je Tag in den Untersegmenten ablehnen oder komplett zustimmen.</p>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs text-white">
+                                    <thead class="bg-black/60 border-b border-white/10 uppercase text-[9px] text-text-muted font-bold tracking-wider">
+                                        <tr>
+                                            <th class="p-5 min-w-[180px]">Tag / Thema</th>
+                                            ${['Research', 'SEO', 'Outline', 'Long-Form', 'Review', 'Publish'].map(s => `<th class="p-5 text-center px-2">${s}</th>`).join('')}
+                                            <th class="p-5 text-center">Row Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-white/5">
+                                        ${p.contentPipeline.map(cp => `
+                                        <tr class="hover:bg-brand/5 hover:bg-opacity-10 transition-colors group">
+                                            <td class="p-5">
+                                                <p class="font-bold text-white text-sm bg-white/10 inline-block px-2 py-0.5 rounded mb-1">${cp.day}</p>
+                                                <p class="text-xs text-text-secondary font-medium md:max-w-[200px] truncate">${cp.topic}</p>
+                                                <p class="text-[9px] text-text-muted mt-1 uppercase tracking-wider">${cp.date}</p>
+                                            </td>
+                                            ${['research', 'seo', 'outline', 'writer', 'review', 'publish'].map(step => {
+                        const stepData = cp.steps?.[step] || { status: 'pending', doc: null };
+                        let btnHtml = '';
+                        let iconClr = 'text-white/20';
+
+                        if (stepData.status === 'done') {
+                            btnHtml = '<div class="flex gap-1 justify-center"><button class="px-2 py-1 rounded bg-green-500/20 hover:bg-green-500/30 text-green-400 border border-green-500/30 text-[9px] font-bold transition-colors">✓ Approve</button></div>';
+                            iconClr = 'text-green-400 hover:text-green-300';
+                        } else if (stepData.status === 'review') {
+                            btnHtml = '<div class="flex gap-1 justify-center"><button class="px-2 py-1 rounded bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-400 border border-yellow-500/30 text-[9px] font-bold transition-colors">⚠ Reject</button><button class="px-2 py-1 rounded bg-green-500/20 hover:bg-green-500/30 text-green-400 border border-green-500/30 text-[9px] font-bold transition-colors">Approve</button></div>';
+                            iconClr = 'text-yellow-400 hover:text-yellow-300';
+                        } else {
+                            btnHtml = '<span class="px-2 py-1 rounded bg-white/5 text-text-muted text-[9px] block text-center border border-white/5 opacity-50">Pending</span>';
+                        }
+
+                        return `
+                                                <td class="p-4 align-middle">
+                                                    <div class="flex flex-col items-center justify-center gap-2 bg-black/30 p-2 rounded-lg border border-white/5 h-full">
+                                                        ${stepData.doc ? `<button onclick="openProjectRef('${stepData.doc}')" class="text-sm ${iconClr} transition-colors" title="Dokument ansehen">📄</button>` : `<span class="text-sm ${iconClr} opacity-40">📄</span>`}
+                                                        ${btnHtml}
+                                                    </div>
+                                                </td>
+                                                `;
+                    }).join('')}
+                                            <td class="p-5 text-center align-middle">
+                                                <div class="flex flex-col gap-2">
+                                                   <button class="px-3 py-1.5 bg-brand/20 border border-brand/30 text-brand shadow hover:shadow-[0_0_15px_rgba(130,81,238,0.3)] transition-all rounded text-[10px] font-bold w-full uppercase" onclick="alert('Gesamten Tag bestätigen!')">⚡ Publish Tag</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>` : ''}
 
                         <div class="glass-card p-4 text-xs mt-4">
                              <h4 class="font-semibold text-white mb-2">Projekt Wissen durchstöbern</h4>
