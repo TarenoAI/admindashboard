@@ -250,7 +250,8 @@
         <header
             class="h-16 flex items-center justify-between px-4 md:px-8 border-b border-border-subtle backdrop-blur-md bg-transparent z-10 gap-2">
             <div class="flex items-center gap-2">
-                <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden bg-white/5 hover:bg-white/10 border border-white/10 text-white px-2.5 py-1.5 rounded-lg text-xs">☰</button>
+                <button id="mobile-menu-btn" onclick="toggleMobileMenu()"
+                    class="md:hidden bg-white/5 hover:bg-white/10 border border-white/10 text-white px-2.5 py-1.5 rounded-lg text-xs">☰</button>
                 <h2 id="view-title" class="text-base md:text-lg font-semibold tracking-wide">Alle Agenten</h2>
             </div>
             <button onclick="loadCurrentView()"
@@ -457,9 +458,9 @@
                               <p class="text-[9px] text-text-muted uppercase tracking-wider mb-2 font-bold">Knowledge Bank</p>
                               <div class="flex flex-wrap gap-1.5">
                                 ${knowledgeOrder.map(item => {
-                                    const present = !!knowledge[item.key];
-                                    return `<span class="px-2 py-0.5 border text-[10px] rounded-full font-medium ${present ? 'bg-green-500/10 border-green-500/30 text-green-300' : 'bg-black/20 border-white/10 text-text-muted'}">${item.label}</span>`;
-                                }).join('')}
+                            const present = !!knowledge[item.key];
+                            return `<span class="px-2 py-0.5 border text-[10px] rounded-full font-medium ${present ? 'bg-green-500/10 border-green-500/30 text-green-300' : 'bg-black/20 border-white/10 text-text-muted'}">${item.label}</span>`;
+                        }).join('')}
                               </div>
                               <div class="mt-2 space-y-1">
                                 ${knowledgeOrder.map(item => knowledge[item.key] ? `<div class="text-[10px] text-text-muted font-mono truncate" title="${knowledgePaths[item.key] || ''}">${item.label}: ${knowledgePaths[item.key] || '—'}</div>` : '').join('')}
@@ -624,7 +625,7 @@
                 activities.forEach(act => {
                     const c = colorMap[act.type] || colorMap.bot;
                     const timeStr = act.time ? act.time.replace('dashboard.log', 'log').replace('openclaw', 'claw') : '';
-                    html += `<details data-search="${`${act.text||''} ${act.agent||''} ${act.target||''} ${act.taskType||''}`.toLowerCase()}" data-result="${(act.result||'info').toLowerCase()}" data-tasktype="${(act.taskType||'routine').toLowerCase()}" class="p-3 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/5 transition-colors group">
+                    html += `<details data-search="${`${act.text || ''} ${act.agent || ''} ${act.target || ''} ${act.taskType || ''}`.toLowerCase()}" data-result="${(act.result || 'info').toLowerCase()}" data-tasktype="${(act.taskType || 'routine').toLowerCase()}" class="p-3 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/5 transition-colors group">
                         <summary class="flex items-start gap-3 cursor-pointer list-none">
                           <div class="mt-1.5 w-2 h-2 rounded-full flex-shrink-0 ${c.dot} shadow-[0_0_6px_currentColor]"></div>
                           <div class="flex-1 min-w-0">
@@ -720,160 +721,222 @@
                 const statusClass = (status) => {
                     const s = String(status || '').toLowerCase();
                     if (s === 'on_track' || s === 'done') return 'bg-green-500/10 text-green-300 border-green-500/30';
-                    if (s === 'at_risk') return 'bg-yellow-500/10 text-yellow-300 border-yellow-500/30';
-                    if (s === 'blocked') return 'bg-red-500/10 text-red-300 border-red-500/30';
-                    return 'bg-blue-500/10 text-blue-300 border-blue-500/30';
+                    if (s === 'at_risk' || s === 'blocked') return 'bg-red-500/10 text-red-300 border-red-500/30';
+                    if (s === 'in_progress' || s === 'active') return 'bg-blue-500/10 text-blue-300 border-blue-500/30';
+                    return 'bg-white/5 text-text-muted border-white/10';
                 };
 
-                html = '<div class="space-y-4">';
-                html += `<div class="glass-card p-4 flex flex-wrap items-center gap-3 text-xs text-text-secondary">
-                    <span class="px-2 py-1 rounded border border-white/10 bg-black/20">Projekt-Hub</span>
-                    <span>• Klick auf ein Projekt: Agenten, Tasks, Datenquellen, Meilensteine</span>
-                </div>`;
-                const workload = data.workload || [];
-                html += `<div class="glass-card p-4">
-                    <h4 class="text-sm font-semibold mb-3">Agent Workload</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
-                        ${workload.map(w => `<div class="bg-black/30 border border-white/10 rounded-lg p-3"><p class="font-semibold text-white">${w.assignee}</p><p class="text-text-muted mt-1">Open ${w.open} • Done ${w.done} • Blocked ${w.blocked}</p></div>`).join('') || '<p class="text-text-muted">Keine Daten</p>'}
-                    </div>
-                </div>`;
-                html += '<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">';
-                data.projects.forEach((p, idx) => {
-                    const lead = p.leadAgent?.name || '—';
-                    const supportAgents = (p.agents || []).filter(a => (a.role || '').toLowerCase() !== 'lead').map(a => a.name);
-                    const support = supportAgents.length ? supportAgents.join(', ') : '—';
-                    const done = p.taskStats?.done || 0;
-                    const total = (p.tasks || []).length;
-                    const blocked = p.taskStats?.blocked || 0;
-                    html += `<div class="glass-card p-6 flex flex-col group relative overflow-hidden hover:scale-[1.01] transition-all duration-300 bg-gradient-to-br from-white/[0.05] via-white/[0.02] to-brand/[0.06]">
-                        <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand/60 to-blue-500/60 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        <div class="flex items-start justify-between gap-2 mb-3">
-                          <h3 class="font-semibold text-lg text-white truncate">${p.name}</h3>
-                          <span class="px-2 py-1 rounded-full border text-[10px] uppercase tracking-wider ${statusClass(p.status)}">${p.status || 'planning'}</span>
-                        </div>
-                        <p class="text-xs text-text-secondary leading-relaxed min-h-[46px]">${p.preview || 'Keine Beschreibung'}</p>
+                html = '<div class="space-y-6">';
+                html += `<div class="glass-card p-5 flex items-center justify-between border border-white/5 bg-gradient-to-r from-black/20 to-transparent">
+                            <div>
+                                <h2 class="text-xl font-bold text-white mb-1">Project Hub</h2>
+                                <p class="text-xs text-text-muted">Übersicht aller aktiven Projekte und Agenten-Workloads</p>
+                            </div>
+                         </div>`;
 
-                        <div class="grid grid-cols-2 gap-2 my-4">
-                          <div class="bg-black/30 border border-white/5 rounded-lg p-2.5"><p class="text-[9px] text-text-muted uppercase">Lead Agent</p><p class="text-xs font-semibold text-white mt-1">${lead}</p></div>
-                          <div class="bg-black/30 border border-white/5 rounded-lg p-2.5"><p class="text-[9px] text-text-muted uppercase">Support</p><p class="text-xs font-semibold text-white mt-1 truncate" title="${support}">${support}</p></div>
-                          <div class="bg-black/30 border border-white/5 rounded-lg p-2.5"><p class="text-[9px] text-text-muted uppercase">Tasks</p><p class="text-xs font-semibold text-white mt-1">${total - done}/${total} offen</p></div>
-                          <div class="bg-black/30 border border-white/5 rounded-lg p-2.5"><p class="text-[9px] text-text-muted uppercase">Blocker</p><p class="text-xs font-semibold ${blocked ? 'text-red-300' : 'text-green-300'} mt-1">${blocked}</p></div>
-                        </div>
+                if (!data.projects || data.projects.length === 0) {
+                    html += '<div class="glass-card p-10 text-center text-text-muted">Keine validen JSON Projekte in data/projects/ gefunden.</div></div>';
+                } else {
+                    html += '<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">';
+                    data.projects.forEach((p, idx) => {
+                        const lead = (p.agents || []).find(a => a.role === 'lead')?.name || '—';
+                        const support = (p.agents || []).filter(a => a.role !== 'lead').map(a => a.name).join(', ') || '—';
+                        const total = (p.tasks || []).length;
+                        const done = (p.tasks || []).filter(t => t.status === 'done').length;
+                        const blocked = (p.tasks || []).filter(t => t.blocker).length;
 
-                        <button onclick="openProjectDetail(${idx})" class="w-full py-2 bg-brand/10 hover:bg-brand/20 border border-brand/20 hover:border-brand/40 rounded-lg text-xs font-bold tracking-wide transition-all text-brand hover:text-white">Projekt öffnen</button>
-                    </div>`;
-                });
-                html += '</div></div>';
+                        html += `<div class="glass-card p-6 flex flex-col group relative overflow-hidden hover:border-brand/40 transition-all duration-300 bg-black/40 shadow-lg cursor-pointer" onclick="openProjectDetail(${idx})">
+                            <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand/60 to-blue-500/60 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <div class="flex items-start justify-between gap-2 mb-3">
+                                <h3 class="font-semibold text-lg text-white truncate group-hover:text-brand transition-colors">${p.name}</h3>
+                                <span class="px-2 py-1 rounded-full border text-[10px] uppercase font-bold tracking-wider ${statusClass(p.status)}">${p.status || 'planning'}</span>
+                            </div>
+                            <p class="text-xs text-text-secondary leading-relaxed mb-4 line-clamp-2">${p.summary || 'Keine Beschreibung'}</p>
+                            
+                            <div class="grid grid-cols-2 gap-2 mt-auto">
+                                <div class="bg-black/30 border border-white/5 rounded-lg p-2.5"><p class="text-[9px] text-text-muted uppercase font-bold tracking-wider mb-1">Lead Agent</p><p class="text-xs font-semibold text-white truncate">${lead}</p></div>
+                                <div class="bg-black/30 border border-white/5 rounded-lg p-2.5"><p class="text-[9px] text-text-muted uppercase font-bold tracking-wider mb-1">Support</p><p class="text-xs font-semibold text-white truncate">${support}</p></div>
+                                <div class="bg-black/30 border border-white/5 rounded-lg p-2.5"><p class="text-[9px] text-text-muted uppercase font-bold tracking-wider mb-1">Tasks</p><p class="text-xs font-semibold text-white">${total - done}/${total} offen</p></div>
+                                <div class="bg-black/30 border border-white/5 rounded-lg p-2.5"><p class="text-[9px] text-text-muted uppercase font-bold tracking-wider mb-1">Blocker</p><p class="text-xs font-semibold ${blocked ? 'text-red-400' : 'text-green-400'}">${blocked}</p></div>
+                            </div>
+                        </div>`;
+                    });
+                    html += '</div></div>';
+                }
             }
 
             else if (tab === 'project-detail') {
                 const p = data.project;
                 if (!p) {
-                    html = `<div class="glass-card p-8 text-center">
-                        <p class="text-text-muted">Kein Projekt ausgewählt.</p>
-                    </div>`;
+                    html = '<div class="glass-card p-10 text-center text-text-muted">Kein Projekt ausgewählt.</div>';
                 } else {
+                    const safeContent = (p.content || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    const statusClass = (status) => {
+                        const s = String(status || '').toLowerCase();
+                        if (s === 'on_track' || s === 'done') return 'bg-green-500/10 text-green-300 border-green-500/30';
+                        if (s === 'in_progress' || s === 'active') return 'bg-blue-500/10 text-blue-300 border-blue-500/30';
+                        if (s === 'planned' || s === 'backlog') return 'bg-white/5 text-text-muted border-white/10';
+                        return 'bg-yellow-500/10 text-yellow-300 border-yellow-500/30';
+                    };
+
                     const tasks = p.tasks || [];
-                    const taskByState = {
+                    const cols = {
                         backlog: tasks.filter(t => t.status === 'backlog'),
+                        planned: tasks.filter(t => t.status === 'planned'),
                         in_progress: tasks.filter(t => t.status === 'in_progress'),
                         review: tasks.filter(t => t.status === 'review'),
                         done: tasks.filter(t => t.status === 'done')
                     };
-                    const safeContent = (p.content || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-                    html = `<div class="space-y-4">
-                        <div class="flex items-center gap-3">
-                            <button onclick="backToProjects()" class="px-3 py-1.5 rounded-lg text-xs border border-white/10 bg-white/5 hover:bg-white/10">← Zurück zu Projekte</button>
-                            <h3 class="text-lg font-semibold text-white">${p.name}</h3>
-                        </div>
-
-                        <div class="glass-card p-4">
-                            <h3 class="text-sm font-semibold mb-3">Projekt-Übersicht</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-                                <div class="bg-black/30 border border-white/5 rounded-lg p-3"><p class="text-text-muted uppercase text-[10px]">Status</p><p class="text-white mt-1">${p.status || 'planning'}</p></div>
-                                <div class="bg-black/30 border border-white/5 rounded-lg p-3"><p class="text-text-muted uppercase text-[10px]">Priorität</p><p class="text-white mt-1">${p.priority || 'medium'}</p></div>
-                                <div class="bg-black/30 border border-white/5 rounded-lg p-3"><p class="text-text-muted uppercase text-[10px]">Last Update</p><p class="text-white mt-1">${p.lastUpdate || '—'}</p></div>
-                            </div>
-                            <p class="text-xs text-text-secondary mt-3">${p.preview || 'Keine Zusammenfassung vorhanden.'}</p>
-                        </div>
-
-                        <div class="glass-card p-4">
-                            <h3 class="text-sm font-semibold mb-3">Agent-Zuordnung & Rechte</h3>
-                            ${(p.agents || []).length ? `<div class="grid grid-cols-1 md:grid-cols-2 gap-2">${p.agents.map(a => `<div class="bg-black/30 border border-white/5 rounded-lg p-3"><p class="text-xs font-semibold text-white">${a.name}</p><p class="text-[11px] text-text-muted mt-1">ID: ${a.id}</p><p class="text-[11px] mt-1 ${((p.permissions||{})[a.id]||'read') === 'write' ? 'text-green-300' : 'text-yellow-300'}">Recht: ${(p.permissions || {})[a.id] || 'read'}</p><div class="mt-2 grid grid-cols-2 gap-2"><input id="proj-role-${p.id}-${a.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[11px]" value="${(a.role||'').replace(/"/g,'&quot;')}" placeholder="Rolle"/><select id="proj-perm-${p.id}-${a.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[11px]"><option value="read" ${((p.permissions||{})[a.id]||'read')==='read'?'selected':''}>Nur Lesen</option><option value="write" ${((p.permissions||{})[a.id]||'read')==='write'?'selected':''}>Lesen+Bearbeiten</option></select></div><div class="mt-2 flex gap-2"><button onclick="updateProjectAgent('${p.id}','${a.id}')" class="w-full px-2 py-1 rounded border border-blue-500/30 bg-blue-500/20 text-[11px]">Rolle/Recht speichern</button><button onclick="checkProjectCapability('${p.id}','${a.id}')" class="w-full px-2 py-1 rounded border border-emerald-500/30 bg-emerald-500/20 text-[11px]">Write-Check</button></div><p id="cap-${p.id}-${a.id}" class="text-[10px] text-text-muted mt-1"></p></div>`).join('')}</div>` : '<p class="text-xs text-text-muted">Keine Agenten zugewiesen.</p>'}
-                            <div class="mt-3 grid grid-cols-1 md:grid-cols-5 gap-2 text-xs">
-                                <select id="proj-agent-select-${p.id}" onchange="prefillProjectAgent('${p.id}')" class="bg-black/40 border border-white/10 rounded px-2 py-1">
-                                    <option value="">Agent auswählen…</option>
-                                    ${(currentData?.agents || []).map(a => `<option value="${a.agentId || a.key}">${a.name} (${a.agentId || a.key})</option>`).join('')}
-                                </select>
-                                <input id="proj-agent-id-${p.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1" placeholder="agent id (auto aus Dropdown)" />
-                                <input id="proj-agent-name-${p.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1" placeholder="Name (auto aus Dropdown)" />
-                                <input id="proj-agent-role-${p.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1" placeholder="Rolle (lead/support)" />
-                                <select id="proj-agent-perm-${p.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1"><option value="read">Nur Lesen</option><option value="write">Lesen + Bearbeiten</option></select>
-                            </div>
-                            <div class="mt-2">
-                                <button onclick="addProjectAgent('${p.id}')" class="px-3 py-1 rounded border border-brand/30 bg-brand/20 text-xs">Agent hinzufügen</button>
+                    const agentHtml = (p.agents || []).map(a => `
+                        <div class="flex items-center gap-3 bg-black/40 border border-white/5 rounded-lg p-3 hover:bg-white/5 transition-colors group">
+                            <div class="w-8 h-8 rounded-md bg-brand/20 flex items-center justify-center text-sm text-brand font-bold border border-brand/30 shadow-[inset_0_0_10px_rgba(130,81,238,0.2)]">${a.name.charAt(0)}</div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-semibold text-white leading-tight truncate px-1">${a.name}</p>
+                                <p class="text-[9px] text-text-muted uppercase tracking-wider mt-1 px-1">${a.role}</p>
                             </div>
                         </div>
+                    `).join('') || '<p class="text-xs text-text-muted italic">Keine Agenten zugewiesen</p>';
 
-                        <div class="glass-card p-4">
-                            <h3 class="text-sm font-semibold mb-3">Tasks (Kanban)</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 text-xs">
-                                ${['backlog','in_progress','review','done'].map(state => `
-                                    <div class="bg-black/30 border border-white/5 rounded-lg p-3">
-                                        <p class="text-[10px] uppercase tracking-wider text-text-muted mb-2">${state.replace('_',' ')}</p>
-                                        <div class="space-y-2">
-                                            ${(taskByState[state] || []).map(t => `<div class="border border-white/10 rounded p-2 bg-black/20"><p class="font-semibold text-white">${t.id}: ${t.title}</p><p class="text-text-muted mt-1">${t.assignee || '—'} • ${t.priority || 'n/a'}</p>${t.blocker ? `<p class="text-red-300 mt-1">Blocker: ${t.blocker}</p>` : ''}<div class="mt-2 grid grid-cols-1 gap-2"><input id="task-title-${p.id}-${t.id}" value="${(t.title||'').replace(/"/g,'&quot;')}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px]" /><div class="flex gap-2"><select id="task-priority-${p.id}-${t.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px]"><option value="low" ${t.priority==='low'?'selected':''}>low</option><option value="medium" ${t.priority==='medium'?'selected':''}>medium</option><option value="high" ${t.priority==='high'?'selected':''}>high</option></select><input id="task-due-${p.id}-${t.id}" value="${t.due || ''}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px]" placeholder="YYYY-MM-DD" /></div><div class="flex gap-2"><select id="task-${p.id}-${t.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px]"><option value="backlog" ${t.status==='backlog'?'selected':''}>backlog</option><option value="in_progress" ${t.status==='in_progress'?'selected':''}>in_progress</option><option value="review" ${t.status==='review'?'selected':''}>review</option><option value="done" ${t.status==='done'?'selected':''}>done</option></select><button onclick="updateTaskStatus('${p.id}','${t.id}')" class="text-[10px] px-2 py-1 rounded border border-brand/30 bg-brand/20">Status</button><button onclick="updateTaskMeta('${p.id}','${t.id}')" class="text-[10px] px-2 py-1 rounded border border-white/20 bg-white/10">Meta</button></div><div class="flex gap-2"><select id="task-move-${p.id}-${t.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px]"><option value="">Nach Projekt verschieben…</option>${(currentData?.projects || []).filter(pp => pp.id !== p.id).map(pp => `<option value="${pp.id}">${pp.name}</option>`).join('')}</select><button onclick="moveTaskToProject('${p.id}','${t.id}')" class="text-[10px] px-2 py-1 rounded border border-yellow-500/30 bg-yellow-500/20">Verschieben</button><button onclick="deleteTask('${p.id}','${t.id}')" class="text-[10px] px-2 py-1 rounded border border-red-500/30 bg-red-500/20">Löschen</button></div></div></div>`).join('') || '<p class="text-text-muted">—</p>'}
+                    const milestonesHtml = (p.milestones || []).map((m, i) => {
+                        const done = m.status === 'done';
+                        const active = m.status === 'in_progress';
+                        return `
+                        <div class="flex items-start gap-4 relative">
+                            ${i !== p.milestones.length - 1 ? `<div class="absolute left-2.5 top-6 bottom-[-20px] w-px ${done ? 'bg-green-500/30 border-dashed border-l' : 'bg-white/10'}" style="${done ? 'background:transparent' : ''}"></div>` : ''}
+                            <div class="w-5 h-5 rounded-full flex-shrink-0 mt-1 flex items-center justify-center ${done ? 'bg-green-500/20 text-green-400 border border-green-500/30' : active ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30 shadow-[0_0_8px_rgba(59,130,246,0.5)]' : 'bg-black/50 border border-white/10 text-text-muted'} z-10">
+                                ${done ? '✓' : active ? '●' : '○'}
+                            </div>
+                            <div class="bg-black/20 border border-white/5 hover:border-white/10 transition-colors rounded-lg p-3 flex-1 mb-2">
+                                <div class="flex items-center justify-between mb-1">
+                                    <p class="text-sm font-semibold text-white">${m.title}</p>
+                                    <p class="text-[10px] text-text-muted bg-white/5 px-2 py-0.5 rounded font-mono">${m.due}</p>
+                                </div>
+                                <p class="text-[10px] uppercase font-bold tracking-wider ${done ? 'text-green-400' : active ? 'text-blue-400' : 'text-text-muted'}">${m.status.replace('_', ' ')}</p>
+                            </div>
+                        </div>`
+                    }).join('') || '<p class="text-xs text-text-muted italic">Keine Meilensteine definiert</p>';
+
+                    const refsHtml = (p.dataRefs || []).map(r => `
+                        <details class="group bg-black/20 border border-white/5 rounded-lg mb-2 overflow-hidden">
+                            <summary class="flex items-center justify-between p-3 cursor-pointer hover:bg-white/[0.02] transition-colors list-none">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-lg w-6 text-center">${r.type === 'md' ? '📄' : r.type === 'json' ? '⚙️' : '📝'}</span>
+                                    <div>
+                                        <p class="text-xs font-bold text-white">${r.label}</p>
+                                        <p class="text-[9px] text-text-muted font-mono truncate max-w-[180px] xl:max-w-[220px] mt-0.5">${r.path}</p>
+                                    </div>
+                                </div>
+                                <div class="text-text-muted group-open:rotate-180 transition-transform">▼</div>
+                            </summary>
+                            <div class="p-3 border-t border-white/5 bg-black/40">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[9px] text-text-muted">Added: ${r.addedAt ? r.addedAt.split('T')[0] : 'Unknown'}</span>
+                                    <button onclick="openProjectRef('${r.path}')" class="text-[10px] px-3 py-1 rounded bg-brand/20 text-brand font-medium hover:bg-brand/30 border border-brand/20 transition-colors">Datei ansehen</button>
+                                </div>
+                            </div>
+                        </details>
+                    `).join('') || '<p class="text-xs text-text-muted italic">Keine Datenquellen</p>';
+
+                    const renderTask = (t) => {
+                        const prioColors = { high: 'text-red-400 border-red-500/30 bg-red-500/10', medium: 'text-yellow-400 border-yellow-500/30 bg-yellow-500/10', low: 'text-blue-400 border-blue-500/30 bg-blue-500/10' };
+                        const pc = prioColors[t.priority] || 'text-text-muted border-white/10 bg-white/5';
+                        return `<div draggable="true" ondragstart="drag(event, '${p.id}', '${t.id}')" class="bg-black/60 border border-white/5 rounded-lg p-3 cursor-grab hover:border-brand/40 transition-colors shadow-sm mb-2 group active:cursor-grabbing hover:shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
+                            <div class="flex items-start justify-between gap-2 mb-2">
+                                <p class="text-xs font-semibold text-white leading-snug group-hover:text-brand transition-colors">${t.title}</p>
+                                <span class="px-1.5 py-0.5 rounded text-[8px] uppercase font-bold tracking-wider ${pc} flex-shrink-0">${t.priority || 'N/A'}</span>
+                            </div>
+                            <div class="flex items-center justify-between mt-3 text-[10px] text-text-muted">
+                                <span class="font-mono bg-white/5 px-1.5 py-0.5 rounded border border-white/5">${t.id}</span>
+                                ${t.assignee ? `<div class="flex items-center gap-1.5 px-2 py-0.5 bg-black/40 rounded-full border border-white/5"><span class="w-1.5 h-1.5 rounded-full bg-brand"></span><span class="text-white font-medium">${t.assignee}</span></div>` : ''}
+                            </div>
+                            ${t.blocker ? `<div class="mt-2 text-[9px] text-red-400 bg-red-500/10 border border-red-500/20 px-2 py-1 rounded">⚠️ ${t.blocker}</div>` : ''}
+                        </div>`;
+                    };
+
+                    html = `
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 pb-2 border-b border-white/10">
+                            <button onclick="backToProjects()" class="px-3 py-1.5 rounded-lg text-xs font-semibold border border-white/10 bg-white/5 hover:bg-white/10 transition-colors text-white">← Alle Projekte</button>
+                        </div>
+                        
+                        <div class="glass-card p-0 flex flex-col group relative overflow-hidden bg-neutral-bg2 border border-border-default shadow-xl rounded-2xl">
+                            <!-- Project Header -->
+                            <div class="p-6 md:p-8 border-b border-white/5 bg-gradient-to-r from-black/60 via-black/40 to-transparent relative">
+                                <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand/80 to-blue-500/80"></div>
+                                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3">
+                                    <h3 class="text-3xl font-extrabold text-white tracking-tight flex items-center gap-3"><span class="text-brand opacity-60">#</span> ${p.name}</h3>
+                                    <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${statusClass(p.status)} shadow-[0_0_15px_rgba(255,255,255,0.05)]">${p.status.replace('_', ' ')}</span>
+                                </div>
+                                <p class="text-sm text-text-secondary max-w-3xl leading-relaxed text-balance">${p.summary}</p>
+                            </div>
+
+                            <!-- Project Dashboard Grid -->
+                            <div class="grid grid-cols-1 xl:grid-cols-4 gap-0 divide-y xl:divide-y-0 xl:divide-x divide-white/5 min-h-[600px]">
+                                
+                                <!-- Meta Sidebar (Agents & Milestones) -->
+                                <div class="p-6 flex flex-col gap-10 bg-black/40">
+                                    <div>
+                                        <h4 class="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-4 flex items-center gap-2 pb-2 border-b border-white/5">👥 Core Team</h4>
+                                        <div class="flex flex-col gap-2">${agentHtml}</div>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-4 flex items-center gap-2 pb-2 border-b border-white/5">🎯 Milestones Timeline</h4>
+                                        <div class="flex flex-col">${milestonesHtml}</div>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-4 flex items-center justify-between pb-2 border-b border-white/5">
+                                            <span class="flex items-center gap-2">📚 Data Sources</span>
+                                            <button onclick="openUploadModal('${p.id}')" class="px-2 py-1 rounded bg-brand/20 text-brand hover:bg-brand/30 border border-brand/30 flex items-center gap-1 transition-colors" title="Wissen hinzufügen"><span class="text-lg leading-none">+</span> Add</button>
+                                        </h4>
+                                        <div class="flex flex-col">${refsHtml}</div>
+                                    </div>
+                                </div>
+
+                                <!-- Kanban Board -->
+                                <div class="col-span-3 p-6 md:p-8 bg-[#0B0B0E]/80 relative">
+                                    <div class="absolute inset-0 bg-gradient-to-br from-brand/5 to-transparent pointer-events-none"></div>
+                                    <h4 class="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-6 flex items-center gap-2 pb-2 border-b border-white/5 relative z-10">🔄 Active Workflows <span class="text-brand/50 font-normal lowercase tracking-normal">(Drag & Drop)</span></h4>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 items-start relative z-10">
+                                        <!-- Columns -->
+                                        ${['backlog', 'planned', 'in_progress', 'review', 'done'].map(col => `
+                                            <div class="flex flex-col border border-white/5 rounded-xl min-h-[400px] bg-black/40"
+                                                 ondragover="allowDrop(event)" 
+                                                 ondrop="drop(event, '${p.id}', '${col}')">
+                                                <div class="p-3 border-b border-white/5 flex items-center gap-2 mb-2 bg-white/[0.02] rounded-t-xl">
+                                                    <div class="w-2 h-2 rounded-full ${col === 'done' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]' : col === 'in_progress' ? 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.6)]' : col === 'review' ? 'bg-purple-500' : 'bg-neutral-500'}"></div>
+                                                    <h5 class="text-[10px] font-bold text-white uppercase tracking-wider">${col.replace('_', ' ')}</h5>
+                                                    <span class="ml-auto text-[9px] text-text-muted bg-white/5 px-2 py-0.5 rounded-full font-bold border border-white/5">${cols[col].length}</span>
+                                                </div>
+                                                <div class="p-2 flex-1 flex flex-col gap-0 transition-colors" id="col-${p.id}-${col}">
+                                                    ${cols[col].map(renderTask).join('')}
+                                                    <div class="flex-1 w-full min-h-[80px] rounded-lg border-2 border-dashed border-transparent hover:border-white/10 transition-colors"></div>
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-4 text-xs mt-4">
+                             <h4 class="font-semibold text-white mb-2">Projekt Wissen durchstöbern</h4>
+                             <button onclick="document.getElementById('file-modal').classList.remove('hidden')" class="w-full py-2 bg-brand/20 border border-brand/30 rounded text-brand font-semibold hover:bg-brand/30 transition-colors shadow">Rohes Markdown / JSON ansehen</button>
+                             <div id="file-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+                                <div class="bg-neutral-bg1 border border-white/10 w-full max-w-4xl max-h-[90vh] rounded-xl flex flex-col shadow-2xl">
+                                    <div class="p-4 border-b border-white/10 flex items-center justify-between">
+                                        <h3 class="text-lg font-bold text-white flex items-center gap-2">📄 ${p.name}</h3>
+                                        <div class="flex items-center gap-2">
+                                           <a href="/api/file/raw?path=${encodeURIComponent(p.file)}" target="_blank" class="px-3 py-1 text-xs bg-white/5 border border-white/10 rounded">Raw JSON</a>
+                                           <button onclick="document.getElementById('file-modal').classList.add('hidden')" class="px-3 py-1 bg-red-500/20 border border-red-500/30 text-red-400 rounded hover:bg-red-500/30">Schließen ✕</button>
                                         </div>
                                     </div>
-                                `).join('')}
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <div class="glass-card p-4">
-                                <h3 class="text-sm font-semibold mb-3">Datenquellen & Referenzen</h3>
-                                ${(p.dataRefs || []).length ? `<ul class="space-y-2 text-xs">${p.dataRefs.map((r,ri) => {
-                                    const isImage = /\.(png|jpe?g|gif|webp|svg)$/i.test(r.path || '');
-                                    const safePath = String(r.path || '').replace(/"/g,'&quot;');
-                                    return `<li class="bg-black/30 border border-white/5 rounded-lg p-2"><span class="text-white">${r.label}</span><p class="text-text-muted mt-1 font-mono break-all">${r.path}</p><div class="mt-2 flex gap-2"><button onclick="openProjectRef('${safePath}')" class="text-[10px] px-2 py-1 rounded border border-blue-500/30 bg-blue-500/20">Öffnen</button>${isImage ? `<button onclick="previewProjectImage('${safePath}','img-${p.id}-${ri}')" class="text-[10px] px-2 py-1 rounded border border-purple-500/30 bg-purple-500/20">Bild anzeigen</button>` : ''}</div><div id="img-${p.id}-${ri}" class="mt-2"></div></li>`;
-                                }).join('')}</ul>` : '<p class="text-xs text-text-muted">Keine Datenquellen hinterlegt.</p>'}
-                                <div class="mt-3 grid grid-cols-1 gap-2 text-xs">
-                                  <input id="proj-ref-label-${p.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1" placeholder="Label (z.B. API Spec)" />
-                                  <input id="proj-ref-path-${p.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1" placeholder="Workspace-Pfad (z.B. /root/.openclaw/workspace-tareno/docs/spec.md)" />
-                                  <button onclick="addProjectReference('${p.id}')" class="px-2 py-1 rounded border border-brand/30 bg-brand/20">Referenz hinzufügen (für Wissensbasis)</button>
+                                    <div class="p-6 overflow-y-auto w-full scrollbar-thin">
+                                        <pre class="whitespace-pre-wrap font-mono text-[11px] text-text-secondary w-full leading-relaxed">${safeContent || 'Kein Inhalt verfügbar'}</pre>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="glass-card p-4">
-                                <h3 class="text-sm font-semibold mb-3">Meilensteine</h3>
-                                ${(p.milestones || []).length ? `<ul class="space-y-2 text-xs">${p.milestones.map((m,mi) => `<li class="bg-black/30 border border-white/5 rounded-lg p-2"><input id="ms-title-${p.id}-${mi}" value="${(m.title||'').replace(/"/g,'&quot;')}" class="w-full bg-black/40 border border-white/10 rounded px-2 py-1 text-xs" /><div class="flex gap-2 mt-2"><input id="ms-due-${p.id}-${mi}" value="${m.due || ''}" class="flex-1 bg-black/40 border border-white/10 rounded px-2 py-1 text-xs" placeholder="YYYY-MM-DD" /><select id="ms-status-${p.id}-${mi}" class="bg-black/40 border border-white/10 rounded px-2 py-1 text-xs"><option value="planned" ${m.status==='planned'?'selected':''}>planned</option><option value="in_progress" ${m.status==='in_progress'?'selected':''}>in_progress</option><option value="done" ${m.status==='done'?'selected':''}>done</option><option value="at_risk" ${m.status==='at_risk'?'selected':''}>at_risk</option></select><button onclick="updateMilestone('${p.id}',${mi})" class="px-2 py-1 text-[10px] rounded border border-white/20 bg-white/10">Save</button></div></li>`).join('')}</ul>` : '<p class="text-xs text-text-muted">Keine Milestones hinterlegt.</p>'}
-                            </div>
-                        </div>
-
-                        <div class="glass-card p-4">
-                            <h3 class="text-sm font-semibold mb-3">Agent-Project-Sync</h3>
-                            <p class="text-xs text-text-muted mb-2">Erzeugt eine Projekt-Snapshot-Datei im Agent-Workspace, damit der Agent Projektwissen direkt nutzen kann.</p>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
-                                <input id="proj-sync-agent-${p.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1" placeholder="agent id (z.B. kimikimbo)" />
-                                <button onclick="syncProjectToAgent('${p.id}')" class="px-2 py-1 rounded border border-green-500/30 bg-green-500/20">Projekt zu Agent syncen</button>
-                            </div>
-                        </div>
-
-                        <div class="glass-card p-4">
-                            <h3 class="text-sm font-semibold mb-3">Projektwissen / ND direkt ablegen</h3>
-                            <div class="grid grid-cols-1 gap-2 text-xs">
-                                <input id="proj-knowledge-title-${p.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1" placeholder="Titel (z.B. ND Kundenbriefing)" />
-                                <textarea id="proj-knowledge-content-${p.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1 min-h-[120px]" placeholder="Inhalt einfügen..."></textarea>
-                                <div class="flex gap-2">
-                                    <select id="proj-knowledge-kind-${p.id}" class="bg-black/40 border border-white/10 rounded px-2 py-1"><option value="md">Markdown</option><option value="txt">Text</option></select>
-                                    <button onclick="addProjectKnowledge('${p.id}')" class="px-2 py-1 rounded border border-brand/30 bg-brand/20">Wissen speichern + alle Agenten syncen</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="glass-card p-4">
-                            <h3 class="text-sm font-semibold mb-3">Rohdaten (Markdown)</h3>
-                            <pre class="text-xs text-text-secondary whitespace-pre-wrap font-mono m-0 bg-transparent border-none p-0 leading-relaxed">${safeContent}</pre>
+                             </div>
                         </div>
                     </div>`;
                 }
@@ -881,7 +944,7 @@
 
             else if (tab === 'agent-detail') {
                 const files = data.files || data.data?.files || [];
-                html = `<div class="space-y-4">
+                html = `< div class="space-y-4" >
                     <div class="flex items-center gap-3">
                         <button onclick="backToAgents()" class="px-3 py-1.5 rounded-lg text-xs border border-white/10 bg-white/5 hover:bg-white/10">← Zurück zu Alle Agenten</button>
                         <h3 class="text-lg font-semibold text-white">Agent-Dateien: ${data.agent || selectedAgent?.name || ''}</h3>
@@ -895,61 +958,61 @@
                                 </div>
                                 <p class="text-[10px] text-text-muted font-mono break-all">${f.path || '—'}</p>
                                 <div class="mt-2"><button onclick="openFullFile('${(f.path || '').replace(/'/g, "\\'")}')" class="text-[10px] px-2 py-1 rounded border border-brand/30 bg-brand/20">Open full file</button></div>
-                                <pre class="mt-3 text-[11px] text-text-secondary whitespace-pre-wrap">${(f.preview || 'Keine Daten').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</pre>
+                                <pre class="mt-3 text-[11px] text-text-secondary whitespace-pre-wrap">${(f.preview || 'Keine Daten').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
                             </div>
                         `).join('') || '<div class="glass-card p-4"><p class="text-text-muted">Keine Dateien gefunden.</p></div>'}
                     </div>
-                </div>`;
+                </div > `;
             }
 
             else if (tab === 'skills') {
                 const allAgents = data.agents || [];
-                html = `<div class="space-y-4">
-                  <div class="glass-card p-4 flex flex-wrap items-center gap-3 text-xs">
+                html = `< div class="space-y-4" >
+                <div class="glass-card p-4 flex flex-wrap items-center gap-3 text-xs">
                     <span class="font-semibold text-white">Skill Aktivierung</span>
                     <label class="inline-flex items-center gap-2">
-                      <input type="checkbox" ${data.policy?.globalEnabled !== false ? 'checked' : ''} onchange="setGlobalSkills(this.checked)" />
-                      <span>Global aktiv</span>
+                        <input type="checkbox" ${data.policy?.globalEnabled !== false ? 'checked' : ''} onchange="setGlobalSkills(this.checked)" />
+                        <span>Global aktiv</span>
                     </label>
                     <span class="text-text-muted">(Global AUS = alle Skills pausiert)</span>
-                  </div>
+                </div>
                   ${(data.integrations || []).length ? `<div class="glass-card p-4"><p class="text-xs font-semibold text-white mb-2">Refs für weitere Skill-Integrationen</p><div class="space-y-1 text-xs">${data.integrations.map(i => `<div><span class="text-brand">${i.name}</span> — <span class="text-text-muted">${i.note}</span> <span class="text-blue-300">${i.ref}</span></div>`).join('')}</div></div>` : ''}
-                  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">`;
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">`;
 
                 data.skills.forEach(s => {
                     const agents = s.usedByAgents || [];
                     const activation = s.activation || { enabled: true, agents: ['*'] };
                     html += `<div class="glass-card p-5 relative overflow-hidden group hover:border-brand/30 transition-all">
-                        <div class="absolute top-0 right-0 w-28 h-28 bg-brand/15 rounded-full blur-2xl -mr-12 -mt-12 group-hover:bg-brand/30 transition-all"></div>
-                        <div class="relative z-10">
-                            <div class="flex items-start justify-between gap-2 mb-2">
-                                <h3 class="font-semibold text-white flex items-center gap-2"><span class="text-lg">🧩</span>${s.name}</h3>
-                                <label class="text-[10px] inline-flex items-center gap-1">
-                                    <input type="checkbox" ${activation.enabled !== false ? 'checked' : ''} onchange="setSkillPolicy('${s.name}', this.checked)" /> aktiv
-                                </label>
-                            </div>
-                            ${s.title !== s.name ? `<p class="text-xs text-brand/80 mb-2 font-medium">${s.title}</p>` : ''}
-                            ${s.description ? `<p class="text-[11px] text-text-muted leading-relaxed mb-3">${s.description}</p>` : ''}
-                            <div class="text-[10px] text-text-muted font-mono truncate bg-black/40 px-2 py-1 rounded border border-white/5 mb-3">${s.path}</div>
-                            <div class="space-y-2">
-                                <p class="text-[10px]"><span class="text-text-muted">Scope:</span> <span class="text-white">${s.scope || 'global'}</span></p>
-                                <p class="text-[10px]"><span class="text-text-muted">Funktion:</span> <span class="text-text-secondary">${s.functions || 'siehe SKILL.md'}</span></p>
-                            </div>
-                            <div class="mt-3">
-                              <p class="text-[10px] text-text-muted mb-1">Aktiv für Agenten</p>
-                              <div class="flex flex-wrap gap-1">
-                                <button onclick="setSkillAgents('${s.name}','*')" class="px-2 py-0.5 text-[10px] rounded-full border ${activation.agents?.includes('*') ? 'bg-green-500/20 border-green-500/30 text-green-300' : 'bg-black/30 border-white/10 text-text-muted'}">Alle</button>
-                                ${allAgents.map(a => `<button onclick="setSkillAgents('${s.name}','${a.id}')" class="px-2 py-0.5 text-[10px] rounded-full border ${(activation.agents||[]).includes(a.id) ? 'bg-blue-500/20 border-blue-500/30 text-blue-300' : 'bg-black/30 border-white/10 text-text-muted'}">${a.name || a.id}</button>`).join('')}
-                              </div>
-                            </div>
-                            ${agents.length > 0 ? `<div class="mt-3"><p class="text-[9px] text-text-muted uppercase tracking-wider mb-1.5 font-bold">Genutzt von Bots</p><div class="flex flex-wrap gap-1">${agents.map(a => `<span class="px-2 py-0.5 bg-green-500/10 border border-green-500/20 text-green-400 text-[10px] rounded-full">${a}</span>`).join('')}</div></div>` : `<p class="text-[10px] text-text-muted italic mt-2">Von keinem Agenten verwendet</p>`}
+                    <div class="absolute top-0 right-0 w-28 h-28 bg-brand/15 rounded-full blur-2xl -mr-12 -mt-12 group-hover:bg-brand/30 transition-all"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-start justify-between gap-2 mb-2">
+                            <h3 class="font-semibold text-white flex items-center gap-2"><span class="text-lg">🧩</span>${s.name}</h3>
+                            <label class="text-[10px] inline-flex items-center gap-1">
+                                <input type="checkbox" ${activation.enabled !== false ? 'checked' : ''} onchange="setSkillPolicy('${s.name}', this.checked)" /> aktiv
+                            </label>
                         </div>
-                    </div>`;
+                        ${s.title !== s.name ? `<p class="text-xs text-brand/80 mb-2 font-medium">${s.title}</p>` : ''}
+                        ${s.description ? `<p class="text-[11px] text-text-muted leading-relaxed mb-3">${s.description}</p>` : ''}
+                        <div class="text-[10px] text-text-muted font-mono truncate bg-black/40 px-2 py-1 rounded border border-white/5 mb-3">${s.path}</div>
+                        <div class="space-y-2">
+                            <p class="text-[10px]"><span class="text-text-muted">Scope:</span> <span class="text-white">${s.scope || 'global'}</span></p>
+                            <p class="text-[10px]"><span class="text-text-muted">Funktion:</span> <span class="text-text-secondary">${s.functions || 'siehe SKILL.md'}</span></p>
+                        </div>
+                        <div class="mt-3">
+                            <p class="text-[10px] text-text-muted mb-1">Aktiv für Agenten</p>
+                            <div class="flex flex-wrap gap-1">
+                                <button onclick="setSkillAgents('${s.name}','*')" class="px-2 py-0.5 text-[10px] rounded-full border ${activation.agents?.includes('*') ? 'bg-green-500/20 border-green-500/30 text-green-300' : 'bg-black/30 border-white/10 text-text-muted'}">Alle</button>
+                                ${allAgents.map(a => `<button onclick="setSkillAgents('${s.name}','${a.id}')" class="px-2 py-0.5 text-[10px] rounded-full border ${(activation.agents || []).includes(a.id) ? 'bg-blue-500/20 border-blue-500/30 text-blue-300' : 'bg-black/30 border-white/10 text-text-muted'}">${a.name || a.id}</button>`).join('')}
+                            </div>
+                        </div>
+                        ${agents.length > 0 ? `<div class="mt-3"><p class="text-[9px] text-text-muted uppercase tracking-wider mb-1.5 font-bold">Genutzt von Bots</p><div class="flex flex-wrap gap-1">${agents.map(a => `<span class="px-2 py-0.5 bg-green-500/10 border border-green-500/20 text-green-400 text-[10px] rounded-full">${a}</span>`).join('')}</div></div>` : `<p class="text-[10px] text-text-muted italic mt-2">Von keinem Agenten verwendet</p>`}
+                    </div>
+                </div>`;
                 });
                 if (data.skills.length === 0) {
                     html += '<div class="glass-card p-8 col-span-3 text-center"><span class="text-4xl block mb-3">🧩</span><p class="text-text-muted">Keine Skills gefunden. Prüfe den Skills-Pfad.</p></div>';
                 }
-                html += '</div></div>';
+                html += '</div></div > ';
             }
 
             else if (tab === 'agent-builder') {
@@ -964,7 +1027,7 @@
                             <input id="new-agent-id" class="bg-black/30 border border-white/10 rounded px-3 py-2 text-xs" placeholder="agent id (z.B. newsbot)" />
                             <input id="new-agent-name" class="bg-black/30 border border-white/10 rounded px-3 py-2 text-xs" placeholder="anzeigename (z.B. News Bot)" />
                             <select id="new-agent-model" class="bg-black/30 border border-white/10 rounded px-3 py-2 text-xs">
-                                ${models.map(m => `<option value="${m}" ${m===data.primary?'selected':''}>${m}</option>`).join('')}
+                                ${models.map(m => `<option value="${m}" ${m === data.primary ? 'selected' : ''}>${m}</option>`).join('')}
                             </select>
                             <input id="new-agent-chat" class="bg-black/30 border border-white/10 rounded px-3 py-2 text-xs" placeholder="telegram chat id (z.B. -100...)" />
                         </div>
@@ -1099,7 +1162,7 @@
                 const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `activity-${Date.now()}.json`; a.click();
                 return;
             }
-            const csv = ['id,agent,target,result,type,time,text', ...rows.map(r => [r.id,r.agent,r.target,r.result,r.type,r.time,(r.text||'').replace(/"/g,'""')].map(v => `"${v||''}"`).join(','))].join('\n');
+            const csv = ['id,agent,target,result,type,time,text', ...rows.map(r => [r.id, r.agent, r.target, r.result, r.type, r.time, (r.text || '').replace(/"/g, '""')].map(v => `"${v || ''}"`).join(','))].join('\n');
             const blob = new Blob([csv], { type: 'text/csv' });
             const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `activity-${Date.now()}.csv`; a.click();
         };
@@ -1111,7 +1174,7 @@
             const content = data.content || data.data?.content || 'Keine Daten';
             const w = window.open('', '_blank');
             if (!w) return;
-            w.document.write(`<pre style="white-space:pre-wrap;font-family:monospace;padding:16px;background:#111;color:#ddd;">${String(content).replace(/</g,'&lt;').replace(/>/g,'&gt;')}</pre>`);
+            w.document.write(`<pre style="white-space:pre-wrap;font-family:monospace;padding:16px;background:#111;color:#ddd;">${String(content).replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>`);
             w.document.title = filePath;
         };
 
@@ -1269,7 +1332,7 @@
             const entries = data.entries || data.data?.entries || [];
             const w = window.open('', '_blank');
             if (!w) return;
-            const rows = entries.map(e => `<div style="padding:8px;border-bottom:1px solid #333"><b>${e.status || '—'}</b> • ${e.runAtMs ? new Date(e.runAtMs).toISOString() : '—'}<br/><small>${(e.summary || '').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</small></div>`).join('') || '<p>Keine Runs gefunden</p>';
+            const rows = entries.map(e => `<div style="padding:8px;border-bottom:1px solid #333"><b>${e.status || '—'}</b> • ${e.runAtMs ? new Date(e.runAtMs).toISOString() : '—'}<br/><small>${(e.summary || '').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</small></div>`).join('') || '<p>Keine Runs gefunden</p>';
             w.document.write(`<div style="font-family:system-ui;background:#111;color:#ddd;min-height:100vh;padding:16px"><h2>Cron Runs: ${jobId}</h2>${rows}</div>`);
             w.document.title = `Cron Runs ${jobId}`;
         };
@@ -1292,6 +1355,90 @@
             if (out) out.innerText = data.success
                 ? `✅ Agent ${data.agentId} erstellt und auf Telegram ${data.telegramChatId} gebunden.`
                 : `❌ ${data.error || 'Fehler beim Anlegen'}`;
+        };
+
+        window.allowDrop = (ev) => ev.preventDefault();
+
+        window.drag = (ev, projectId, taskId) => {
+            ev.dataTransfer.setData("projectId", projectId);
+            ev.dataTransfer.setData("taskId", taskId);
+        };
+
+        window.drop = async (ev, projectId, colId) => {
+            ev.preventDefault();
+            const sourceProjectId = ev.dataTransfer.getData("projectId");
+            const taskId = ev.dataTransfer.getData("taskId");
+            if (sourceProjectId !== projectId) return; // Prevent cross-project drops for now
+
+            // Move visually immediately
+            const targetCol = document.getElementById(`col-${projectId}-${colId}`);
+            const draggedEl = document.querySelector(`[draggable="true"][ondragstart*="${taskId}"]`);
+            if (targetCol && draggedEl) {
+                targetCol.insertBefore(draggedEl, targetCol.lastElementChild); // Insert before the dashed bottom border
+            }
+
+            // Update Backend
+            try {
+                const res = await fetch(`/api/projects/${projectId}/tasks/${taskId}/move`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ newStatus: colId })
+                });
+                if (!res.ok) throw new Error('Failed to move');
+                loadCurrentView(); // Refresh to ensure data sync
+            } catch (e) {
+                console.error("Drag Drop Error", e);
+                loadCurrentView(); // Revert on fail
+            }
+        };
+
+        window.openUploadModal = (projectId) => {
+            selectedProject = currentData?.projects?.find(p => p.id === projectId);
+            if (!selectedProject) return;
+            document.getElementById('upload-modal-project-name').innerText = selectedProject.name;
+            document.getElementById('upload-knowledge-modal').classList.remove('hidden');
+        };
+
+        window.closeUploadModal = () => {
+            document.getElementById('upload-knowledge-modal').classList.add('hidden');
+            document.getElementById('upload-title').value = '';
+            document.getElementById('upload-content').value = '';
+        };
+
+        window.uploadKnowledge = async () => {
+            if (!selectedProject) return;
+            const title = document.getElementById('upload-title').value.trim();
+            const content = document.getElementById('upload-content').value.trim();
+            const type = document.getElementById('upload-type').value;
+            const btn = document.getElementById('upload-btn');
+
+            if (!title || !content) {
+                alert('Titel und Inhalt werden benötigt!');
+                return;
+            }
+
+            btn.innerText = "Wird gespeichert...";
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(`/api/projects/${selectedProject.id}/knowledge`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, content, type })
+                });
+                if (res.ok) {
+                    closeUploadModal();
+                    loadCurrentView();
+                } else {
+                    const err = await res.json();
+                    alert('Fehler: ' + err.error);
+                }
+            } catch (e) {
+                alert('Netzwerkfehler');
+            } finally {
+                btn.innerText = "Wissen speichern";
+                btn.disabled = false;
+            }
         };
 
         window.setGlobalSkills = async (enabled) => {
@@ -1336,6 +1483,58 @@
         configureAutoRefreshForTab();
         loadCurrentView();
     </script>
+
+    <!-- Upload Knowledge Modal Overlay -->
+    <div id="upload-knowledge-modal"
+        class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div
+            class="glass-card w-full max-w-lg p-0 flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-white/10 rounded-2xl overflow-hidden animate-slide-up">
+            <div
+                class="p-5 border-b border-white/5 bg-gradient-to-r from-black/40 to-transparent flex items-center justify-between">
+                <div>
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2"><span class="text-brand">+</span>
+                        Wissen hinzufügen</h3>
+                    <p class="text-[10px] text-text-muted uppercase tracking-wider mt-1 font-bold"
+                        id="upload-modal-project-name">Project</p>
+                </div>
+                <button onclick="closeUploadModal()"
+                    class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 flex items-center justify-center text-text-muted hover:text-white transition-colors">✕</button>
+            </div>
+            <div class="p-5 flex flex-col gap-4">
+                <div>
+                    <label
+                        class="block text-[10px] uppercase font-bold tracking-wider text-text-muted mb-1.5 ml-1">Titel /
+                        Art</label>
+                    <input id="upload-title" type="text"
+                        class="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-brand/50 transition-colors"
+                        placeholder="z.B. Meeting Notes" />
+                </div>
+                <div>
+                    <label
+                        class="block text-[10px] uppercase font-bold tracking-wider text-text-muted mb-1.5 ml-1">Inhalt</label>
+                    <textarea id="upload-content" rows="6"
+                        class="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-brand/50 transition-colors font-mono resize-none"
+                        placeholder="Hier Text, Links oder Markdown einfügen..."></textarea>
+                </div>
+                <div>
+                    <label
+                        class="block text-[10px] uppercase font-bold tracking-wider text-text-muted mb-1.5 ml-1">Format</label>
+                    <select id="upload-type"
+                        class="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-brand/50 transition-colors">
+                        <option value="md">Markdown (.md)</option>
+                        <option value="txt">Text (.txt)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="p-4 border-t border-white/5 bg-black/20 flex justify-end gap-3">
+                <button onclick="closeUploadModal()"
+                    class="px-4 py-2 border border-white/10 rounded-lg text-xs font-semibold text-text-muted hover:text-white hover:bg-white/5 transition-colors">Abbrechen</button>
+                <button id="upload-btn" onclick="uploadKnowledge()"
+                    class="px-4 py-2 border border-brand/30 bg-brand/20 rounded-lg text-xs font-bold text-brand hover:text-white hover:bg-brand/40 transition-colors shadow-[0_0_15px_rgba(130,81,238,0.2)]">Wissen
+                    speichern</button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

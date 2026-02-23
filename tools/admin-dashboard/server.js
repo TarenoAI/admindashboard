@@ -263,6 +263,104 @@ function saveSkillPolicy(policy) {
     fs.writeFileSync(SKILL_POLICY_FILE, JSON.stringify(policy, null, 2) + '\n', 'utf8');
 }
 
+app.get("/api/projects", async (_, res) => {
+    const projectsDir = path.join(WORKSPACE_ROOT, "data", "projects");
+    fs.mkdirSync(projectsDir, { recursive: true });
+
+    // Wir unterstützen jetzt primär JSON Projekte für die volle Funktionalität
+    const files = listFilesSafe(projectsDir).filter(f => f.endsWith(".json"));
+    const projects = files.map(f => {
+        const full = path.join(projectsDir, f);
+        const content = readFileSafe(full) || "{}";
+        const projectId = f.replace(/\.json$/, "");
+        try {
+            const data = JSON.parse(content);
+            return {
+                id: projectId,
+                name: data.name || projectId,
+                summary: data.summary || "",
+                status: data.status || "planned",
+                agents: data.agents || [],
+                tasks: data.tasks || [],
+                milestones: data.milestones || [],
+                dataRefs: data.dataRefs || [],
+                file: full
+            };
+        } catch (e) {
+            return {
+                id: projectId,
+                name: projectId,
+                summary: "Fehler beim Parsen der JSON",
+                status: "error",
+                agents: [], tasks: [], milestones: [], dataRefs: [], file: full
+            };
+        }
+    });
+    ok(res, { count: projects.length, projects });
+});
+
+// Kanban Task Move API
+app.post("/api/projects/:projectId/tasks/:taskId/move", express.json(), async (req, res) => {
+    const { projectId, taskId } = req.params;
+    const { newStatus } = req.body;
+    if (!newStatus) return res.status(400).json({ success: false, error: "newStatus missing" });
+
+    const projectFile = path.join(WORKSPACE_ROOT, "data", "projects", `${projectId}.json`);
+    if (!fs.existsSync(projectFile)) return res.status(404).json({ success: false, error: "Project not found" });
+
+    try {
+        const data = JSON.parse(fs.readFileSync(projectFile, 'utf8'));
+        const task = data.tasks.find(t => t.id === taskId);
+        if (!task) return res.status(404).json({ success: false, error: "Task not found" });
+
+        task.status = newStatus;
+        fs.writeFileSync(projectFile, JSON.stringify(data, null, 2), 'utf8');
+        syncAllAssignedAgents(projectId, data); // from existing sync logic
+        ok(res, { message: "Task moved successfully" });
+    } catch (e) {
+        res.status(500).json({ success: false, error: e.message });
+    }
+});
+
+// Knowledge Upload API
+app.post("/api/projects/:projectId/knowledge", express.json(), async (req, res) => {
+    const { projectId } = req.params;
+    const { title, content, type } = req.body; // type e.g. 'md' or 'txt'
+
+    if (!title || !content) return res.status(400).json({ success: false, error: "title and content required" });
+
+    const projectFile = path.join(WORKSPACE_ROOT, "data", "projects", `${projectId}.json`);
+    if (!fs.existsSync(projectFile)) return res.status(404).json({ success: false, error: "Project not found" });
+
+    try {
+        const ext = type === 'txt' ? 'txt' : 'md';
+        const ts = new Date().toISOString().replace(/[:.]/g, '-');
+        const safeTitle = title.replace(/[^a-zA-Z0-9]/g, '-');
+        const fileName = `${ts}-${safeTitle}.${ext}`;
+        const knowledgeDir = path.join(WORKSPACE_ROOT, "projects", "_knowledge", projectId);
+        fs.mkdirSync(knowledgeDir, { recursive: true });
+
+        const filePath = path.join(knowledgeDir, fileName);
+        fs.writeFileSync(filePath, content, 'utf8');
+
+        // Update Project JSON Data Refs
+        const data = JSON.parse(fs.readFileSync(projectFile, 'utf8'));
+        if (!data.dataRefs) data.dataRefs = [];
+        data.dataRefs.push({
+            label: title,
+            path: `projects/_knowledge/${projectId}/${fileName}`,
+            type: ext,
+            addedAt: new Date().toISOString()
+        });
+
+        fs.writeFileSync(projectFile, JSON.stringify(data, null, 2), 'utf8');
+        syncAllAssignedAgents(projectId, data);
+
+        ok(res, { message: "Knowledge added", file: filePath });
+    } catch (e) {
+        res.status(500).json({ success: false, error: e.message });
+    }
+});
 app.get("/api/overview", async (_, res) => {
     const xvfb = await runCmd("systemctl is-active xvfb");
     const openclaw = await runFirstOk(["/usr/bin/openclaw status", "/usr/local/bin/openclaw status"]);
@@ -1166,7 +1264,7 @@ app.get("/api/activity", async (_, res) => {
         const [hash, ts, msg] = line.split('|');
         const isFix = /fix|bug|repair|hotfix|dashboard/i.test(msg || '');
         return {
-            id: `git-${i}-${hash?.slice(0,7)}`,
+            id: `git-${i}-${hash?.slice(0, 7)}`,
             text: msg || 'commit',
             details: `commit ${hash}`,
             type: 'system',
