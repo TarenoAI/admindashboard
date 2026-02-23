@@ -696,6 +696,30 @@ app.post('/api/projects/task', (req, res) => {
     }
 });
 
+// Drag & Drop Task Move Endpoint
+app.post('/api/projects/:projectId/tasks/:taskId/move', (req, res) => {
+    try {
+        const { projectId, taskId } = req.params;
+        const { newStatus, actorAgentId } = req.body || {};
+        if (!newStatus) return res.status(400).json({ success: false, error: 'newStatus required' });
+        const file = path.join(PROJECT_DATA_DIR, `${projectId}.json`);
+        const raw = readFileSafe(file);
+        if (!raw) return res.status(404).json({ success: false, error: 'Project data file missing' });
+        const data = JSON.parse(raw);
+        if (!hasProjectWritePermission(data, actorAgentId)) return res.status(403).json({ success: false, error: `Agent ${actorAgentId} has no write permission for project ${projectId}` });
+        const task = (data.tasks || []).find(t => t.id === taskId);
+        if (!task) return res.status(404).json({ success: false, error: 'Task not found' });
+        const oldStatus = task.status;
+        task.status = newStatus;
+        data.lastUpdate = new Date().toISOString().slice(0, 10);
+        fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n', 'utf8');
+        const sync = syncAllAssignedAgents(projectId, data);
+        return ok(res, { moved: true, projectId, taskId, oldStatus, newStatus, sync });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
+});
+
 app.post('/api/projects/task-meta', (req, res) => {
     try {
         const { projectId, taskId, title, priority, due, actorAgentId } = req.body || {};
