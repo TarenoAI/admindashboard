@@ -1,0 +1,92 @@
+Competitor,Blog Title,URL
+Buffer,13 Ways to Get More Followers on Instagram in 2026 — Here&#x27;s Exactly What I Would Do if I Were Just Starting Out,https://buffer.com/resources/grow-on-instagram/
+Buffer,My Content Rotation: 23 Best Newsletters for Marketers and Creators in 2026,https://buffer.com/resources/best-newsletters/
+Buffer,How to Get Verified on Instagram: 2 Ways to Get Your Blue Check in 2026,https://buffer.com/resources/how-to-get-verified-on-instagram/
+Buffer,I Tested Our New Trending Topics Feature and Got 54K Views Overnight,https://buffer.com/resources/trending-topics-threads/
+Buffer,The Top Threads Features + How to Use Them,https://buffer.com/resources/threads-new-features/
+Buffer,How to Get More Followers on Threads: 10 Tactics to Help You Grow,https://buffer.com/resources/how-to-grow-on-threads/
+Buffer,13 Trending Sounds on Instagram in February 2026 (+ How to Use Them),https://buffer.com/resources/trending-audio-instagram/
+Buffer,14 AI Tools for Social Media Content Creation: My Workflow Guide,https://buffer.com/resources/ai-social-media-content-creation/
+Buffer,"Our 7th Profit Share: Behind the $377,005 We Distributed to the Buffer Team",https://buffer.com/resources/7th-profit-share/
+Buffer,The Best Time to Post on Threads in 2026 — Data from 2.5M Posts,https://buffer.com/resources/the-best-time-to-post-on-threads/
+Buffer,13 Trending Songs on TikTok in February 2026 (+ How to Use Them),https://buffer.com/resources/trending-songs-tiktok/
+Buffer,"I Have 22K Followers on LinkedIn — Here&#x27;s How You Can Grow Your Following, Too",https://buffer.com/resources/how-to-increase-linkedin-followers/
+Buffer,Scared to Post on Social Media? Here&#x27;s What Actually Helped Us Start (ft. Creators from Buffer),https://buffer.com/resources/advice-from-buffer-creators/
+Buffer,Replying to Your Instagram Comments Can Boost Engagement by 21%,https://buffer.com/resources/instagram-comments-engagement/
+Buffer,7 Tips for Managing Multiple Social Media Accounts Like a Pro,https://buffer.com/resources/manage-multiple-social-media-accounts/
+Buffer,10 Things You Need to Know About the Threads Algorithm (According to The Threads Team),https://buffer.com/resources/threads-algorithm/
+Buffer,The 4 Forces Shaping Social Media in 2026 (and What They Mean for Creators),https://buffer.com/resources/2026-predictions-social-media/
+Buffer,Best Time to Post on Instagram in 2026: New Data from 9.6 Million Posts,https://buffer.com/resources/when-is-the-best-time-to-post-on-instagram/
+Buffer,How to Create and Use GIFs: A Guide for Social Media Marketers,https://buffer.com/resources/animated-gifs-2/
+Buffer,The Complete Guide to Content Repurposing: How to Get the Most Out of Every Piece of Content You Create,https://buffer.com/resources/repurposing-content-guide/
+Buffer,We Should All Be Building People-First Communities in the Age of AI,https://buffer.com/resources/people-first-communities/
+Buffer,7 Ways to Use Twitter Analytics to Help You Tweet Better,https://buffer.com/resources/twitter-analytics/
+Buffer,Bluesky Isn’t Like Other Social Networks: Here’s How to Get Set Up,https://buffer.com/resources/how-to-use-bluesky/
+Buffer,What is Bluesky? Here&#x27;s What You Should Know,https://buffer.com/resources/bluesky-social/
+Buffer,13 Ways to Get More Followers on Instagram in 2026 — Here&#x27;s Exactly What I Would Do if I Were Just Starting Out,https://buffer.com/resources/grow-on-instagram/
+Buffer,My Content Rotation: 23 Best Newsletters for Marketers and Creators in 2026,https://buffer.com/resources/best-newsletters/
+Buffer,How to Get Verified on Instagram: 2 Ways to Get Your Blue Check in 2026,https://buffer.com/resources/how-to-get-verified-on-instagram/
+Buffer,I Tested Our New Trending Topics Feature and Got 54K Views Overnight,https://buffer.com/resources/trending-topics-threads/
+Buffer,The Top Threads Features + How to Use Them,https://buffer.com/resources/threads-new-features/
+Buffer,How to Get More Followers on Threads: 10 Tactics to Help You Grow,https://buffer.com/resources/how-to-grow-on-threads/
+Buffer,13 Trending Sounds on Instagram in February 2026 (+ How to Use Them),https://buffer.com/resources/trending-audio-instagram/
+Buffer,14 AI Tools for Social Media Content Creation: My Workflow Guide,https://buffer.com/resources/ai-social-media-content-creation/
+Buffer,"Our 7th Profit Share: Behind the $377,005 We Distributed to the Buffer Team",https://buffer.com/resources/7th-profit-share/
+Buffer,The Best Time to Post on Threads in 2026 — Data from 2.5M Posts,https://buffer.com/resources/the-best-time-to-post-on-threads/
+Buffer,13 Trending Songs on TikTok in February 2026 (+ How to Use Them),https://buffer.com/resources/trending-songs-tiktok/
+Buffer,"I Have 22K Followers on LinkedIn — Here&#x27;s How You Can Grow Your Following, Too",https://buffer.com/resources/how-to-increase-linkedin-followers/
+Buffer,Scared to Post on Social Media? Here&#x27;s What Actually Helped Us Start (ft. Creators from Buffer),https://buffer.com/resources/advice-from-buffer-creators/
+Buffer,Replying to Your Instagram Comments Can Boost Engagement by 21%,https://buffer.com/resources/instagram-comments-engagement/
+Buffer,7 Tips for Managing Multiple Social Media Accounts Like a Pro,https://buffer.com/resources/manage-multiple-social-media-accounts/
+Buffer,10 Things You Need to Know About the Threads Algorithm (According to The Threads Team),https://buffer.com/resources/threads-algorithm/
+Buffer,The 4 Forces Shaping Social Media in 2026 (and What They Mean for Creators),https://buffer.com/resources/2026-predictions-social-media/
+Buffer,Best Time to Post on Instagram in 2026: New Data from 9.6 Million Posts,https://buffer.com/resources/when-is-the-best-time-to-post-on-instagram/
+Buffer,How to Create and Use GIFs: A Guide for Social Media Marketers,https://buffer.com/resources/animated-gifs-2/
+Buffer,The Complete Guide to Content Repurposing: How to Get the Most Out of Every Piece of Content You Create,https://buffer.com/resources/repurposing-content-guide/
+Buffer,We Should All Be Building People-First Communities in the Age of AI,https://buffer.com/resources/people-first-communities/
+Buffer,7 Ways to Use Twitter Analytics to Help You Tweet Better,https://buffer.com/resources/twitter-analytics/
+Buffer,Bluesky Isn’t Like Other Social Networks: Here’s How to Get Set Up,https://buffer.com/resources/how-to-use-bluesky/
+Buffer,What is Bluesky? Here&#x27;s What You Should Know,https://buffer.com/resources/bluesky-social/
+Hootsuite,19 social media best practices for faster growth,https://blog.hootsuite.com/social-media-best-practices/
+Hootsuite,Social media for banks: 9 tips to boost trust + engagement,https://blog.hootsuite.com/social-media-for-banks/
+Hootsuite,11 ways to use AI in social media (not just for content creation),https://blog.hootsuite.com/how-to-use-ai-for-social-media/
+Hootsuite,Social media and government: 5 tips for citizen engagement,https://blog.hootsuite.com/social-media-government/
+Hootsuite,19 social media best practices for faster growth,https://blog.hootsuite.com/social-media-best-practices/
+Hootsuite,Social media for banks: 9 tips to boost trust + engagement,https://blog.hootsuite.com/social-media-for-banks/
+Hootsuite,11 ways to use AI in social media (not just for content creation),https://blog.hootsuite.com/how-to-use-ai-for-social-media/
+Hootsuite,Social media and government: 5 tips for citizen engagement,https://blog.hootsuite.com/social-media-government/
+SocialBee,How to share a post from Facebook to Instagram in 2026,https://socialbee.com/blog/how-to-share-facebook-posts-to-instagram/
+SocialBee,How to make a slideshow on TikTok (step-by-step guide),https://socialbee.com/blog/how-to-make-a-slideshow-on-tiktok/
+SocialBee,(February 12) 2026 X (Twitter) updates and news,https://socialbee.com/blog/twitter-updates/
+SocialBee,(February 12) The Latest 2026 social media news,https://socialbee.com/blog/social-media-news/
+SocialBee,How to get monetized on YouTube in 2026 (complete guide),https://socialbee.com/blog/youtube-monetization/
+SocialBee,I reviewed 5 social media schedulers. Here’s what I learned,https://socialbee.com/blog/social-media-scheduling-platforms/
+SocialBee,"(February 10, 2026) Trending Instagram songs this week",https://socialbee.com/blog/trending-instagram-songs/
+SocialBee,My review of the best 5 Hootsuite alternatives,https://socialbee.com/blog/hootsuite-alternatives/
+SocialBee,The only social media for lawyers guide you will ever need,https://socialbee.com/blog/social-media-for-lawyers/
+SocialBee,Sprout Social vs Hootsuite: Tested & Compared,https://socialbee.com/blog/hootsuite-vs-sprout-social/
+CoSchedule,200 Powerful Marketing Interview Questions To Hire The Best,https://coschedule.com/blog/marketing-interview-questions
+CoSchedule,Sprout Social Alternative,https://coschedule.com/blog/sprout-social-alternative
+CoSchedule,Discover The Top 33 Marketing Management Software Solutions For Your Business,https://coschedule.com/blog/marketing-management-software-tools-platforms
+CoSchedule,Marketing Checklists: How To Complete Work Right In The First Iteration (Examples & Templates),https://coschedule.com/blog/marketing-checklists-template
+CoSchedule,How To Triage Incoming Marketing Requests With CoSchedule Marketing Calendar,https://coschedule.com/blog/triage-requests-marketing-calendar
+CoSchedule,How To Convince Your Marketing Team To Implement New Tools [Backed By Science],https://coschedule.com/blog/marketing-team-new-tools
+CoSchedule,How To Triage Incoming Marketing Requests With CoSchedule Marketing Suite,https://coschedule.com/blog/triage-incoming-marketing-requests
+CoSchedule,How To Convince Your Team To Use (And Love) CoSchedule,https://coschedule.com/blog/convince-your-team-to-use-coschedule-marketing-suite
+CoSchedule,Marketing Tech Stack: What It Takes to Choose The Right Tools (+ Template),https://coschedule.com/blog/marketing-technology-stack
+CoSchedule,How To Develop An Effective Customer Acquisition Strategy,https://coschedule.com/blog/customer-acquisition-strategy
+CoSchedule,8 Must-Have Digital Marketing Skills In 2024,https://coschedule.com/blog/digital-marketing-skills
+CoSchedule,100+ Marketing Resources To Help You Create Content & Drive Better Results,https://coschedule.com/blog/100-marketing-resources-to-help-you-create-content-drive-better-results
+CoSchedule,9 Awesome Marketing Workflow Software Tools To Achieve Marketing Greatness,https://coschedule.com/blog/marketing-workflow-software-tools
+CoSchedule,TikTok Influencer Marketing: A Guide To Increase Brand Awareness & Conversions,https://coschedule.com/blog/tiktok-influencer-marketing
+CoSchedule,10 Marketing Operations Software To Boost Productivity & Execute Marketing Activities,https://coschedule.com/blog/marketing-operations-software-tools-platforms
+CoSchedule,How To Write A Business Proposal In 12 Simple Steps,https://coschedule.com/blog/how-to-write-a-business-proposal
+CoSchedule,How To Write An Article That Turns Lurkers Into Customers,https://coschedule.com/blog/how-to-write-an-article
+CoSchedule,Elevate Your Email Game: How To Write An Email That Gets Results,https://coschedule.com/blog/how-to-write-an-email
+CoSchedule,34 Blog Examples To Unlock Creative Ideas For Your Own Blog,https://coschedule.com/blog/blog-examples
+CoSchedule,How To Write A Business Plan: A Guide For Entrepreneurs (2023),https://coschedule.com/blog/how-to-write-a-business-plan
+Loomly,20 Best Marketing Podcasts of 2025,https://www.loomly.com/blog/best-marketing-podcasts
+Loomly,Your Community Management Playbook for 2025,https://www.loomly.com/blog/community-management
+Loomly,10 of the Best Social Media Marketing Books to Read in 2025,https://www.loomly.com/blog/social-media-books
+Loomly,Social Media KPIs: How to Measure & Maximize Your Impact in 2025,https://www.loomly.com/blog/social-media-kpis
+Loomly,Marketing Automation 101: 12 Things to Automate Before Anything Else,https://www.loomly.com/blog/marketing-automation

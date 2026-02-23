@@ -1,0 +1,73 @@
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [{
+    "@type": "Question",
+    "name": "Brauche ich teures Equipment für Faceless Videos?",
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Nein. Für Screen-Recordings reicht kostenlose Software wie OBS. Für POV-Videos genügt ein aktuelles Smartphone und Tageslicht. Für Stock-Videos brauchst du gar keine Kamera, nur Zugriff auf eine Bibliothek wie in Tareno."
+    }
+  }, {
+    "@type": "Question",
+    "name": "Ist das nicht zu unpersönlich?",
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Nicht unbedingt. Persönlichkeit zeigst du durch deine Stimme, deinen Schreibstil, deine Musikwahl und deine Themen. Viele Faceless-Accounts haben eine extrem loyale Community, weil sie sich auf die Werte konzentrieren."
+    }
+  }, {
+    "@type": "Question",
+    "name": "Kann man damit wirklich verkaufen?",
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Absolut. Oft sogar besser. Da der Fokus auf dem Inhalt/Produkt liegt und nicht auf dem Influencer, kaufen Menschen wegen des Nutzens. Besonders bei digitalen Produkten funktioniert das hervorragend."
+    }
+  }, {
+    "@type": "Question",
+    "name": "Woher bekomme ich rechtssichere Musik?",
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Nutze entweder die integrierten Musik-Bibliotheken der Plattformen (Instagram/TikTok Audio Library) für organischen Content oder lizenzfreie Musikdatenbanken, wenn du Werbeanzeigen schaltest."
+    }
+  }, {
+    "@type": "Question",
+    "name": "Welche Apps brauche ich zum Schneiden?",
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Am Smartphone sind CapCut oder VN Editor die Standards. Am Desktop bieten Tools wie Premiere Pro mehr Optionen, sind aber komplexer. Viele Creator starten rein mobile-only."
+    }
+  }]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "Erstelle ein Faceless 'Mood-Setter' Video",
+  "description": "Anleitung zur Erstellung eines viralen Faceless-Videos mit Stock-Footage und Text-Overlay.",
+  "step": [{
+    "@type": "HowToStep",
+    "name": "Wähle den Vibe",
+    "text": "Entscheide dich für eine Stimmung (motivierend, nachdenklich, dynamisch), die zu deinem Thema passt."
+  }, {
+    "@type": "HowToStep",
+    "name": "Finde Footage",
+    "text": "Suche in der Tareno Media Library nach passendem 4K-Stock-Material (z.B. 'Cozy Office', 'Urban Night')."
+  }, {
+    "@type": "HowToStep",
+    "name": "Schreibe den Hook",
+    "text": "Formuliere einen starken ersten Satz, der den Zuschauer stoppt (z.B. 'Hör auf, dich zu entschuldigen')."
+  }, {
+    "@type": "HowToStep",
+    "name": "Füge Audio hinzu",
+    "text": "Wähle einen Trending Audio Track oder ein passendes Instrumentalstück."
+  }, {
+    "@type": "HowToStep",
+    "name": "Poste mit Caption",
+    "text": "Nutze die Bildunterschrift für detaillierte Erklärungen und Hashtags."
+  }]
+}
+</script>
