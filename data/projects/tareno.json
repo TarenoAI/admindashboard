@@ -1,6 +1,6 @@
 {
   "name": "Tareno",
-  "summary": "SaaS-Marketing & Blog-Operations f\u00fcr tareno.co mit Fokus auf planbare Content-Pipeline.",
+  "summary": "SaaS-Marketing & Blog-Operations für tareno.co mit Fokus auf planbare Content-Pipeline.",
   "status": "on_track",
   "priority": "high",
   "lastUpdate": "2026-02-23",
@@ -48,11 +48,12 @@
       "status": "active",
       "currentTask": "TAG-01 fertig, TAG-02 vorbereitet",
       "description": "Erstellt kompakten Kontext aus der 500+ Artikel Competitor-KB, ohne den Token-Rahmen zu sprengen.",
-      "output": "01_kb_pack.md – Top 10–30 Titel + 3–6 Bullet-Insights, max. 800–1200 Wörter",
+      "output": "01_research_tag01.md – KB-Pack Kontext (Top 30 Titel + Bullet-Insights)",
       "hardRules": [
         "Kein Copy langer Absätze, nur Pattern-Mining",
         "Keine erfundenen Quellen"
-      ]
+      ],
+      "outputPath": "projects/blog-artifacts/tag01/01_research_tag01.md"
     },
     {
       "id": "research",
@@ -62,12 +63,13 @@
       "status": "active",
       "currentTask": "TAG-01 fertig, TAG-02 vorbereitet",
       "description": "Synthetisiert Wissen aus KB-Pack + Jobdaten, findet Lücken, liefert Competitive-Gap-Analyse.",
-      "output": "02_research.md – Search Intent, Audience, Patterns, Gaps, Differentiation Angles, Volatile Claim Zones",
+      "output": "01_research_tag01.md – Search Intent, Audience, Patterns, Gaps, Differentiation Angles",
       "hardRules": [
         "Keine Prosa / kein Artikelschreiben",
         "Keine Zahlen ohne sichere Quelle",
         "Max. 30 Bullets/Block, max. 900 Wörter"
-      ]
+      ],
+      "outputPath": "projects/blog-artifacts/tag01/01_research_tag01.md"
     },
     {
       "id": "outline",
@@ -77,12 +79,13 @@
       "status": "active",
       "currentTask": "TAG-01 fertig",
       "description": "Baut GEO-optimierte Outline: Intent-erfüllend, mit GAP/DIFF-Abschnitten, erzwingt TL;DR, Framework, Definition, FAQ≥5.",
-      "output": "03_outline.md – Article Blueprint mit [CORE]/[GAP]/[DIFF] H2-Tags, max. 10–14 H2",
+      "output": "02_outline_tag01.md – Article Blueprint mit [CORE]/[GAP]/[DIFF] H2-Tags",
       "hardRules": [
         "Keine exakten Preise in Outline",
         "Definition + Framework früh ansetzen",
         "Kein zweites H1"
-      ]
+      ],
+      "outputPath": "projects/blog-artifacts/tag01/02_outline_tag01.md"
     },
     {
       "id": "writer",
@@ -92,12 +95,13 @@
       "status": "active",
       "currentTask": "TAG-01 fertig",
       "description": "Schreibt Abschnitte in Chunks (350–600 Wörter/Spawn). Produktion, nicht Recherche.",
-      "output": "04_sections/section_XX.md – ein Abschnitt pro Spawn",
+      "output": "03_draft_tag01.md – Longform Draft in Chunks",
       "hardRules": [
         "Volatile Claims weich formulieren ('starts around…')",
         "Keine neuen Studien ohne Link",
         "Erste 300 Wörter factual & skimmable"
-      ]
+      ],
+      "outputPath": "projects/blog-artifacts/tag01/03_draft_tag01.md"
     },
     {
       "id": "product",
@@ -107,12 +111,13 @@
       "status": "active",
       "currentTask": "TAG-01 fertig",
       "description": "Setzt Tareno als Workflow-Enabler ein – editorial, nicht werblich. Max. 3 Inserts à 80–120 Wörter.",
-      "output": "05_product_inserts.md – max. 3 Inserts mit Platzierungsangabe",
+      "output": "04_product_tag01.md – max. 3 Tareno Product Inserts",
       "hardRules": [
         "Keine Superlative",
         "Keine 'unlimited' Claims ohne Plan-Details",
         "CTA minimal & editorial"
-      ]
+      ],
+      "outputPath": "projects/blog-artifacts/tag01/04_product_tag01.md"
     },
     {
       "id": "editor",
@@ -122,12 +127,13 @@
       "status": "active",
       "currentTask": "TAG-01 fertig",
       "description": "Finale Qualität + Vertrauensaufbau + Halluzinationsschutz. Gatekeeper: hält harte Zahlen zurück, prüft E-E-A-T.",
-      "output": "06_edited.md – bereinigtes, E-E-A-T-konformes Draft",
+      "output": "05_edited_tag01.md – bereinigtes, E-E-A-T-konformes Draft",
       "hardRules": [
         "Hard-Fail bei fehlendem H1, Script-Tags, sichtbarem Frontmatter",
         "Hard-Fail bei Preis-Claims ohne Quelle",
         "Hard-Fail wenn Definition/Framework/FAQ laut Outline fehlt"
-      ]
+      ],
+      "outputPath": "projects/blog-artifacts/tag01/05_edited_tag01.md"
     },
     {
       "id": "entity",
@@ -137,12 +143,13 @@
       "status": "active",
       "currentTask": "TAG-01 fertig",
       "description": "Macht Artikel GEO-zitierbar: poliert Definitionen, benennt Frameworks, schärft TL;DR + Key Takeaways – ohne neue Fakten.",
-      "output": "07_geo_polish.md – finaler polierter Draft",
+      "output": "06_final_tag01.md – GEO-polierter finaler Draft",
       "hardRules": [
         "Keine neuen Zahlen/Studien",
         "Keine neuen Produktclaims",
         "Kein Umschreiben ganzer Kapitel – nur Blocks"
-      ]
+      ],
+      "outputPath": "projects/blog-artifacts/tag01/06_final_tag01.md"
     }
   ],
   "blogPipeline": {
@@ -171,7 +178,7 @@
       },
       {
         "id": "TAG-03",
-        "title": "Instagram Automation: Was erlaubt ist und was zum Ban f\u00fchrt (2026 Update)",
+        "title": "Instagram Automation: Was erlaubt ist und was zum Ban führt (2026 Update)",
         "status": "planned",
         "progress": 0,
         "stepsCompleted": 0,
@@ -179,7 +186,7 @@
       },
       {
         "id": "TAG-04",
-        "title": "Omnipr\u00e4senz-Strategie: Wie Creator Y mit Repurposing 1M Views erreichte",
+        "title": "Omnipräsenz-Strategie: Wie Creator Y mit Repurposing 1M Views erreichte",
         "status": "planned",
         "progress": 0,
         "stepsCompleted": 0,
@@ -187,7 +194,7 @@
       },
       {
         "id": "TAG-05",
-        "title": "Threads ein Jahr sp\u00e4ter: Lohnt es sich f\u00fcr Brands?",
+        "title": "Threads ein Jahr später: Lohnt es sich für Brands?",
         "status": "planned",
         "progress": 0,
         "stepsCompleted": 0,
@@ -211,7 +218,7 @@
       },
       {
         "id": "TAG-08",
-        "title": "UGC (User Generated Content): Der heilige Gral f\u00fcr Trust?",
+        "title": "UGC (User Generated Content): Der heilige Gral für Trust?",
         "status": "planned",
         "progress": 0,
         "stepsCompleted": 0,
@@ -219,7 +226,7 @@
       },
       {
         "id": "TAG-09",
-        "title": "Der perfekte Social Media Tech Stack 2026 (unter 100\u20ac)",
+        "title": "Der perfekte Social Media Tech Stack 2026 (unter 100€)",
         "status": "planned",
         "progress": 0,
         "stepsCompleted": 0,
@@ -249,7 +256,7 @@
       "note": "Alle 6 Subagent-Schritte abgeschlossen"
     },
     {
-      "title": "TAG-01 ver\u00f6ffentlichen",
+      "title": "TAG-01 veröffentlichen",
       "due": "2026-02-24",
       "status": "in_progress",
       "note": "Ready for final review"
@@ -303,7 +310,7 @@
       "assignee": "Sam",
       "due": "2026-02-23",
       "completedAt": "2026-02-23",
-      "note": "Alle Artefakte erstellt: Research\u2192Final"
+      "note": "Alle Artefakte erstellt: Research→Final"
     },
     {
       "id": "TAR-5",
@@ -371,9 +378,58 @@
       "path": "projects/_knowledge/tareno/2026-02-23T10-51-35-473Z-BLOG_STATUS_BOARD_30_TAGE.md",
       "type": "md",
       "addedAt": "2026-02-23T10:51:35.474Z"
+    },
+    {
+      "label": "BLOG_ARTEFAKTE_INDEX",
+      "path": "projects/blog-artifacts/TARENO_BLOG_ARTEFAKTE.md",
+      "type": "md",
+      "category": "Artefakte"
+    },
+    {
+      "label": "Blog Artifacts – Index",
+      "path": "projects/blog-artifacts/INDEX.md",
+      "type": "md",
+      "category": "Artefakte"
+    },
+    {
+      "label": "TAG-01 🔄 Research",
+      "path": "projects/blog-artifacts/tag01/01_research_tag01.md",
+      "type": "md",
+      "category": "Artefakt TAG-01"
+    },
+    {
+      "label": "TAG-01 📚 Outline",
+      "path": "projects/blog-artifacts/tag01/02_outline_tag01.md",
+      "type": "md",
+      "category": "Artefakt TAG-01"
+    },
+    {
+      "label": "TAG-01 ✏️ Draft",
+      "path": "projects/blog-artifacts/tag01/03_draft_tag01.md",
+      "type": "md",
+      "category": "Artefakt TAG-01"
+    },
+    {
+      "label": "TAG-01 🏷️ Product Inserts",
+      "path": "projects/blog-artifacts/tag01/04_product_tag01.md",
+      "type": "md",
+      "category": "Artefakt TAG-01"
+    },
+    {
+      "label": "TAG-01 📘 Edited Draft",
+      "path": "projects/blog-artifacts/tag01/05_edited_tag01.md",
+      "type": "md",
+      "category": "Artefakt TAG-01"
+    },
+    {
+      "label": "TAG-01 ✨ Final",
+      "path": "projects/blog-artifacts/tag01/06_final_tag01.md",
+      "type": "md",
+      "category": "Artefakt TAG-01",
+      "status": "ready_for_publish"
     }
   ],
-  "notes": "Sam liefert operative Updates; Luna validiert Struktur und Qualit\u00e4t. TAG-01 alle 6 Schritte abgeschlossen, bereit f\u00fcr Luna's Final Review.",
+  "notes": "Sam liefert operative Updates; Luna validiert Struktur und Qualität. TAG-01 alle 6 Schritte abgeschlossen, bereit für Luna's Final Review.",
   "lastStatusUpdate": {
     "timestamp": "2026-02-23T10:55:00Z",
     "agent": "tarenoblog",
@@ -477,7 +533,7 @@
     {
       "day": "Tag 2 (Post 1)",
       "date": "2026-02-24",
-      "topic": "Instagram Automation: Was erlaubt ist und was zum Ban f\u00fchrt (2026 Update)",
+      "topic": "Instagram Automation: Was erlaubt ist und was zum Ban führt (2026 Update)",
       "keyword": "Instagram Automation Rules",
       "author": "Alex (Tech Lead)",
       "feature": "Channel Management (Safe API)",
@@ -517,7 +573,7 @@
     {
       "day": "Tag 2 (Post 2)",
       "date": "2026-02-24",
-      "topic": "Omnipr\u00e4senz-Strategie: Wie Creator Y mit Repurposing 1M Views erreichte",
+      "topic": "Omnipräsenz-Strategie: Wie Creator Y mit Repurposing 1M Views erreichte",
       "keyword": "Social Media Omnipresence",
       "author": "Sarah (Growth)",
       "feature": "Analytics Suite (Cross-Platform)",
@@ -557,7 +613,7 @@
     {
       "day": "Tag 3 (Post 1)",
       "date": "2026-02-25",
-      "topic": "Threads ein Jahr sp\u00e4ter: Lohnt es sich f\u00fcr Brands?",
+      "topic": "Threads ein Jahr später: Lohnt es sich für Brands?",
       "keyword": "Threads Marketing Strategy",
       "author": "Sarah (Growth)",
       "feature": "Threads Post Generator",
@@ -677,7 +733,7 @@
     {
       "day": "Tag 4 (Post 2)",
       "date": "2026-02-26",
-      "topic": "UGC (User Generated Content): Der heilige Gral f\u00fcr Trust?",
+      "topic": "UGC (User Generated Content): Der heilige Gral für Trust?",
       "keyword": "UGC Strategy Guide",
       "author": "Sarah (Growth)",
       "feature": "Media Library (Tagging)",
@@ -717,7 +773,7 @@
     {
       "day": "Tag 5 (Post 1)",
       "date": "2026-02-27",
-      "topic": "Der perfekte Social Media Tech Stack 2026 (unter 100\u20ac)",
+      "topic": "Der perfekte Social Media Tech Stack 2026 (unter 100€)",
       "keyword": "Social Media Tool Stack",
       "author": "Alex (Tech Lead)",
       "feature": "All Features",
@@ -797,7 +853,7 @@
     {
       "day": "Tag 6 (Post 1)",
       "date": "2026-02-28",
-      "topic": "Content Batching f\u00fcr Solopreneure: 1 Monat in 1 Tag",
+      "topic": "Content Batching für Solopreneure: 1 Monat in 1 Tag",
       "keyword": "Content Batching Guide",
       "author": "Mia (Creative)",
       "feature": "Workflow Builder",
@@ -837,7 +893,7 @@
     {
       "day": "Tag 6 (Post 2)",
       "date": "2026-02-28",
-      "topic": "Voice Search & Social Media: Optimierung f\u00fcr gesprochene Suchanfragen",
+      "topic": "Voice Search & Social Media: Optimierung für gesprochene Suchanfragen",
       "keyword": "Voice Search Social Media",
       "author": "Alex (Tech Lead)",
       "feature": "YouTube/TikTok Transcript Extractor (Free Tools)",
@@ -917,7 +973,7 @@
     {
       "day": "Tag 7 (Post 2)",
       "date": "2026-03-01",
-      "topic": "LinkedIn Algorithmus 2026: Was jetzt wirklich z\u00e4hlt",
+      "topic": "LinkedIn Algorithmus 2026: Was jetzt wirklich zählt",
       "keyword": "LinkedIn Algorithm 2026",
       "author": "Sarah (Growth)",
       "feature": "LinkedIn Post Generator",
@@ -957,7 +1013,7 @@
     {
       "day": "Tag 8 (Post 1)",
       "date": "2026-03-02",
-      "topic": "7 Tools f\u00fcr bessere Instagram Stories (die nicht Instagram sind)",
+      "topic": "7 Tools für bessere Instagram Stories (die nicht Instagram sind)",
       "keyword": "Instagram Story Tools",
       "author": "Mia (Creative)",
       "feature": "Media Library (Editor)",
@@ -1117,7 +1173,7 @@
     {
       "day": "Tag 10 (Post 1)",
       "date": "2026-03-04",
-      "topic": "Zapier vs. Make vs. Native Integrationen: Der gro\u00dfe Vergleich f\u00fcr Social Media",
+      "topic": "Zapier vs. Make vs. Native Integrationen: Der große Vergleich für Social Media",
       "keyword": "Social Media Integrations",
       "author": "Alex (Tech Lead)",
       "feature": "Developer API + n8n Node",
@@ -1237,7 +1293,7 @@
     {
       "day": "Tag 11 (Post 2)",
       "date": "2026-03-05",
-      "topic": "Burnout bei Social Media Managern: Warnsignale & Pr\u00e4vention",
+      "topic": "Burnout bei Social Media Managern: Warnsignale & Prävention",
       "keyword": "Social Media Burnout",
       "author": "Sarah (Growth)",
       "feature": "Team Management (Workload)",
@@ -1397,7 +1453,7 @@
     {
       "day": "Tag 13 (Post 2)",
       "date": "2026-03-07",
-      "topic": "Instagram Shadowban: Mythos oder Realit\u00e4t? Der Test.",
+      "topic": "Instagram Shadowban: Mythos oder Realität? Der Test.",
       "keyword": "Instagram Shadowban Check",
       "author": "Alex (Tech Lead)",
       "feature": "Analytics Suite",
@@ -1797,7 +1853,7 @@
     {
       "day": "Tag 18 (Post 2)",
       "date": "2026-03-12",
-      "topic": "Die Content-Maschine: Einmal erstellen 20x posten (Omnipr\u00e4senz Guide)",
+      "topic": "Die Content-Maschine: Einmal erstellen 20x posten (Omnipräsenz Guide)",
       "keyword": "Content Repurposing Guide",
       "author": "Mia (Creative)",
       "feature": "Multi-Platform Publishing + Repost Queue",
@@ -1877,7 +1933,7 @@
     {
       "day": "Tag 19 (Post 2)",
       "date": "2026-03-13",
-      "topic": "Generative Engine Optimization (GEO): Content f\u00fcr ChatGPT optimieren",
+      "topic": "Generative Engine Optimization (GEO): Content für ChatGPT optimieren",
       "keyword": "GEO Marketing Strategy",
       "author": "Sarah (Growth)",
       "feature": "Tareno Knowledge Base (Internal)",
@@ -1917,7 +1973,7 @@
     {
       "day": "Tag 20 (Post 1)",
       "date": "2026-03-14",
-      "topic": "Hashtag-Strategie 2026: Qualit\u00e4t vor Quantit\u00e4t (Daten-Analyse)",
+      "topic": "Hashtag-Strategie 2026: Qualität vor Quantität (Daten-Analyse)",
       "keyword": "Hashtag Strategy 2026",
       "author": "Mia (Creative)",
       "feature": "Hashtag Dashboard (AI Generated)",
@@ -1957,7 +2013,7 @@
     {
       "day": "Tag 20 (Post 2)",
       "date": "2026-03-14",
-      "topic": "Bulk Scheduling: 100 Posts in 5 Minuten planen (Schritt-f\u00fcr-Schritt)",
+      "topic": "Bulk Scheduling: 100 Posts in 5 Minuten planen (Schritt-für-Schritt)",
       "keyword": "Bulk Social Media Posting",
       "author": "Alex (Tech Lead)",
       "feature": "Post Composer (Bulk Upload)",
@@ -2117,7 +2173,7 @@
     {
       "day": "Tag 22 (Post 2)",
       "date": "2026-03-16",
-      "topic": "LinkedIn Automation f\u00fcr B2B: Leads auf Autopilot?",
+      "topic": "LinkedIn Automation für B2B: Leads auf Autopilot?",
       "keyword": "LinkedIn B2B Automation",
       "author": "Sarah (Growth)",
       "feature": "LinkedIn Post Generator (Free Tool)",
@@ -2237,7 +2293,7 @@
     {
       "day": "Tag 24 (Post 1)",
       "date": "2026-03-18",
-      "topic": "Sound Design f\u00fcr Reels: ASMR und Sound Effects nutzen",
+      "topic": "Sound Design für Reels: ASMR und Sound Effects nutzen",
       "keyword": "Reels Sound Design",
       "author": "Mia (Creative)",
       "feature": "Media Library",
@@ -2317,7 +2373,7 @@
     {
       "day": "Tag 25 (Post 1)",
       "date": "2026-03-19",
-      "topic": "TikTok SEO: Wie du f\u00fcr How-To Suchanfragen rankst",
+      "topic": "TikTok SEO: Wie du für How-To Suchanfragen rankst",
       "keyword": "TikTok SEO Strategy",
       "author": "Mia (Creative)",
       "feature": "TikTok Hook Generator (Free Tool)",
@@ -2357,7 +2413,7 @@
     {
       "day": "Tag 25 (Post 2)",
       "date": "2026-03-19",
-      "topic": "YouTube Studio f\u00fcr Anf\u00e4nger: Was die Charts wirklich bedeuten",
+      "topic": "YouTube Studio für Anfänger: Was die Charts wirklich bedeuten",
       "keyword": "YouTube Analytics Guide",
       "author": "Alex (Tech Lead)",
       "feature": "Analytics Suite (YouTube)",
@@ -2397,7 +2453,7 @@
     {
       "day": "Tag 26 (Post 1)",
       "date": "2026-03-20",
-      "topic": "2-Faktor-Authentifizierung: Warum dein Account morgen weg sein k\u00f6nnte",
+      "topic": "2-Faktor-Authentifizierung: Warum dein Account morgen weg sein könnte",
       "keyword": "Social Media Security",
       "author": "Alex (Tech Lead)",
       "feature": "Settings (Security)",
@@ -2437,7 +2493,7 @@
     {
       "day": "Tag 26 (Post 2)",
       "date": "2026-03-20",
-      "topic": "CapCut vs. InShot: Der ultimative Vergleich f\u00fcr Creator",
+      "topic": "CapCut vs. InShot: Der ultimative Vergleich für Creator",
       "keyword": "Video Editor App Vergleich",
       "author": "Mia (Creative)",
       "feature": "Media Library",
@@ -2717,7 +2773,7 @@
     {
       "day": "Tag 30 (Post 1)",
       "date": "2026-03-24",
-      "topic": "Pinterest SEO: Die untersch\u00e4tzte Suchmaschine f\u00fcr Traffic",
+      "topic": "Pinterest SEO: Die unterschätzte Suchmaschine für Traffic",
       "keyword": "Pinterest SEO Guide",
       "author": "Sarah (Growth)",
       "feature": "Pinterest Pin Title Generator (Free Tool)",
@@ -2797,7 +2853,7 @@
     {
       "day": "Tag 31 (Post 1)",
       "date": "2026-03-25",
-      "topic": "Die ultimative Automation-Checkliste f\u00fcr Social Media Manager (Download)",
+      "topic": "Die ultimative Automation-Checkliste für Social Media Manager (Download)",
       "keyword": "Social Media Automation Checklist",
       "author": "Sarah (Growth)",
       "feature": "Reports Center (Export)",
@@ -2917,7 +2973,7 @@
     {
       "day": "Tag 32 (Post 2)",
       "date": "2026-03-26",
-      "topic": "Memes f\u00fcr B2B: Cringe oder Genial?",
+      "topic": "Memes für B2B: Cringe oder Genial?",
       "keyword": "B2B Meme Marketing",
       "author": "Sarah (Growth)",
       "feature": "Media Library",
@@ -2957,8 +3013,8 @@
     {
       "day": "Tag 33 (Post 1)",
       "date": "2026-03-27",
-      "topic": "Warum Social Media Automation f\u00fcr Anf\u00e4nger oft schiefgeht (und wie man es richtig macht)",
-      "keyword": "Social Media Automation Anf\u00e4ngerfehler",
+      "topic": "Warum Social Media Automation für Anfänger oft schiefgeht (und wie man es richtig macht)",
+      "keyword": "Social Media Automation Anfängerfehler",
       "author": "Alex (Tech Lead)",
       "feature": "Workflow Builder",
       "cluster": "PILLAR 1: AUTOMATION",
@@ -2997,7 +3053,7 @@
     {
       "day": "Tag 33 (Post 2)",
       "date": "2026-03-27",
-      "topic": "3 einfache Video-Ideen f\u00fcr mehr Reichweite (ohne Tanzen)",
+      "topic": "3 einfache Video-Ideen für mehr Reichweite (ohne Tanzen)",
       "keyword": "Video Content Ideen ohne Gesicht",
       "author": "Mia (Creative)",
       "feature": "Media Library (Stock)",
@@ -3077,7 +3133,7 @@
     {
       "day": "Tag 34 (Post 2)",
       "date": "2026-03-28",
-      "topic": "Zeitmanagement f\u00fcr Social Media Manager: Tools statt \u00dcberstunden",
+      "topic": "Zeitmanagement für Social Media Manager: Tools statt Überstunden",
       "keyword": "Social Media Zeitmanagement",
       "author": "Sarah (Growth)",
       "feature": "Workflow Builder + Calendar",
