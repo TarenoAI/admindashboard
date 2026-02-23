@@ -79,7 +79,8 @@ const PROJECT_DATA_DIR = path.join(WORKSPACE_ROOT, "data", "projects");
 const SKILL_POLICY_FILE = path.join(WORKSPACE_ROOT, "data", "skills-policy.json");
 
 app.use(express.static(path.join(__dirname, "public")));
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 function isAllowedWorkspacePath(absPath) {
     const resolved = path.resolve(absPath);
@@ -302,7 +303,7 @@ app.get("/api/projects", async (_, res) => {
 });
 
 // Kanban Task Move API
-app.post("/api/projects/:projectId/tasks/:taskId/move", express.json(), async (req, res) => {
+app.post("/api/projects/:projectId/tasks/:taskId/move", express.json({ limit: '50mb' }), async (req, res) => {
     const { projectId, taskId } = req.params;
     const { newStatus } = req.body;
     if (!newStatus) return res.status(400).json({ success: false, error: "newStatus missing" });
@@ -325,7 +326,7 @@ app.post("/api/projects/:projectId/tasks/:taskId/move", express.json(), async (r
 });
 
 // Knowledge Upload API
-app.post("/api/projects/:projectId/knowledge", express.json(), async (req, res) => {
+app.post("/api/projects/:projectId/knowledge", express.json({ limit: '50mb' }), async (req, res) => {
     const { projectId } = req.params;
     const { title, content, type, category } = req.body; // type e.g. 'md' or 'txt'
 
