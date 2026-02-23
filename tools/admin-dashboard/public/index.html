@@ -898,30 +898,25 @@
                     const refsHtml = Object.keys(refsByCategory).length > 0 ?
                         Object.keys(refsByCategory).map(cat => {
                             const items = refsByCategory[cat];
-                            let catHtml = `<div class="mb-3 text-xs"><p class="text-[9px] text-text-muted uppercase font-bold tracking-wider mb-2 pl-2 border-l-2 border-brand/50">${cat}</p><div class="flex flex-col gap-1.5">`;
-                            catHtml += items.map(r => `
-                            <details class="group bg-black/20 border border-white/5 rounded-lg overflow-hidden transition-colors hover:border-white/10">
-                                <summary class="flex items-center justify-between p-2.5 cursor-pointer hover:bg-white/[0.02] transition-colors list-none">
-                                    <div class="flex items-center gap-3 min-w-0 pr-2">
-                                        <div class="w-6 h-6 rounded flex items-center justify-center bg-white/5 text-sm flex-shrink-0">${r.type === 'md' ? '📄' : r.type === 'json' ? '⚙️' : r.type === 'txt' ? '📝' : '🔗'}</div>
+                            let catHtml = `<div class="mb-4"><p class="text-[9px] text-text-muted uppercase font-bold tracking-widest mb-1.5 pl-2 border-l-2 border-brand/50">${cat}</p><div class="flex flex-col gap-1">`;
+                            catHtml += items.map(r => {
+                                const filename = (r.path || '').split('/').pop();
+                                const icon = r.type === 'md' ? '📄' : r.type === 'json' ? '⚙️' : r.type === 'txt' ? '📝' : '🔗';
+                                return `
+                                <div onclick="openProjectRef('${r.path}')" class="group flex items-center justify-between p-2 rounded-lg bg-black/20 hover:bg-white/5 border border-transparent hover:border-white/10 transition-all cursor-pointer">
+                                    <div class="flex items-center gap-2.5 min-w-0 pr-2">
+                                        <div class="w-6 h-6 rounded flex items-center justify-center bg-white/5 text-[11px] flex-shrink-0 group-hover:bg-brand/20 transition-colors shadow-sm">${icon}</div>
                                         <div class="min-w-0">
-                                            <p class="text-[11px] font-bold text-white leading-tight truncate">${r.label}</p>
-                                            <p class="text-[9px] text-text-muted font-mono truncate max-w-[150px] xl:max-w-[190px] mt-0.5">${(r.path || '').split('/').pop()}</p>
+                                            <p class="text-[11px] font-bold text-white leading-tight truncate group-hover:text-brand transition-colors">${r.label || filename}</p>
+                                            <p class="text-[9px] text-text-muted font-mono truncate mt-0.5 opacity-70 group-hover:opacity-100">${filename}</p>
                                         </div>
                                     </div>
-                                    <div class="text-text-muted group-open:rotate-180 transition-transform text-[10px] flex-shrink-0">▼</div>
-                                </summary>
-                                <div class="p-2 border-t border-white/5 bg-black/40">
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-[9px] text-text-muted font-mono">Added: ${r.addedAt ? r.addedAt.split('T')[0] : 'Unknown'}</span>
-                                        <button onclick="openProjectRef('${r.path}')" class="text-[9px] px-2.5 py-1 rounded bg-brand/20 text-brand font-bold hover:bg-brand/30 border border-brand/20 transition-colors shadow-sm">Öffnen</button>
-                                    </div>
-                                </div>
-                            </details>
-                        `).join('');
+                                    <div class="text-[9px] font-bold opacity-0 group-hover:opacity-100 text-brand bg-brand/10 px-2 py-0.5 rounded transition-opacity flex-shrink-0 uppercase tracking-wider border border-brand/20 shadow-sm mr-1">Öffnen</div>
+                                </div>`;
+                            }).join('');
                             catHtml += `</div></div>`;
                             return catHtml;
-                        }).join('') : '<p class="text-xs text-text-muted italic">Keine Datenquellen</p>';
+                        }).join('') : '<p class="text-[10px] text-text-muted italic">Keine Datenquellen</p>';
 
                     const renderTask = (t) => {
                         const prioColors = { high: 'text-red-400 border-red-500/30 bg-red-500/10', medium: 'text-yellow-400 border-yellow-500/30 bg-yellow-500/10', low: 'text-blue-400 border-blue-500/30 bg-blue-500/10' };
@@ -968,12 +963,12 @@
                                         <h4 class="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-4 flex items-center gap-2 pb-2 border-b border-white/5">👥 Core Team</h4>
                                         <div class="flex flex-col gap-2">${agentHtml}</div>
                                     </div>
-                                    <div>
-                                        <h4 class="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-4 flex items-center justify-between pb-2 border-b border-white/5">
+                                    <div class="flex flex-col flex-1 overflow-hidden">
+                                        <h4 class="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-4 flex items-center justify-between pb-2 border-b border-white/5 flex-shrink-0">
                                             <span class="flex items-center gap-2">📚 Data Sources</span>
                                             <button onclick="openUploadModal('${p.id}')" class="px-2 py-1 rounded bg-brand/20 text-brand hover:bg-brand/30 border border-brand/30 flex items-center gap-1 transition-colors" title="Wissen hinzufügen"><span class="text-lg leading-none">+</span> Add</button>
                                         </h4>
-                                        <div class="flex flex-col">${refsHtml}</div>
+                                        <div class="flex flex-col overflow-y-auto max-h-[350px] scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent pr-2">${refsHtml}</div>
                                     </div>
                                 </div>
 
@@ -1033,10 +1028,10 @@
                         let iconClr = 'text-white/20';
 
                         if (stepData.status === 'done') {
-                            btnHtml = '<div class="flex gap-1 justify-center"><button class="px-2 py-1 rounded bg-green-500/20 hover:bg-green-500/30 text-green-400 border border-green-500/30 text-[9px] font-bold transition-colors">✓ Approve</button></div>';
+                            btnHtml = '<div class="flex gap-1 justify-center"><button class="px-2 py-1 rounded bg-green-500/20 hover:bg-green-500/30 text-green-400 border border-green-500/30 text-[9px] font-bold transition-colors">✓</button></div>';
                             iconClr = 'text-green-400 hover:text-green-300';
                         } else if (stepData.status === 'review') {
-                            btnHtml = '<div class="flex gap-1 justify-center"><button class="px-2 py-1 rounded bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-400 border border-yellow-500/30 text-[9px] font-bold transition-colors">⚠ Reject</button><button class="px-2 py-1 rounded bg-green-500/20 hover:bg-green-500/30 text-green-400 border border-green-500/30 text-[9px] font-bold transition-colors">Approve</button></div>';
+                            btnHtml = '<div class="flex gap-1 justify-center"><button class="px-2 py-1 rounded bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-400 border border-yellow-500/30 text-[9px] font-bold transition-colors">⚠</button><button class="px-2 py-1 rounded bg-green-500/20 hover:bg-green-500/30 text-green-400 border border-green-500/30 text-[9px] font-bold transition-colors">✓</button></div>';
                             iconClr = 'text-yellow-400 hover:text-yellow-300';
                         } else {
                             btnHtml = '<span class="px-2 py-1 rounded bg-white/5 text-text-muted text-[9px] block text-center border border-white/5 opacity-50">Pending</span>';
@@ -1634,7 +1629,7 @@
                 currentTab = hash;
                 document.getElementById('view-title').innerText = hash.charAt(0).toUpperCase() + hash.slice(1);
                 document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-                const nav = Array.from(document.querySelectorAll('.nav-item')).find(n => n.getAttribute('onclick')?.includes(`'${hash}'`));
+                const nav = Array.from(document.querySelecll('.nav-item')).find(n => n.getAttribute('onclick')?.includes(`'${ha;
                 if (nav) nav.classList.add('active');
             }
         }
