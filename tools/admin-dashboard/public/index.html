@@ -909,15 +909,18 @@
                                 const filename = (r.path || '').split('/').pop();
                                 const icon = r.type === 'md' ? '📄' : r.type === 'json' ? '⚙️' : r.type === 'txt' ? '📝' : '🔗';
                                 return `
-                                <div onclick="openProjectRef('${r.path}')" class="group flex items-center justify-between p-2 rounded-lg bg-black/20 hover:bg-white/5 border border-transparent hover:border-white/10 transition-all cursor-pointer">
-                                    <div class="flex items-center gap-2.5 min-w-0 pr-2">
+                                <div class="group flex items-center justify-between p-2 rounded-lg bg-black/20 hover:bg-white/5 border border-transparent hover:border-white/10 transition-all">
+                                    <div onclick="openProjectRef('${r.path}')" class="flex items-center gap-2.5 min-w-0 pr-2 flex-1 cursor-pointer">
                                         <div class="w-6 h-6 rounded flex items-center justify-center bg-white/5 text-[11px] flex-shrink-0 group-hover:bg-brand/20 transition-colors shadow-sm">${icon}</div>
                                         <div class="min-w-0">
                                             <p class="text-[11px] font-bold text-white leading-tight truncate group-hover:text-brand transition-colors">${r.label || filename}</p>
                                             <p class="text-[9px] text-text-muted font-mono truncate mt-0.5 opacity-70 group-hover:opacity-100">${filename}</p>
                                         </div>
                                     </div>
-                                    <div class="text-[9px] font-bold opacity-0 group-hover:opacity-100 text-brand bg-brand/10 px-2 py-0.5 rounded transition-opacity flex-shrink-0 uppercase tracking-wider border border-brand/20 shadow-sm mr-1">Öffnen</div>
+                                    <div class="flex items-center gap-1 flex-shrink-0">
+                                        <div onclick="openProjectRef('${r.path}')" class="text-[9px] font-bold opacity-0 group-hover:opacity-100 text-brand bg-brand/10 px-2 py-0.5 rounded transition-opacity uppercase tracking-wider border border-brand/20 shadow-sm cursor-pointer">Öffnen</div>
+                                        <button onclick="removeDataSource('${p.id}', '${r.path}')" class="opacity-0 group-hover:opacity-100 transition-opacity w-6 h-6 rounded flex items-center justify-center bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:border-red-500/40 text-red-400 text-[11px] ml-1" title="Datenquelle entfernen">✕</button>
+                                    </div>
                                 </div>`;
                             }).join('');
                             catHtml += `</div></div>`;
@@ -1453,6 +1456,22 @@
                 body: JSON.stringify({ projectId, agentId })
             });
             loadCurrentView();
+        };
+
+        window.removeDataSource = async (projectId, refPath) => {
+            if (!confirm(`Datenquelle wirklich entfernen?\n\n${refPath}`)) return;
+            try {
+                const res = await fetch(`/api/projects/${projectId}/data-refs/remove`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ path: refPath })
+                });
+                const data = await res.json();
+                if (!data.success) throw new Error(data.error || 'Fehler');
+                loadCurrentView();
+            } catch (e) {
+                alert('Fehler beim Entfernen: ' + e.message);
+            }
         };
 
         window.setPipelineStatus = async (projectId, cpIndex, stepId, status) => {

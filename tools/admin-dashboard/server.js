@@ -371,6 +371,32 @@ app.post("/api/projects/:projectId/tasks/:taskId/move", express.json({ limit: '5
 });
 
 // Knowledge Upload API
+// Remove Data Source from project
+app.post("/api/projects/:projectId/data-refs/remove", express.json({ limit: '50mb' }), async (req, res) => {
+    const { projectId } = req.params;
+    const { path: refPath } = req.body;
+
+    if (!refPath) return res.status(400).json({ success: false, error: "path missing" });
+
+    const projectFile = path.join(WORKSPACE_ROOT, "data", "projects", `${projectId}.json`);
+    if (!fs.existsSync(projectFile)) return res.status(404).json({ success: false, error: "Project not found" });
+
+    try {
+        const data = JSON.parse(fs.readFileSync(projectFile, 'utf8'));
+        const before = (data.dataRefs || []).length;
+        data.dataRefs = (data.dataRefs || []).filter(r => r.path !== refPath);
+
+        if (data.dataRefs.length === before) {
+            return res.status(404).json({ success: false, error: "Data source not found in project" });
+        }
+
+        fs.writeFileSync(projectFile, JSON.stringify(data, null, 2), 'utf8');
+        ok(res, { message: "Data source removed successfully" });
+    } catch (e) {
+        res.status(500).json({ success: false, error: e.message });
+    }
+});
+
 app.post("/api/projects/:projectId/knowledge", express.json({ limit: '50mb' }), async (req, res) => {
     const { projectId } = req.params;
     const { title, content, type, category } = req.body; // type e.g. 'md' or 'txt'
