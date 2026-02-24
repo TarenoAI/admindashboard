@@ -157,6 +157,24 @@
         "Acceptance: Improves snippability, easy patch format, no new risk"
       ],
       "outputPath": "projects/blog-artifacts/tag01/07_geo_polish.md"
+    },
+    {
+      "id": "final_assembler",
+      "name": "Final Assembler & Publisher",
+      "agentKey": "Agent 7",
+      "role": "Final Assembler & Publisher (FINAL.md Gate)",
+      "status": "active",
+      "currentTask": "FINAL.md Contract aktiv; TAG-01 finalisierbar",
+      "description": "Assembles validated artifacts into FINAL.md, applies patches, enforces final publish contract, and closes STATE.md.",
+      "output": "FINAL.md (single source of truth, publish-ready) + STATE.md => DONE",
+      "hardRules": [
+        "Sam writes no new content: merge/place/remove only",
+        "Only Sam may create or overwrite FINAL.md",
+        "Patch-only application from 07_geo_polish.md (Replace/Add/Delete)",
+        "Hard fail if FINAL.md missing required blocks or contains internal labels/scripts"
+      ],
+      "outputPath": "projects/blog-artifacts/tag01/FINAL.md",
+      "referenceSpec": "projects/blog-artifacts/AGENT_7_FINAL_ASSEMBLER_PUBLISHER.md"
     }
   ],
   "blogPipeline": {
@@ -439,6 +457,12 @@
       "path": "projects/blog-artifacts/tag01/07_geo_polish.md",
       "type": "md",
       "category": "Artefakt TAG-01"
+    },
+    {
+      "label": "Agent 7 FINAL.md Contract",
+      "path": "projects/blog-artifacts/AGENT_7_FINAL_ASSEMBLER_PUBLISHER.md",
+      "type": "md",
+      "addedAt": "2026-02-24T23:17:40.141Z"
     }
   ],
   "notes": "Sam liefert operative Updates; Luna validiert Struktur und Qualität. TAG-01 alle 6 Schritte abgeschlossen, bereit für Luna's Final Review.",
