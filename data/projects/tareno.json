@@ -52,14 +52,14 @@
       "status": "active",
       "currentTask": "TAG-01 fertig, TAG-02 vorbereitet",
       "description": "Erstellt kompakten Kontext aus der 500+ Artikel Competitor-KB, ohne den Token-Rahmen zu sprengen.",
-      "output": "01_research_tag01.md – KB-Pack mit Top 10–30 Artikeln (Titel/ID/URL), TOC-Header + 3–5 Bullets pro Quelle, Common H2 Patterns (Top 8) & Likely Gaps (Top 8)",
+      "output": "01_kb_pack.md – KB-Pack (Top 10–30 relevante Artikel, TOCs, Patterns & Gaps)",
       "hardRules": [
         "Must include competitor patterns & gaps",
         "Kein Copy langer Absätze, nur Pattern-Mining (max. 1–2 Sätze Snippet pro Quelle)",
         "Keine erfundenen Quellen",
         "Maximal 800–1200 Wörter"
       ],
-      "outputPath": "projects/blog-artifacts/tag01/01_research_tag01.md"
+      "outputPath": "projects/blog-artifacts/tag01/01_kb_pack.md"
     },
     {
       "id": "research",
@@ -69,14 +69,14 @@
       "status": "active",
       "currentTask": "TAG-01 fertig, TAG-02 vorbereitet",
       "description": "Synthetisiert Wissen aus KB-Pack + Jobdaten, findet Lücken, liefert Competitive-Gap-Analyse.",
-      "output": "01_research_tag01.md – Pflichtblöcke: Competitor Patterns (Top 5–8), Competitor Gaps (Top 5–8), DIFF Angle (1–2 Sätze)",
+      "output": "02_research.md – Research Notes (Competitor Gaps, DIFF Angles, Risky Zones)",
       "hardRules": [
         "No generic advice: Alles ohne KB-Bezug muss als 'common knowledge' markiert oder in patterns/gaps einsortiert sein",
         "Pflichtblöcke aus KB erzwingen",
         "Risky/Volatile Zones konkretisieren: Preise, Limits, 'study says', Prozentzahlen",
         "Max. 30 Bullets/Block, max. 900 Wörter"
       ],
-      "outputPath": "projects/blog-artifacts/tag01/01_research_tag01.md"
+      "outputPath": "projects/blog-artifacts/tag01/02_research.md"
     },
     {
       "id": "outline",
@@ -86,7 +86,7 @@
       "status": "active",
       "currentTask": "TAG-01 fertig",
       "description": "Baut GEO-optimierte Outline: Intent-erfüllend, mit GAP/DIFF-Abschnitten, erzwingt TL;DR, Framework, Definition, FAQ≥5.",
-      "output": "02_outline_tag01.md – Article Blueprint mit CORE/GAP/DIFF Label Pflicht für jede H2",
+      "output": "03_outline.md – Article Blueprint (Mandatory Start Order, CORE/GAP/DIFF Labeling)",
       "hardRules": [
         "CORE/GAP/DIFF Label Pflicht",
         "Min. Anforderungen: ≥60% CORE, ≥20% GAP, ≥20% DIFF",
@@ -94,7 +94,7 @@
         "Start-Reihenfolge erzwingen: TL;DR bullets -> Quick Definition (2 Sätze) -> H1 -> Intro (max. 200–250 Wörter, sachlich)",
         "Kein zweites H1"
       ],
-      "outputPath": "projects/blog-artifacts/tag01/02_outline_tag01.md"
+      "outputPath": "projects/blog-artifacts/tag01/03_outline.md"
     },
     {
       "id": "writer",
@@ -104,7 +104,7 @@
       "status": "active",
       "currentTask": "TAG-01 fertig",
       "description": "Schreibt Abschnitte in Chunks (350–600 Wörter/Spawn). Produktion, nicht Recherche.",
-      "output": "03_draft_tag01.md – Longform Draft",
+      "output": "04_draft.md – Section-by-Section Draft (Strict Start Sequence, No Fluff)",
       "hardRules": [
         "Fixe Start-Reihenfolge: YAML -> TL;DR -> H1 -> Quick Definition -> Intro",
         "Tool-Section must be concrete: 3 Kategorien, 3 Auswahlkriterien pro Kategorie, kein Fülltext",
@@ -112,7 +112,7 @@
         "Keine 'studies show' ohne Link, keine 'unlimited/best' Claims",
         "Pro Spawn max. 350–600 Wörter"
       ],
-      "outputPath": "projects/blog-artifacts/tag01/03_draft_tag01.md"
+      "outputPath": "projects/blog-artifacts/tag01/04_draft.md"
     },
     {
       "id": "product",
@@ -122,7 +122,7 @@
       "status": "active",
       "currentTask": "TAG-01 fertig",
       "description": "Setzt Tareno als Workflow-Enabler ein – editorial, nicht werblich. Max. 3 Inserts à 80–120 Wörter.",
-      "output": "04_product_tag01.md – Tareno Inserts",
+      "output": "05_product_inserts.md – Tareno Workflow Inserts (Strict Contract, No Marketing Metaphors)",
       "hardRules": [
         "Insert-Contract: Genau 1x Produktname 'Tareno' pro Insert",
         "Min. 1 konkreter Begriff aus Feature-Liste (z.B. Publishing Queue, Approval Status, Asset Library)",
@@ -131,7 +131,7 @@
         "Insert 2 & 3 müssen Tareno explizit nennen (keine generic inserts)",
         "60–120 Wörter pro Insert"
       ],
-      "outputPath": "projects/blog-artifacts/tag01/04_product_tag01.md"
+      "outputPath": "projects/blog-artifacts/tag01/05_product_inserts.md"
     },
     {
       "id": "editor",
@@ -141,7 +141,7 @@
       "status": "active",
       "currentTask": "TAG-01 fertig",
       "description": "Finale Qualität + Vertrauensaufbau + Halluzinationsschutz. Gatekeeper: hält harte Zahlen zurück, prüft E-E-A-T.",
-      "output": "05_edited_tag01.md – bereinigtes Draft",
+      "output": "06_edited.md – Quality & EEAT Gate (Claim Hygiene, Author Box, Typos)",
       "hardRules": [
         "Autorbox + Last Updated am Ende Pflicht (konkret, 2–3 Sätze)",
         "Obvious typo cleanup erzwingen",
@@ -150,7 +150,7 @@
         "Max. 1–3 outbound links (nur wenn wirklich hilfreich)",
         "Hard-Fail bei fehlendem H1, Script-Tags, sichtbarem Frontmatter"
       ],
-      "outputPath": "projects/blog-artifacts/tag01/05_edited_tag01.md"
+      "outputPath": "projects/blog-artifacts/tag01/06_edited.md"
     },
     {
       "id": "entity",
@@ -160,7 +160,7 @@
       "status": "active",
       "currentTask": "TAG-01 fertig",
       "description": "Macht Artikel GEO-zitierbar und linkwürdig.",
-      "output": "06_final_tag01.md – Output-Format = Patch (Replace block X, Add block Y), kein Full Rewrite",
+      "output": "07_geo_polish.md – GEO-Poliert (Snippable Definition, Framework Explainer, Patching)",
       "hardRules": [
         "Kein 'für Suchmaschinen' Label (Nutze 'Kurzdefinition' oder 'Definition')",
         "Keine Meta-Kommentare ('Dieser Artikel wurde erstellt...')",
@@ -168,7 +168,7 @@
         "Keine neuen Zahlen/Studien",
         "Kein Umschreiben ganzer Kapitel – nur Blocks"
       ],
-      "outputPath": "projects/blog-artifacts/tag01/06_final_tag01.md"
+      "outputPath": "projects/blog-artifacts/tag01/07_geo_polish.md"
     }
   ],
   "blogPipeline": {
