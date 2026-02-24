@@ -9,16 +9,25 @@ Create a compact, token-efficient “KB Pack” so downstream agents can reason 
 - competitor_kb_filter (optional)
 
 ## Output: `01_kb_pack.md` (required structure)
-1. **Top competitor list** (10–30)
-   - title + URL/ID
-2. **For each competitor**:
-   - TOC headers (H2/H3)
-   - 3–5 bullet insights
-3. **Common patterns (Top 8)**  
-4. **Likely gaps (Top 8)**
+
+Select the top 10–30 competitor items by relevance to the focus keyword and search intent (minimum 70% must have a clear match).
+
+Use this exact mini-template for each source:
+### Source [X]: <title>
+- URL/ID: ...
+- TOC:
+  - ...
+- Insights:
+  - ...
+
+Then summarize:
+### Common H2 patterns (Top 8)
+- ...
+### Likely gaps (Top 8)
+- ...
 
 ## Hard Rules
-- No full-text dumps
+- No full-text dumps (no formulation > 12 words copied continuously from source)
 - Max 1–2 sentence snippets per source
 - No fabricated sources
 
