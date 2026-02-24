@@ -11,6 +11,12 @@ Write high-quality sections aligned with the outline, while following claim poli
 ## Output
 - One file per section: `04_sections/section_XX.md`
 
+### Section-Header Contract
+Each file MUST start with the following header block:
+- **Section ID:** (e.g., `section_03`)
+- **Target outline heading:** (e.g., `H2 [CORE]: ...`)
+- **Word count:** (e.g., `~450 words`)
+
 ## First Section Contract (must follow)
 1) YAML frontmatter (minimal)
 2) TL;DR bullets only
@@ -23,6 +29,9 @@ Write high-quality sections aligned with the outline, while following claim poli
 - 350–600 words
 - End with 1–2 takeaway bullets
 - No new studies/stats unless verified in research
+- **No duplication:** Must deliver ONLY new information. No re-intros or re-definitions if passed in `existing sections`.
+- **H2 Keywords:** The focus keyword (or semantic variant) MUST appear once within the first 2 paragraphs of the section.
+- **Micro-Examples:** Every section MUST contain at least one concrete mini-example (`Example: ...`, `Scenario: ...`, or a 3-point mini-checklist) to prevent generic voice.
 
 ## Tool Section Rule
 If present, must include:
