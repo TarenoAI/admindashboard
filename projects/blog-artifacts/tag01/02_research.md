@@ -1,51 +1,27 @@
-# Agent 1 — Research Synthesizer (Competitive Gap Research)
+# Agent 1 — Research Synthesizer
 
-## Rolle
-Synthetisiert Wissen aus KB-Pack + Jobdaten, findet Lücken, liefert “Research Notes”.
+## Purpose
+Turn `kb_pack` into actionable research notes: intent, patterns, gaps, and differentiation.
 
 ## Inputs
 - `01_kb_pack.md`
-- `focus_keyword` + `secondary_keywords`
-- `target_audience`
-- `content_type`
-- optional: internal notes
+- job fields: focus_keyword, audience, content_type
 
-## Output: `02_research.md` (feste Blöcke)
-**Pflichtstruktur:**
-```md
-## Search intent
-- primary:
-- secondary:
-
-## Audience assumptions
-- ...
-
-## Competitor patterns (Top 5–8)
-- ...
-
-## Competitor gaps (Top 5–8)
-- ...
-
-## Differentiation angles (DIFF) (1–2 Sätze)
-- ...
-
-## Risky/volatile claim zones
-- prices:
-- limits:
-- performance metrics:
-- “studies show” / institutions:
-- percentages:
-```
-
-## Limits
-- max 30 Bullets pro Block
-- max 600–900 Wörter total
+## Output: `02_research.md` (required structure)
+- Search intent (primary/secondary)
+- Audience assumptions (3–6 bullets)
+- Competitor patterns (Top 5–8)
+- Competitor gaps (Top 5–8)
+- Differentiation angle (1–2 sentences)
+- Risky/volatile claim zones (prices, limits, %s, institutions)
 
 ## Hard Rules
-- keine Prosa / kein “Artikel schreiben”  
-- keine exakten Zahlen/Preise ohne sichere Quelle  
-- keine “Institution X found …%” ohne nachweisbare Quelle  
-- keine Konkurrenztexte paraphrasen (nur Muster & Lücken)
-- **No generic advice:** Punkte ohne KB-Bezug müssen als “common knowledge” markiert oder in Patterns/Gaps einsortiert werden.
+- No prose article writing
+- No hard numbers unless source-backed
+- No competitor paraphrase; only pattern extraction
+- **No generic advice**: if a bullet is not grounded in kb_pack, mark it as “common knowledge”
 
----
+## Acceptance Criteria (8/10)
+- gaps are specific (templates/decision trees/processes), not vague (“more depth”)
+- differentiation angle is clear and usable by Agent 2
+- volatile zones are explicit

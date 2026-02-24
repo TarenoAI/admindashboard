@@ -1,69 +1,42 @@
-# Agent 2 — SEO & Outline Architect (GEO-Struktur erzwingen)
+# Agent 2 — SEO & Outline Architect
 
-## Rolle
-Baut Outline so, dass sie:
-- Intent erfüllt
-- GAP/DIFF Abschnitte enthält
-- GEO-Zitierblöcke erzwingt
-- Section-by-section schreibbar bleibt
+## Purpose
+Design the blueprint that is both SEO-complete and GEO-citable.
 
 ## Inputs
 - `02_research.md`
-- `focus_keyword`
-- `content_type`
-- `author/expert`
-- `feature_mapping` (Tareno)
-- `word_target`
+- focus_keyword
+- content_type
+- feature mapping
+- word_target
 
-## Output: `03_outline.md`
+## Output: `03_outline.md` (required)
+### A) Mandatory GEO Blocks
+- TL;DR (3–5 bullets)
+- Quick definition (2 sentences)
+- Named framework/model
+- When to use / when not
+- Comparison: table OR checklist
+- FAQ (>= 5)
 
-### Pflicht: GEO Blocks
-- TL;DR
-- Quick Definition (2 Sätze)
-- Named Framework
-- When to Use / When Not to Use
-- Comparison (Table **oder** Checklist)
-- FAQ (>=5)
+### B) Outline with labels
+Every H2 must be labeled: `[CORE]`, `[GAP]`, `[DIFF]`
 
-### Pflicht: CORE/GAP/DIFF Labels
-Jede H2 muss ein Label tragen: `[CORE]`, `[GAP]`, `[DIFF]`
+Minimum distribution:
+- ≥60% CORE
+- ≥20% GAP
+- ≥20% DIFF (or at least 2 DIFF sections)
 
-**Mindestanforderung:**
-- ≥ 60% CORE
-- ≥ 20% GAP
-- ≥ 20% DIFF (oder min. 2 DIFF-Sektionen)
+### C) Start block order
+1) TL;DR bullets
+2) Quick definition
+3) H1
+4) Intro (200–250 words, factual)
 
-### Volatile-Claim Gate (wichtig)
-- Keine harten Zahlen in H1/TL;DR/Headings, außer:
-  - es gibt eine Quelle (offizielle Seite / interne Studie) oder
-  - es ist klar als Beispiel/Rahmen formuliert (“in many cases…”, “several hours…”, “depending on…”)
+## Volatile-Claim Gate
+No hard numbers in H1/TL;DR/headings unless source-backed or framed as an example/range.
 
-### Startblock-Reihenfolge (First 300 words factual)
-Outline muss diese Reihenfolge erzwingen:
-1) TL;DR bullets  
-2) Quick Definition (2 Sätze)  
-3) H1  
-4) Intro (max 200–250 Wörter, sachlich)
-
-### Formatvorlage
-```md
-# Article Blueprint
-Title:
-Focus keyword:
-Secondary keywords:
-
-## Mandatory GEO Blocks
-- ...
-
-## Outline (H2/H3)
-H2 [CORE]: ...
-H2 [GAP]: ...
-H2 [DIFF]: ...
-```
-
-## Hard Rules
-- Keine exakten Preise/Prozentzahlen in Outline erzwingen  
-- Definition + Framework müssen früh vorkommen  
-- Kein zweites H1 im Outline-Plan
-
----
+## Acceptance Criteria (8/10)
+- Outline is writeable section-by-section
+- Includes at least 1 named framework + 1 comparison element + FAQ
+- Avoids brittle headline numbers without sources

@@ -1,26 +1,28 @@
-# Agent 0a — KB Retriever (Pre-Step; kann Teil von Sam sein)
+# Agent 0a — KB Retriever
 
-## Rolle
-Erstellt einen kompakten Kontext aus der 500+ KB, ohne Tokens zu sprengen.
+## Purpose
+Create a compact, token-efficient “KB Pack” so downstream agents can reason about competitors without ingesting 500 full articles.
 
 ## Inputs
-- `focus_keyword`
-- `cluster/topic`
-- optional: `competitor_kb_filter`
+- focus_keyword
+- cluster/topic
+- competitor_kb_filter (optional)
 
-## Output: `01_kb_pack.md`
-Muss enthalten:
-- Top 10–30 relevante Konkurrenzartikel (**Titel/ID/URL**)  
-- pro Artikel: **TOC-Header + 3–5 Insight-Bullets**  
-- am Ende zusätzlich:
-  - **Common H2 patterns (Top 8)**
-  - **Likely gaps (Top 8)**
-- Keine Volltexte; nur Snippets
-- max 800–1200 Wörter
+## Output: `01_kb_pack.md` (required structure)
+1. **Top competitor list** (10–30)
+   - title + URL/ID
+2. **For each competitor**:
+   - TOC headers (H2/H3)
+   - 3–5 bullet insights
+3. **Common patterns (Top 8)**  
+4. **Likely gaps (Top 8)**
 
 ## Hard Rules
-- maximal 1–2 Sätze Snippet pro Quelle, keine langen Blöcke  
-- kein Copy von langen Absätzen  
-- keine erfundenen Quellen
+- No full-text dumps
+- Max 1–2 sentence snippets per source
+- No fabricated sources
 
----
+## Acceptance Criteria (8/10)
+- at least 10 relevant competitor items
+- patterns and gaps are non-trivial and actionable
+- output stays within ~800–1200 words

@@ -1,37 +1,29 @@
-# Agent 5 — Editor & E‑E‑A‑T + Claim Hygiene (Gatekeeper)
+# Agent 5 — Editor & E-E-A-T + Claim Hygiene
 
-## Rolle
-Finale Qualität + Vertrauensaufbau + Halluzinationsschutz.
+## Purpose
+Editorial quality pass + trust signals + claim safety.
 
 ## Inputs
-- alle sections merged oder `draft.md`
-- product inserts
-- ruleset
+- merged draft + inserts
 
 ## Output
-- `06_edited.md`
+`06_edited.md`
 
-## Aufgaben
-- Redundanzen kürzen  
-- Klarheit & Struktur verbessern  
-- E‑E‑A‑T sicherstellen:
-  - **Author Bio** (2–3 Sätze, konkret)
-  - **Last updated line** (`_Last updated: YYYY-MM-DD_`)
-- Claim Hygiene:
-  - harte Zahlen/Preise/% ohne Quelle entfernen oder umformulieren (descriptive phrasing)
-  - “Study/Survey claims” ohne Quelle umformulieren; **keine Institution nennen**
-- Tool-Sektionen konkretisieren (Kriterien statt Fülltext)
-- Obvious typo cleanup (harte Ausreißer entfernen)
+## Mandatory tasks
+- tighten structure, remove redundancies
+- enforce volatile-claim policy (rewrite brittle claims)
+- ensure tool sections are concrete (criteria)
+- remove obvious typos
+- add **Author bio** + **Last updated**
 
-## Hard Fail Checks (Stop & Return)
-- Mehr als 1 H1  
-- `<script>` oder JSON-LD im Markdown  
-- Frontmatter im Body sichtbar  
-- harte Preis-/Prozentclaims ohne Quelle  
-- Missing: Definition/Framework/Table/FAQ (wenn Outline verlangt)
+## Hard fail checks
+- >1 H1
+- scripts/JSON-LD in markdown
+- frontmatter rendered in body
+- exact prices/percent claims without sources
+- missing mandatory blocks
 
-## Quellen-Regel (Editor)
-- 1–3 hochwertige outbound links max, wenn sinnvoll (offizielle Produktseiten, offizielle docs, seriöse Reports)  
-- Keine Low-quality Quellen nur um Links zu haben.
-
----
+## Acceptance Criteria (8/10)
+- clean, credible, readable
+- compliant with claim policy
+- includes author + update line
