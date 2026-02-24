@@ -1,0 +1,248 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.2.19-2",
+    "lastTouchedAt": "2026-02-21T22:40:46.076Z"
+  },
+  "env": {
+    "NVIDIA_API_KEY": "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",
+    "NVIDIA_KIMI_KEY": "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",
+    "NVIDIA_QWEN_KEY": "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"
+  },
+  "wizard": {
+    "lastRunAt": "2026-02-18T19:03:42.430Z",
+    "lastRunVersion": "2026.2.13",
+    "lastRunCommand": "onboard",
+    "lastRunMode": "local"
+  },
+  "auth": {
+    "profiles": {
+      "google-antigravity:bjkmert97@gmail.com": {
+        "provider": "google-antigravity",
+        "mode": "oauth",
+        "email": "bjkmert97@gmail.com"
+      }
+    }
+  },
+  "models": {
+    "mode": "merge",
+    "providers": {
+      "nvkimi": {
+        "baseUrl": "https://integrate.api.nvidia.com/v1",
+        "apiKey": "${NVIDIA_KIMI_KEY}",
+        "api": "openai-completions",
+        "models": [
+          {
+            "id": "moonshotai/kimi-k2.5",
+            "name": "Kimi K2.5 (NVIDIA)"
+          }
+        ]
+      },
+      "nvqwen": {
+        "baseUrl": "https://integrate.api.nvidia.com/v1",
+        "apiKey": "${NVIDIA_QWEN_KEY}",
+        "api": "openai-completions",
+        "models": [
+          {
+            "id": "qwen/qwen3.5-397b-a17b",
+            "name": "Qwen 3.5 (NVIDIA)"
+          }
+        ]
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "openai-codex/gpt-5.3-codex",
+        "fallbacks": [
+          "nvkimi/moonshotai/kimi-k2.5",
+          "nvqwen/qwen/qwen3.5-397b-a17b"
+        ]
+      },
+      "models": {
+        "google-antigravity/gemini-3-flash": {},
+        "google-antigravity/gemini-3-pro-high": {},
+        "google-antigravity/gemini-3-pro-low": {},
+        "nvkimi/moonshotai/kimi-k2.5": {},
+        "google-antigravity/claude-opus-4-6-thinking": {},
+        "nvqwen/qwen/qwen3.5-397b-a17b": {},
+        "openai-codex/gpt-5.3-codex": {}
+      },
+      "workspace": "/root/.openclaw/workspace-tareno"
+    },
+    "list": [
+      {
+        "id": "main",
+        "name": "Luna",
+        "workspace": "/root/.openclaw/workspace-tareno",
+        "model": "openai-codex/gpt-5.3-codex",
+        "sandbox": {
+          "mode": "off"
+        },
+        "tools": {
+          "profile": "coding",
+          "allow": [
+            "group:fs",
+            "group:runtime",
+            "group:sessions",
+            "group:memory",
+            "image",
+            "browser"
+          ]
+        }
+      },
+      {
+        "id": "tarenoblog",
+        "name": "Sam",
+        "workspace": "/root/.openclaw/workspace-tareno",
+        "model": "nvkimi/moonshotai/kimi-k2.5",
+        "sandbox": {
+          "mode": "off"
+        },
+        "tools": {
+          "profile": "coding",
+          "allow": [
+            "group:fs",
+            "group:runtime",
+            "group:sessions",
+            "group:memory",
+            "image",
+            "browser"
+          ]
+        }
+      },
+      {
+        "id": "social",
+        "name": "MiracleSocial",
+        "workspace": "/root/.openclaw/workspace-tareno",
+        "model": "openai-codex/gpt-5.3-codex",
+        "sandbox": {
+          "mode": "off"
+        },
+        "tools": {
+          "profile": "coding",
+          "allow": [
+            "group:fs",
+            "group:runtime",
+            "group:sessions",
+            "group:memory",
+            "image",
+            "browser"
+          ]
+        }
+      },
+      {
+        "id": "kimikimbo",
+        "name": "kimikimbo",
+        "workspace": "/root/.openclaw/workspace-tareno",
+        "agentDir": "/root/.openclaw-tareno/agents/kimikimbo/agent",
+        "model": "openai-codex/gpt-5.3-codex",
+        "sandbox": {
+          "mode": "off"
+        },
+        "tools": {
+          "profile": "coding",
+          "allow": [
+            "group:fs",
+            "group:runtime",
+            "group:sessions",
+            "group:memory",
+            "image",
+            "browser"
+          ]
+        }
+      }
+    ]
+  },
+  "tools": {
+    "profile": "minimal"
+  },
+  "bindings": [
+    {
+      "agentId": "main",
+      "match": {
+        "channel": "telegram",
+        "accountId": "default"
+      }
+    },
+    {
+      "agentId": "kimikimbo",
+      "match": {
+        "channel": "telegram",
+        "accountId": "kimikimbo"
+      }
+    }
+  ],
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true
+  },
+  "session": {
+    "dmScope": "per-channel-peer",
+    "sendPolicy": {
+      "default": "allow",
+      "rules": []
+    }
+  },
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "dmPolicy": "open",
+      "allowFrom": [
+        "*"
+      ],
+      "groupPolicy": "allowlist",
+      "streamMode": "off",
+      "accounts": {
+        "default": {
+          "botToken": "8257683131:AAHBgXyNXD5J0B-3SmkGvyKnz1xgiIIk4HM",
+          "dmPolicy": "open",
+          "allowFrom": [
+            "*"
+          ],
+          "groupPolicy": "allowlist",
+          "streamMode": "off"
+        },
+        "kimikimbo": {
+          "botToken": "8450097472:AAEUXpVpdpjjN6c8ZDXCrspi-DZa4KTMR5M",
+          "dmPolicy": "allowlist",
+          "allowFrom": [
+            "tg:6646986574"
+          ],
+          "groupPolicy": "allowlist",
+          "streamMode": "off"
+        }
+      }
+    }
+  },
+  "gateway": {
+    "port": 18790,
+    "mode": "local",
+    "bind": "loopback",
+    "auth": {
+      "mode": "token",
+      "token": "98cdfd680e2cdef720804d01b94325d0b0a15e1187211871"
+    },
+    "trustedProxies": [
+      "0.0.0.0/0"
+    ],
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    }
+  },
+  "plugins": {
+    "entries": {
+      "telegram": {
+        "enabled": true
+      },
+      "google-antigravity-auth": {
+        "enabled": true
+      },
+      "qwen-portal-auth": {
+        "enabled": true
+      }
+    }
+  }
+}
