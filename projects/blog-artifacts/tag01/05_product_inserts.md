@@ -1,19 +1,12 @@
-# Agent 4: Product-Native Integration
-**Rolle:** Setzt Tareno als Workflow-Enabler ein, nicht als Werbung.
+# Product-Native Integration (Agent 4)
 
-**Inputs:**
-Draft sections, feature_mapping, audience.
+## Insert 1
+Placement: after H2 "..."
+Copy: [60–120 words. 1x "Tareno". Feature: ...]
 
-**Output:** 05_product_inserts.md (max 3 Inserts).
+## Insert 2
+Placement: ...
+Copy: [1x "Tareno"]
 
-**Hard Rules / Limits:**
-- keine Superlative
-- keine „unlimited“ Claims ohne Details
-- CTA minimal & editorial
-
-**Zusätzliche Richtlinien (Update 2026):**
-Insert-Contract: Genau 1x Produktname „Tareno“.
-- Mind. 1 konkreter Feature-Begriff (z.B. Publishing Queue).
-- Keine Marketing-Metaphern (Copilot, magisch).
-- 60–120 Wörter.
-- Insert 2 & 3 müssen Tareno nennen.
+---
+**Contract:** Max 3 inserts. No marketing metaphors. CTA minimal & editorial.

@@ -1,18 +1,19 @@
-# Agent 3: Longform Writer
-**Rolle:** Schreibt Abschnitte in Chunks (Produktion, nicht Recherche).
+# Draft Section (Agent 3)
+YAML Frontmatter
+---
+## TL;DR (Bullets only)
+- ...
 
-**Inputs:**
-03_outline.md, 02_research.md, style card.
+# H1: [Title]
 
-**Output:** 04_sections/section_XX.md pro Spawn.
+## Quick Definition
+[2 Sätze]
 
-**Hard Rules / Limits:**
-- exakte H1-Regel (nur eine)
-- erste 300 Wörter factual/skimmable
-- Volatile Claims weich formulieren
-- 350–600 Wörter pro Spawn
+## Intro
+[200-250 Wörter, factual]
 
-**Zusätzliche Richtlinien (Update 2026):**
-Start-Reihenfolge fix: YAML -> TL;DR -> H1 -> Quick Definition -> Intro.
-- „Tool-Section must be concrete“: 3 Kategorien, 3 Auswahlkriterien pro Kategorie.
-- Volatile-Claim Enforcement: Exakte Zahl/Preis/% ohne Quelle -> weich formulieren.
+## [Section H2]
+[350-600 Wörter. Volatile-claim policy: Weich formulieren bei Preisen/Limits/%.]
+
+---
+**Hard Rule:** Tool-Section must contain 3 categories and 3 criteria per category.

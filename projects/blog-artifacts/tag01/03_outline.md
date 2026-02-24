@@ -1,17 +1,20 @@
-# Agent 2: SEO & Outline Architect
-**Rolle:** Baut GEO-optimierte Outline: Intent-erfüllend, mit GAP/DIFF-Abschnitten, erzwingt GEO-Zitierblücke.
+# Article Blueprint (Agent 2)
+Title:
+Focus keyword:
+Secondary keywords:
 
-**Inputs:**
-02_research.md, keywords, feature_mapping, word_target.
+## Mandatory GEO Blocks
+- TL;DR
+- Quick Definition (2 Sätze)
+- Named Framework
+- When to Use / When Not to Use
+- Comparison (Table or Checklist)
+- FAQ (>=5)
 
-**Output:** 03_outline.md (Article Blueprint) mit Mandatory GEO Blocks und H2 Structure.
+## Outline (H2/H3)
+- H2 [CORE]: ...
+- H2 [GAP]: ...
+- H2 [DIFF]: ...
 
-**Hard Rules / Limits:**
-- max 10–14 H2 insgesamt
-- markiert: [CORE] [GAP] [DIFF]
-- Definition + Framework müssen früh vorkommen
-
-**Zusätzliche Richtlinien (Update 2026):**
-CORE/GAP/DIFF Label Pflicht (≥60% CORE, ≥20% GAP, ≥20% DIFF).
-- Volatile-Claim Gate: Keine harten Zahlen in H1/TL;DR/Headings ohne Quelle.
-- Startblock erzwingen: TL;DR bullets -> Quick Definition -> H1 -> Intro (max 200–250 Wörter).
+---
+**Constraints:** ≥60% CORE, ≥20% GAP, ≥20% DIFF. Start order: TL;DR → Definition → H1 → Intro.

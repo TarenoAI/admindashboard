@@ -1,17 +1,28 @@
-# Agent 1: Research Synthesizer
-**Rolle:** Synthetisiert Wissen aus KB-Pack + Jobdaten, findet Lücken, liefert Research Notes.
+# Research Notes (Agent 1)
+[Project ID]
 
-**Inputs:**
-01_kb_pack.md, focus_keyword, audience, content_type.
+## Search intent
+- primary:
+- secondary:
 
-**Output:** 02_research.md mit Search intent, Audience, Competitor patterns/gaps, DIFF angles, Risky zones.
+## Audience assumptions
+- ...
 
-**Hard Rules / Limits:**
-- keine Prosa / kein Artikel schreiben
-- keine exakten Zahlen/Preise ohne Quelle
-- max 30 Bullets pro Block, 600–900 Wörter total
+## Competitor patterns (Top 5–8)
+- ...
 
-**Zusätzliche Richtlinien (Update 2026):**
-Pflichtblücke aus KB (Patterns, Gaps, DIFF Angle).
-- Risky/Volatile Zones konkret: Preise, Limits, „study says“, Prozentzahlen.
-- „No generic advice“ Regel: Alles ohne KB-Bezug als common knowledge markieren oder einsortieren.
+## Competitor gaps (Top 5–8)
+- ...
+
+## Differentiation angles (DIFF)
+- [1–2 Sätze]
+
+## Risky/volatile claim zones
+- prices:
+- limits:
+- performance metrics:
+- „studies show“ / institutions:
+- percentages:
+
+---
+**Hard Rule:** No generic advice. Alles ohne KB-Bezug als common knowledge markieren. Keine exakten Zahlen ohne Quelle.
