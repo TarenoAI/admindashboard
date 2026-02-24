@@ -1028,10 +1028,12 @@
                                         <tr class="hover:bg-brand/5 hover:bg-opacity-10 transition-colors group">
                                             <td class="p-5 align-top">
                                                 <div class="flex items-center gap-2 mb-1.5">
-                                                    <span class="font-bold text-white text-xs bg-brand/20 text-brand px-2 py-0.5 rounded border border-brand/30 shadow-[0_0_10px_rgba(130,81,238,0.2)]">${cp.day}</span>
+                                                    <span class="font-bold text-white text-xs bg-brand/20 text-brand px-2 py-0.5 rounded border border-brand/30 shadow-[0_0_10px_rgba(130,81,238,0.2)]">${cp.id || `TAG-${String(cpIndex + 1).padStart(2, '0')}`}</span>
+                                                    <span class="text-[9px] uppercase tracking-wider text-text-muted bg-white/5 px-2 py-0.5 rounded border border-white/5">${cp.day}</span>
                                                     <span class="text-[9px] uppercase tracking-wider text-text-muted bg-white/5 px-2 py-0.5 rounded border border-white/5">${cp.date}</span>
                                                 </div>
-                                                <p class="text-xs text-white font-semibold md:max-w-[220px] leading-snug mb-2.5">${cp.topic}</p>
+                                                <p class="text-xs text-white font-semibold md:max-w-[220px] leading-snug mb-1.5">${cp.topicEn || cp.topic || '—'}</p>
+                                                ${cp.topicEn && cp.topic && cp.topicEn !== cp.topic ? `<p class="text-[10px] text-text-muted md:max-w-[220px] leading-snug mb-2.5">DE: ${cp.topic}</p>` : '<div class="mb-2.5"></div>'}
                                                 <div class="flex flex-col gap-1">
                                                     ${cp.keyword && cp.keyword !== 'nan' ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">KW:</span><span class="text-[10px] text-brand/80 leading-tight line-clamp-1" title="${cp.keyword}">${cp.keyword}</span></div>` : ''}
                                                     ${cp.feature && cp.feature !== 'nan' ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">Tool:</span><span class="text-[10px] text-text-secondary leading-tight line-clamp-1" title="${cp.feature}">${cp.feature}</span></div>` : ''}
@@ -1059,7 +1061,7 @@
                         }
 
                         const docIcon = stepData.doc
-                            ? `<button onclick="openProjectRef('${stepData.doc}')" class="group relative flex items-center justify-center w-8 h-8 rounded bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all ${iconClr}" title="Dokument ansehen">📄<span class="absolute -top-1 -right-1 flex h-2.5 w-2.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-75"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand"></span></span></button>`
+                            ? `<button onclick="openPipelineDoc('${p.id}', ${cpIndex}, '${step}')" class="group relative flex items-center justify-center w-8 h-8 rounded bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all ${iconClr}" title="Dokument ansehen">📄<span class="absolute -top-1 -right-1 flex h-2.5 w-2.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-75"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand"></span></span></button>`
                             : `<div class="flex items-center justify-center w-8 h-8 rounded bg-white/5 border border-white/5 opacity-30 ${iconClr}">📄</div>`;
 
                         const wordCountHtml = stepData.wordCount ? `<div class="absolute top-1 right-2 bg-brand/10 px-1 py-0.5 rounded text-[8px] font-bold text-brand border border-brand/20 whitespace-nowrap z-20 shadow-sm" title="Word count">🔥 ${stepData.wordCount} W</div>` : '';
@@ -1431,9 +1433,22 @@
             loadCurrentView();
         };
 
+        window.getWorkspaceRoot = () => {
+            const ws = currentData?.workspaceRoot || currentData?.data?.workspaceRoot;
+            return (typeof ws === 'string' && ws.trim()) ? ws.trim().replace(/\/+$/, '') : '/root/.openclaw/workspace-tareno';
+        };
+
+        window.toAbsProjectPath = (targetPath) => {
+            const raw = String(targetPath || '').trim();
+            if (!raw) return null;
+            if (raw.startsWith('/')) return raw;
+            return `${window.getWorkspaceRoot()}/${raw.replace(/^\/+/, '')}`;
+        };
+
         window.openProjectRef = (relPath) => {
             if (!relPath) return;
-            const abs = relPath.startsWith('/') ? relPath : `/root/.openclaw/workspace-tareno/${relPath}`;
+            const abs = window.toAbsProjectPath(relPath);
+            if (!abs) return;
             const rawUrl = `/api/file/raw?path=${encodeURIComponent(abs)}`;
             // Open immediately to avoid popup blockers (especially on mobile)
             window.open(rawUrl, '_blank', 'noopener,noreferrer');
@@ -1442,9 +1457,31 @@
         window.previewProjectImage = (relPath, targetId) => {
             const box = document.getElementById(targetId);
             if (!box) return;
-            const abs = relPath.startsWith('/') ? relPath : `/root/.openclaw/workspace-tareno/${relPath}`;
+            const abs = window.toAbsProjectPath(relPath);
+            if (!abs) return;
             const url = `/api/file/raw?path=${encodeURIComponent(abs)}`;
             box.innerHTML = `<img src="${url}" alt="preview" class="max-h-48 rounded border border-white/10" />`;
+        };
+
+        window.openPipelineDoc = async (projectId, cpIndex, stepId) => {
+            try {
+                const res = await fetch(`/api/projects/${projectId}/pipeline/${cpIndex}/${stepId}/doc`);
+                const payload = await res.json().catch(() => null);
+                const absPath = payload?.path || payload?.data?.path;
+                if (res.ok && absPath) {
+                    window.open(`/api/file/raw?path=${encodeURIComponent(absPath)}`, '_blank', 'noopener,noreferrer');
+                    return;
+                }
+            } catch (e) {
+                console.warn('Pipeline doc resolve failed', e);
+            }
+
+            const fallback = currentData?.project?.contentPipeline?.[cpIndex]?.steps?.[stepId]?.doc;
+            if (fallback) {
+                window.openProjectRef(fallback);
+                return;
+            }
+            alert('Dokument konnte nicht gefunden werden.');
         };
 
         window.syncProjectToAgent = async (projectId) => {

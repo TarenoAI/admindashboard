@@ -18,6 +18,8 @@
 - `GET /api/projects`
 - `POST /api/projects/capability-check` mit `{projectId, agentId, action:"write"}`
 - `POST /api/projects/knowledge` mit `{projectId,title,content,kind,actorAgentId}`
+- `POST /api/projects/:projectId/pipeline/upload` mit `{actorAgentId, rowId|cpIndex, stepId, content|docPath, status?, language?, title?}`
+- `GET /api/projects/:projectId/pipeline/:cpIndex/:stepId/doc` (liefert aufgelösten Dokumentpfad)
 
 ## Wichtige Bereiche
 - Alle Agenten

@@ -239,6 +239,319 @@ function countTasksByState(tasks = []) {
     return states;
 }
 
+const PIPELINE_STEP_IDS = [
+    'content_research',
+    'structure',
+    'drafting',
+    'feature_inserts',
+    'editing',
+    'geo_polish',
+    'final'
+];
+
+const PIPELINE_STEP_ALIASES = {
+    content_research: 'content_research',
+    research: 'content_research',
+    recherche: 'content_research',
+    structure: 'structure',
+    seo: 'structure',
+    outline: 'structure',
+    drafting: 'drafting',
+    draft: 'drafting',
+    entwurf: 'drafting',
+    feature_inserts: 'feature_inserts',
+    features: 'feature_inserts',
+    feature: 'feature_inserts',
+    editing: 'editing',
+    edit: 'editing',
+    redaktion: 'editing',
+    geo_polish: 'geo_polish',
+    geo: 'geo_polish',
+    geopolish: 'geo_polish',
+    final: 'final',
+    final_review: 'final',
+    finalreview: 'final',
+    review_final: 'final'
+};
+
+const PIPELINE_STEP_FILE_NAMES = {
+    content_research: 'research',
+    structure: 'structure',
+    drafting: 'draft',
+    feature_inserts: 'feature_inserts',
+    editing: 'edited',
+    geo_polish: 'geo_polish',
+    final: 'final'
+};
+
+const PIPELINE_STEP_DOC_FALLBACKS = {
+    content_research: ['02_research.md', '01_kb_pack.md', 'research.md'],
+    structure: ['03_outline.md', '02_structure.md', 'seo.md', 'outline.md'],
+    drafting: ['04_draft.md', 'draft.md'],
+    feature_inserts: ['05_product_inserts.md', 'product_inserts.md'],
+    editing: ['06_edited.md', 'editing.md', 'edit.md'],
+    geo_polish: ['07_geo_polish.md', 'geo_polish.md'],
+    final: ['FINAL.md', '07_final.md', 'final.md']
+};
+
+function normalizePipelineStepId(stepId) {
+    const key = String(stepId || '').trim().toLowerCase().replace(/[\s-]+/g, '_');
+    return PIPELINE_STEP_ALIASES[key] || null;
+}
+
+function pipelineRowId(index) {
+    return `TAG-${String(Number(index) + 1).padStart(2, '0')}`;
+}
+
+function safeSlug(value, fallback = 'item') {
+    const slug = String(value || '')
+        .normalize('NFKD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    return slug || fallback;
+}
+
+function normalizeLooseText(input) {
+    return String(input || '')
+        .normalize('NFKD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, ' ')
+        .trim();
+}
+
+function getPipelineRowFolder(row, index) {
+    const compact = String(row?.id || pipelineRowId(index)).toLowerCase().replace(/[^a-z0-9]/g, '');
+    const m = compact.match(/^tag(\d+)$/);
+    if (m) return `tag${String(Number(m[1])).padStart(2, '0')}`;
+    return compact || `tag${String(Number(index) + 1).padStart(2, '0')}`;
+}
+
+function ensurePipelineShape(projectData) {
+    if (!projectData || typeof projectData !== 'object') return;
+    const rows = Array.isArray(projectData.contentPipeline) ? projectData.contentPipeline : [];
+    projectData.contentPipeline = rows.map((row, index) => {
+        const current = (row && typeof row === 'object') ? row : {};
+        const rawSteps = (current.steps && typeof current.steps === 'object') ? current.steps : {};
+        const normalized = {};
+
+        for (const [rawStep, rawValue] of Object.entries(rawSteps)) {
+            const stepId = normalizePipelineStepId(rawStep);
+            if (!stepId) continue;
+            const value = (rawValue && typeof rawValue === 'object') ? rawValue : { status: String(rawValue || '') };
+            normalized[stepId] = { ...(normalized[stepId] || {}), ...value };
+        }
+
+        for (const stepId of PIPELINE_STEP_IDS) {
+            const step = { ...(normalized[stepId] || {}) };
+            if (typeof step.status !== 'string' || !step.status.trim()) step.status = 'pending';
+            step.status = String(step.status).trim().toLowerCase();
+            step.doc = (typeof step.doc === 'string' && step.doc.trim()) ? step.doc.trim() : null;
+            normalized[stepId] = step;
+        }
+
+        return {
+            ...current,
+            id: String(current.id || pipelineRowId(index)),
+            steps: normalized
+        };
+    });
+}
+
+function resolvePathFromAnyInput(targetPath) {
+    const raw = String(targetPath || '').trim();
+    if (!raw) return null;
+
+    const candidates = [];
+    if (path.isAbsolute(raw)) {
+        candidates.push(path.resolve(raw));
+    } else {
+        candidates.push(path.resolve(WORKSPACE_ROOT, raw));
+        candidates.push(path.resolve(raw));
+    }
+
+    for (const abs of candidates) {
+        if (!isAllowedWorkspacePath(abs)) continue;
+        if (!fs.existsSync(abs)) continue;
+        return { absPath: abs, relPath: path.relative(WORKSPACE_ROOT, abs), exists: true };
+    }
+
+    const fallback = candidates.find(abs => isAllowedWorkspacePath(abs));
+    if (!fallback) return null;
+    return { absPath: fallback, relPath: path.relative(WORKSPACE_ROOT, fallback), exists: false };
+}
+
+function findFileByNameRecursive(rootDir, fileName, limit = 5000) {
+    if (!fileName || !fs.existsSync(rootDir)) return null;
+    const queue = [rootDir];
+    let seen = 0;
+
+    while (queue.length > 0 && seen < limit) {
+        const dir = queue.shift();
+        let entries = [];
+        try {
+            entries = fs.readdirSync(dir, { withFileTypes: true });
+        } catch {
+            continue;
+        }
+        for (const entry of entries) {
+            seen += 1;
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) {
+                queue.push(full);
+                continue;
+            }
+            if (entry.isFile() && entry.name.toLowerCase() === String(fileName).toLowerCase()) {
+                return full;
+            }
+            if (seen >= limit) break;
+        }
+    }
+    return null;
+}
+
+function resolvePipelineDocPath(projectData, cpIndex, stepId) {
+    if (!projectData || !Array.isArray(projectData.contentPipeline)) return null;
+    const rowIndex = Number(cpIndex);
+    if (!Number.isInteger(rowIndex) || rowIndex < 0 || rowIndex >= projectData.contentPipeline.length) return null;
+    const normalizedStepId = normalizePipelineStepId(stepId);
+    if (!normalizedStepId) return null;
+
+    const row = projectData.contentPipeline[rowIndex];
+    const step = row?.steps?.[normalizedStepId];
+    const rawDoc = (typeof step?.doc === 'string' && step.doc.trim()) ? step.doc.trim() : null;
+    if (!rawDoc) return null;
+
+    const candidates = [];
+    if (path.isAbsolute(rawDoc)) {
+        candidates.push(path.resolve(rawDoc));
+    } else {
+        candidates.push(path.resolve(WORKSPACE_ROOT, rawDoc));
+    }
+
+    const docBase = path.basename(rawDoc);
+    const docBaseNoExt = path.basename(rawDoc, path.extname(rawDoc));
+    const rowFolder = getPipelineRowFolder(row, rowIndex);
+    const folderRoot = path.join(WORKSPACE_ROOT, 'projects', 'blog-artifacts', rowFolder);
+
+    if (!rawDoc.includes('/')) {
+        candidates.push(path.join(folderRoot, rawDoc));
+        if (!path.extname(rawDoc)) {
+            candidates.push(path.join(folderRoot, `${rawDoc}.md`));
+            candidates.push(path.join(folderRoot, `${rawDoc}.txt`));
+        }
+        if (docBaseNoExt) {
+            candidates.push(path.join(folderRoot, `${docBaseNoExt}.md`));
+            candidates.push(path.join(folderRoot, `${docBaseNoExt}.txt`));
+        }
+    }
+
+    const stepFallbacks = PIPELINE_STEP_DOC_FALLBACKS[normalizedStepId] || [];
+    for (const fallbackName of stepFallbacks) {
+        candidates.push(path.join(folderRoot, fallbackName));
+    }
+
+    for (const abs of candidates) {
+        const resolved = path.resolve(abs);
+        if (!isAllowedWorkspacePath(resolved)) continue;
+        if (!fs.existsSync(resolved)) continue;
+        return { absPath: resolved, relPath: path.relative(WORKSPACE_ROOT, resolved) };
+    }
+
+    const byName = findFileByNameRecursive(path.join(WORKSPACE_ROOT, 'projects', 'blog-artifacts'), docBase);
+    if (byName && isAllowedWorkspacePath(byName)) {
+        return { absPath: byName, relPath: path.relative(WORKSPACE_ROOT, byName) };
+    }
+
+    return null;
+}
+
+function findPipelineRowIndex(contentPipeline, selector = {}) {
+    if (!Array.isArray(contentPipeline) || contentPipeline.length === 0) return -1;
+
+    const directIndex = Number(selector.cpIndex);
+    if (Number.isInteger(directIndex) && directIndex >= 0 && directIndex < contentPipeline.length) {
+        return directIndex;
+    }
+
+    const wantedId = String(selector.rowId || selector.id || selector.tag || '').trim().toLowerCase();
+    if (wantedId) {
+        const byId = contentPipeline.findIndex((row, idx) => String(row?.id || pipelineRowId(idx)).toLowerCase() === wantedId);
+        if (byId >= 0) return byId;
+    }
+
+    const wantedDay = normalizeLooseText(selector.day);
+    if (wantedDay) {
+        const byDay = contentPipeline.findIndex(row => normalizeLooseText(row?.day) === wantedDay);
+        if (byDay >= 0) return byDay;
+    }
+
+    const wantedKeyword = normalizeLooseText(selector.keyword);
+    if (wantedKeyword) {
+        const byKeyword = contentPipeline.findIndex(row => normalizeLooseText(row?.keyword) === wantedKeyword);
+        if (byKeyword >= 0) return byKeyword;
+    }
+
+    const wantedTopic = normalizeLooseText(selector.topic || selector.title);
+    if (wantedTopic) {
+        const byExactTopic = contentPipeline.findIndex(row => {
+            const options = [row?.topic, row?.topicEn].map(normalizeLooseText).filter(Boolean);
+            return options.some(candidate => candidate === wantedTopic);
+        });
+        if (byExactTopic >= 0) return byExactTopic;
+
+        const byContainsTopic = contentPipeline.findIndex(row => {
+            const options = [row?.topic, row?.topicEn].map(normalizeLooseText).filter(Boolean);
+            return options.some(candidate => candidate.includes(wantedTopic) || wantedTopic.includes(candidate));
+        });
+        if (byContainsTopic >= 0) return byContainsTopic;
+    }
+
+    return -1;
+}
+
+function buildPipelineArtifactName(cpIndex, stepId, ext, title) {
+    const stepBase = PIPELINE_STEP_FILE_NAMES[stepId] || safeSlug(stepId, 'step');
+    const rowNo = String(Number(cpIndex) + 1).padStart(2, '0');
+    const topicSuffix = title ? safeSlug(title, '') : '';
+    const stem = topicSuffix ? `${rowNo}_${stepBase}_${topicSuffix.slice(0, 48)}` : `${rowNo}_${stepBase}`;
+    return `${stem}.${ext}`;
+}
+
+function updateBlogPipelineProgress(projectData, cpIndex) {
+    if (!projectData || !Array.isArray(projectData.contentPipeline)) return;
+    const row = projectData.contentPipeline[cpIndex];
+    if (!row?.steps) return;
+
+    const stepEntries = PIPELINE_STEP_IDS.map(id => row.steps[id] || { status: 'pending' });
+    const done = stepEntries.filter(s => String(s.status || '').toLowerCase() === 'done').length;
+    const review = stepEntries.filter(s => String(s.status || '').toLowerCase() === 'review').length;
+    const started = stepEntries.some(s => String(s.status || '').toLowerCase() !== 'pending');
+    const total = PIPELINE_STEP_IDS.length;
+    const progress = Math.max(0, Math.min(100, Math.round(((done + review * 0.5) / total) * 100)));
+    const status = done === total ? 'done' : (started ? 'in_progress' : 'planned');
+
+    const rowId = String(row.id || pipelineRowId(cpIndex));
+    const list = Array.isArray(projectData.blogPipeline?.blogs) ? projectData.blogPipeline.blogs : [];
+    const blog = list.find(item => String(item?.id || '').toLowerCase() === rowId.toLowerCase());
+    if (blog) {
+        blog.status = status;
+        blog.progress = progress;
+        blog.stepsCompleted = done;
+        blog.stepsTotal = total;
+    }
+
+    if (projectData.blogPipeline && Array.isArray(projectData.blogPipeline.blogs)) {
+        const all = projectData.blogPipeline.blogs;
+        projectData.blogPipeline.totalBlogs = all.length;
+        projectData.blogPipeline.completed = all.filter(b => b.status === 'done').length;
+        projectData.blogPipeline.inProgress = all.filter(b => b.status === 'in_progress').length;
+        projectData.blogPipeline.planned = all.filter(b => b.status === 'planned').length;
+    }
+}
+
 function ok(res, payload) {
     return res.json({ success: true, data: payload, ...payload });
 }
@@ -289,17 +602,24 @@ app.get("/api/projects", async (_, res) => {
                 contentPipeline: data.contentPipeline || [],
             };
 
-            // Count words for final review step
-            if (result.contentPipeline) {
-                for (const cp of result.contentPipeline) {
-                    if (cp.steps?.final?.doc) {
+            ensurePipelineShape(result);
+
+            for (let cpIndex = 0; cpIndex < result.contentPipeline.length; cpIndex += 1) {
+                const cp = result.contentPipeline[cpIndex];
+                for (const stepId of PIPELINE_STEP_IDS) {
+                    const step = cp?.steps?.[stepId];
+                    if (!step?.doc) continue;
+                    const resolved = resolvePipelineDocPath(result, cpIndex, stepId);
+                    if (!resolved) continue;
+
+                    step.doc = resolved.relPath;
+                    if (step.wordCount == null) {
                         try {
-                            const p = path.join(WORKSPACE_ROOT, cp.steps.final.doc);
-                            if (fs.existsSync(p)) {
-                                const text = fs.readFileSync(p, 'utf8');
-                                cp.steps.final.wordCount = text.trim().split(/\s+/).length || 0;
-                            }
-                        } catch (e) { /* ignore missing files */ }
+                            const text = fs.readFileSync(resolved.absPath, 'utf8');
+                            step.wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+                        } catch {
+                            // ignore missing/invalid files
+                        }
                     }
                 }
             }
@@ -315,36 +635,219 @@ app.get("/api/projects", async (_, res) => {
             };
         }
     });
-    ok(res, { count: projects.length, projects });
+    ok(res, { count: projects.length, projects, workspaceRoot: WORKSPACE_ROOT });
 });
 
 // Pipeline Status API
 app.post("/api/projects/:projectId/pipeline/:cpIndex/:stepId", express.json({ limit: '50mb' }), async (req, res) => {
     const { projectId, cpIndex, stepId } = req.params;
-    const { status, reason } = req.body;
+    const { status, reason, actorAgentId } = req.body || {};
 
     const projectFile = path.join(WORKSPACE_ROOT, "data", "projects", `${projectId}.json`);
     if (!fs.existsSync(projectFile)) return res.status(404).json({ success: false, error: "Project not found" });
 
     try {
         const data = JSON.parse(fs.readFileSync(projectFile, 'utf8'));
-        if (!data.contentPipeline || !data.contentPipeline[cpIndex]) {
+        ensurePipelineShape(data);
+        if (!hasProjectWritePermission(data, actorAgentId)) {
+            return res.status(403).json({ success: false, error: `Agent ${actorAgentId} has no write permission for project ${projectId}` });
+        }
+
+        const rowIndex = Number(cpIndex);
+        if (!Number.isInteger(rowIndex) || !data.contentPipeline || !data.contentPipeline[rowIndex]) {
             return res.status(404).json({ success: false, error: "Pipeline row not found" });
         }
-        const step = data.contentPipeline[cpIndex].steps[stepId];
+        const normalizedStepId = normalizePipelineStepId(stepId);
+        if (!normalizedStepId) {
+            return res.status(400).json({ success: false, error: "Invalid stepId" });
+        }
+        const step = data.contentPipeline[rowIndex].steps[normalizedStepId];
         if (!step) {
             return res.status(404).json({ success: false, error: "Step not found" });
         }
 
-        step.status = status;
+        if (typeof status === 'string' && status.trim()) {
+            step.status = status.trim().toLowerCase();
+        }
         if (reason !== undefined) {
             step.rejectReason = reason;
+        } else if (String(step.status || '').toLowerCase() !== 'rejected' && step.rejectReason != null) {
+            delete step.rejectReason;
         }
+        step.updatedAt = new Date().toISOString();
+        if (actorAgentId) step.updatedBy = actorAgentId;
 
-        fs.writeFileSync(projectFile, JSON.stringify(data, null, 2), 'utf8');
-        ok(res, { message: "Pipeline status updated successfully" });
+        updateBlogPipelineProgress(data, rowIndex);
+        data.lastUpdate = new Date().toISOString().slice(0, 10);
+
+        fs.writeFileSync(projectFile, JSON.stringify(data, null, 2) + '\n', 'utf8');
+        const sync = syncAllAssignedAgents(projectId, data);
+        ok(res, { message: "Pipeline status updated successfully", rowIndex, stepId: normalizedStepId, sync });
     } catch (e) {
         res.status(500).json({ success: false, error: e.message });
+    }
+});
+
+app.get("/api/projects/:projectId/pipeline/:cpIndex/:stepId/doc", (req, res) => {
+    try {
+        const { projectId, cpIndex, stepId } = req.params;
+        const data = loadProjectMeta(projectId);
+        if (!data) return res.status(404).json({ success: false, error: "Project not found" });
+
+        ensurePipelineShape(data);
+        const rowIndex = Number(cpIndex);
+        if (!Number.isInteger(rowIndex) || !data.contentPipeline || !data.contentPipeline[rowIndex]) {
+            return res.status(404).json({ success: false, error: "Pipeline row not found" });
+        }
+
+        const normalizedStepId = normalizePipelineStepId(stepId);
+        if (!normalizedStepId) return res.status(400).json({ success: false, error: "Invalid stepId" });
+
+        const resolved = resolvePipelineDocPath(data, rowIndex, normalizedStepId);
+        if (!resolved) {
+            const doc = data.contentPipeline[rowIndex]?.steps?.[normalizedStepId]?.doc || null;
+            return res.status(404).json({ success: false, error: "Document not found", rowIndex, stepId: normalizedStepId, doc });
+        }
+
+        return ok(res, {
+            projectId,
+            rowIndex,
+            rowId: data.contentPipeline[rowIndex].id,
+            stepId: normalizedStepId,
+            path: resolved.absPath,
+            relPath: resolved.relPath
+        });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
+});
+
+app.post("/api/projects/:projectId/pipeline/upload", express.json({ limit: '50mb' }), (req, res) => {
+    try {
+        const { projectId } = req.params;
+        const body = req.body || {};
+        const {
+            actorAgentId,
+            cpIndex,
+            rowId,
+            day,
+            topic,
+            title,
+            keyword,
+            stepId,
+            status,
+            reason,
+            language,
+            content,
+            docPath,
+            fileName,
+            format
+        } = body;
+
+        const data = loadProjectMeta(projectId);
+        if (!data) return res.status(404).json({ success: false, error: "Project not found" });
+
+        ensurePipelineShape(data);
+        if (!hasProjectWritePermission(data, actorAgentId)) {
+            return res.status(403).json({ success: false, error: `Agent ${actorAgentId} has no write permission for project ${projectId}` });
+        }
+
+        const normalizedStepId = normalizePipelineStepId(stepId);
+        if (!normalizedStepId) return res.status(400).json({ success: false, error: "Valid stepId required" });
+
+        const rowIndex = findPipelineRowIndex(data.contentPipeline, { cpIndex, rowId, day, topic, title, keyword, id: body.id, tag: body.tag });
+        if (rowIndex < 0) {
+            return res.status(404).json({ success: false, error: "Pipeline row not found (use cpIndex, rowId/TAG-xx, day, topic, or keyword)" });
+        }
+
+        const row = data.contentPipeline[rowIndex];
+        const step = row.steps[normalizedStepId];
+        let resolvedAbs = null;
+        let resolvedRel = null;
+        let wroteFile = false;
+
+        if (typeof docPath === 'string' && docPath.trim()) {
+            const resolved = resolvePathFromAnyInput(docPath.trim());
+            if (!resolved || !resolved.exists) {
+                return res.status(400).json({ success: false, error: "docPath does not exist or is outside allowed workspaces" });
+            }
+            resolvedAbs = resolved.absPath;
+            resolvedRel = resolved.relPath;
+        }
+
+        if (typeof content === 'string' && content.trim()) {
+            const extRaw = String(format || path.extname(String(fileName || '')).replace('.', '') || 'md').toLowerCase();
+            const ext = extRaw === 'txt' ? 'txt' : 'md';
+            const outDir = path.join(WORKSPACE_ROOT, 'projects', 'blog-artifacts', getPipelineRowFolder(row, rowIndex));
+            fs.mkdirSync(outDir, { recursive: true });
+
+            let outName;
+            if (typeof fileName === 'string' && fileName.trim()) {
+                const parsed = path.parse(fileName.trim());
+                outName = `${safeSlug(parsed.name || 'artifact', 'artifact')}.${ext}`;
+            } else {
+                outName = buildPipelineArtifactName(rowIndex, normalizedStepId, ext, title || row.topicEn || row.topic || '');
+            }
+
+            const outAbs = path.join(outDir, outName);
+            const payload = content.endsWith('\n') ? content : `${content}\n`;
+            fs.writeFileSync(outAbs, payload, 'utf8');
+            resolvedAbs = outAbs;
+            resolvedRel = path.relative(WORKSPACE_ROOT, outAbs);
+            wroteFile = true;
+        }
+
+        if (!resolvedRel) {
+            return res.status(400).json({ success: false, error: "Either content or docPath is required" });
+        }
+
+        step.doc = resolvedRel;
+        step.status = (typeof status === 'string' && status.trim()) ? status.trim().toLowerCase() : 'review';
+        if (reason !== undefined) {
+            step.rejectReason = reason;
+        } else if (step.status !== 'rejected' && step.rejectReason != null) {
+            delete step.rejectReason;
+        }
+        step.updatedAt = new Date().toISOString();
+        if (actorAgentId) step.updatedBy = actorAgentId;
+        if (typeof language === 'string' && language.trim()) step.language = language.trim().toLowerCase();
+
+        if (resolvedAbs) {
+            try {
+                const text = fs.readFileSync(resolvedAbs, 'utf8');
+                step.wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+            } catch {
+                // keep existing count when file cannot be read
+            }
+        }
+
+        const submittedTitle = String(title || topic || '').trim();
+        if (submittedTitle) {
+            if (String(language || '').toLowerCase().startsWith('en')) {
+                row.topicEn = submittedTitle;
+            } else {
+                row.topic = submittedTitle;
+            }
+        }
+
+        updateBlogPipelineProgress(data, rowIndex);
+        data.lastUpdate = new Date().toISOString().slice(0, 10);
+        saveProjectMeta(projectId, data);
+
+        const sync = syncAllAssignedAgents(projectId, data);
+        return ok(res, {
+            uploaded: true,
+            projectId,
+            rowIndex,
+            rowId: row.id,
+            stepId: normalizedStepId,
+            status: step.status,
+            path: resolvedRel,
+            wroteFile,
+            sync
+        });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
     }
 });
 // Kanban Task Move API
@@ -1060,20 +1563,21 @@ app.post('/api/projects/sync-agent', (req, res) => {
 app.get('/api/file', (req, res) => {
     const target = String(req.query.path || '');
     if (!target) return res.status(400).json({ success: false, error: 'Missing ?path=' });
-    const abs = path.resolve(target);
-    if (!isAllowedWorkspacePath(abs)) return res.status(403).json({ success: false, error: 'Path outside allowed workspaces blocked' });
-    const content = readFileSafe(abs);
+    const resolved = resolvePathFromAnyInput(target);
+    if (!resolved) return res.status(403).json({ success: false, error: 'Path outside allowed workspaces blocked' });
+    if (!resolved.exists) return res.status(404).json({ success: false, error: 'File not found' });
+    const content = readFileSafe(resolved.absPath);
     if (content == null) return res.status(404).json({ success: false, error: 'File not found' });
-    return ok(res, { path: abs, content });
+    return ok(res, { path: resolved.absPath, relPath: resolved.relPath, content });
 });
 
 app.get('/api/file/raw', (req, res) => {
     const target = String(req.query.path || '');
     if (!target) return res.status(400).send('Missing ?path=');
-    const abs = path.resolve(target);
-    if (!isAllowedWorkspacePath(abs)) return res.status(403).send('Path outside allowed workspaces blocked');
-    if (!fs.existsSync(abs)) return res.status(404).send('File not found');
-    return res.sendFile(abs);
+    const resolved = resolvePathFromAnyInput(target);
+    if (!resolved) return res.status(403).send('Path outside allowed workspaces blocked');
+    if (!resolved.exists) return res.status(404).send('File not found');
+    return res.sendFile(resolved.absPath);
 });
 
 app.get("/api/cron", async (_, res) => {
