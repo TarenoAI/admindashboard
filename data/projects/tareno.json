@@ -17,13 +17,17 @@
         "Agenten sequenziell ausführen",
         "Artefakte nach jedem Schritt speichern & verifizieren",
         "Fehler (Timeout/429) mit Retry/Backoff behandeln",
-        "Finale Merge + Publish-Paket erzeugen (FINAL.md)"
+        "Finale Merge + Publish-Paket erzeugen (FINAL.md)",
+        "Prompt-Sanitation: Prüfung jeder Writing-Task auf irrelevante Boilerplates (Svelte, Supabase etc.) vor Spawn",
+        "Workspace-Verifikation: Prüfung nach jedem Schritt (ls -la $WORKDIR, head -20 <file>)"
       ],
       "hardRules": [
-        "Nie selbst schreiben",
-        "Nie mehrere Rollen in einem Sub-Agent-Spawn bündeln",
-        "429-Policy: Retry 4x (30s → 60s → 120s → 240s)",
-        "Bei Timeout: Scope halbieren, max. 3 Reductions pro Section"
+        "Mode-Lock: Pro Artikel fester MODE (CHUNKED_WRITING oder SINGLE_WRITER) – kein Wechsel mid-run",
+        "No Self Writing: Hard-Fail wenn Orchestrator 'I will write it myself' o.ä. ausgibt -> Abbruch & Retry",
+        "429-Policy: Retry 4x (30/60/120/240s), nach 2. Fail fallback model/provider",
+        "Timeout: Scope halbieren, max. 3 Reductions pro Section, dann fallback",
+        "Snippet-Check: Wenn ls Datei nicht findet -> Step unvollständig, kein Weiter",
+        "Sanitation: Falls Boilerplate gefunden -> Task-Prompt neu generieren"
       ]
     },
     {
@@ -48,10 +52,12 @@
       "status": "active",
       "currentTask": "TAG-01 fertig, TAG-02 vorbereitet",
       "description": "Erstellt kompakten Kontext aus der 500+ Artikel Competitor-KB, ohne den Token-Rahmen zu sprengen.",
-      "output": "01_research_tag01.md – KB-Pack Kontext (Top 30 Titel + Bullet-Insights)",
+      "output": "01_research_tag01.md – KB-Pack mit Top 10–30 Artikeln (Titel/ID/URL), TOC-Header + 3–5 Bullets pro Quelle, Common H2 Patterns (Top 8) & Likely Gaps (Top 8)",
       "hardRules": [
-        "Kein Copy langer Absätze, nur Pattern-Mining",
-        "Keine erfundenen Quellen"
+        "Must include competitor patterns & gaps",
+        "Kein Copy langer Absätze, nur Pattern-Mining (max. 1–2 Sätze Snippet pro Quelle)",
+        "Keine erfundenen Quellen",
+        "Maximal 800–1200 Wörter"
       ],
       "outputPath": "projects/blog-artifacts/tag01/01_research_tag01.md"
     },
@@ -63,10 +69,11 @@
       "status": "active",
       "currentTask": "TAG-01 fertig, TAG-02 vorbereitet",
       "description": "Synthetisiert Wissen aus KB-Pack + Jobdaten, findet Lücken, liefert Competitive-Gap-Analyse.",
-      "output": "01_research_tag01.md – Search Intent, Audience, Patterns, Gaps, Differentiation Angles",
+      "output": "01_research_tag01.md – Pflichtblöcke: Competitor Patterns (Top 5–8), Competitor Gaps (Top 5–8), DIFF Angle (1–2 Sätze)",
       "hardRules": [
-        "Keine Prosa / kein Artikelschreiben",
-        "Keine Zahlen ohne sichere Quelle",
+        "No generic advice: Alles ohne KB-Bezug muss als 'common knowledge' markiert oder in patterns/gaps einsortiert sein",
+        "Pflichtblöcke aus KB erzwingen",
+        "Risky/Volatile Zones konkretisieren: Preise, Limits, 'study says', Prozentzahlen",
         "Max. 30 Bullets/Block, max. 900 Wörter"
       ],
       "outputPath": "projects/blog-artifacts/tag01/01_research_tag01.md"
@@ -79,10 +86,12 @@
       "status": "active",
       "currentTask": "TAG-01 fertig",
       "description": "Baut GEO-optimierte Outline: Intent-erfüllend, mit GAP/DIFF-Abschnitten, erzwingt TL;DR, Framework, Definition, FAQ≥5.",
-      "output": "02_outline_tag01.md – Article Blueprint mit [CORE]/[GAP]/[DIFF] H2-Tags",
+      "output": "02_outline_tag01.md – Article Blueprint mit CORE/GAP/DIFF Label Pflicht für jede H2",
       "hardRules": [
-        "Keine exakten Preise in Outline",
-        "Definition + Framework früh ansetzen",
+        "CORE/GAP/DIFF Label Pflicht",
+        "Min. Anforderungen: ≥60% CORE, ≥20% GAP, ≥20% DIFF",
+        "Volatile-Claim Gate: Keine harten Zahlen in H1/TL;DR/Headings ohne Quelle (außer als Beispiel gerahmt)",
+        "Start-Reihenfolge erzwingen: TL;DR bullets -> Quick Definition (2 Sätze) -> H1 -> Intro (max. 200–250 Wörter, sachlich)",
         "Kein zweites H1"
       ],
       "outputPath": "projects/blog-artifacts/tag01/02_outline_tag01.md"
@@ -95,11 +104,13 @@
       "status": "active",
       "currentTask": "TAG-01 fertig",
       "description": "Schreibt Abschnitte in Chunks (350–600 Wörter/Spawn). Produktion, nicht Recherche.",
-      "output": "03_draft_tag01.md – Longform Draft in Chunks",
+      "output": "03_draft_tag01.md – Longform Draft",
       "hardRules": [
-        "Volatile Claims weich formulieren ('starts around…')",
-        "Keine neuen Studien ohne Link",
-        "Erste 300 Wörter factual & skimmable"
+        "Fixe Start-Reihenfolge: YAML -> TL;DR -> H1 -> Quick Definition -> Intro",
+        "Tool-Section must be concrete: 3 Kategorien, 3 Auswahlkriterien pro Kategorie, kein Fülltext",
+        "Volatile-Claim Enforcement: Exakte Zahl/Preis/% ohne Quelle -> automatisch weich formulieren",
+        "Keine 'studies show' ohne Link, keine 'unlimited/best' Claims",
+        "Pro Spawn max. 350–600 Wörter"
       ],
       "outputPath": "projects/blog-artifacts/tag01/03_draft_tag01.md"
     },
@@ -111,11 +122,14 @@
       "status": "active",
       "currentTask": "TAG-01 fertig",
       "description": "Setzt Tareno als Workflow-Enabler ein – editorial, nicht werblich. Max. 3 Inserts à 80–120 Wörter.",
-      "output": "04_product_tag01.md – max. 3 Tareno Product Inserts",
+      "output": "04_product_tag01.md – Tareno Inserts",
       "hardRules": [
-        "Keine Superlative",
-        "Keine 'unlimited' Claims ohne Plan-Details",
-        "CTA minimal & editorial"
+        "Insert-Contract: Genau 1x Produktname 'Tareno' pro Insert",
+        "Min. 1 konkreter Begriff aus Feature-Liste (z.B. Publishing Queue, Approval Status, Asset Library)",
+        "Keine Marketing-Metaphern (Copilot, magisch)",
+        "Keine harten Produktclaims, nur 'helps', 'supports'",
+        "Insert 2 & 3 müssen Tareno explizit nennen (keine generic inserts)",
+        "60–120 Wörter pro Insert"
       ],
       "outputPath": "projects/blog-artifacts/tag01/04_product_tag01.md"
     },
@@ -127,11 +141,14 @@
       "status": "active",
       "currentTask": "TAG-01 fertig",
       "description": "Finale Qualität + Vertrauensaufbau + Halluzinationsschutz. Gatekeeper: hält harte Zahlen zurück, prüft E-E-A-T.",
-      "output": "05_edited_tag01.md – bereinigtes, E-E-A-T-konformes Draft",
+      "output": "05_edited_tag01.md – bereinigtes Draft",
       "hardRules": [
-        "Hard-Fail bei fehlendem H1, Script-Tags, sichtbarem Frontmatter",
-        "Hard-Fail bei Preis-Claims ohne Quelle",
-        "Hard-Fail wenn Definition/Framework/FAQ laut Outline fehlt"
+        "Autorbox + Last Updated am Ende Pflicht (konkret, 2–3 Sätze)",
+        "Obvious typo cleanup erzwingen",
+        "Claim Hygiene: Rewrite exakte Zahlen/Preise/% ohne Quelle (descriptive phrasing)",
+        "No institution naming if study has no source",
+        "Max. 1–3 outbound links (nur wenn wirklich hilfreich)",
+        "Hard-Fail bei fehlendem H1, Script-Tags, sichtbarem Frontmatter"
       ],
       "outputPath": "projects/blog-artifacts/tag01/05_edited_tag01.md"
     },
@@ -142,11 +159,13 @@
       "role": "geo_polish",
       "status": "active",
       "currentTask": "TAG-01 fertig",
-      "description": "Macht Artikel GEO-zitierbar: poliert Definitionen, benennt Frameworks, schärft TL;DR + Key Takeaways – ohne neue Fakten.",
-      "output": "06_final_tag01.md – GEO-polierter finaler Draft",
+      "description": "Macht Artikel GEO-zitierbar und linkwürdig.",
+      "output": "06_final_tag01.md – Output-Format = Patch (Replace block X, Add block Y), kein Full Rewrite",
       "hardRules": [
+        "Kein 'für Suchmaschinen' Label (Nutze 'Kurzdefinition' oder 'Definition')",
+        "Keine Meta-Kommentare ('Dieser Artikel wurde erstellt...')",
+        "Redundanz-Limit: Max. 1 TL;DR, 1 Quick Definition, 1 Framework, 1 Key Takeaways",
         "Keine neuen Zahlen/Studien",
-        "Keine neuen Produktclaims",
         "Kein Umschreiben ganzer Kapitel – nur Blocks"
       ],
       "outputPath": "projects/blog-artifacts/tag01/06_final_tag01.md"
