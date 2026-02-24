@@ -1,33 +1,46 @@
-# Research Synthesizer Output: [Project ID]
-**Thema:** [Topic]
-**Fokus-Keyword:** [Focus Keyword]
-**Zielgruppe:** [Target Audience]
-**Search Intent:** [Search Intent]
+# Research Synthesizer Output: TAG-01
+**Thema:** Social Media Automation für Anfänger: Wie du 10h pro Woche sparst
+**Fokus-Keyword:** social media automation
+**Zielgruppe:** Solopreneure, kleine Unternehmen, Social Media Manager
+**Search Intent:** Informational (How-To)
 
 ---
 
-## Search intent
-- primary: [Primary Intent]
-- secondary: [Secondary Intent]
+## Kernbegriffe & Definitionen
+- Social Media Automation = schedulen + planen + repurposen von Content
+- Zeitersparnis durch Batch-Produktion statt ad-hoc Posting
+- Content-Kalender = zentrales Planungsinstrument
 
-## Audience assumptions
-- [Assumption 1]
-- [Assumption 2]
+## Typische Fehler (Recherchebasis)
+- Keine klare Strategie vor Automation
+- Zu viele Plattformen gleichzeitig bespielen
+- Keine Content-Puffer aufbauen
+- Manuelles Posten zu unregelmäßigen Zeiten
+- Keine Analyse/Optimierung nach Veröffentlichung
 
-## Competitor patterns (what they cover)
-- [Pattern 1]
-- [Pattern 2]
+## Use Cases
+- Wochenplanung an einem Tag (Batch-Modus)
+- Cross-Posting zwischen Plattformen
+- Evergreen-Content recyclen
+- Zeitliche Optimierung (Beste Posting-Zeiten)
 
-## Competitor gaps (what they miss)
-- [Gap 1]
-- [Gap 2]
+## Gegenargumente (was funktioniert nicht)
+- Automation ohne Qualitäts-Check
+- Reine Auto-DMs/Spam-Automation
+- Keine persönliche Interaktion mehr
 
-## Differentiation angles (our unique value)
-- [Angle 1]
-- [Angle 2]
+## Was ist volatil (kann sich ändern)
+- Tool-Preise
+- Plattform-API-Regeln
+- Feature-Verfügbarkeit
 
-## Risky/volatile claim zones
-- prices: [Notes on pricing claims]
-- limits: [Notes on limits]
-- performance metrics: [Notes on metrics]
-- “studies show”: [Notes on studies and links]
+## Empfohlene Struktur-Vorgaben
+- Quick Definition (2 Sätze)
+- Framework: FAKTOR-6 (Fokus, Assets, Kanäle, Timing, Output, Review)
+- Step-by-Step Anleitung
+- Tool-Vergleich (ohne exakte Preise)
+- FAQ (min. 5 Fragen)
+- When to Use / When Not to Use
+
+---
+*Output für Agent 2: SEO & Outline Architect*
