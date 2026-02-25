@@ -1614,6 +1614,15 @@
                 btn.disabled = true;
             }
             try {
+                const secretKey = 'tareno_blog_api_secret';
+                let apiSecret = sessionStorage.getItem(secretKey) || '';
+                if (!apiSecret) {
+                    const entered = prompt('Bitte BLOG_API_SECRET eingeben (wird nur bis zum Tab-Close gespeichert):');
+                    apiSecret = String(entered || '').trim();
+                    if (!apiSecret) throw new Error('Kein BLOG_API_SECRET angegeben.');
+                    sessionStorage.setItem(secretKey, apiSecret);
+                }
+
                 const actorAgentId = window.getProjectActorAgentId(projectId);
                 const row = currentData?.project?.contentPipeline?.[cpIndex] || {};
                 const title = row.topicEn || row.topic || row.id || `TAG-${String(cpIndex + 1).padStart(2, '0')}`;
@@ -1623,6 +1632,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         actorAgentId,
+                        apiSecret,
                         title,
                         authorName,
                         mode: isDraft ? 'draft' : 'publish',
@@ -1631,6 +1641,9 @@
                 });
                 const data = await res.json().catch(() => ({}));
                 if (!res.ok || !data.success) {
+                    if (String(data?.error || '').includes('Missing BLOG_API_SECRET')) {
+                        sessionStorage.removeItem(secretKey);
+                    }
                     throw new Error(data.error || `Publish fehlgeschlagen (${res.status})`);
                 }
                 if (btn) btn.innerText = isDraft ? 'Draft saved' : 'Published';

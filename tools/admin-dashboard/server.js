@@ -79,6 +79,10 @@ const PROJECT_DATA_DIR = path.join(WORKSPACE_ROOT, "data", "projects");
 const SKILL_POLICY_FILE = path.join(WORKSPACE_ROOT, "data", "skills-policy.json");
 const NOTEBOOKLM_JOB_DIR = path.join(WORKSPACE_ROOT, "data", "notebooklm", "jobs");
 const NOTEBOOKLM_BRIDGE_PATH = path.join(__dirname, "scripts", "notebooklm_audio_bridge.py");
+const NOTEBOOKLM_PYTHON_BIN = process.env.NOTEBOOKLM_PYTHON_BIN
+    || (fs.existsSync("/opt/homebrew/bin/python3.11") ? "/opt/homebrew/bin/python3.11" : "python3");
+const NOTEBOOKLM_AUDIO_FORMATS = new Set(["DEEP_DIVE", "BRIEF", "CRITIQUE", "DEBATE"]);
+const NOTEBOOKLM_AUDIO_LENGTHS = new Set(["SHORT", "DEFAULT", "LONG"]);
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json({ limit: '50mb' }));
@@ -613,6 +617,27 @@ function expandUserPath(rawPath) {
     return p;
 }
 
+function normalizeNotebookLmLanguage(raw) {
+    const value = String(raw || 'de').trim().toLowerCase();
+    return /^[a-z]{2}(?:-[a-z]{2})?$/.test(value) ? value : 'de';
+}
+
+function normalizeNotebookLmAudioFormat(raw) {
+    const value = String(raw || '').trim().toUpperCase();
+    const aliases = {
+        SUMMARY: 'BRIEF',
+        SUMMARY_SHORT: 'BRIEF',
+        DETAILED_ANALYSIS: 'DEEP_DIVE'
+    };
+    const mapped = aliases[value] || value || 'DEEP_DIVE';
+    return NOTEBOOKLM_AUDIO_FORMATS.has(mapped) ? mapped : 'DEEP_DIVE';
+}
+
+function normalizeNotebookLmAudioLength(raw) {
+    const value = String(raw || '').trim().toUpperCase() || 'DEFAULT';
+    return NOTEBOOKLM_AUDIO_LENGTHS.has(value) ? value : 'DEFAULT';
+}
+
 function normalizeNotebookLmConfig(raw = {}) {
     const input = (raw && typeof raw === 'object') ? raw : {};
     const waitTimeout = Number(input.waitTimeoutSec);
@@ -627,6 +652,9 @@ function normalizeNotebookLmConfig(raw = {}) {
         outputDir: String(input.outputDir || 'media/notebooklm-audio/{{projectId}}').trim(),
         fileNameTemplate: String(input.fileNameTemplate || '{{rowId}}-{{slugTitle}}-notebooklm.mp3').trim(),
         reuseNotebook: input.reuseNotebook !== false,
+        language: normalizeNotebookLmLanguage(input.language),
+        audioFormat: normalizeNotebookLmAudioFormat(input.audioFormat),
+        audioLength: normalizeNotebookLmAudioLength(input.audioLength),
         waitTimeoutSec: Number.isFinite(waitTimeout) && waitTimeout > 0 ? Math.min(Math.max(waitTimeout, 60), 3600) : 900
     };
 }
@@ -1248,6 +1276,9 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/notebooklm-audio", express.
             outputPath: outputAbsPath,
             storagePath: storagePathRaw,
             reuseNotebook: cfg.reuseNotebook !== false,
+            language: normalizeNotebookLmLanguage(body.language || cfg.language),
+            audioFormat: normalizeNotebookLmAudioFormat(body.audioFormat || cfg.audioFormat),
+            audioLength: normalizeNotebookLmAudioLength(body.audioLength || cfg.audioLength),
             waitTimeoutSec: cfg.waitTimeoutSec
         };
 
@@ -1277,7 +1308,7 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/notebooklm-audio", express.
         }
 
         let bridgeOutput = null;
-        const cmd = `python3 ${JSON.stringify(NOTEBOOKLM_BRIDGE_PATH)} ${JSON.stringify(payloadPath)}`;
+        const cmd = `${JSON.stringify(NOTEBOOKLM_PYTHON_BIN)} ${JSON.stringify(NOTEBOOKLM_BRIDGE_PATH)} ${JSON.stringify(payloadPath)}`;
         if (!dryRun) {
             const timeoutMs = (Number(cfg.waitTimeoutSec) * 1000) + (2 * 60 * 1000);
             const run = await runCmd(cmd, { timeoutMs, maxBuffer: 20 * 1024 * 1024 });
@@ -1285,8 +1316,9 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/notebooklm-audio", express.
             if (!run.ok) {
                 return res.status(502).json({
                     success: false,
-                    error: "NotebookLM bridge command failed",
+                    error: parsed?.error || "NotebookLM bridge command failed",
                     command: cmd,
+                    bridge: parsed || null,
                     stderr: run.stderr || run.error || null,
                     stdout: run.stdout || null
                 });
@@ -1349,6 +1381,9 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/notebooklm-audio", express.
             outputPath: outputRelPath,
             payloadPath: payloadPathForResponse,
             bridge: bridgeOutput,
+            language: payload.language,
+            audioFormat: payload.audioFormat,
+            audioLength: payload.audioLength,
             command: dryRun ? cmd : undefined,
             config: cfg,
             sync
