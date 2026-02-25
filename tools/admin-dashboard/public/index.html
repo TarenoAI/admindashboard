@@ -273,6 +273,8 @@
         let selectedProject = null;
         let selectedAgent = null;
         let notebookLmModalCtx = null;
+        const notebooklmJobs = new Map(); // jobKey -> { projectId, cpIndex, tagId, startedAt }
+        let notebooklmPollInterval = null;
         let organizationAutoRefreshTimer = null;
 
         function switchTab(tabId, el) {
@@ -1794,6 +1796,75 @@
             if (modal) modal.classList.remove('hidden');
         };
 
+        // --- NotebookLM Background Job System ---
+        function showNlmToast(msg, type = 'info') {
+            let toast = document.getElementById('nlm-toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'nlm-toast';
+                toast.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;';
+                document.body.appendChild(toast);
+            }
+            const colors = { info: '#3b82f6', success: '#10b981', error: '#ef4444' };
+            const icons = { info: '🎙', success: '🎧', error: '⚠️' };
+            const el = document.createElement('div');
+            el.style.cssText = `background:rgba(15,15,25,0.95);border:1px solid ${colors[type] || colors.info}55;border-radius:10px;padding:12px 16px;color:#e2e8f0;font-size:12px;max-width:320px;box-shadow:0 4px 24px rgba(0,0,0,0.5);pointer-events:all;opacity:0;transition:opacity 0.3s;`;
+            el.innerHTML = `<span style="color:${colors[type]};font-weight:700;">${icons[type]} NotebookLM</span><br>${msg}`;
+            toast.appendChild(el);
+            requestAnimationFrame(() => { el.style.opacity = '1'; });
+            if (type !== 'info') setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 400); }, 6000);
+            return el;
+        }
+
+        function updateNlmBadge() {
+            let badge = document.getElementById('nlm-badge');
+            const active = [...notebooklmJobs.values()];
+            if (active.length === 0) {
+                if (badge) badge.remove();
+                if (notebooklmPollInterval) { clearInterval(notebooklmPollInterval); notebooklmPollInterval = null; }
+                return;
+            }
+            if (!badge) {
+                badge = document.createElement('div');
+                badge.id = 'nlm-badge';
+                badge.style.cssText = 'position:fixed;top:16px;right:16px;z-index:9998;background:rgba(251,146,60,0.15);border:1px solid rgba(251,146,60,0.4);border-radius:20px;padding:6px 14px;font-size:11px;font-weight:700;color:#fdba74;display:flex;align-items:center;gap:6px;box-shadow:0 0 20px rgba(251,146,60,0.15);cursor:pointer;';
+                badge.onclick = () => { loadCurrentView(); };
+                document.body.appendChild(badge);
+            }
+            badge.innerHTML = `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#fb923c;animation:pulse 1.5s infinite;"></span> ${active.length} Audio wird generiert… (klicken = refresh)`;
+        }
+
+        function startNlmPolling(projectId, cpIndex, tagId) {
+            const jobKey = `${projectId}-${cpIndex}`;
+            notebooklmJobs.set(jobKey, { projectId, cpIndex, tagId, startedAt: Date.now() });
+            updateNlmBadge();
+
+            if (!notebooklmPollInterval) {
+                notebooklmPollInterval = setInterval(async () => {
+                    for (const [key, job] of notebooklmJobs) {
+                        try {
+                            const res = await fetch(`/api/projects/${job.projectId}`);
+                            if (!res.ok) continue;
+                            const d = await res.json();
+                            const cp = d?.project?.contentPipeline?.[job.cpIndex];
+                            if (cp?.notebooklm?.lastAudioRelPath) {
+                                notebooklmJobs.delete(key);
+                                showNlmToast(`✅ <b>${job.tagId}</b> Audio fertig! Seite wird aktualisiert.`, 'success');
+                                loadCurrentView();
+                                updateNlmBadge();
+                            }
+                            // Timeout after 20min
+                            if (Date.now() - job.startedAt > 20 * 60 * 1000) {
+                                notebooklmJobs.delete(key);
+                                showNlmToast(`Timeout: ${job.tagId} Audio hat zu lange gedauert. Bitte manuell prüfen.`, 'error');
+                                updateNlmBadge();
+                            }
+                        } catch (e) { console.warn('NLM poll error', e); }
+                    }
+                }, 30000); // poll every 30 seconds
+            }
+        }
+
         window.generateNotebookLmAudio = async () => {
             if (!notebookLmModalCtx) return;
 
@@ -1801,6 +1872,7 @@
             const resultEl = document.getElementById('notebooklm-result');
             const submitBtn = document.getElementById('notebooklm-run-btn');
             const actorAgentId = window.getProjectActorAgentId(projectId);
+            const tagId = currentData?.project?.contentPipeline?.[cpIndex]?.id || `TAG-${cpIndex + 1}`;
 
             const payload = {
                 actorAgentId,
@@ -1819,56 +1891,47 @@
                 reuseNotebook: !!document.getElementById('notebooklm-reuse-notebook')?.checked
             };
 
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.innerText = payload.dryRun ? 'Dry-Run...' : 'Generating...';
-            }
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = payload.dryRun ? 'Dry-Run...' : 'Generating...'; }
             if (resultEl) {
                 resultEl.className = 'text-xs text-blue-200 bg-blue-500/10 border border-blue-500/20 rounded-lg px-3 py-2';
-                resultEl.innerText = payload.dryRun ? 'Dry-Run läuft...' : 'NotebookLM Audio wird erzeugt...';
+                resultEl.innerText = payload.dryRun ? 'Dry-Run läuft...' : 'NotebookLM Audio wird erzeugt... Du kannst das Fenster jetzt schließen.';
             }
 
-            try {
-                const res = await fetch(`/api/projects/${projectId}/pipeline/${cpIndex}/notebooklm-audio`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
+            // Allow closing immediately — run in background
+            fetch(`/api/projects/${projectId}/pipeline/${cpIndex}/notebooklm-audio`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(async res => {
                 const data = await res.json().catch(() => ({}));
                 if (!res.ok || !data.success) {
                     const details = [];
                     if (data?.error) details.push(String(data.error));
-                    if (data?.bridge?.error && String(data.bridge.error) !== String(data.error || '')) {
-                        details.push(String(data.bridge.error));
-                    }
-                    const tbLine = String(data?.bridge?.traceback || '').split('\n').find(line => line.includes('TimeoutError'));
-                    if (tbLine) details.push(tbLine.trim());
-                    throw new Error(details.join('\n') || `NotebookLM API failed (${res.status})`);
+                    if (data?.bridge?.error && String(data.bridge.error) !== String(data.error || '')) details.push(String(data.bridge.error));
+                    showNlmToast(`Fehler ${tagId}: ${details.join(' — ') || res.status}`, 'error');
+                    notebooklmJobs.delete(`${projectId}-${cpIndex}`);
+                    updateNlmBadge();
+                } else {
+                    // Server returned success — audio already available
+                    notebooklmJobs.delete(`${projectId}-${cpIndex}`);
+                    showNlmToast(`<b>${tagId}</b> Audio fertig!`, 'success');
+                    updateNlmBadge();
+                    loadCurrentView();
                 }
-
-                const outputPath = data.outputPath || '—';
-                const modeLabel = data.dryRun ? 'Dry-Run erfolgreich' : 'Audio erfolgreich erstellt';
-                if (resultEl) {
-                    resultEl.className = 'text-xs text-emerald-200 bg-emerald-500/10 border border-emerald-500/20 rounded-lg px-3 py-2';
-                    resultEl.innerText = `${modeLabel}\nOutput: ${outputPath}\nFormat: ${data.audioFormat || payload.audioFormat} · Sprache: ${data.language || payload.language} · Länge: ${data.audioLength || payload.audioLength}`;
-                }
-
-                if (!data.dryRun && outputPath) {
-                    setTimeout(() => window.openProjectRef(outputPath), 150);
-                }
-
-                loadCurrentView();
-            } catch (e) {
+                if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'Audio aus FINAL.md erzeugen'; }
+            }).catch(e => {
                 console.error(e);
-                if (resultEl) {
-                    resultEl.className = 'text-xs text-red-200 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2';
-                    resultEl.innerText = `Fehler: ${e.message}`;
-                }
-            } finally {
-                if (submitBtn) {
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = 'Audio aus FINAL.md erzeugen';
-                }
+                showNlmToast(`Netzwerkfehler: ${e.message}`, 'error');
+                notebooklmJobs.delete(`${projectId}-${cpIndex}`);
+                updateNlmBadge();
+                if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'Audio aus FINAL.md erzeugen'; }
+            });
+
+            // Start background polling + show persistent badge
+            if (!payload.dryRun) {
+                startNlmPolling(projectId, cpIndex, tagId);
+                showNlmToast(`<b>${tagId}</b> Audio-Generierung gestartet.<br>Du kannst das Fenster schließen — du wirst benachrichtigt.`, 'info');
+                window.closeNotebookLmModal();
             }
         };
 
