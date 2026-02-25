@@ -1065,20 +1065,21 @@
 
                         const docAction = stepData.doc
                             ? `<div class="flex items-center gap-1.5">
-                                    <button onclick="openPipelineDoc('${p.id}', ${cpIndex}, '${step}')" class="group relative flex items-center justify-center w-8 h-8 rounded bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all ${iconClr}" title="Dokument ansehen">📄<span class="absolute -top-1 -right-1 flex h-2.5 w-2.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-75"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand"></span></span></button>
-                                    <button onclick="downloadPipelineDoc('${p.id}', ${cpIndex}, '${step}', '${cp.id || `TAG-${String(cpIndex + 1).padStart(2, '0')}`}')" class="flex items-center justify-center w-8 h-8 rounded bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 text-blue-300 transition-all" title="Markdown downloaden">⬇</button>
+                                    <button onclick="openPipelineDoc('${p.id}', ${cpIndex}, '${step}')" class="group relative flex items-center justify-center w-8 h-8 rounded bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all ${iconClr} z-20" title="Dokument ansehen">📄<span class="absolute -top-1 -right-1 flex h-2.5 w-2.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-75"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand"></span></span></button>
+                                    <button onclick="downloadPipelineDoc('${p.id}', ${cpIndex}, '${step}', '${cp.id || `TAG-${String(cpIndex + 1).padStart(2, '0')}`}')" class="flex items-center justify-center w-8 h-8 rounded bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 text-blue-300 transition-all z-20" title="Markdown downloaden">⬇</button>
                                </div>`
                             : `<div class="flex items-center justify-center w-8 h-8 rounded bg-white/5 border border-white/5 opacity-30 ${iconClr}">📄</div>`;
 
-                        const wordCountHtml = stepData.wordCount ? `<div class="absolute top-1 right-2 bg-brand/10 px-1 py-0.5 rounded text-[8px] font-bold text-brand border border-brand/20 whitespace-nowrap z-20 shadow-sm" title="Word count">🔥 ${stepData.wordCount} W</div>` : '';
+                        const wordCountHtml = stepData.wordCount ? `<div class="bg-brand/10 px-1.5 py-0.5 rounded text-[8px] font-bold text-brand border border-brand/20 whitespace-nowrap shadow-sm" title="Word count">🔥 ${stepData.wordCount} W</div>` : '';
+                        const reviewBadge = stepData.status === 'review' ? '<span class="text-[8px] font-bold text-yellow-500 bg-yellow-500/20 px-1.5 py-0.5 rounded uppercase tracking-wider animate-pulse">Review</span>' : '';
+                        const metaTopHtml = (reviewBadge || wordCountHtml) ? `<div class="flex items-center justify-center gap-1.5 flex-wrap">${reviewBadge}${wordCountHtml}</div>` : '';
 
                         return `
-                                                <td class="p-3 align-middle relative">
-                                                    <div class="flex flex-col items-center justify-center gap-3 bg-black/40 p-3 pt-4 rounded-xl border border-white/5 h-full relative group-hover:border-white/10 transition-colors">
-                                                        ${stepData.status === 'review' ? '<span class="absolute top-1.5 left-1.5 text-[8px] font-bold text-yellow-500 bg-yellow-500/20 px-1.5 py-0.5 rounded uppercase tracking-wider animate-pulse z-10 w-fit">Review</span>' : ''}
-                                                        ${wordCountHtml}
+                                                <td class="p-2 align-middle">
+                                                    <div class="flex flex-col items-center justify-center gap-2 bg-black/40 p-2.5 pt-3 rounded-xl border border-white/5 h-full group-hover:border-white/15 hover:shadow-[0_0_15px_rgba(255,255,255,0.03)] transition-all">
+                                                        ${metaTopHtml}
                                                         ${docAction}
-                                                        <div class="w-full mt-auto">${btnHtml}</div>
+                                                        <div class="w-full mt-auto pt-1">${btnHtml}</div>
                                                     </div>
                                                 </td>
                                                 `;
