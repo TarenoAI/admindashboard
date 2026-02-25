@@ -669,9 +669,14 @@ app.get("/api/projects", async (_, res) => {
 });
 
 // Pipeline Status API
-app.post("/api/projects/:projectId/pipeline/:cpIndex/:stepId", express.json({ limit: '50mb' }), async (req, res) => {
+app.post("/api/projects/:projectId/pipeline/:cpIndex/:stepId", express.json({ limit: '50mb' }), async (req, res, next) => {
     const { projectId, cpIndex, stepId } = req.params;
     const { status, reason, actorAgentId } = req.body || {};
+
+    // Let dedicated endpoints handle these action routes.
+    if (stepId === 'accept-all' || stepId === 'publish-now') {
+        return next();
+    }
 
     const projectFile = path.join(WORKSPACE_ROOT, "data", "projects", `${projectId}.json`);
     if (!fs.existsSync(projectFile)) return res.status(404).json({ success: false, error: "Project not found" });
