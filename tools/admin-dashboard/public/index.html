@@ -1669,6 +1669,9 @@
             outputDir: 'media/notebooklm-audio/{{projectId}}',
             fileNameTemplate: '{{rowId}}-{{slugTitle}}-notebooklm.mp3',
             reuseNotebook: true,
+            language: 'de',
+            audioFormat: 'DEEP_DIVE',
+            audioLength: 'DEFAULT',
             waitTimeoutSec: 900
         });
 
@@ -1685,6 +1688,24 @@
             set('notebooklm-output-dir', value.outputDir);
             set('notebooklm-file-name', value.fileNameTemplate);
             set('notebooklm-timeout', value.waitTimeoutSec);
+            const setSelect = (id, v) => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                const val = String(v ?? '').trim();
+                if (!val) return;
+                const options = Array.from(el.options || []);
+                const hasValue = options.some(o => o.value === val);
+                if (!hasValue) {
+                    const extra = document.createElement('option');
+                    extra.value = val;
+                    extra.innerText = val;
+                    el.appendChild(extra);
+                }
+                el.value = val;
+            };
+            setSelect('notebooklm-language', String(value.language || 'de').toLowerCase());
+            setSelect('notebooklm-audio-format', String(value.audioFormat || 'DEEP_DIVE').toUpperCase());
+            setSelect('notebooklm-audio-length', String(value.audioLength || 'DEFAULT').toUpperCase());
             const reuse = document.getElementById('notebooklm-reuse-notebook');
             if (reuse) reuse.checked = value.reuseNotebook !== false;
             const saveCfg = document.getElementById('notebooklm-save-config');
@@ -1717,6 +1738,11 @@
             if (subtitleEl) subtitleEl.innerText = subtitle;
             const rowInfoEl = document.getElementById('notebooklm-row-info');
             if (rowInfoEl) rowInfoEl.innerText = subtitle;
+            const runBtn = document.getElementById('notebooklm-run-btn');
+            if (runBtn) {
+                runBtn.disabled = false;
+                runBtn.innerText = 'Audio aus FINAL.md erzeugen';
+            }
 
             window.setNotebookLmFormValues(window.defaultNotebookLmConfig());
 
@@ -1740,8 +1766,24 @@
                 console.error(e);
             }
 
+            try {
+                const finalRes = await fetch(`/api/projects/${projectId}/pipeline/${cpIndex}/final/doc`);
+                const finalPayload = await finalRes.json().catch(() => ({}));
+                if (!finalRes.ok || !finalPayload?.success) {
+                    const msg = finalPayload?.error || 'FINAL.md fehlt für diese Row.';
+                    if (runBtn) runBtn.disabled = true;
+                    const resultEl = document.getElementById('notebooklm-result');
+                    if (resultEl) {
+                        resultEl.className = 'text-xs text-red-200 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2';
+                        resultEl.innerText = `Nicht startbar: ${msg}`;
+                    }
+                }
+            } catch (e) {
+                console.error(e);
+            }
+
             const result = document.getElementById('notebooklm-result');
-            if (result) result.innerText = '';
+            if (result && !runBtn?.disabled) result.innerText = '';
 
             const modal = document.getElementById('notebooklm-modal');
             if (modal) modal.classList.remove('hidden');
@@ -1765,6 +1807,9 @@
                 instructionsTemplate: document.getElementById('notebooklm-instructions')?.value?.trim() || '',
                 outputDir: document.getElementById('notebooklm-output-dir')?.value?.trim() || '',
                 fileNameTemplate: document.getElementById('notebooklm-file-name')?.value?.trim() || '',
+                language: document.getElementById('notebooklm-language')?.value?.trim() || 'de',
+                audioFormat: document.getElementById('notebooklm-audio-format')?.value?.trim() || 'DEEP_DIVE',
+                audioLength: document.getElementById('notebooklm-audio-length')?.value?.trim() || 'DEFAULT',
                 waitTimeoutSec: Number(document.getElementById('notebooklm-timeout')?.value || 900),
                 reuseNotebook: !!document.getElementById('notebooklm-reuse-notebook')?.checked
             };
@@ -1786,14 +1831,21 @@
                 });
                 const data = await res.json().catch(() => ({}));
                 if (!res.ok || !data.success) {
-                    throw new Error(data.error || `NotebookLM API failed (${res.status})`);
+                    const details = [];
+                    if (data?.error) details.push(String(data.error));
+                    if (data?.bridge?.error && String(data.bridge.error) !== String(data.error || '')) {
+                        details.push(String(data.bridge.error));
+                    }
+                    const tbLine = String(data?.bridge?.traceback || '').split('\n').find(line => line.includes('TimeoutError'));
+                    if (tbLine) details.push(tbLine.trim());
+                    throw new Error(details.join('\n') || `NotebookLM API failed (${res.status})`);
                 }
 
                 const outputPath = data.outputPath || '—';
                 const modeLabel = data.dryRun ? 'Dry-Run erfolgreich' : 'Audio erfolgreich erstellt';
                 if (resultEl) {
                     resultEl.className = 'text-xs text-emerald-200 bg-emerald-500/10 border border-emerald-500/20 rounded-lg px-3 py-2';
-                    resultEl.innerText = `${modeLabel}\nOutput: ${outputPath}`;
+                    resultEl.innerText = `${modeLabel}\nOutput: ${outputPath}\nFormat: ${data.audioFormat || payload.audioFormat} · Sprache: ${data.language || payload.language} · Länge: ${data.audioLength || payload.audioLength}`;
                 }
 
                 if (!data.dryRun && outputPath) {
@@ -2129,6 +2181,39 @@
                     <textarea id="notebooklm-instructions" rows="4"
                         class="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-orange-400/50 transition-colors font-mono resize-none"
                         placeholder="Create a podcast-style audio overview..."></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold tracking-wider text-text-muted mb-1.5 ml-1">Format</label>
+                        <select id="notebooklm-audio-format"
+                            class="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-orange-400/50 transition-colors">
+                            <option value="DEEP_DIVE">Detaillierte Analyse</option>
+                            <option value="BRIEF">Zusammenfassung</option>
+                            <option value="CRITIQUE">Kritische Bewertung</option>
+                            <option value="DEBATE">Diskussion</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold tracking-wider text-text-muted mb-1.5 ml-1">Sprache</label>
+                        <select id="notebooklm-language"
+                            class="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-orange-400/50 transition-colors">
+                            <option value="de">Deutsch</option>
+                            <option value="en">English</option>
+                            <option value="tr">Türkçe</option>
+                            <option value="es">Español</option>
+                            <option value="fr">Français</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold tracking-wider text-text-muted mb-1.5 ml-1">Länge</label>
+                        <select id="notebooklm-audio-length"
+                            class="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-orange-400/50 transition-colors">
+                            <option value="SHORT">Kurz</option>
+                            <option value="DEFAULT">Standard</option>
+                            <option value="LONG">Lang</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">

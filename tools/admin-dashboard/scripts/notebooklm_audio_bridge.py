@@ -40,6 +40,35 @@ def as_list(value: Any) -> list[Any]:
     return []
 
 
+def parse_language(raw: Any) -> str:
+    value = str(raw or "").strip().lower()
+    if not value:
+        return "de"
+    if len(value) > 16:
+        return "de"
+    return value
+
+
+def parse_audio_format(raw: Any, enum_cls: Any) -> Any:
+    key = str(raw or "").strip().upper()
+    if not key:
+        return None
+    try:
+        return enum_cls[key]
+    except Exception:
+        return None
+
+
+def parse_audio_length(raw: Any, enum_cls: Any) -> Any:
+    key = str(raw or "").strip().upper()
+    if not key:
+        return None
+    try:
+        return enum_cls[key]
+    except Exception:
+        return None
+
+
 async def resolve_notebook(client: Any, title: str, reuse_existing: bool) -> tuple[str, bool]:
     notebook_obj = None
 
@@ -88,6 +117,9 @@ async def run(payload_path: Path) -> dict[str, Any]:
     instructions = str(payload.get("instructions") or "").strip()
     output_path = str(payload.get("outputPath") or "").strip()
     storage_path_raw = str(payload.get("storagePath") or "").strip()
+    language = parse_language(payload.get("language"))
+    audio_format_code = str(payload.get("audioFormat") or "").strip().upper()
+    audio_length_code = str(payload.get("audioLength") or "").strip().upper()
     reuse_notebook = bool(payload.get("reuseNotebook", True))
     wait_timeout_sec = int(payload.get("waitTimeoutSec") or 900)
     wait_timeout_sec = max(60, min(wait_timeout_sec, 3600))
@@ -100,7 +132,7 @@ async def run(payload_path: Path) -> dict[str, Any]:
         raise ValueError("Missing outputPath in payload.")
 
     try:
-        from notebooklm import NotebookLMClient
+        from notebooklm import AudioFormat, AudioLength, NotebookLMClient
     except Exception as exc:  # pragma: no cover - depends on host env
         raise RuntimeError(
             "notebooklm-py is not installed. Install with: pip install notebooklm-py"
@@ -120,21 +152,43 @@ async def run(payload_path: Path) -> dict[str, Any]:
 
         source_status = await client.sources.add_text(notebook_id, source_title, source_content)
         source_id = pick(source_status, "source_id", "id")
+        source_ids = [str(source_id)] if source_id else None
+        audio_format = parse_audio_format(audio_format_code, AudioFormat)
+        audio_length = parse_audio_length(audio_length_code, AudioLength)
 
         generation = await client.artifacts.generate_audio(
             notebook_id,
+            source_ids=source_ids,
+            language=language,
             instructions=instructions or None,
+            audio_format=audio_format,
+            audio_length=audio_length,
         )
         task_id = str(pick(generation, "task_id", "id") or "").strip()
 
         wait_result = None
+        wait_error = None
         if task_id:
-            wait_result = await wait_for_audio(client, notebook_id, task_id, wait_timeout_sec)
+            try:
+                wait_result = await wait_for_audio(client, notebook_id, task_id, wait_timeout_sec)
+            except TimeoutError as exc:
+                wait_error = str(exc)
+
+        wait_status = str(pick(wait_result, "status") or "").strip().lower()
+        if wait_status in {"failed", "error"}:
+            raise RuntimeError(f"NotebookLM audio generation failed for task {task_id}.")
 
         artifact_id = (
             pick(wait_result, "artifact_id", "id")
             or pick(generation, "artifact_id")
         )
+        if not artifact_id and wait_status == "completed" and task_id:
+            artifact_id = task_id
+
+        if wait_error and not artifact_id:
+            raise TimeoutError(
+                f"{wait_error}. Increase waitTimeoutSec or retry with a shorter source."
+            )
 
         try:
             if artifact_id:
@@ -159,6 +213,10 @@ async def run(payload_path: Path) -> dict[str, Any]:
         "sourceId": source_id,
         "taskId": task_id or None,
         "artifactId": artifact_id,
+        "language": language,
+        "audioFormat": audio_format_code or None,
+        "audioLength": audio_length_code or None,
+        "waitTimeoutSec": wait_timeout_sec,
         "downloadResult": download_result if isinstance(download_result, (dict, list, str, int, float, bool, type(None))) else str(download_result),
         "outputPath": str(output_file),
         "outputExists": output_file.exists(),

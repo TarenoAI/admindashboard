@@ -3,7 +3,7 @@
   "summary": "SaaS-Marketing & Blog-Operations für tareno.co mit Fokus auf planbare Content-Pipeline.",
   "status": "on_track",
   "priority": "high",
-  "lastUpdate": "2026-02-23",
+  "lastUpdate": "2026-02-25",
   "agents": [
     {
       "id": "tarenoblog",
@@ -463,6 +463,13 @@
       "path": "projects/blog-artifacts/AGENT_7_FINAL_ASSEMBLER_PUBLISHER.md",
       "type": "md",
       "addedAt": "2026-02-24T23:17:40.141Z"
+    },
+    {
+      "label": "TAG-01 NotebookLM Audio",
+      "path": "media/notebooklm-audio/tareno/tag-01-bio-link-optimierung-der-erste-schritt-im-seo-funnel-notebooklm.mp3",
+      "type": "mp3",
+      "category": "Audio TAG-01",
+      "addedAt": "2026-02-25T19:56:31.139Z"
     }
   ],
   "notes": "Sam liefert operative Updates; Luna validiert Struktur und Qualität. TAG-01 alle 6 Schritte abgeschlossen, bereit für Luna's Final Review.",
@@ -524,6 +531,17 @@
           "status": "pending",
           "doc": null
         }
+      },
+      "id": "TAG-01",
+      "notebooklm": {
+        "lastJobId": "1772049059649-tag-01",
+        "lastGeneratedAt": "2026-02-25T19:56:31.139Z",
+        "lastAudioRelPath": "media/notebooklm-audio/tareno/tag-01-bio-link-optimierung-der-erste-schritt-im-seo-funnel-notebooklm.mp3",
+        "lastAudioAbsPath": "/Users/mertkaraca/Downloads/admindashboard/media/notebooklm-audio/tareno/tag-01-bio-link-optimierung-der-erste-schritt-im-seo-funnel-notebooklm.mp3",
+        "notebookTitle": "Tareno TAG-01 - Bio-Link Optimierung: Der erste Schritt im SEO-Funnel",
+        "notebookId": "1a0996a1-4236-4445-9ea5-a13c802fd78f",
+        "artifactId": null,
+        "taskId": "459e5efb-ebcc-4bda-b908-a558cf0e3fbb"
       }
     },
     {
@@ -564,7 +582,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-02"
     },
     {
       "day": "Tag 2 (Post 1)",
@@ -604,7 +623,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-03"
     },
     {
       "day": "Tag 2 (Post 2)",
@@ -644,7 +664,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-04"
     },
     {
       "day": "Tag 3 (Post 1)",
@@ -684,7 +705,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-05"
     },
     {
       "day": "Tag 3 (Post 2)",
@@ -724,7 +746,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-06"
     },
     {
       "day": "Tag 4 (Post 1)",
@@ -764,7 +787,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-07"
     },
     {
       "day": "Tag 4 (Post 2)",
@@ -804,7 +828,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-08"
     },
     {
       "day": "Tag 5 (Post 1)",
@@ -844,7 +869,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-09"
     },
     {
       "day": "Tag 5 (Post 2)",
@@ -884,7 +910,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-10"
     },
     {
       "day": "Tag 6 (Post 1)",
@@ -924,7 +951,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-11"
     },
     {
       "day": "Tag 6 (Post 2)",
@@ -964,7 +992,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-12"
     },
     {
       "day": "Tag 7 (Post 1)",
@@ -1004,7 +1033,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-13"
     },
     {
       "day": "Tag 7 (Post 2)",
@@ -1044,7 +1074,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-14"
     },
     {
       "day": "Tag 8 (Post 1)",
@@ -1084,7 +1115,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-15"
     },
     {
       "day": "Tag 8 (Post 2)",
@@ -1124,7 +1156,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-16"
     },
     {
       "day": "Tag 9 (Post 1)",
@@ -1164,7 +1197,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-17"
     },
     {
       "day": "Tag 9 (Post 2)",
@@ -1204,7 +1238,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-18"
     },
     {
       "day": "Tag 10 (Post 1)",
@@ -1244,7 +1279,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-19"
     },
     {
       "day": "Tag 10 (Post 2)",
@@ -1284,7 +1320,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-20"
     },
     {
       "day": "Tag 11 (Post 1)",
@@ -1324,7 +1361,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-21"
     },
     {
       "day": "Tag 11 (Post 2)",
@@ -1364,7 +1402,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-22"
     },
     {
       "day": "Tag 12 (Post 1)",
@@ -1404,7 +1443,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-23"
     },
     {
       "day": "Tag 12 (Post 2)",
@@ -1444,7 +1484,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-24"
     },
     {
       "day": "Tag 13 (Post 1)",
@@ -1484,7 +1525,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-25"
     },
     {
       "day": "Tag 13 (Post 2)",
@@ -1524,7 +1566,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-26"
     },
     {
       "day": "Tag 14 (Post 1)",
@@ -1564,7 +1607,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-27"
     },
     {
       "day": "Tag 14 (Post 2)",
@@ -1604,7 +1648,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-28"
     },
     {
       "day": "Tag 15 (Post 1)",
@@ -1644,7 +1689,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-29"
     },
     {
       "day": "Tag 15 (Post 2)",
@@ -1684,7 +1730,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-30"
     },
     {
       "day": "Tag 16 (Post 1)",
@@ -1724,7 +1771,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-31"
     },
     {
       "day": "Tag 16 (Post 2)",
@@ -1764,7 +1812,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-32"
     },
     {
       "day": "Tag 17 (Post 1)",
@@ -1804,7 +1853,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-33"
     },
     {
       "day": "Tag 17 (Post 2)",
@@ -1844,7 +1894,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-34"
     },
     {
       "day": "Tag 18 (Post 1)",
@@ -1884,7 +1935,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-35"
     },
     {
       "day": "Tag 18 (Post 2)",
@@ -1924,7 +1976,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-36"
     },
     {
       "day": "Tag 19 (Post 1)",
@@ -1964,7 +2017,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-37"
     },
     {
       "day": "Tag 19 (Post 2)",
@@ -2004,7 +2058,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-38"
     },
     {
       "day": "Tag 20 (Post 1)",
@@ -2044,7 +2099,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-39"
     },
     {
       "day": "Tag 20 (Post 2)",
@@ -2084,7 +2140,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-40"
     },
     {
       "day": "Tag 21 (Post 1)",
@@ -2124,7 +2181,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-41"
     },
     {
       "day": "Tag 21 (Post 2)",
@@ -2164,7 +2222,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-42"
     },
     {
       "day": "Tag 22 (Post 1)",
@@ -2204,7 +2263,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-43"
     },
     {
       "day": "Tag 22 (Post 2)",
@@ -2244,7 +2304,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-44"
     },
     {
       "day": "Tag 23 (Post 1)",
@@ -2284,7 +2345,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-45"
     },
     {
       "day": "Tag 23 (Post 2)",
@@ -2324,7 +2386,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-46"
     },
     {
       "day": "Tag 24 (Post 1)",
@@ -2364,7 +2427,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-47"
     },
     {
       "day": "Tag 24 (Post 2)",
@@ -2404,7 +2468,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-48"
     },
     {
       "day": "Tag 25 (Post 1)",
@@ -2444,7 +2509,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-49"
     },
     {
       "day": "Tag 25 (Post 2)",
@@ -2484,7 +2550,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-50"
     },
     {
       "day": "Tag 26 (Post 1)",
@@ -2524,7 +2591,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-51"
     },
     {
       "day": "Tag 26 (Post 2)",
@@ -2564,7 +2632,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-52"
     },
     {
       "day": "Tag 27 (Post 1)",
@@ -2604,7 +2673,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-53"
     },
     {
       "day": "Tag 27 (Post 2)",
@@ -2644,7 +2714,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-54"
     },
     {
       "day": "Tag 28 (Post 1)",
@@ -2684,7 +2755,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-55"
     },
     {
       "day": "Tag 28 (Post 2)",
@@ -2724,7 +2796,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-56"
     },
     {
       "day": "Tag 29 (Post 1)",
@@ -2764,7 +2837,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-57"
     },
     {
       "day": "Tag 29 (Post 2)",
@@ -2804,7 +2878,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-58"
     },
     {
       "day": "Tag 30 (Post 1)",
@@ -2844,7 +2919,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-59"
     },
     {
       "day": "Tag 30 (Post 2)",
@@ -2884,7 +2960,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-60"
     },
     {
       "day": "Tag 31 (Post 1)",
@@ -2924,7 +3001,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-61"
     },
     {
       "day": "Tag 31 (Post 2)",
@@ -2964,7 +3042,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-62"
     },
     {
       "day": "Tag 32 (Post 1)",
@@ -3004,7 +3083,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-63"
     },
     {
       "day": "Tag 32 (Post 2)",
@@ -3044,7 +3124,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-64"
     },
     {
       "day": "Tag 33 (Post 1)",
@@ -3084,7 +3165,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-65"
     },
     {
       "day": "Tag 33 (Post 2)",
@@ -3124,7 +3206,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-66"
     },
     {
       "day": "Tag 34 (Post 1)",
@@ -3164,7 +3247,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-67"
     },
     {
       "day": "Tag 34 (Post 2)",
@@ -3204,7 +3288,8 @@
           "status": "pending",
           "doc": null
         }
-      }
+      },
+      "id": "TAG-68"
     }
   ]
 }
