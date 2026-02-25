@@ -577,18 +577,23 @@ function resolvePublishConfig(projectData, body = {}) {
         `${apiBase}/api/blog/publish`
     ).trim();
 
-    const apiKey = String(
-        body.apiKey ||
-        projectPublish.apiKey ||
+    const apiSecret = String(
+        body.apiSecret ||
+        projectPublish.apiSecret ||
+        process.env.BLOG_API_SECRET ||
+        process.env.TARENO_BLOG_API_SECRET ||
         process.env.TARENO_BLOG_API_KEY ||
         ''
     ).trim();
 
+    const incomingMode = String(body.mode || projectPublish.mode || 'publish').trim().toLowerCase();
+    const mode = incomingMode === 'draft' ? 'draft' : 'publish';
+
     return {
         apiBase,
         endpoint,
-        apiKey,
-        mode: String(body.mode || projectPublish.mode || 'live').trim().toLowerCase()
+        apiSecret,
+        mode
     };
 }
 
@@ -1028,17 +1033,16 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
         }
 
         const publishCfg = resolvePublishConfig(data, body);
-        if (!publishCfg.apiKey) {
+        if (!publishCfg.apiSecret) {
             return res.status(400).json({
                 success: false,
-                error: "Missing publish API key (set project.publish.apiKey or TARENO_BLOG_API_KEY)"
+                error: "Missing BLOG_API_SECRET (set project.publish.apiSecret or BLOG_API_SECRET env)"
             });
         }
 
         let publishUrl;
         try {
             publishUrl = new URL(publishCfg.endpoint);
-            publishUrl.searchParams.set('key', publishCfg.apiKey);
         } catch {
             return res.status(400).json({ success: false, error: "Invalid publish endpoint URL" });
         }
@@ -1046,19 +1050,26 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
         const rowId = String(row.id || pipelineRowId(rowIndex));
         const title = String(body.title || row.topicEn || row.topic || rowId).trim();
         const slug = safeSlug(body.slug || title || rowId, rowId.toLowerCase());
+        const authorName = String(body.authorName || String(row.author || '').split('(')[0].trim() || 'Tareno Editorial').trim();
+        const previewHours = Number.isFinite(Number(body.previewHours)) ? Math.max(1, Number(body.previewHours)) : 72;
         const fileName = `${slug}.md`;
 
         const form = new FormData();
         form.append('file', new Blob([markdown], { type: 'text/markdown; charset=utf-8' }), fileName);
         form.append('title', title);
         form.append('slug', slug);
-        form.append('projectId', projectId);
-        form.append('rowId', rowId);
         form.append('mode', publishCfg.mode);
+        form.append('authorName', authorName);
+        if (publishCfg.mode === 'draft') {
+            form.append('previewHours', String(previewHours));
+        }
         form.append('content', markdown);
 
         const upstream = await fetch(publishUrl.toString(), {
             method: 'POST',
+            headers: {
+                Authorization: `Bearer ${publishCfg.apiSecret}`
+            },
             body: form
         });
 
@@ -1074,10 +1085,16 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
         }
 
         row.publishedAt = new Date().toISOString();
-        row.publishStatus = 'published';
+        row.publishStatus = publishCfg.mode === 'draft' ? 'draft' : 'published';
         row.publishResult = parsed || raw;
+        row.publishMeta = {
+            mode: publishCfg.mode,
+            endpoint: publishCfg.endpoint,
+            authorName,
+            previewHours: publishCfg.mode === 'draft' ? previewHours : null
+        };
         if (row.steps?.final) {
-            row.steps.final.status = 'done';
+            row.steps.final.status = publishCfg.mode === 'publish' ? 'done' : row.steps.final.status;
             row.steps.final.updatedAt = new Date().toISOString();
             if (actorAgentId) row.steps.final.updatedBy = actorAgentId;
         }

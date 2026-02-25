@@ -1084,7 +1084,8 @@
                                             <td class="p-5 text-center align-middle">
                                                 <div class="flex flex-col gap-2">
                                                    <button id="accept-all-${p.id}-${cpIndex}" class="px-3 py-1.5 bg-green-500/15 border border-green-500/30 text-green-300 shadow hover:shadow-[0_0_12px_rgba(34,197,94,0.25)] transition-all rounded text-[10px] font-bold w-full uppercase" onclick="acceptAllPipelineSteps('${p.id}', ${cpIndex})">✓ Accept all</button>
-                                                   <button id="publish-now-${p.id}-${cpIndex}" class="px-3 py-1.5 bg-brand/20 border border-brand/30 text-brand shadow hover:shadow-[0_0_15px_rgba(130,81,238,0.3)] transition-all rounded text-[10px] font-bold w-full uppercase" onclick="publishPipelineNow('${p.id}', ${cpIndex})">⚡ Publish now</button>
+                                                   <button id="draft-now-${p.id}-${cpIndex}" class="px-3 py-1.5 bg-amber-500/15 border border-amber-500/30 text-amber-300 shadow hover:shadow-[0_0_12px_rgba(245,158,11,0.25)] transition-all rounded text-[10px] font-bold w-full uppercase" onclick="publishPipelineNow('${p.id}', ${cpIndex}, 'draft')">📝 Draft now</button>
+                                                   <button id="publish-now-${p.id}-${cpIndex}" class="px-3 py-1.5 bg-brand/20 border border-brand/30 text-brand shadow hover:shadow-[0_0_15px_rgba(130,81,238,0.3)] transition-all rounded text-[10px] font-bold w-full uppercase" onclick="publishPipelineNow('${p.id}', ${cpIndex}, 'publish')">⚡ Publish now</button>
                                                    <button id="notebooklm-audio-${p.id}-${cpIndex}" class="px-3 py-1.5 bg-orange-500/15 border border-orange-500/30 text-orange-300 shadow hover:shadow-[0_0_12px_rgba(251,146,60,0.25)] transition-all rounded text-[10px] font-bold w-full uppercase" onclick="openNotebookLmModal('${p.id}', ${cpIndex})">🎙 NotebookLM Audio</button>
                                                    ${cp.notebooklm?.lastAudioRelPath ? `<button class="px-3 py-1.5 bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 shadow hover:shadow-[0_0_12px_rgba(16,185,129,0.25)] transition-all rounded text-[10px] font-bold w-full uppercase" onclick="openProjectRef('${String(cp.notebooklm.lastAudioRelPath).replace(/'/g, "\\'")}')">🎧 Last Audio</button>` : ''}
                                                    <button class="px-3 py-1.5 bg-blue-500/15 border border-blue-500/30 text-blue-300 shadow hover:shadow-[0_0_12px_rgba(59,130,246,0.25)] transition-all rounded text-[10px] font-bold w-full uppercase" onclick="downloadPipelineRange('${p.id}', ${cpIndex}, '${cp.id || `TAG-${String(cpIndex + 1).padStart(2, '0')}`}')">⬇ Download All</button>
@@ -1603,27 +1604,36 @@
             }
         };
 
-        window.publishPipelineNow = async (projectId, cpIndex) => {
-            const btn = document.getElementById(`publish-now-${projectId}-${cpIndex}`);
-            const oldText = btn?.innerText || 'Publish now';
+        window.publishPipelineNow = async (projectId, cpIndex, mode = 'publish') => {
+            const isDraft = String(mode).toLowerCase() === 'draft';
+            const btnId = `${isDraft ? 'draft-now' : 'publish-now'}-${projectId}-${cpIndex}`;
+            const btn = document.getElementById(btnId);
+            const oldText = btn?.innerText || (isDraft ? 'Draft now' : 'Publish now');
             if (btn) {
-                btn.innerText = 'Publishing...';
+                btn.innerText = isDraft ? 'Drafting...' : 'Publishing...';
                 btn.disabled = true;
             }
             try {
                 const actorAgentId = window.getProjectActorAgentId(projectId);
                 const row = currentData?.project?.contentPipeline?.[cpIndex] || {};
                 const title = row.topicEn || row.topic || row.id || `TAG-${String(cpIndex + 1).padStart(2, '0')}`;
+                const authorName = String(row.author || 'Alex').replace(/\s*\(.*\)\s*$/, '').trim() || 'Alex';
                 const res = await fetch(`/api/projects/${projectId}/pipeline/${cpIndex}/publish-now`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ actorAgentId, title, mode: 'live' })
+                    body: JSON.stringify({
+                        actorAgentId,
+                        title,
+                        authorName,
+                        mode: isDraft ? 'draft' : 'publish',
+                        previewHours: 72
+                    })
                 });
                 const data = await res.json().catch(() => ({}));
                 if (!res.ok || !data.success) {
                     throw new Error(data.error || `Publish fehlgeschlagen (${res.status})`);
                 }
-                if (btn) btn.innerText = 'Published';
+                if (btn) btn.innerText = isDraft ? 'Draft saved' : 'Published';
                 loadCurrentView();
             } catch (e) {
                 console.error(e);
