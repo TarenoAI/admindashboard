@@ -1060,8 +1060,11 @@
                             iconClr = 'text-white/10';
                         }
 
-                        const docIcon = stepData.doc
-                            ? `<button onclick="openPipelineDoc('${p.id}', ${cpIndex}, '${step}')" class="group relative flex items-center justify-center w-8 h-8 rounded bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all ${iconClr}" title="Dokument ansehen">📄<span class="absolute -top-1 -right-1 flex h-2.5 w-2.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-75"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand"></span></span></button>`
+                        const docAction = stepData.doc
+                            ? `<div class="flex items-center gap-1.5">
+                                    <button onclick="openPipelineDoc('${p.id}', ${cpIndex}, '${step}')" class="group relative flex items-center justify-center w-8 h-8 rounded bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all ${iconClr}" title="Dokument ansehen">📄<span class="absolute -top-1 -right-1 flex h-2.5 w-2.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-75"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand"></span></span></button>
+                                    <button onclick="downloadPipelineDoc('${p.id}', ${cpIndex}, '${step}', '${cp.id || `TAG-${String(cpIndex + 1).padStart(2, '0')}`}')" class="flex items-center justify-center w-8 h-8 rounded bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 text-blue-300 transition-all" title="Markdown downloaden">⬇</button>
+                               </div>`
                             : `<div class="flex items-center justify-center w-8 h-8 rounded bg-white/5 border border-white/5 opacity-30 ${iconClr}">📄</div>`;
 
                         const wordCountHtml = stepData.wordCount ? `<div class="absolute top-1 right-2 bg-brand/10 px-1 py-0.5 rounded text-[8px] font-bold text-brand border border-brand/20 whitespace-nowrap z-20 shadow-sm" title="Word count">🔥 ${stepData.wordCount} W</div>` : '';
@@ -1071,7 +1074,7 @@
                                                     <div class="flex flex-col items-center justify-center gap-3 bg-black/40 p-3 pt-4 rounded-xl border border-white/5 h-full relative group-hover:border-white/10 transition-colors">
                                                         ${stepData.status === 'review' ? '<span class="absolute top-1.5 left-1.5 text-[8px] font-bold text-yellow-500 bg-yellow-500/20 px-1.5 py-0.5 rounded uppercase tracking-wider animate-pulse z-10 w-fit">Review</span>' : ''}
                                                         ${wordCountHtml}
-                                                        ${docIcon}
+                                                        ${docAction}
                                                         <div class="w-full mt-auto">${btnHtml}</div>
                                                     </div>
                                                 </td>
@@ -1079,6 +1082,7 @@
                     }).join('')}
                                             <td class="p-5 text-center align-middle">
                                                 <div class="flex flex-col gap-2">
+                                                   <button class="px-3 py-1.5 bg-blue-500/15 border border-blue-500/30 text-blue-300 shadow hover:shadow-[0_0_12px_rgba(59,130,246,0.25)] transition-all rounded text-[10px] font-bold w-full uppercase" onclick="downloadPipelineRange('${p.id}', ${cpIndex}, '${cp.id || `TAG-${String(cpIndex + 1).padStart(2, '0')}`}')">⬇ Download All</button>
                                                    <button class="px-3 py-1.5 bg-brand/20 border border-brand/30 text-brand shadow hover:shadow-[0_0_15px_rgba(130,81,238,0.3)] transition-all rounded text-[10px] font-bold w-full uppercase" onclick="alert('Gesamten Tag bestätigen!')">⚡ Publish Tag</button>
                                                 </div>
                                             </td>
@@ -1482,6 +1486,73 @@
                 return;
             }
             alert('Dokument konnte nicht gefunden werden.');
+        };
+
+        window.getPipelineDocMeta = async (projectId, cpIndex, stepId) => {
+            const res = await fetch(`/api/projects/${projectId}/pipeline/${cpIndex}/${stepId}/doc`);
+            const payload = await res.json().catch(() => null);
+            const absPath = payload?.path || payload?.data?.path;
+            const relPath = payload?.relPath || payload?.data?.relPath || null;
+            if (!res.ok || !absPath) {
+                throw new Error(payload?.error || 'Dokument nicht gefunden');
+            }
+            return { absPath, relPath };
+        };
+
+        window.slugifyForFile = (value) => {
+            return String(value || '')
+                .normalize('NFKD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '') || 'file';
+        };
+
+        window.downloadFileFromAbsPath = async (absPath, fileName) => {
+            const res = await fetch(`/api/file/raw?path=${encodeURIComponent(absPath)}`);
+            if (!res.ok) throw new Error('Download fehlgeschlagen');
+            const blob = await res.blob();
+            const href = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = href;
+            a.download = fileName || absPath.split('/').pop() || 'download.md';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(href), 1000);
+        };
+
+        window.downloadPipelineDoc = async (projectId, cpIndex, stepId, rowId) => {
+            try {
+                const meta = await window.getPipelineDocMeta(projectId, cpIndex, stepId);
+                const ext = (meta.relPath || '').split('.').pop() || 'md';
+                const filename = `${window.slugifyForFile(rowId)}-${window.slugifyForFile(stepId)}.${ext}`;
+                await window.downloadFileFromAbsPath(meta.absPath, filename);
+            } catch (e) {
+                console.error(e);
+                alert(`Download fehlgeschlagen (${stepId}).`);
+            }
+        };
+
+        window.downloadPipelineRange = async (projectId, cpIndex, rowId) => {
+            const orderedSteps = ['content_research', 'structure', 'drafting', 'feature_inserts', 'editing', 'geo_polish', 'final'];
+            let downloaded = 0;
+            for (const stepId of orderedSteps) {
+                try {
+                    const meta = await window.getPipelineDocMeta(projectId, cpIndex, stepId);
+                    const ext = (meta.relPath || '').split('.').pop() || 'md';
+                    const filename = `${window.slugifyForFile(rowId)}-${window.slugifyForFile(stepId)}.${ext}`;
+                    await window.downloadFileFromAbsPath(meta.absPath, filename);
+                    downloaded += 1;
+                    await new Promise(r => setTimeout(r, 200));
+                } catch (_) {
+                    // skip missing docs in this range
+                }
+            }
+
+            if (!downloaded) {
+                alert('Keine Dateien im Bereich Research bis Final Review gefunden.');
+            }
         };
 
         window.syncProjectToAgent = async (projectId) => {
