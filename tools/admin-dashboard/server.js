@@ -552,6 +552,36 @@ function updateBlogPipelineProgress(projectData, cpIndex) {
     }
 }
 
+function resolvePublishConfig(projectData, body = {}) {
+    const projectPublish = (projectData && typeof projectData.publish === 'object') ? projectData.publish : {};
+    const apiBase = String(
+        body.apiBase ||
+        projectPublish.apiBase ||
+        process.env.TARENO_BLOG_API_BASE ||
+        'https://tareno.co'
+    ).trim().replace(/\/+$/, '');
+
+    const endpoint = String(
+        body.endpoint ||
+        projectPublish.endpoint ||
+        `${apiBase}/api/blog/publish`
+    ).trim();
+
+    const apiKey = String(
+        body.apiKey ||
+        projectPublish.apiKey ||
+        process.env.TARENO_BLOG_API_KEY ||
+        ''
+    ).trim();
+
+    return {
+        apiBase,
+        endpoint,
+        apiKey,
+        mode: String(body.mode || projectPublish.mode || 'live').trim().toLowerCase()
+    };
+}
+
 function ok(res, payload) {
     return res.json({ success: true, data: payload, ...payload });
 }
@@ -844,6 +874,163 @@ app.post("/api/projects/:projectId/pipeline/upload", express.json({ limit: '50mb
             status: step.status,
             path: resolvedRel,
             wroteFile,
+            sync
+        });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
+});
+
+app.post("/api/projects/:projectId/pipeline/:cpIndex/accept-all", express.json({ limit: '50mb' }), (req, res) => {
+    try {
+        const { projectId, cpIndex } = req.params;
+        const { actorAgentId } = req.body || {};
+        const rowIndex = Number(cpIndex);
+
+        const data = loadProjectMeta(projectId);
+        if (!data) return res.status(404).json({ success: false, error: "Project not found" });
+        ensurePipelineShape(data);
+
+        if (!hasProjectWritePermission(data, actorAgentId)) {
+            return res.status(403).json({ success: false, error: `Agent ${actorAgentId} has no write permission for project ${projectId}` });
+        }
+        if (!Number.isInteger(rowIndex) || rowIndex < 0 || rowIndex >= data.contentPipeline.length) {
+            return res.status(404).json({ success: false, error: "Pipeline row not found" });
+        }
+
+        const missingDocs = [];
+        for (const stepId of PIPELINE_STEP_IDS) {
+            const resolved = resolvePipelineDocPath(data, rowIndex, stepId);
+            if (!resolved) missingDocs.push(stepId);
+        }
+        if (missingDocs.length > 0) {
+            return res.status(400).json({
+                success: false,
+                error: "Cannot accept all: one or more step documents are missing",
+                missingSteps: missingDocs
+            });
+        }
+
+        const row = data.contentPipeline[rowIndex];
+        for (const stepId of PIPELINE_STEP_IDS) {
+            row.steps[stepId].status = 'done';
+            delete row.steps[stepId].rejectReason;
+            row.steps[stepId].updatedAt = new Date().toISOString();
+            if (actorAgentId) row.steps[stepId].updatedBy = actorAgentId;
+        }
+
+        updateBlogPipelineProgress(data, rowIndex);
+        data.lastUpdate = new Date().toISOString().slice(0, 10);
+        saveProjectMeta(projectId, data);
+
+        const sync = syncAllAssignedAgents(projectId, data);
+        return ok(res, {
+            acceptedAll: true,
+            projectId,
+            rowIndex,
+            rowId: row.id,
+            sync
+        });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
+});
+
+app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json({ limit: '50mb' }), async (req, res) => {
+    try {
+        const { projectId, cpIndex } = req.params;
+        const body = req.body || {};
+        const rowIndex = Number(cpIndex);
+        const actorAgentId = body.actorAgentId;
+
+        const data = loadProjectMeta(projectId);
+        if (!data) return res.status(404).json({ success: false, error: "Project not found" });
+        ensurePipelineShape(data);
+
+        if (!hasProjectWritePermission(data, actorAgentId)) {
+            return res.status(403).json({ success: false, error: `Agent ${actorAgentId} has no write permission for project ${projectId}` });
+        }
+        if (!Number.isInteger(rowIndex) || rowIndex < 0 || rowIndex >= data.contentPipeline.length) {
+            return res.status(404).json({ success: false, error: "Pipeline row not found" });
+        }
+
+        const row = data.contentPipeline[rowIndex];
+        const finalDoc = resolvePipelineDocPath(data, rowIndex, 'final');
+        if (!finalDoc) {
+            return res.status(400).json({ success: false, error: "FINAL.md not found for this pipeline row" });
+        }
+
+        const markdown = readFileSafe(finalDoc.absPath);
+        if (!markdown || !markdown.trim()) {
+            return res.status(400).json({ success: false, error: "FINAL.md is empty" });
+        }
+
+        const publishCfg = resolvePublishConfig(data, body);
+        if (!publishCfg.apiKey) {
+            return res.status(400).json({
+                success: false,
+                error: "Missing publish API key (set project.publish.apiKey or TARENO_BLOG_API_KEY)"
+            });
+        }
+
+        let publishUrl;
+        try {
+            publishUrl = new URL(publishCfg.endpoint);
+            publishUrl.searchParams.set('key', publishCfg.apiKey);
+        } catch {
+            return res.status(400).json({ success: false, error: "Invalid publish endpoint URL" });
+        }
+
+        const rowId = String(row.id || pipelineRowId(rowIndex));
+        const title = String(body.title || row.topicEn || row.topic || rowId).trim();
+        const slug = safeSlug(body.slug || title || rowId, rowId.toLowerCase());
+        const fileName = `${slug}.md`;
+
+        const form = new FormData();
+        form.append('file', new Blob([markdown], { type: 'text/markdown; charset=utf-8' }), fileName);
+        form.append('title', title);
+        form.append('slug', slug);
+        form.append('projectId', projectId);
+        form.append('rowId', rowId);
+        form.append('mode', publishCfg.mode);
+        form.append('content', markdown);
+
+        const upstream = await fetch(publishUrl.toString(), {
+            method: 'POST',
+            body: form
+        });
+
+        const raw = await upstream.text();
+        const parsed = tryParseJson(raw);
+        if (!upstream.ok) {
+            return res.status(502).json({
+                success: false,
+                error: "Publish endpoint rejected request",
+                status: upstream.status,
+                response: parsed || raw
+            });
+        }
+
+        row.publishedAt = new Date().toISOString();
+        row.publishStatus = 'published';
+        row.publishResult = parsed || raw;
+        if (row.steps?.final) {
+            row.steps.final.status = 'done';
+            row.steps.final.updatedAt = new Date().toISOString();
+            if (actorAgentId) row.steps.final.updatedBy = actorAgentId;
+        }
+        updateBlogPipelineProgress(data, rowIndex);
+        data.lastUpdate = new Date().toISOString().slice(0, 10);
+        saveProjectMeta(projectId, data);
+
+        const sync = syncAllAssignedAgents(projectId, data);
+        return ok(res, {
+            published: true,
+            projectId,
+            rowIndex,
+            rowId,
+            endpoint: publishCfg.endpoint,
+            response: parsed || raw,
             sync
         });
     } catch (e) {
