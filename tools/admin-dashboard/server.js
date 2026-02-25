@@ -77,6 +77,8 @@ const MEMORY_DIR = path.join(WORKSPACE_ROOT, "memory");
 const SKILLS_DIR = "/usr/lib/node_modules/openclaw/skills";
 const PROJECT_DATA_DIR = path.join(WORKSPACE_ROOT, "data", "projects");
 const SKILL_POLICY_FILE = path.join(WORKSPACE_ROOT, "data", "skills-policy.json");
+const NOTEBOOKLM_JOB_DIR = path.join(WORKSPACE_ROOT, "data", "notebooklm", "jobs");
+const NOTEBOOKLM_BRIDGE_PATH = path.join(__dirname, "scripts", "notebooklm_audio_bridge.py");
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json({ limit: '50mb' }));
@@ -93,9 +95,14 @@ function readFileSafe(filePath) {
 function listFilesSafe(dir) {
     try { return fs.readdirSync(dir).sort(); } catch { return []; }
 }
-function runCmd(cmd) {
+function runCmd(cmd, options = {}) {
+    const timeout = Number(options.timeoutMs);
+    const maxBuffer = Number(options.maxBuffer);
     return new Promise((resolve) => {
-        exec(cmd, { timeout: 12000 }, (err, stdout, stderr) => {
+        exec(cmd, {
+            timeout: Number.isFinite(timeout) && timeout > 0 ? timeout : 12000,
+            maxBuffer: Number.isFinite(maxBuffer) && maxBuffer > 0 ? maxBuffer : (10 * 1024 * 1024),
+        }, (err, stdout, stderr) => {
             resolve({
                 ok: !err,
                 stdout: (stdout || "").trim(),
@@ -422,21 +429,22 @@ function resolvePipelineDocPath(projectData, cpIndex, stepId) {
     const row = projectData.contentPipeline[rowIndex];
     const step = row?.steps?.[normalizedStepId];
     const rawDoc = (typeof step?.doc === 'string' && step.doc.trim()) ? step.doc.trim() : null;
-    if (!rawDoc) return null;
 
     const candidates = [];
-    if (path.isAbsolute(rawDoc)) {
-        candidates.push(path.resolve(rawDoc));
-    } else {
-        candidates.push(path.resolve(WORKSPACE_ROOT, rawDoc));
+    if (rawDoc) {
+        if (path.isAbsolute(rawDoc)) {
+            candidates.push(path.resolve(rawDoc));
+        } else {
+            candidates.push(path.resolve(WORKSPACE_ROOT, rawDoc));
+        }
     }
 
-    const docBase = path.basename(rawDoc);
-    const docBaseNoExt = path.basename(rawDoc, path.extname(rawDoc));
+    const docBase = rawDoc ? path.basename(rawDoc) : null;
+    const docBaseNoExt = rawDoc ? path.basename(rawDoc, path.extname(rawDoc)) : null;
     const rowFolder = getPipelineRowFolder(row, rowIndex);
     const folderRoot = path.join(WORKSPACE_ROOT, 'projects', 'blog-artifacts', rowFolder);
 
-    if (!rawDoc.includes('/')) {
+    if (rawDoc && !rawDoc.includes('/')) {
         candidates.push(path.join(folderRoot, rawDoc));
         if (!path.extname(rawDoc)) {
             candidates.push(path.join(folderRoot, `${rawDoc}.md`));
@@ -460,9 +468,11 @@ function resolvePipelineDocPath(projectData, cpIndex, stepId) {
         return { absPath: resolved, relPath: path.relative(WORKSPACE_ROOT, resolved) };
     }
 
-    const byName = findFileByNameRecursive(path.join(WORKSPACE_ROOT, 'projects', 'blog-artifacts'), docBase);
-    if (byName && isAllowedWorkspacePath(byName)) {
-        return { absPath: byName, relPath: path.relative(WORKSPACE_ROOT, byName) };
+    if (docBase) {
+        const byName = findFileByNameRecursive(path.join(WORKSPACE_ROOT, 'projects', 'blog-artifacts'), docBase);
+        if (byName && isAllowedWorkspacePath(byName)) {
+            return { absPath: byName, relPath: path.relative(WORKSPACE_ROOT, byName) };
+        }
     }
 
     return null;
@@ -582,6 +592,53 @@ function resolvePublishConfig(projectData, body = {}) {
     };
 }
 
+function renderTemplate(template, vars = {}) {
+    const source = String(template || '');
+    return source.replace(/\{\{\s*([a-zA-Z0-9_]+)\s*\}\}/g, (_, key) => {
+        const value = vars[key];
+        return value == null ? '' : String(value);
+    });
+}
+
+function expandUserPath(rawPath) {
+    const p = String(rawPath || '').trim();
+    if (!p) return '';
+    if (p === '~') return os.homedir();
+    if (p.startsWith('~/')) return path.join(os.homedir(), p.slice(2));
+    return p;
+}
+
+function normalizeNotebookLmConfig(raw = {}) {
+    const input = (raw && typeof raw === 'object') ? raw : {};
+    const waitTimeout = Number(input.waitTimeoutSec);
+    return {
+        storagePath: String(input.storagePath || '~/.notebooklm/storage_state.json').trim(),
+        notebookTitleTemplate: String(input.notebookTitleTemplate || 'Tareno {{rowId}} - {{title}}').trim(),
+        sourceTitleTemplate: String(input.sourceTitleTemplate || '{{rowId}} FINAL.md').trim(),
+        instructionsTemplate: String(
+            input.instructionsTemplate ||
+            'Create a podcast-style audio overview in German with practical takeaways and a clear structure.'
+        ).trim(),
+        outputDir: String(input.outputDir || 'media/notebooklm-audio/{{projectId}}').trim(),
+        fileNameTemplate: String(input.fileNameTemplate || '{{rowId}}-{{slugTitle}}-notebooklm.mp3').trim(),
+        reuseNotebook: input.reuseNotebook !== false,
+        waitTimeoutSec: Number.isFinite(waitTimeout) && waitTimeout > 0 ? Math.min(Math.max(waitTimeout, 60), 3600) : 900
+    };
+}
+
+function pickJsonFromOutput(stdout = '') {
+    const trimmed = String(stdout || '').trim();
+    if (!trimmed) return null;
+    const direct = tryParseJson(trimmed);
+    if (direct) return direct;
+    const lines = trimmed.split('\n').map(l => l.trim()).filter(Boolean).reverse();
+    for (const line of lines) {
+        const parsed = tryParseJson(line);
+        if (parsed) return parsed;
+    }
+    return null;
+}
+
 function ok(res, payload) {
     return res.json({ success: true, data: payload, ...payload });
 }
@@ -674,7 +731,7 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/:stepId", express.json({ li
     const { status, reason, actorAgentId } = req.body || {};
 
     // Let dedicated endpoints handle these action routes.
-    if (stepId === 'accept-all' || stepId === 'publish-now') {
+    if (stepId === 'accept-all' || stepId === 'publish-now' || stepId === 'notebooklm-audio') {
         return next();
     }
 
@@ -1036,6 +1093,247 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
             rowId,
             endpoint: publishCfg.endpoint,
             response: parsed || raw,
+            sync
+        });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
+});
+
+app.get("/api/projects/:projectId/notebooklm/config", (req, res) => {
+    try {
+        const { projectId } = req.params;
+        const data = loadProjectMeta(projectId);
+        if (!data) return res.status(404).json({ success: false, error: "Project not found" });
+
+        const cfg = normalizeNotebookLmConfig(data.integrations?.notebooklm || {});
+        return ok(res, {
+            projectId,
+            config: cfg,
+            bridgePath: NOTEBOOKLM_BRIDGE_PATH,
+            bridgeAvailable: fs.existsSync(NOTEBOOKLM_BRIDGE_PATH)
+        });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
+});
+
+app.post("/api/projects/:projectId/notebooklm/config", express.json({ limit: '50mb' }), (req, res) => {
+    try {
+        const { projectId } = req.params;
+        const body = req.body || {};
+        const actorAgentId = body.actorAgentId;
+
+        const data = loadProjectMeta(projectId);
+        if (!data) return res.status(404).json({ success: false, error: "Project not found" });
+        ensurePipelineShape(data);
+
+        if (!hasProjectWritePermission(data, actorAgentId)) {
+            return res.status(403).json({ success: false, error: `Agent ${actorAgentId} has no write permission for project ${projectId}` });
+        }
+
+        const existing = normalizeNotebookLmConfig(data.integrations?.notebooklm || {});
+        const incoming = normalizeNotebookLmConfig(body.config || body);
+        const merged = normalizeNotebookLmConfig({ ...existing, ...incoming });
+
+        data.integrations = (data.integrations && typeof data.integrations === 'object') ? data.integrations : {};
+        data.integrations.notebooklm = merged;
+        data.lastUpdate = new Date().toISOString().slice(0, 10);
+
+        saveProjectMeta(projectId, data);
+        const sync = syncAllAssignedAgents(projectId, data);
+        return ok(res, { projectId, config: merged, sync });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
+});
+
+app.post("/api/projects/:projectId/pipeline/:cpIndex/notebooklm-audio", express.json({ limit: '50mb' }), async (req, res) => {
+    try {
+        const { projectId, cpIndex } = req.params;
+        const body = req.body || {};
+        const actorAgentId = body.actorAgentId;
+        const rowIndex = Number(cpIndex);
+
+        const data = loadProjectMeta(projectId);
+        if (!data) return res.status(404).json({ success: false, error: "Project not found" });
+        ensurePipelineShape(data);
+
+        if (!hasProjectWritePermission(data, actorAgentId)) {
+            return res.status(403).json({ success: false, error: `Agent ${actorAgentId} has no write permission for project ${projectId}` });
+        }
+        if (!Number.isInteger(rowIndex) || rowIndex < 0 || rowIndex >= data.contentPipeline.length) {
+            return res.status(404).json({ success: false, error: "Pipeline row not found" });
+        }
+
+        const row = data.contentPipeline[rowIndex];
+        const rowId = String(row.id || pipelineRowId(rowIndex));
+        const title = String(body.title || row.topicEn || row.topic || rowId).trim();
+        const finalDoc = resolvePipelineDocPath(data, rowIndex, 'final');
+        if (!finalDoc) {
+            return res.status(400).json({ success: false, error: "FINAL.md not found for this pipeline row" });
+        }
+
+        const sourceContent = readFileSafe(finalDoc.absPath);
+        if (!sourceContent || !sourceContent.trim()) {
+            return res.status(400).json({ success: false, error: "FINAL.md is empty" });
+        }
+
+        const today = new Date().toISOString().slice(0, 10);
+        const vars = {
+            project: data.name || projectId,
+            projectId,
+            rowId,
+            rowIndex: String(rowIndex),
+            title,
+            slugTitle: safeSlug(title || rowId, rowId.toLowerCase()),
+            date: String(row.date || today),
+            today
+        };
+
+        const existingCfg = normalizeNotebookLmConfig(data.integrations?.notebooklm || {});
+        const incomingCfg = normalizeNotebookLmConfig(body.config || body);
+        const cfg = normalizeNotebookLmConfig({ ...existingCfg, ...incomingCfg });
+        const saveConfig = body.saveConfig !== false;
+        const dryRun = body.dryRun === true;
+
+        const notebookTitle = renderTemplate(body.notebookTitle || cfg.notebookTitleTemplate, vars).trim() || `${vars.project} ${rowId}`;
+        const sourceTitle = renderTemplate(body.sourceTitle || cfg.sourceTitleTemplate, vars).trim() || `${rowId} FINAL.md`;
+        const instructions = renderTemplate(body.instructions || cfg.instructionsTemplate, vars).trim();
+
+        const outputDirTpl = renderTemplate(body.outputDir || cfg.outputDir, vars).trim() || `media/notebooklm-audio/${projectId}`;
+        const outputDirRaw = expandUserPath(outputDirTpl);
+        const outputDirAbs = path.isAbsolute(outputDirRaw) ? path.resolve(outputDirRaw) : path.resolve(WORKSPACE_ROOT, outputDirRaw);
+        if (!isAllowedWorkspacePath(outputDirAbs)) {
+            return res.status(400).json({ success: false, error: "outputDir must be inside an allowed workspace" });
+        }
+
+        const fileNameTpl = renderTemplate(body.fileName || cfg.fileNameTemplate, vars).trim() || `${rowId}-${vars.slugTitle}-notebooklm.mp3`;
+        const parsedName = path.parse(fileNameTpl);
+        const stem = safeSlug(parsedName.name || `${rowId}-${vars.slugTitle}-notebooklm`, `${rowId.toLowerCase()}-notebooklm`);
+        const extRaw = String(parsedName.ext || '.mp3').toLowerCase();
+        const ext = ['.mp3', '.wav', '.m4a'].includes(extRaw) ? extRaw : '.mp3';
+        const outputFileName = `${stem}${ext}`;
+        const outputAbsPath = path.join(outputDirAbs, outputFileName);
+        const outputRelPath = path.relative(WORKSPACE_ROOT, outputAbsPath);
+
+        const storagePathRaw = String(body.storagePath || cfg.storagePath || '').trim();
+        const payload = {
+            projectId,
+            projectName: data.name || projectId,
+            rowId,
+            rowIndex,
+            finalDocPath: finalDoc.absPath,
+            notebookTitle,
+            sourceTitle,
+            sourceContent,
+            instructions,
+            outputPath: outputAbsPath,
+            storagePath: storagePathRaw,
+            reuseNotebook: cfg.reuseNotebook !== false,
+            waitTimeoutSec: cfg.waitTimeoutSec
+        };
+
+        const jobDir = dryRun
+            ? path.join(os.tmpdir(), 'notebooklm-jobs', projectId)
+            : path.join(NOTEBOOKLM_JOB_DIR, projectId);
+        fs.mkdirSync(jobDir, { recursive: true });
+        fs.mkdirSync(path.dirname(outputAbsPath), { recursive: true });
+        const jobId = `${Date.now()}-${safeSlug(rowId, `row-${rowIndex + 1}`)}`;
+        const payloadPath = path.join(jobDir, `${jobId}.json`);
+        fs.writeFileSync(payloadPath, JSON.stringify(payload, null, 2) + '\n', 'utf8');
+        const payloadPathForResponse = isAllowedWorkspacePath(payloadPath)
+            ? path.relative(WORKSPACE_ROOT, payloadPath)
+            : payloadPath;
+
+        if (saveConfig) {
+            data.integrations = (data.integrations && typeof data.integrations === 'object') ? data.integrations : {};
+            data.integrations.notebooklm = cfg;
+        }
+
+        if (!dryRun && !fs.existsSync(NOTEBOOKLM_BRIDGE_PATH)) {
+            return res.status(500).json({
+                success: false,
+                error: "NotebookLM bridge script is missing",
+                bridgePath: NOTEBOOKLM_BRIDGE_PATH
+            });
+        }
+
+        let bridgeOutput = null;
+        const cmd = `python3 ${JSON.stringify(NOTEBOOKLM_BRIDGE_PATH)} ${JSON.stringify(payloadPath)}`;
+        if (!dryRun) {
+            const timeoutMs = (Number(cfg.waitTimeoutSec) * 1000) + (2 * 60 * 1000);
+            const run = await runCmd(cmd, { timeoutMs, maxBuffer: 20 * 1024 * 1024 });
+            const parsed = pickJsonFromOutput(run.stdout);
+            if (!run.ok) {
+                return res.status(502).json({
+                    success: false,
+                    error: "NotebookLM bridge command failed",
+                    command: cmd,
+                    stderr: run.stderr || run.error || null,
+                    stdout: run.stdout || null
+                });
+            }
+            if (!parsed || parsed.success === false) {
+                return res.status(502).json({
+                    success: false,
+                    error: parsed?.error || "NotebookLM bridge returned invalid output",
+                    command: cmd,
+                    bridge: parsed || null,
+                    stdout: run.stdout || null,
+                    stderr: run.stderr || null
+                });
+            }
+            bridgeOutput = parsed;
+
+            row.notebooklm = {
+                ...(row.notebooklm && typeof row.notebooklm === 'object' ? row.notebooklm : {}),
+                lastJobId: jobId,
+                lastGeneratedAt: new Date().toISOString(),
+                lastAudioRelPath: outputRelPath,
+                lastAudioAbsPath: outputAbsPath,
+                notebookTitle,
+                notebookId: parsed.notebookId || null,
+                artifactId: parsed.artifactId || null,
+                taskId: parsed.taskId || null
+            };
+
+            const refs = Array.isArray(data.dataRefs) ? data.dataRefs : [];
+            const existsRef = refs.find(r => String(r?.path || '') === outputRelPath);
+            if (!existsRef) {
+                refs.push({
+                    label: `${rowId} NotebookLM Audio`,
+                    path: outputRelPath,
+                    type: ext.replace('.', ''),
+                    category: `Audio ${rowId}`,
+                    addedAt: new Date().toISOString()
+                });
+            }
+            data.dataRefs = refs;
+        }
+
+        const shouldPersist = (!dryRun) || saveConfig;
+        let sync = [];
+        if (shouldPersist) {
+            data.lastUpdate = new Date().toISOString().slice(0, 10);
+            saveProjectMeta(projectId, data);
+            sync = syncAllAssignedAgents(projectId, data);
+        }
+
+        return ok(res, {
+            projectId,
+            rowIndex,
+            rowId,
+            title,
+            dryRun,
+            notebookTitle,
+            sourceTitle,
+            finalDoc: finalDoc.relPath,
+            outputPath: outputRelPath,
+            payloadPath: payloadPathForResponse,
+            bridge: bridgeOutput,
+            command: dryRun ? cmd : undefined,
+            config: cfg,
             sync
         });
     } catch (e) {
