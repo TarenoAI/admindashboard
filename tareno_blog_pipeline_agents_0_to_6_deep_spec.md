@@ -6,7 +6,33 @@
 **Agent 7:** intentionally omitted (assets/UI)  
 **Target quality bar:** **≥ 8/10** per agent output (not perfection)
 
+
 ---
+
+# Agent 8 — NotebookLM Audio Architect
+
+## Purpose
+Generate an Audio Overview (Podcast-style) based on `FINAL.md` via the NotebookLM bridge.
+
+## Inputs
+- `FINAL.md`
+- `instructions` (language, tone, focus points)
+
+## Output
+- `blog-audio.mp3`
+- Embed meta-tag for the CMS
+
+## Hard Rules
+- **Source-Lock:** Use only content from the finalized article.
+- **Tone:** Professional Podcast overview.
+- **Format:** High-quality mp3.
+
+## Acceptance Criteria (8/10)
+- Audio generated successfully and matches context.
+- Mentions "Tareno" and key frameworks correctly.
+
+---
+
 
 ## Table of Contents
 1. [System Overview](#system-overview)  
@@ -20,7 +46,8 @@
 9. [Agent 4 — Product-Native Integration](#agent-4--product-native-integration)  
 10. [Agent 5 — Editor & E-E-A-T + Claim Hygiene](#agent-5--editor--e-e-a-t--claim-hygiene)  
 11. [Agent 6 — Entity, Claims & Linkability Architect](#agent-6--entity-claims--linkability-architect)  
-12. [Acceptance Criteria & Scoring](#acceptance-criteria--scoring)  
+13. [Agent 8 — NotebookLM Audio Architect](#agent-8--notebooklm-audio-architect)
+14. [Acceptance Criteria & Scoring](#acceptance-criteria--scoring)  
 13. [Operational Playbooks (429/Timeout/Drift)](#operational-playbooks-429timeoutdrift)  
 
 ---
