@@ -1193,6 +1193,60 @@ app.post("/api/projects/:projectId/notebooklm/config", express.json({ limit: '50
     }
 });
 
+// Stream the last generated NotebookLM audio for a pipeline row
+app.get("/api/projects/:projectId/pipeline/:cpIndex/notebooklm-audio/stream", (req, res) => {
+    try {
+        const { projectId, cpIndex } = req.params;
+        const rowIndex = Number(cpIndex);
+        const data = loadProjectMeta(projectId);
+        if (!data) return res.status(404).json({ error: "Project not found" });
+        ensurePipelineShape(data);
+
+        const row = data.contentPipeline?.[rowIndex];
+        if (!row) return res.status(404).json({ error: "Pipeline row not found" });
+
+        const nlm = row.notebooklm;
+        if (!nlm?.lastAudioRelPath && !nlm?.lastAudioAbsPath) {
+            return res.status(404).json({ error: "No audio available for this row. Generate it first via NotebookLM." });
+        }
+
+        // Prefer the abs path saved by the bridge, fall back to resolving relative
+        let audioAbs = nlm.lastAudioAbsPath
+            ? path.resolve(nlm.lastAudioAbsPath)
+            : path.resolve(WORKSPACE_ROOT, nlm.lastAudioRelPath);
+
+        if (!fs.existsSync(audioAbs)) {
+            return res.status(404).json({ error: `Audio file not found on disk: ${audioAbs}` });
+        }
+        if (!isAllowedWorkspacePath(audioAbs)) {
+            return res.status(403).json({ error: "Path not allowed" });
+        }
+
+        const stat = fs.statSync(audioAbs);
+        const range = req.headers.range;
+        res.setHeader('Content-Type', 'audio/mpeg');
+        res.setHeader('Accept-Ranges', 'bytes');
+        res.setHeader('Content-Disposition', `inline; filename="${path.basename(audioAbs)}"`);
+
+        if (range) {
+            const [startStr, endStr] = range.replace(/bytes=/, '').split('-');
+            const start = parseInt(startStr, 10);
+            const end = endStr ? parseInt(endStr, 10) : stat.size - 1;
+            const chunkSize = end - start + 1;
+            res.status(206);
+            res.setHeader('Content-Range', `bytes ${start}-${end}/${stat.size}`);
+            res.setHeader('Content-Length', chunkSize);
+            fs.createReadStream(audioAbs, { start, end }).pipe(res);
+        } else {
+            res.setHeader('Content-Length', stat.size);
+            fs.createReadStream(audioAbs).pipe(res);
+        }
+    } catch (e) {
+        console.error('[audio/stream]', e);
+        res.status(500).json({ error: e.message });
+    }
+});
+
 app.post("/api/projects/:projectId/pipeline/:cpIndex/notebooklm-audio", express.json({ limit: '50mb' }), async (req, res) => {
     try {
         const { projectId, cpIndex } = req.params;
