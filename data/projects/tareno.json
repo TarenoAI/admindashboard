@@ -19,7 +19,8 @@
         "Fehler (Timeout/429) mit Retry/Backoff/Fallback behandeln",
         "Finale Merge + Publish-Paket erzeugen (FINAL.md)",
         "Prompt Sanitation: Keine irrelevanten Boilerplates (Svelte/Supabase/Bindings etc.)",
-        "Workspace-Verifikation: ls -la $WORKDIR, head -20 <file>"
+        "Workspace-Verifikation: ls -la $WORKDIR, head -20 <file>",
+        "NotebookLM Audio-Bridge triggern"
       ],
       "hardRules": [
         "No Self-Writing: Abort if Sam outputs \"I will write it myself\"",
@@ -175,6 +176,23 @@
       ],
       "outputPath": "projects/blog-artifacts/tag01/FINAL.md",
       "referenceSpec": "projects/blog-artifacts/AGENT_7_FINAL_ASSEMBLER_PUBLISHER.md"
+    },
+    {
+      "id": "notebooklm_audio",
+      "name": "NotebookLM Audio Architect",
+      "agentKey": "Agent 8",
+      "role": "Audio Overview Generation",
+      "status": "active",
+      "currentTask": "Bridge bereit; Podcast Embed Pflicht für alle Beiträge",
+      "description": "Erzeugt eine Audio-Overview (Podcast-Stil) basierend auf FINAL.md mittels NotebookLM-Bridge.",
+      "output": "blog-audio.mp3 + Embed-Code für Blog-Sidebar",
+      "hardRules": [
+        "Nur FINAL.md als Quelle nutzen",
+        "Instructions: Fokus auf Nutzwert und GEO-Elemente",
+        "Output-Format: mp3",
+        "Zwingend in Blog-Sidebar oder unter H1 einbetten"
+      ],
+      "outputPath": "projects/blog-artifacts/tag01/blog-audio.mp3"
     }
   ],
   "blogPipeline": {
