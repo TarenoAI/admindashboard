@@ -758,6 +758,56 @@ app.get("/api/projects", async (_, res) => {
     ok(res, { count: projects.length, projects, workspaceRoot: WORKSPACE_ROOT });
 });
 
+app.get("/api/projects/:projectId", (req, res) => {
+    try {
+        const { projectId } = req.params;
+        const data = loadProjectMeta(projectId);
+        if (!data) return res.status(404).json({ success: false, error: "Project not found" });
+
+        const project = {
+            id: projectId,
+            name: data.name || projectId,
+            summary: data.summary || "",
+            status: data.status || "planned",
+            agents: data.agents || [],
+            subagents: data.subagents || [],
+            tasks: data.tasks || [],
+            milestones: data.milestones || [],
+            dataRefs: data.dataRefs || [],
+            contentPipeline: data.contentPipeline || [],
+            permissions: (data.permissions && typeof data.permissions === 'object') ? data.permissions : {},
+            integrations: (data.integrations && typeof data.integrations === 'object') ? data.integrations : {},
+            lastUpdate: data.lastUpdate || null
+        };
+
+        ensurePipelineShape(project);
+
+        for (let cpIndex = 0; cpIndex < project.contentPipeline.length; cpIndex += 1) {
+            const cp = project.contentPipeline[cpIndex];
+            for (const stepId of PIPELINE_STEP_IDS) {
+                const step = cp?.steps?.[stepId];
+                if (!step?.doc) continue;
+                const resolved = resolvePipelineDocPath(project, cpIndex, stepId);
+                if (!resolved) continue;
+
+                step.doc = resolved.relPath;
+                if (step.wordCount == null) {
+                    try {
+                        const text = fs.readFileSync(resolved.absPath, 'utf8');
+                        step.wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+                    } catch {
+                        // ignore missing/invalid files
+                    }
+                }
+            }
+        }
+
+        return ok(res, { project, workspaceRoot: WORKSPACE_ROOT });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
+});
+
 // Pipeline Status API
 app.post("/api/projects/:projectId/pipeline/:cpIndex/:stepId", express.json({ limit: '50mb' }), async (req, res, next) => {
     const { projectId, cpIndex, stepId } = req.params;

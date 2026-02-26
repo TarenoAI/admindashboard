@@ -1723,12 +1723,77 @@
             if (dryRun) dryRun.checked = false;
         };
 
+        function setNotebookLmResultState(message, tone = 'info') {
+            const result = document.getElementById('notebooklm-result');
+            if (!result) return;
+            const classMap = {
+                info: 'text-xs text-blue-200 bg-blue-500/10 border border-blue-500/20 rounded-lg px-3 py-2',
+                running: 'text-xs text-orange-100 bg-orange-500/10 border border-orange-500/30 rounded-lg px-3 py-2',
+                success: 'text-xs text-emerald-200 bg-emerald-500/10 border border-emerald-500/20 rounded-lg px-3 py-2',
+                error: 'text-xs text-red-200 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2'
+            };
+            result.className = classMap[tone] || classMap.info;
+            result.innerText = String(message || '');
+        }
+
+        function setNotebookLmPreview(projectId, cpIndex, visible = true) {
+            const box = document.getElementById('notebooklm-preview-box');
+            const player = document.getElementById('notebooklm-preview-player');
+            const link = document.getElementById('notebooklm-preview-link');
+            if (!box || !player || !link) return;
+
+            if (!visible || projectId == null || cpIndex == null) {
+                box.classList.add('hidden');
+                try { player.pause(); } catch { /* ignore */ }
+                player.removeAttribute('src');
+                try { player.load(); } catch { /* ignore */ }
+                link.removeAttribute('href');
+                return;
+            }
+
+            const src = `/api/projects/${projectId}/pipeline/${cpIndex}/notebooklm-audio/stream?ts=${Date.now()}`;
+            box.classList.remove('hidden');
+            player.src = src;
+            try { player.load(); } catch { /* ignore */ }
+            link.href = src;
+        }
+
+        function formatNlmElapsed(ms) {
+            const totalSec = Math.max(0, Math.floor(ms / 1000));
+            const minutes = Math.floor(totalSec / 60);
+            const seconds = totalSec % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        async function fetchProjectSnapshot(projectId) {
+            try {
+                const singleRes = await fetch(`/api/projects/${projectId}`);
+                if (singleRes.ok) {
+                    const payload = await singleRes.json().catch(() => ({}));
+                    const project = payload?.project || payload?.data?.project;
+                    if (project) return project;
+                }
+            } catch {
+                // fallback below
+            }
+
+            try {
+                const listRes = await fetch('/api/projects');
+                if (!listRes.ok) return null;
+                const payload = await listRes.json().catch(() => ({}));
+                const projects = payload?.projects || payload?.data?.projects || [];
+                return projects.find(p => p?.id === projectId) || null;
+            } catch {
+                return null;
+            }
+        }
+
         window.closeNotebookLmModal = () => {
             notebookLmModalCtx = null;
             const modal = document.getElementById('notebooklm-modal');
             if (modal) modal.classList.add('hidden');
-            const result = document.getElementById('notebooklm-result');
-            if (result) result.innerText = '';
+            setNotebookLmPreview(null, null, false);
+            setNotebookLmResultState('Bereit.', 'info');
         };
 
         window.openNotebookLmModal = async (projectId, cpIndex) => {
@@ -1748,9 +1813,15 @@
             const rowInfoEl = document.getElementById('notebooklm-row-info');
             if (rowInfoEl) rowInfoEl.innerText = subtitle;
             const runBtn = document.getElementById('notebooklm-run-btn');
+            const existingJob = notebooklmJobs.get(`${projectId}-${cpIndex}`);
             if (runBtn) {
-                runBtn.disabled = false;
-                runBtn.innerText = 'Audio aus FINAL.md erzeugen';
+                runBtn.disabled = !!existingJob;
+                runBtn.innerText = existingJob ? 'Generierung läuft...' : 'Audio aus FINAL.md erzeugen';
+            }
+            if (row?.notebooklm?.lastAudioRelPath) {
+                setNotebookLmPreview(projectId, cpIndex, true);
+            } else {
+                setNotebookLmPreview(null, null, false);
             }
 
             window.setNotebookLmFormValues(window.defaultNotebookLmConfig());
@@ -1781,18 +1852,20 @@
                 if (!finalRes.ok || !finalPayload?.success) {
                     const msg = finalPayload?.error || 'FINAL.md fehlt für diese Row.';
                     if (runBtn) runBtn.disabled = true;
-                    const resultEl = document.getElementById('notebooklm-result');
-                    if (resultEl) {
-                        resultEl.className = 'text-xs text-red-200 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2';
-                        resultEl.innerText = `Nicht startbar: ${msg}`;
-                    }
+                    setNotebookLmResultState(`Nicht startbar: ${msg}`, 'error');
                 }
             } catch (e) {
                 console.error(e);
             }
 
-            const result = document.getElementById('notebooklm-result');
-            if (result && !runBtn?.disabled) result.innerText = '';
+            if (existingJob) {
+                setNotebookLmResultState(
+                    `NotebookLM-Job läuft bereits...\nRow: ${rowId}\nDauer: ${formatNlmElapsed(Date.now() - existingJob.startedAt)}\nStatus: Warte auf Fertigstellung...`,
+                    'running'
+                );
+            } else if (!runBtn?.disabled) {
+                setNotebookLmResultState('Bereit.', 'info');
+            }
 
             const modal = document.getElementById('notebooklm-modal');
             if (modal) modal.classList.remove('hidden');
@@ -1836,34 +1909,77 @@
             badge.innerHTML = `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#fb923c;animation:pulse 1.5s infinite;"></span> ${active.length} Audio wird generiert… (klicken = refresh)`;
         }
 
-        function startNlmPolling(projectId, cpIndex, tagId) {
+        function startNlmPolling(projectId, cpIndex, tagId, baselineGeneratedAt = null) {
             const jobKey = `${projectId}-${cpIndex}`;
-            notebooklmJobs.set(jobKey, { projectId, cpIndex, tagId, startedAt: Date.now() });
+            notebooklmJobs.set(jobKey, { projectId, cpIndex, tagId, startedAt: Date.now(), baselineGeneratedAt });
             updateNlmBadge();
 
             if (!notebooklmPollInterval) {
                 notebooklmPollInterval = setInterval(async () => {
                     for (const [key, job] of notebooklmJobs) {
                         try {
-                            const res = await fetch(`/api/projects/${job.projectId}`);
-                            if (!res.ok) continue;
-                            const d = await res.json();
-                            const cp = d?.project?.contentPipeline?.[job.cpIndex];
-                            if (cp?.notebooklm?.lastAudioRelPath) {
+                            const project = await fetchProjectSnapshot(job.projectId);
+                            const cp = project?.contentPipeline?.[job.cpIndex];
+                            const lastGeneratedAt = cp?.notebooklm?.lastGeneratedAt || null;
+                            const hasNewGeneration = !!lastGeneratedAt && (!job.baselineGeneratedAt || lastGeneratedAt !== job.baselineGeneratedAt);
+
+                            if (
+                                notebookLmModalCtx
+                                && notebookLmModalCtx.projectId === job.projectId
+                                && Number(notebookLmModalCtx.cpIndex) === Number(job.cpIndex)
+                            ) {
+                                setNotebookLmResultState(
+                                    `NotebookLM-Job läuft...\nRow: ${job.tagId}\nDauer: ${formatNlmElapsed(Date.now() - job.startedAt)}\nStatus: Warte auf Fertigstellung und Upload ...`,
+                                    'running'
+                                );
+                            }
+
+                            if (cp?.notebooklm?.lastAudioRelPath && hasNewGeneration) {
                                 notebooklmJobs.delete(key);
-                                showNlmToast(`✅ <b>${job.tagId}</b> Audio fertig! Seite wird aktualisiert.`, 'success');
+                                showNlmToast(`✅ <b>${job.tagId}</b> Audio fertig!`, 'success');
+                                if (
+                                    notebookLmModalCtx
+                                    && notebookLmModalCtx.projectId === job.projectId
+                                    && Number(notebookLmModalCtx.cpIndex) === Number(job.cpIndex)
+                                ) {
+                                    setNotebookLmResultState(
+                                        `Audio erfolgreich erstellt.\nRow: ${job.tagId}\nDu kannst das Audio jetzt direkt unten abspielen.`,
+                                        'success'
+                                    );
+                                    setNotebookLmPreview(job.projectId, job.cpIndex, true);
+                                    const runBtn = document.getElementById('notebooklm-run-btn');
+                                    if (runBtn) {
+                                        runBtn.disabled = false;
+                                        runBtn.innerText = 'Audio aus FINAL.md erzeugen';
+                                    }
+                                }
                                 loadCurrentView();
                                 updateNlmBadge();
                             }
-                            // Timeout after 20min
-                            if (Date.now() - job.startedAt > 20 * 60 * 1000) {
+                            // Timeout after 45min
+                            if (Date.now() - job.startedAt > 45 * 60 * 1000) {
                                 notebooklmJobs.delete(key);
                                 showNlmToast(`Timeout: ${job.tagId} Audio hat zu lange gedauert. Bitte manuell prüfen.`, 'error');
+                                if (
+                                    notebookLmModalCtx
+                                    && notebookLmModalCtx.projectId === job.projectId
+                                    && Number(notebookLmModalCtx.cpIndex) === Number(job.cpIndex)
+                                ) {
+                                    setNotebookLmResultState(
+                                        `Timeout bei der Generierung.\nRow: ${job.tagId}\nBitte Timeout erhöhen oder erneut starten.`,
+                                        'error'
+                                    );
+                                    const runBtn = document.getElementById('notebooklm-run-btn');
+                                    if (runBtn) {
+                                        runBtn.disabled = false;
+                                        runBtn.innerText = 'Audio aus FINAL.md erzeugen';
+                                    }
+                                }
                                 updateNlmBadge();
                             }
                         } catch (e) { console.warn('NLM poll error', e); }
                     }
-                }, 30000); // poll every 30 seconds
+                }, 10000); // poll every 10 seconds
             }
         }
 
@@ -1871,10 +1987,11 @@
             if (!notebookLmModalCtx) return;
 
             const { projectId, cpIndex } = notebookLmModalCtx;
-            const resultEl = document.getElementById('notebooklm-result');
             const submitBtn = document.getElementById('notebooklm-run-btn');
             const actorAgentId = window.getProjectActorAgentId(projectId);
-            const tagId = currentData?.project?.contentPipeline?.[cpIndex]?.id || `TAG-${cpIndex + 1}`;
+            const row = currentData?.project?.contentPipeline?.[cpIndex] || null;
+            const tagId = row?.id || `TAG-${cpIndex + 1}`;
+            const previousGeneratedAt = row?.notebooklm?.lastGeneratedAt || null;
 
             const payload = {
                 actorAgentId,
@@ -1894,12 +2011,18 @@
             };
 
             if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = payload.dryRun ? 'Dry-Run...' : 'Generating...'; }
-            if (resultEl) {
-                resultEl.className = 'text-xs text-blue-200 bg-blue-500/10 border border-blue-500/20 rounded-lg px-3 py-2';
-                resultEl.innerText = payload.dryRun ? 'Dry-Run läuft...' : 'NotebookLM Audio wird erzeugt... Du kannst das Fenster jetzt schließen.';
+            setNotebookLmResultState(
+                payload.dryRun
+                    ? 'Dry-Run läuft...'
+                    : `NotebookLM Audio wird erzeugt...\nRow: ${tagId}\nStatus: gestartet, warte auf Antwort...`,
+                payload.dryRun ? 'info' : 'running'
+            );
+
+            if (!payload.dryRun) {
+                startNlmPolling(projectId, cpIndex, tagId, previousGeneratedAt);
+                showNlmToast(`<b>${tagId}</b> Audio-Generierung gestartet. Live-Status läuft im Modal.`, 'info');
             }
 
-            // Allow closing immediately — run in background
             fetch(`/api/projects/${projectId}/pipeline/${cpIndex}/notebooklm-audio`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1912,11 +2035,17 @@
                     if (data?.bridge?.error && String(data.bridge.error) !== String(data.error || '')) details.push(String(data.bridge.error));
                     showNlmToast(`Fehler ${tagId}: ${details.join(' — ') || res.status}`, 'error');
                     notebooklmJobs.delete(`${projectId}-${cpIndex}`);
+                    setNotebookLmResultState(`Fehler: ${details.join('\n') || `NotebookLM API failed (${res.status})`}`, 'error');
                     updateNlmBadge();
                 } else {
-                    // Server returned success — audio already available
                     notebooklmJobs.delete(`${projectId}-${cpIndex}`);
                     showNlmToast(`<b>${tagId}</b> Audio fertig!`, 'success');
+                    const outputPath = data.outputPath || '—';
+                    setNotebookLmResultState(
+                        `Audio erfolgreich erstellt.\nOutput: ${outputPath}\nFormat: ${data.audioFormat || payload.audioFormat} · Sprache: ${data.language || payload.language} · Länge: ${data.audioLength || payload.audioLength}`,
+                        'success'
+                    );
+                    setNotebookLmPreview(projectId, cpIndex, true);
                     updateNlmBadge();
                     loadCurrentView();
                 }
@@ -1925,16 +2054,10 @@
                 console.error(e);
                 showNlmToast(`Netzwerkfehler: ${e.message}`, 'error');
                 notebooklmJobs.delete(`${projectId}-${cpIndex}`);
+                setNotebookLmResultState(`Netzwerkfehler: ${e.message}`, 'error');
                 updateNlmBadge();
                 if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'Audio aus FINAL.md erzeugen'; }
             });
-
-            // Start background polling + show persistent badge
-            if (!payload.dryRun) {
-                startNlmPolling(projectId, cpIndex, tagId);
-                showNlmToast(`<b>${tagId}</b> Audio-Generierung gestartet.<br>Du kannst das Fenster schließen — du wirst benachrichtigt.`, 'info');
-                window.closeNotebookLmModal();
-            }
         };
 
         window.syncProjectToAgent = async (projectId) => {
@@ -2337,6 +2460,13 @@
 
                 <pre id="notebooklm-result"
                     class="m-0 text-xs text-text-secondary whitespace-pre-wrap bg-black/30 border border-white/10 rounded-lg p-3 min-h-[52px]">Bereit.</pre>
+
+                <div id="notebooklm-preview-box" class="hidden rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-3">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-emerald-300 mb-2">🎧 Audio Vorschau</p>
+                    <audio id="notebooklm-preview-player" controls preload="metadata" class="w-full"></audio>
+                    <a id="notebooklm-preview-link" href="#" target="_blank"
+                        class="inline-block mt-2 text-[10px] text-emerald-300 hover:text-emerald-200 transition-colors">Download / In neuem Tab öffnen</a>
+                </div>
             </div>
             <div class="p-4 border-t border-white/5 bg-black/20 flex justify-end gap-3">
                 <button onclick="closeNotebookLmModal()"
