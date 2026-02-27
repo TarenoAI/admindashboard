@@ -273,6 +273,7 @@
         let selectedProject = null;
         let selectedAgent = null;
         let notebookLmModalCtx = null;
+        let pipelineUploadModalCtx = null;
         const notebooklmJobs = new Map(); // jobKey -> { projectId, cpIndex, tagId, startedAt }
         let notebooklmPollInterval = null;
         let organizationAutoRefreshTimer = null;
@@ -1067,8 +1068,12 @@
                             ? `<div class="flex items-center gap-1.5">
                                     <button onclick="openPipelineDoc('${p.id}', ${cpIndex}, '${step}')" class="group relative flex items-center justify-center w-8 h-8 rounded bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all ${iconClr} z-20" title="Dokument ansehen">📄<span class="absolute -top-1 -right-1 flex h-2.5 w-2.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-75"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand"></span></span></button>
                                     <button onclick="downloadPipelineDoc('${p.id}', ${cpIndex}, '${step}', '${cp.id || `TAG-${String(cpIndex + 1).padStart(2, '0')}`}')" class="flex items-center justify-center w-8 h-8 rounded bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 text-blue-300 transition-all z-20" title="Markdown downloaden">⬇</button>
+                                    <button onclick="openPipelineUploadModal('${p.id}', ${cpIndex}, '${step}')" class="flex items-center justify-center w-8 h-8 rounded bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 text-amber-300 transition-all z-20" title="Markdown hochladen / ersetzen">⬆</button>
                                </div>`
-                            : `<div class="flex items-center justify-center w-8 h-8 rounded bg-white/5 border border-white/5 opacity-30 ${iconClr}">📄</div>`;
+                            : `<div class="flex items-center gap-1.5">
+                                    <div class="flex items-center justify-center w-8 h-8 rounded bg-white/5 border border-white/5 opacity-30 ${iconClr}">📄</div>
+                                    <button onclick="openPipelineUploadModal('${p.id}', ${cpIndex}, '${step}')" class="flex items-center justify-center w-8 h-8 rounded bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 text-amber-300 transition-all z-20" title="Markdown hochladen">⬆</button>
+                               </div>`;
 
                         const wordCountHtml = stepData.wordCount ? `<div class="bg-brand/10 px-1.5 py-0.5 rounded text-[8px] font-bold text-brand border border-brand/20 whitespace-nowrap shadow-sm" title="Word count">🔥 ${stepData.wordCount} W</div>` : '';
                         const reviewBadge = stepData.status === 'review' ? '<span class="text-[8px] font-bold text-yellow-500 bg-yellow-500/20 px-1.5 py-0.5 rounded uppercase tracking-wider animate-pulse">Review</span>' : '';
@@ -1566,6 +1571,116 @@
 
             if (!downloaded) {
                 alert('Keine Dateien im Bereich Research bis Multimedia gefunden.');
+            }
+        };
+
+        window.openPipelineUploadModal = (projectId, cpIndex, stepId) => {
+            const project = currentData?.project;
+            const row = project?.contentPipeline?.[cpIndex];
+            if (!project || !row) return;
+
+            const rowId = row.id || `TAG-${String(Number(cpIndex) + 1).padStart(2, '0')}`;
+            const title = row.topicEn || row.topic || '—';
+            pipelineUploadModalCtx = { projectId, cpIndex, rowId, stepId };
+
+            const info = document.getElementById('pipeline-upload-row-info');
+            if (info) info.innerText = `${project.name || projectId} • ${rowId} • ${title}`;
+
+            const stepSelect = document.getElementById('pipeline-upload-step');
+            if (stepSelect) stepSelect.value = stepId || 'multimedia_enrichment';
+
+            const fileInput = document.getElementById('pipeline-upload-file');
+            const fileName = document.getElementById('pipeline-upload-file-name');
+            const result = document.getElementById('pipeline-upload-result');
+            const status = document.getElementById('pipeline-upload-status');
+            if (fileInput) fileInput.value = '';
+            if (fileName) fileName.innerText = 'Keine Datei ausgewählt';
+            if (result) result.innerText = 'Bereit.';
+            if (status) status.value = 'review';
+
+            document.getElementById('pipeline-upload-modal')?.classList.remove('hidden');
+        };
+
+        window.closePipelineUploadModal = () => {
+            document.getElementById('pipeline-upload-modal')?.classList.add('hidden');
+            pipelineUploadModalCtx = null;
+        };
+
+        window.onPipelineUploadFileChange = () => {
+            const fileInput = document.getElementById('pipeline-upload-file');
+            const fileName = document.getElementById('pipeline-upload-file-name');
+            const file = fileInput?.files?.[0];
+            if (fileName) fileName.innerText = file ? file.name : 'Keine Datei ausgewählt';
+        };
+
+        window.submitPipelineUpload = async () => {
+            const ctx = pipelineUploadModalCtx;
+            if (!ctx) return;
+
+            const stepId = document.getElementById('pipeline-upload-step')?.value?.trim();
+            const status = document.getElementById('pipeline-upload-status')?.value?.trim() || 'review';
+            const fileInput = document.getElementById('pipeline-upload-file');
+            const file = fileInput?.files?.[0];
+            const result = document.getElementById('pipeline-upload-result');
+            const btn = document.getElementById('pipeline-upload-submit');
+
+            if (!stepId) {
+                if (result) result.innerText = 'Fehler: Step fehlt.';
+                return;
+            }
+            if (!file) {
+                if (result) result.innerText = 'Bitte eine .md oder .txt Datei auswählen.';
+                return;
+            }
+
+            const ext = (file.name.split('.').pop() || 'md').toLowerCase();
+            const format = ext === 'txt' ? 'txt' : 'md';
+            const content = await file.text();
+            if (!content.trim()) {
+                if (result) result.innerText = 'Datei ist leer.';
+                return;
+            }
+
+            const actorAgentId = window.getProjectActorAgentId(ctx.projectId);
+            const row = currentData?.project?.contentPipeline?.[ctx.cpIndex] || {};
+            const title = row.topicEn || row.topic || ctx.rowId;
+
+            if (btn) {
+                btn.disabled = true;
+                btn.innerText = 'Upload läuft...';
+            }
+            if (result) result.innerText = 'Lade hoch...';
+
+            try {
+                const res = await fetch(`/api/projects/${ctx.projectId}/pipeline/upload`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        actorAgentId,
+                        cpIndex: ctx.cpIndex,
+                        rowId: ctx.rowId,
+                        stepId,
+                        status,
+                        title,
+                        content,
+                        fileName: file.name,
+                        format
+                    })
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok || !data.success) {
+                    throw new Error(data.error || `Upload fehlgeschlagen (${res.status})`);
+                }
+                if (result) result.innerText = `Erfolgreich hochgeladen: ${data.path || 'Datei gespeichert'}`;
+                closePipelineUploadModal();
+                loadCurrentView();
+            } catch (e) {
+                if (result) result.innerText = `Fehler: ${e.message || e}`;
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerText = 'Markdown hochladen';
+                }
             }
         };
 
@@ -2474,6 +2589,76 @@
                 <button id="notebooklm-run-btn" onclick="generateNotebookLmAudio()"
                     class="px-4 py-2 border border-orange-400/40 bg-orange-500/20 rounded-lg text-xs font-bold text-orange-200 hover:text-white hover:bg-orange-500/40 transition-colors shadow-[0_0_15px_rgba(251,146,60,0.15)]">Audio
                     aus FINAL.md erzeugen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pipeline Upload Modal -->
+    <div id="pipeline-upload-modal"
+        class="hidden fixed inset-0 z-[105] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div
+            class="glass-card w-full max-w-xl p-0 flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-white/10 rounded-2xl overflow-hidden animate-slide-up">
+            <div
+                class="p-5 border-b border-white/5 bg-gradient-to-r from-black/40 to-transparent flex items-start justify-between gap-3">
+                <div>
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <span class="text-amber-300">⬆</span> Pipeline Markdown Upload
+                    </h3>
+                    <p id="pipeline-upload-row-info"
+                        class="text-[10px] text-text-muted uppercase tracking-wider mt-1 font-bold">
+                        Projekt • Row
+                    </p>
+                </div>
+                <button onclick="closePipelineUploadModal()"
+                    class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 flex items-center justify-center text-text-muted hover:text-white transition-colors">✕</button>
+            </div>
+            <div class="p-5 space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label
+                            class="block text-[10px] uppercase font-bold tracking-wider text-text-muted mb-1.5 ml-1">Step</label>
+                        <select id="pipeline-upload-step"
+                            class="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400/50 transition-colors">
+                            <option value="content_research">content_research</option>
+                            <option value="structure">structure</option>
+                            <option value="drafting">drafting</option>
+                            <option value="feature_inserts">feature_inserts</option>
+                            <option value="editing">editing</option>
+                            <option value="geo_polish">geo_polish</option>
+                            <option value="final">final</option>
+                            <option value="multimedia_enrichment">multimedia_enrichment</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label
+                            class="block text-[10px] uppercase font-bold tracking-wider text-text-muted mb-1.5 ml-1">Status</label>
+                        <select id="pipeline-upload-status"
+                            class="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400/50 transition-colors">
+                            <option value="review">review</option>
+                            <option value="done">done</option>
+                            <option value="pending">pending</option>
+                            <option value="rejected">rejected</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label
+                        class="block text-[10px] uppercase font-bold tracking-wider text-text-muted mb-1.5 ml-1">Datei (.md/.txt)</label>
+                    <input id="pipeline-upload-file" type="file" accept=".md,.txt,text/markdown,text/plain"
+                        onchange="onPipelineUploadFileChange()"
+                        class="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white file:mr-3 file:rounded file:border-0 file:bg-amber-500/20 file:px-3 file:py-1 file:text-amber-200 file:cursor-pointer focus:outline-none focus:border-amber-400/50 transition-colors" />
+                    <p id="pipeline-upload-file-name" class="text-[10px] text-text-muted mt-1.5">Keine Datei ausgewählt</p>
+                </div>
+
+                <pre id="pipeline-upload-result"
+                    class="m-0 text-xs text-text-secondary whitespace-pre-wrap bg-black/30 border border-white/10 rounded-lg p-3 min-h-[48px]">Bereit.</pre>
+            </div>
+            <div class="p-4 border-t border-white/5 bg-black/20 flex justify-end gap-3">
+                <button onclick="closePipelineUploadModal()"
+                    class="px-4 py-2 border border-white/10 rounded-lg text-xs font-semibold text-text-muted hover:text-white hover:bg-white/5 transition-colors">Abbrechen</button>
+                <button id="pipeline-upload-submit" onclick="submitPipelineUpload()"
+                    class="px-4 py-2 border border-amber-400/40 bg-amber-500/20 rounded-lg text-xs font-bold text-amber-200 hover:text-white hover:bg-amber-500/40 transition-colors shadow-[0_0_15px_rgba(245,158,11,0.15)]">Markdown hochladen</button>
             </div>
         </div>
     </div>
