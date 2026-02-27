@@ -198,8 +198,8 @@
   ],
   "blogPipeline": {
     "totalBlogs": 10,
-    "completed": 5,
-    "inProgress": 5,
+    "completed": 6,
+    "inProgress": 4,
     "planned": 0,
     "currentFocus": "TAG-01",
     "currentStage": "Final Review",
@@ -247,9 +247,9 @@
       {
         "id": "TAG-06",
         "title": "Musikrechte auf Instagram: So vermeidest du Abmahnungen",
-        "status": "in_progress",
-        "progress": 50,
-        "stepsCompleted": 0,
+        "status": "done",
+        "progress": 100,
+        "stepsCompleted": 7,
         "stepsTotal": 7
       },
       {
@@ -5616,6 +5616,12 @@
           "doc": "projects/blog-artifacts/tag02/02_final_bio-link-optimization-the-first-step-in-the-seo-.md",
           "language": "en",
           "updatedBy": "tarenoblog"
+        },
+        "multimedia_enrichment": {
+          "status": "review",
+          "doc": "projects/blog-artifacts/tag01/08_asset_plan.md",
+          "updatedBy": "tarenoblog",
+          "updatedAt": "2026-02-27T10:43:55.657Z"
         }
       },
       "id": "TAG-01",
@@ -5696,6 +5702,12 @@
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 2078
+        },
+        "multimedia_enrichment": {
+          "status": "review",
+          "doc": "projects/blog-artifacts/tag02/08_asset_plan.md",
+          "updatedBy": "tarenoblog",
+          "updatedAt": "2026-02-27T10:43:55.657Z"
         }
       },
       "id": "TAG-02",
@@ -5797,6 +5809,12 @@
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 4979
+        },
+        "multimedia_enrichment": {
+          "status": "review",
+          "doc": "projects/blog-artifacts/tag03/08_asset_plan.md",
+          "updatedBy": "tarenoblog",
+          "updatedAt": "2026-02-27T10:43:55.657Z"
         }
       },
       "id": "TAG-03",
@@ -5867,6 +5885,12 @@
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 4976
+        },
+        "multimedia_enrichment": {
+          "status": "review",
+          "doc": "projects/blog-artifacts/tag04/08_asset_plan.md",
+          "updatedBy": "tarenoblog",
+          "updatedAt": "2026-02-27T10:43:55.657Z"
         }
       },
       "id": "TAG-04",
@@ -5937,6 +5961,12 @@
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 4978
+        },
+        "multimedia_enrichment": {
+          "status": "review",
+          "doc": "projects/blog-artifacts/tag05/08_asset_plan.md",
+          "updatedBy": "tarenoblog",
+          "updatedAt": "2026-02-27T10:43:55.657Z"
         }
       },
       "id": "TAG-05",
@@ -5953,60 +5983,66 @@
       "wordTarget": "2000",
       "steps": {
         "content_research": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag06/06_research_instagram-music-copyright-how-to-avoid-legal-tro.md",
-          "updatedAt": "2026-02-25T15:06:34.416Z",
+          "updatedAt": "2026-02-27T10:21:04.292Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 58
         },
         "structure": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag06/06_structure_instagram-music-copyright-how-to-avoid-legal-tro.md",
-          "updatedAt": "2026-02-25T15:06:34.437Z",
+          "updatedAt": "2026-02-27T10:21:04.292Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 58
         },
         "drafting": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag06/06_draft_instagram-music-copyright-how-to-avoid-legal-tro.md",
-          "updatedAt": "2026-02-25T15:06:34.453Z",
+          "updatedAt": "2026-02-27T10:21:04.292Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 4977
         },
         "feature_inserts": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag06/06_feature_inserts_instagram-music-copyright-how-to-avoid-legal-tro.md",
-          "updatedAt": "2026-02-25T15:06:34.476Z",
+          "updatedAt": "2026-02-27T10:21:04.292Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 191
         },
         "editing": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag06/06_edited_instagram-music-copyright-how-to-avoid-legal-tro.md",
-          "updatedAt": "2026-02-25T15:06:34.491Z",
+          "updatedAt": "2026-02-27T10:21:04.292Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 4977
         },
         "geo_polish": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag06/06_geo_polish_instagram-music-copyright-how-to-avoid-legal-tro.md",
-          "updatedAt": "2026-02-25T15:06:34.504Z",
+          "updatedAt": "2026-02-27T10:21:04.292Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 67
         },
         "final": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag06/06_final_instagram-music-copyright-how-to-avoid-legal-tro.md",
-          "updatedAt": "2026-02-25T15:06:34.526Z",
+          "updatedAt": "2026-02-27T10:21:04.292Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 4977
+        },
+        "multimedia_enrichment": {
+          "status": "review",
+          "doc": "projects/blog-artifacts/tag06/08_asset_plan.md",
+          "updatedBy": "tarenoblog",
+          "updatedAt": "2026-02-27T10:43:55.657Z"
         }
       },
       "id": "TAG-06",
@@ -6077,6 +6113,12 @@
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 4978
+        },
+        "multimedia_enrichment": {
+          "status": "review",
+          "doc": "projects/blog-artifacts/tag07/08_asset_plan.md",
+          "updatedBy": "tarenoblog",
+          "updatedAt": "2026-02-27T10:43:55.657Z"
         }
       },
       "id": "TAG-07",
@@ -6147,6 +6189,12 @@
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 4970
+        },
+        "multimedia_enrichment": {
+          "status": "review",
+          "doc": "projects/blog-artifacts/tag08/08_asset_plan.md",
+          "updatedBy": "tarenoblog",
+          "updatedAt": "2026-02-27T10:43:55.657Z"
         }
       },
       "id": "TAG-08",
@@ -6217,6 +6265,12 @@
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 4977
+        },
+        "multimedia_enrichment": {
+          "status": "review",
+          "doc": "projects/blog-artifacts/tag09/08_asset_plan.md",
+          "updatedBy": "tarenoblog",
+          "updatedAt": "2026-02-27T10:43:55.657Z"
         }
       },
       "id": "TAG-09",
@@ -6287,6 +6341,12 @@
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 4979
+        },
+        "multimedia_enrichment": {
+          "status": "review",
+          "doc": "projects/blog-artifacts/tag10/08_asset_plan.md",
+          "updatedBy": "tarenoblog",
+          "updatedAt": "2026-02-27T10:43:55.657Z"
         }
       },
       "id": "TAG-10",
