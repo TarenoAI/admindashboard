@@ -500,6 +500,15 @@ function resolvePipelineDocPath(projectData, cpIndex, stepId) {
     return null;
 }
 
+function readWordCountFromFile(absPath) {
+    try {
+        const text = fs.readFileSync(absPath, 'utf8');
+        return text.trim() ? text.trim().split(/\s+/).length : 0;
+    } catch {
+        return null;
+    }
+}
+
 function findPipelineRowIndex(contentPipeline, selector = {}) {
     if (!Array.isArray(contentPipeline) || contentPipeline.length === 0) return -1;
 
@@ -752,14 +761,8 @@ app.get("/api/projects", async (_, res) => {
                     if (!resolved) continue;
 
                     step.doc = resolved.relPath;
-                    if (step.wordCount == null) {
-                        try {
-                            const text = fs.readFileSync(resolved.absPath, 'utf8');
-                            step.wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
-                        } catch {
-                            // ignore missing/invalid files
-                        }
-                    }
+                    const wordCount = readWordCountFromFile(resolved.absPath);
+                    if (wordCount != null) step.wordCount = wordCount;
                 }
             }
 
@@ -810,14 +813,8 @@ app.get("/api/projects/:projectId", (req, res) => {
                 if (!resolved) continue;
 
                 step.doc = resolved.relPath;
-                if (step.wordCount == null) {
-                    try {
-                        const text = fs.readFileSync(resolved.absPath, 'utf8');
-                        step.wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
-                    } catch {
-                        // ignore missing/invalid files
-                    }
-                }
+                const wordCount = readWordCountFromFile(resolved.absPath);
+                if (wordCount != null) step.wordCount = wordCount;
             }
         }
 
