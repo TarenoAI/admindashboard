@@ -1097,10 +1097,11 @@
                                                    <button id="notebooklm-audio-${p.id}-${cpIndex}" class="px-3 py-1.5 bg-orange-500/15 border border-orange-500/30 text-orange-300 shadow hover:shadow-[0_0_12px_rgba(251,146,60,0.25)] transition-all rounded text-[10px] font-bold w-full uppercase" onclick="openNotebookLmModal('${p.id}', ${cpIndex})">🎙 NotebookLM Audio</button>
                                                    ${cp.notebooklm?.lastAudioRelPath ? `<div class="mt-1 rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-1.5">
                                                      <div class="text-[9px] text-emerald-400 font-bold uppercase tracking-wider mb-1 flex items-center gap-1">🎧 <span>NotebookLM Audio</span></div>
-                                                     <audio id="nlm-audio-${p.id}-${cpIndex}" controls preload="none" style="width:100%;height:28px;filter:invert(0.85) hue-rotate(90deg);border-radius:6px;outline:none;" src="/api/projects/${p.id}/pipeline/${cpIndex}/notebooklm-audio/stream">
-                                                       <a href="/api/projects/${p.id}/pipeline/${cpIndex}/notebooklm-audio/stream" class="text-emerald-300 text-[9px]">Download mp3</a>
+                                                     <audio id="nlm-audio-${p.id}-${cpIndex}" controls preload="none" style="width:100%;height:28px;filter:invert(0.85) hue-rotate(90deg);border-radius:6px;outline:none;" src="/api/projects/${p.id}/pipeline/${cpIndex}/notebooklm-audio/stream?ts=${encodeURIComponent(cp.notebooklm?.lastGeneratedAt || '')}">
+                                                       <a href="/api/projects/${p.id}/pipeline/${cpIndex}/notebooklm-audio/stream?ts=${encodeURIComponent(cp.notebooklm?.lastGeneratedAt || '')}" class="text-emerald-300 text-[9px]">Download mp3</a>
                                                      </audio>
-                                                     <a href="/api/projects/${p.id}/pipeline/${cpIndex}/notebooklm-audio/stream" target="_blank" class="block text-center text-emerald-400/70 hover:text-emerald-300 text-[9px] mt-1 transition-colors">⬇ Download / In neuem Tab öffnen</a>
+                                                     <a href="/api/projects/${p.id}/pipeline/${cpIndex}/notebooklm-audio/stream?ts=${encodeURIComponent(cp.notebooklm?.lastGeneratedAt || '')}" target="_blank" class="block text-center text-emerald-400/70 hover:text-emerald-300 text-[9px] mt-1 transition-colors">⬇ Download / In neuem Tab öffnen</a>
+                                                     ${Array.isArray(cp.notebooklm?.history) && cp.notebooklm.history.length > 1 ? `<div class="text-[9px] text-emerald-300/80 text-center mt-1">${cp.notebooklm.history.length} Versionen gespeichert</div>` : ''}
                                                    </div>` : ''}
                                                    <button class="px-3 py-1.5 bg-blue-500/15 border border-blue-500/30 text-blue-300 shadow hover:shadow-[0_0_12px_rgba(59,130,246,0.25)] transition-all rounded text-[10px] font-bold w-full uppercase" onclick="downloadPipelineRange('${p.id}', ${cpIndex}, '${cp.id || `TAG-${String(cpIndex + 1).padStart(2, '0')}`}')">⬇ Download All</button>
                                                 </div>
@@ -1793,6 +1794,7 @@
             outputDir: 'media/notebooklm-audio/{{projectId}}',
             fileNameTemplate: '{{rowId}}-{{slugTitle}}-notebooklm.mp3',
             reuseNotebook: true,
+            newVersionOnGenerate: false,
             language: 'de',
             audioFormat: 'DEEP_DIVE',
             audioLength: 'DEFAULT',
@@ -1832,6 +1834,8 @@
             setSelect('notebooklm-audio-length', String(value.audioLength || 'DEFAULT').toUpperCase());
             const reuse = document.getElementById('notebooklm-reuse-notebook');
             if (reuse) reuse.checked = value.reuseNotebook !== false;
+            const newVersion = document.getElementById('notebooklm-new-version');
+            if (newVersion) newVersion.checked = value.newVersionOnGenerate === true;
             const saveCfg = document.getElementById('notebooklm-save-config');
             if (saveCfg) saveCfg.checked = true;
             const dryRun = document.getElementById('notebooklm-dry-run');
@@ -2122,7 +2126,9 @@
                 audioFormat: document.getElementById('notebooklm-audio-format')?.value?.trim() || 'DEEP_DIVE',
                 audioLength: document.getElementById('notebooklm-audio-length')?.value?.trim() || 'DEFAULT',
                 waitTimeoutSec: Number(document.getElementById('notebooklm-timeout')?.value || 900),
-                reuseNotebook: !!document.getElementById('notebooklm-reuse-notebook')?.checked
+                reuseNotebook: !!document.getElementById('notebooklm-reuse-notebook')?.checked,
+                createNewVersion: !!document.getElementById('notebooklm-new-version')?.checked,
+                newVersionOnGenerate: !!document.getElementById('notebooklm-new-version')?.checked
             };
 
             if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = payload.dryRun ? 'Dry-Run...' : 'Generating...'; }
@@ -2558,10 +2564,14 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-2 text-xs">
                     <label class="inline-flex items-center gap-2 p-2 rounded border border-white/10 bg-black/20">
                         <input id="notebooklm-reuse-notebook" type="checkbox" checked />
                         <span>Notebook wiederverwenden</span>
+                    </label>
+                    <label class="inline-flex items-center gap-2 p-2 rounded border border-orange-500/30 bg-orange-500/5">
+                        <input id="notebooklm-new-version" type="checkbox" />
+                        <span>Neue Version erzeugen</span>
                     </label>
                     <label class="inline-flex items-center gap-2 p-2 rounded border border-white/10 bg-black/20">
                         <input id="notebooklm-save-config" type="checkbox" checked />

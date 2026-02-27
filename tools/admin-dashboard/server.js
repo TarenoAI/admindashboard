@@ -680,6 +680,7 @@ function normalizeNotebookLmConfig(raw = {}) {
         outputDir: String(input.outputDir || 'media/notebooklm-audio/{{projectId}}').trim(),
         fileNameTemplate: String(input.fileNameTemplate || '{{rowId}}-{{slugTitle}}-notebooklm.mp3').trim(),
         reuseNotebook: input.reuseNotebook !== false,
+        newVersionOnGenerate: input.newVersionOnGenerate === true,
         language: normalizeNotebookLmLanguage(input.language),
         audioFormat: normalizeNotebookLmAudioFormat(input.audioFormat),
         audioLength: normalizeNotebookLmAudioLength(input.audioLength),
@@ -1120,10 +1121,18 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
         if (!finalDoc) {
             return res.status(400).json({ success: false, error: "FINAL.md not found for this pipeline row" });
         }
+        const multimediaDoc = resolvePipelineDocPath(data, rowIndex, 'multimedia_enrichment');
+        if (!multimediaDoc) {
+            return res.status(400).json({ success: false, error: "08_asset_plan.md (multimedia_enrichment) not found for this pipeline row" });
+        }
 
         const markdown = readFileSafe(finalDoc.absPath);
         if (!markdown || !markdown.trim()) {
             return res.status(400).json({ success: false, error: "FINAL.md is empty" });
+        }
+        const assetPlanMarkdown = readFileSafe(multimediaDoc.absPath);
+        if (!assetPlanMarkdown || !assetPlanMarkdown.trim()) {
+            return res.status(400).json({ success: false, error: "08_asset_plan.md is empty" });
         }
 
         const publishCfg = resolvePublishConfig(data, body);
@@ -1147,9 +1156,37 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
         const authorName = String(body.authorName || String(row.author || '').split('(')[0].trim() || 'Tareno Editorial').trim();
         const previewHours = Number.isFinite(Number(body.previewHours)) ? Math.max(1, Number(body.previewHours)) : 72;
         const fileName = `${slug}.md`;
+        const rowFolder = getPipelineRowFolder(row, rowIndex);
+        const rowFolderAbs = path.join(WORKSPACE_ROOT, 'projects', 'blog-artifacts', rowFolder);
+        const audioCandidates = [
+            path.join(rowFolderAbs, 'blog-audio.mp3')
+        ];
+        const foundAudioBySearch = findFileByNameRecursive(rowFolderAbs, 'blog-audio.mp3', 2000);
+        if (foundAudioBySearch) audioCandidates.push(foundAudioBySearch);
+
+        let blogAudio = null;
+        for (const candidate of audioCandidates) {
+            const abs = path.resolve(candidate);
+            if (!isAllowedWorkspacePath(abs)) continue;
+            if (!fs.existsSync(abs)) continue;
+            blogAudio = {
+                absPath: abs,
+                relPath: path.relative(WORKSPACE_ROOT, abs),
+                fileName: path.basename(abs)
+            };
+            break;
+        }
 
         const form = new FormData();
         form.append('file', new Blob([markdown], { type: 'text/markdown; charset=utf-8' }), fileName);
+        form.append('assetPlanFile', new Blob([assetPlanMarkdown], { type: 'text/markdown; charset=utf-8' }), path.basename(multimediaDoc.absPath) || '08_asset_plan.md');
+        form.append('assetPlanContent', assetPlanMarkdown);
+        form.append('assetPlanPath', multimediaDoc.relPath);
+        if (blogAudio) {
+            const audioBuffer = fs.readFileSync(blogAudio.absPath);
+            form.append('audioFile', new Blob([audioBuffer], { type: 'audio/mpeg' }), blogAudio.fileName || 'blog-audio.mp3');
+            form.append('audioPath', blogAudio.relPath);
+        }
         form.append('title', title);
         form.append('slug', slug);
         form.append('mode', publishCfg.mode);
@@ -1185,7 +1222,10 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
             mode: publishCfg.mode,
             endpoint: publishCfg.endpoint,
             authorName,
-            previewHours: publishCfg.mode === 'draft' ? previewHours : null
+            previewHours: publishCfg.mode === 'draft' ? previewHours : null,
+            finalDoc: finalDoc.relPath,
+            assetPlanDoc: multimediaDoc.relPath,
+            blogAudio: blogAudio?.relPath || null
         };
         if (row.steps?.final) {
             row.steps.final.status = publishCfg.mode === 'publish' ? 'done' : row.steps.final.status;
@@ -1204,6 +1244,11 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
             rowId,
             endpoint: publishCfg.endpoint,
             response: parsed || raw,
+            sentFiles: {
+                finalDoc: finalDoc.relPath,
+                assetPlanDoc: multimediaDoc.relPath,
+                blogAudio: blogAudio?.relPath || null
+            },
             sync
         });
     } catch (e) {
@@ -1378,7 +1423,10 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/notebooklm-audio", express.
         const stem = safeSlug(parsedName.name || `${rowId}-${vars.slugTitle}-notebooklm`, `${rowId.toLowerCase()}-notebooklm`);
         const extRaw = String(parsedName.ext || '.mp3').toLowerCase();
         const ext = ['.mp3', '.wav', '.m4a'].includes(extRaw) ? extRaw : '.mp3';
-        const outputFileName = `${stem}${ext}`;
+        const createNewVersion = body.createNewVersion === true || cfg.newVersionOnGenerate === true;
+        const versionTag = new Date().toISOString().replace(/[-:]/g, '').replace(/\..+$/, '').replace('T', '-');
+        const outputStem = createNewVersion ? `${stem}-${versionTag}` : stem;
+        const outputFileName = `${outputStem}${ext}`;
         const outputAbsPath = path.join(outputDirAbs, outputFileName);
         const outputRelPath = path.relative(WORKSPACE_ROOT, outputAbsPath);
 
@@ -1467,6 +1515,22 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/notebooklm-audio", express.
                 taskId: parsed.taskId || null
             };
 
+            const history = Array.isArray(row.notebooklm.history) ? row.notebooklm.history : [];
+            history.unshift({
+                generatedAt: row.notebooklm.lastGeneratedAt,
+                outputRelPath,
+                outputAbsPath,
+                notebookTitle,
+                notebookId: row.notebooklm.notebookId,
+                artifactId: row.notebooklm.artifactId,
+                taskId: row.notebooklm.taskId,
+                language: payload.language,
+                audioFormat: payload.audioFormat,
+                audioLength: payload.audioLength,
+                createNewVersion
+            });
+            row.notebooklm.history = history.slice(0, 25);
+
             const refs = Array.isArray(data.dataRefs) ? data.dataRefs : [];
             const existsRef = refs.find(r => String(r?.path || '') === outputRelPath);
             if (!existsRef) {
@@ -1504,6 +1568,7 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/notebooklm-audio", express.
             language: payload.language,
             audioFormat: payload.audioFormat,
             audioLength: payload.audioLength,
+            createNewVersion,
             command: dryRun ? cmd : undefined,
             config: cfg,
             sync
