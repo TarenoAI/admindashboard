@@ -250,7 +250,7 @@ function countTasksByState(tasks = []) {
     return states;
 }
 
-const PIPELINE_STEP_IDS = [
+const PIPELINE_CORE_STEP_IDS = [
     'content_research',
     'structure',
     'drafting',
@@ -258,6 +258,15 @@ const PIPELINE_STEP_IDS = [
     'editing',
     'geo_polish',
     'final'
+];
+
+const PIPELINE_OPTIONAL_STEP_IDS = [
+    'multimedia_enrichment'
+];
+
+const PIPELINE_STEP_IDS = [
+    ...PIPELINE_CORE_STEP_IDS,
+    ...PIPELINE_OPTIONAL_STEP_IDS
 ];
 
 const PIPELINE_STEP_ALIASES = {
@@ -282,7 +291,14 @@ const PIPELINE_STEP_ALIASES = {
     final: 'final',
     final_review: 'final',
     finalreview: 'final',
-    review_final: 'final'
+    review_final: 'final',
+    multimedia_enrichment: 'multimedia_enrichment',
+    multimedia: 'multimedia_enrichment',
+    assets: 'multimedia_enrichment',
+    asset: 'multimedia_enrichment',
+    asset_plan: 'multimedia_enrichment',
+    media_plan: 'multimedia_enrichment',
+    visual_plan: 'multimedia_enrichment'
 };
 
 const PIPELINE_STEP_FILE_NAMES = {
@@ -292,7 +308,8 @@ const PIPELINE_STEP_FILE_NAMES = {
     feature_inserts: 'feature_inserts',
     editing: 'edited',
     geo_polish: 'geo_polish',
-    final: 'final'
+    final: 'final',
+    multimedia_enrichment: 'asset_plan'
 };
 
 const PIPELINE_STEP_DOC_FALLBACKS = {
@@ -302,7 +319,8 @@ const PIPELINE_STEP_DOC_FALLBACKS = {
     feature_inserts: ['05_product_inserts.md', 'product_inserts.md'],
     editing: ['06_edited.md', 'editing.md', 'edit.md'],
     geo_polish: ['07_geo_polish.md', 'geo_polish.md'],
-    final: ['FINAL.md', '07_final.md', 'final.md']
+    final: ['FINAL.md', '07_final.md', 'final.md'],
+    multimedia_enrichment: ['08_asset_plan.md', 'asset_plan.md', '08_multimedia_enrichment.md', 'multimedia_enrichment.md']
 };
 
 function normalizePipelineStepId(stepId) {
@@ -539,11 +557,12 @@ function updateBlogPipelineProgress(projectData, cpIndex) {
     const row = projectData.contentPipeline[cpIndex];
     if (!row?.steps) return;
 
-    const stepEntries = PIPELINE_STEP_IDS.map(id => row.steps[id] || { status: 'pending' });
+    // Keep progress semantics stable: core editorial flow remains the KPI.
+    const stepEntries = PIPELINE_CORE_STEP_IDS.map(id => row.steps[id] || { status: 'pending' });
     const done = stepEntries.filter(s => String(s.status || '').toLowerCase() === 'done').length;
     const review = stepEntries.filter(s => String(s.status || '').toLowerCase() === 'review').length;
     const started = stepEntries.some(s => String(s.status || '').toLowerCase() !== 'pending');
-    const total = PIPELINE_STEP_IDS.length;
+    const total = PIPELINE_CORE_STEP_IDS.length;
     const progress = Math.max(0, Math.min(100, Math.round(((done + review * 0.5) / total) * 100)));
     const status = done === total ? 'done' : (started ? 'in_progress' : 'planned');
 
@@ -1044,7 +1063,7 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/accept-all", express.json({
         }
 
         const missingDocs = [];
-        for (const stepId of PIPELINE_STEP_IDS) {
+        for (const stepId of PIPELINE_CORE_STEP_IDS) {
             const resolved = resolvePipelineDocPath(data, rowIndex, stepId);
             if (!resolved) missingDocs.push(stepId);
         }
@@ -1057,7 +1076,7 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/accept-all", express.json({
         }
 
         const row = data.contentPipeline[rowIndex];
-        for (const stepId of PIPELINE_STEP_IDS) {
+        for (const stepId of PIPELINE_CORE_STEP_IDS) {
             row.steps[stepId].status = 'done';
             delete row.steps[stepId].rejectReason;
             row.steps[stepId].updatedAt = new Date().toISOString();

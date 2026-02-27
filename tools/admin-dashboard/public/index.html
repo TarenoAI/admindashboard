@@ -1015,14 +1015,14 @@
                         <div class="glass-card mt-6 p-0 overflow-hidden shadow-2xl border border-white/10 bg-black/40">
                             <div class="p-6 md:p-8 border-b border-white/5 bg-gradient-to-r from-brand/10 to-transparent relative">
                                 <h4 class="text-xs uppercase tracking-widest text-brand font-extrabold flex items-center gap-2">🗓️ Content Pipeline & Approvals</h4>
-                                <p class="text-xs text-text-muted mt-2">Detaillierte Schritt-für-Schritt Freigabe für die 7-stufige Agentic Content Pipeline (inkl. Final Review durch Sam) je Tag.</p>
+                                <p class="text-xs text-text-muted mt-2">Detaillierte Schritt-für-Schritt Freigabe für die Agentic Content Pipeline je Tag (inkl. optionalem Multimedia-Plan). Draft/Publish nutzt weiterhin FINAL.md.</p>
                             </div>
                             <div class="overflow-x-auto">
                                 <table class="w-full text-left text-xs text-white">
                                     <thead class="bg-black/60 border-b border-white/10 uppercase text-[9px] text-text-muted font-bold tracking-wider">
                                         <tr>
                                             <th class="p-5 min-w-[180px]">Tag / Thema</th>
-                                            ${['Research', 'Structure', 'Drafting', 'Features', 'Editing', 'Geo-Polish', 'Final Review'].map(s => `<th class="p-5 text-center px-2">${s}</th>`).join('')}
+                                            ${['Research', 'Structure', 'Drafting', 'Features', 'Editing', 'Geo-Polish', 'Final Review', 'Multimedia'].map(s => `<th class="p-5 text-center px-2">${s}</th>`).join('')}
                                             <th class="p-5 text-center">Row Actions</th>
                                         </tr>
                                     </thead>
@@ -1043,7 +1043,7 @@
                                                     ${cp.author && cp.author !== 'nan' ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">Aut:</span><span class="text-[10px] text-text-secondary leading-tight line-clamp-1">${cp.author}</span></div>` : ''}
                                                 </div>
                                             </td>
-                                            ${['content_research', 'structure', 'drafting', 'feature_inserts', 'editing', 'geo_polish', 'final'].map(step => {
+                                            ${['content_research', 'structure', 'drafting', 'feature_inserts', 'editing', 'geo_polish', 'final', 'multimedia_enrichment'].map(step => {
                         const stepData = cp.steps?.[step] || { status: 'pending', doc: null };
                         let btnHtml = '';
                         let iconClr = 'text-white/20';
@@ -1549,7 +1549,7 @@
         };
 
         window.downloadPipelineRange = async (projectId, cpIndex, rowId) => {
-            const orderedSteps = ['content_research', 'structure', 'drafting', 'feature_inserts', 'editing', 'geo_polish', 'final'];
+            const orderedSteps = ['content_research', 'structure', 'drafting', 'feature_inserts', 'editing', 'geo_polish', 'final', 'multimedia_enrichment'];
             let downloaded = 0;
             for (const stepId of orderedSteps) {
                 try {
@@ -1565,7 +1565,7 @@
             }
 
             if (!downloaded) {
-                alert('Keine Dateien im Bereich Research bis Final Review gefunden.');
+                alert('Keine Dateien im Bereich Research bis Multimedia gefunden.');
             }
         };
 
