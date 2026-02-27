@@ -441,6 +441,58 @@ function findFileByNameRecursive(rootDir, fileName, limit = 5000) {
     return null;
 }
 
+function findNewestFileByPredicateRecursive(rootDir, predicate, limit = 5000) {
+    if (!rootDir || !fs.existsSync(rootDir) || typeof predicate !== 'function') return null;
+    const queue = [rootDir];
+    let seen = 0;
+    let newestPath = null;
+    let newestMtime = 0;
+
+    while (queue.length > 0 && seen < limit) {
+        const dir = queue.shift();
+        let entries = [];
+        try {
+            entries = fs.readdirSync(dir, { withFileTypes: true });
+        } catch {
+            continue;
+        }
+        for (const entry of entries) {
+            seen += 1;
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) {
+                queue.push(full);
+                continue;
+            }
+            if (!entry.isFile()) continue;
+
+            let matches = false;
+            try {
+                matches = !!predicate(full, entry.name);
+            } catch {
+                matches = false;
+            }
+            if (!matches) {
+                if (seen >= limit) break;
+                continue;
+            }
+
+            let mtimeMs = 0;
+            try {
+                mtimeMs = Number(fs.statSync(full).mtimeMs || 0);
+            } catch {
+                mtimeMs = 0;
+            }
+            if (!newestPath || mtimeMs >= newestMtime) {
+                newestPath = full;
+                newestMtime = mtimeMs;
+            }
+            if (seen >= limit) break;
+        }
+    }
+
+    return newestPath;
+}
+
 function resolvePipelineDocPath(projectData, cpIndex, stepId) {
     if (!projectData || !Array.isArray(projectData.contentPipeline)) return null;
     const rowIndex = Number(cpIndex);
@@ -1117,23 +1169,6 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
         }
 
         const row = data.contentPipeline[rowIndex];
-        const finalDoc = resolvePipelineDocPath(data, rowIndex, 'final');
-        if (!finalDoc) {
-            return res.status(400).json({ success: false, error: "FINAL.md not found for this pipeline row" });
-        }
-        const multimediaDoc = resolvePipelineDocPath(data, rowIndex, 'multimedia_enrichment');
-        if (!multimediaDoc) {
-            return res.status(400).json({ success: false, error: "08_asset_plan.md (multimedia_enrichment) not found for this pipeline row" });
-        }
-
-        const markdown = readFileSafe(finalDoc.absPath);
-        if (!markdown || !markdown.trim()) {
-            return res.status(400).json({ success: false, error: "FINAL.md is empty" });
-        }
-        const assetPlanMarkdown = readFileSafe(multimediaDoc.absPath);
-        if (!assetPlanMarkdown || !assetPlanMarkdown.trim()) {
-            return res.status(400).json({ success: false, error: "08_asset_plan.md is empty" });
-        }
 
         const publishCfg = resolvePublishConfig(data, body);
         if (!publishCfg.apiSecret) {
@@ -1158,14 +1193,43 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
         const fileName = `${slug}.md`;
         const rowFolder = getPipelineRowFolder(row, rowIndex);
         const rowFolderAbs = path.join(WORKSPACE_ROOT, 'projects', 'blog-artifacts', rowFolder);
+        const rowIdSlug = safeSlug(rowId, `tag-${String(rowIndex + 1).padStart(2, '0')}`).toLowerCase();
+        const slugToken = safeSlug(slug, rowIdSlug).toLowerCase();
+        const notebookLmAudioDir = path.join(WORKSPACE_ROOT, 'media', 'notebooklm-audio', projectId);
+        const notebookLmAudioRoot = path.join(WORKSPACE_ROOT, 'media', 'notebooklm-audio');
         const audioCandidates = [
-            path.join(rowFolderAbs, 'blog-audio.mp3')
-        ];
+            row?.notebooklm?.lastAudioAbsPath ? path.resolve(row.notebooklm.lastAudioAbsPath) : null,
+            row?.notebooklm?.lastAudioRelPath ? path.resolve(WORKSPACE_ROOT, row.notebooklm.lastAudioRelPath) : null,
+            path.join(rowFolderAbs, 'blog-audio.mp3'),
+            path.join(notebookLmAudioDir, `${rowIdSlug}-${slugToken}-notebooklm.mp3`)
+        ].filter(Boolean);
         const foundAudioBySearch = findFileByNameRecursive(rowFolderAbs, 'blog-audio.mp3', 2000);
         if (foundAudioBySearch) audioCandidates.push(foundAudioBySearch);
+        const foundNotebookLmByPrefix = findNewestFileByPredicateRecursive(
+            notebookLmAudioDir,
+            (_, fileName) => {
+                const lower = String(fileName || '').toLowerCase();
+                if (!lower.endsWith('.mp3')) return false;
+                if (!lower.includes('notebooklm')) return false;
+                return lower.includes(`${rowIdSlug}-`) || lower.includes(`-${rowIdSlug}-`) || lower.includes(slugToken);
+            },
+            5000
+        );
+        if (foundNotebookLmByPrefix) audioCandidates.push(foundNotebookLmByPrefix);
+        const foundNotebookLmGlobal = findNewestFileByPredicateRecursive(
+            notebookLmAudioRoot,
+            (_, fileName) => {
+                const lower = String(fileName || '').toLowerCase();
+                if (!lower.endsWith('.mp3')) return false;
+                if (!lower.includes('notebooklm')) return false;
+                return lower.includes(`${rowIdSlug}-`) || lower.includes(`-${rowIdSlug}-`) || lower.includes(slugToken);
+            },
+            8000
+        );
+        if (foundNotebookLmGlobal) audioCandidates.push(foundNotebookLmGlobal);
 
         let blogAudio = null;
-        for (const candidate of audioCandidates) {
+        for (const candidate of [...new Set(audioCandidates)]) {
             const abs = path.resolve(candidate);
             if (!isAllowedWorkspacePath(abs)) continue;
             if (!fs.existsSync(abs)) continue;
@@ -1175,6 +1239,92 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
                 fileName: path.basename(abs)
             };
             break;
+        }
+
+        const audioOnlyPatchRequested = body.audioOnly === true || body.uploadAudioOnly === true;
+        if (audioOnlyPatchRequested) {
+            if (!blogAudio) {
+                return res.status(400).json({ success: false, error: "Audio-only patch requested but no audio file found (NotebookLM or blog-audio.mp3)." });
+            }
+            const patchEndpointRaw = String(
+                body.audioPatchEndpoint || `${publishCfg.apiBase}/api/blog/admin/posts/${encodeURIComponent(slug)}`
+            ).trim();
+            let patchUrl;
+            try {
+                patchUrl = new URL(patchEndpointRaw);
+            } catch {
+                return res.status(400).json({ success: false, error: "Invalid audio patch endpoint URL" });
+            }
+
+            const patchForm = new FormData();
+            const audioBuffer = fs.readFileSync(blogAudio.absPath);
+            patchForm.append('audioFile', new Blob([audioBuffer], { type: 'audio/mpeg' }), blogAudio.fileName || 'blog-audio.mp3');
+            patchForm.append('audioPath', blogAudio.relPath);
+
+            const patchResp = await fetch(patchUrl.toString(), {
+                method: 'PATCH',
+                headers: {
+                    Authorization: `Bearer ${publishCfg.apiSecret}`
+                },
+                body: patchForm
+            });
+            const patchRaw = await patchResp.text();
+            const patchParsed = tryParseJson(patchRaw);
+            if (!patchResp.ok) {
+                return res.status(502).json({
+                    success: false,
+                    error: "Audio patch endpoint rejected request",
+                    status: patchResp.status,
+                    response: patchParsed || patchRaw
+                });
+            }
+
+            row.publishedAt = new Date().toISOString();
+            row.publishStatus = 'draft';
+            row.publishResult = patchParsed || patchRaw;
+            row.publishMeta = {
+                mode: 'draft',
+                operation: 'audio_patch',
+                endpoint: patchUrl.toString(),
+                authorName,
+                slug,
+                blogAudio: blogAudio.relPath
+            };
+            updateBlogPipelineProgress(data, rowIndex);
+            data.lastUpdate = new Date().toISOString().slice(0, 10);
+            saveProjectMeta(projectId, data);
+
+            const sync = syncAllAssignedAgents(projectId, data);
+            return ok(res, {
+                audioPatched: true,
+                projectId,
+                rowIndex,
+                rowId,
+                endpoint: patchUrl.toString(),
+                response: patchParsed || patchRaw,
+                sentFiles: {
+                    blogAudio: blogAudio.relPath
+                },
+                sync
+            });
+        }
+
+        const finalDoc = resolvePipelineDocPath(data, rowIndex, 'final');
+        if (!finalDoc) {
+            return res.status(400).json({ success: false, error: "FINAL.md not found for this pipeline row" });
+        }
+        const multimediaDoc = resolvePipelineDocPath(data, rowIndex, 'multimedia_enrichment');
+        if (!multimediaDoc) {
+            return res.status(400).json({ success: false, error: "08_asset_plan.md (multimedia_enrichment) not found for this pipeline row" });
+        }
+
+        const markdown = readFileSafe(finalDoc.absPath);
+        if (!markdown || !markdown.trim()) {
+            return res.status(400).json({ success: false, error: "FINAL.md is empty" });
+        }
+        const assetPlanMarkdown = readFileSafe(multimediaDoc.absPath);
+        if (!assetPlanMarkdown || !assetPlanMarkdown.trim()) {
+            return res.status(400).json({ success: false, error: "08_asset_plan.md is empty" });
         }
 
         const form = new FormData();
@@ -1191,6 +1341,10 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
         form.append('slug', slug);
         form.append('mode', publishCfg.mode);
         form.append('authorName', authorName);
+        form.append('contentFormat', String(body.contentFormat || 'markdown').trim().toLowerCase() || 'markdown');
+        if (body.scheduledFor) {
+            form.append('scheduledFor', String(body.scheduledFor).trim());
+        }
         if (publishCfg.mode === 'draft') {
             form.append('previewHours', String(previewHours));
         }
@@ -1223,6 +1377,8 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
             endpoint: publishCfg.endpoint,
             authorName,
             previewHours: publishCfg.mode === 'draft' ? previewHours : null,
+            scheduledFor: body.scheduledFor ? String(body.scheduledFor).trim() : null,
+            contentFormat: String(body.contentFormat || 'markdown').trim().toLowerCase() || 'markdown',
             finalDoc: finalDoc.relPath,
             assetPlanDoc: multimediaDoc.relPath,
             blogAudio: blogAudio?.relPath || null
