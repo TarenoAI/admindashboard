@@ -2,7 +2,7 @@
 
 - Project ID: tareno
 - Permission: read
-- Last Sync: 2026-02-25T19:45:52.673Z
+- Last Sync: 2026-02-27T00:08:48.098Z
 
 ## Summary
 SaaS-Marketing & Blog-Operations für tareno.co mit Fokus auf planbare Content-Pipeline.
@@ -871,3 +871,6 @@ SaaS-Marketing & Blog-Operations für tareno.co mit Fokus auf planbare Content-P
 - Knowledge: 2026-02-25T12-47-35-AUTO_INDEX_SYNC_NOTE.md: projects/_knowledge/tareno/2026-02-25T12-47-35-AUTO_INDEX_SYNC_NOTE.md (md)
 - Knowledge: 2026-02-25T16-24-41-AUTO_COMPETITOR_BATCH_001.md: projects/_knowledge/tareno/2026-02-25T16-24-41-AUTO_COMPETITOR_BATCH_001.md (md)
 - Knowledge: 2026-02-25T16-24-41-AUTO_INDEX_SYNC_NOTE.md: projects/_knowledge/tareno/2026-02-25T16-24-41-AUTO_INDEX_SYNC_NOTE.md (md)
+- Knowledge: 2026-02-26T08-10-50-AUTO_INDEX_SYNC_NOTE.md: projects/_knowledge/tareno/2026-02-26T08-10-50-AUTO_INDEX_SYNC_NOTE.md (md)
+- TAG-01 NotebookLM Audio: media/notebooklm-audio/tareno/tag-01-bio-link-optimization-the-first-step-in-the-seo-funnel-notebooklm.mp3 (mp3)
+- TAG-02 NotebookLM Audio: media/notebooklm-audio/tareno/tag-02-community-management-how-to-turn-trolls-into-loyal-fans-notebooklm.mp3 (mp3)

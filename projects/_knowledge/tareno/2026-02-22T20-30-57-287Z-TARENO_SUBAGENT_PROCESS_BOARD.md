@@ -1,0 +1,20 @@
+# Projekt Tareno – Subagent Prozesssicht
+
+## Ziel
+Volle Nachvollziehbarkeit: welcher Subagent hat wann was gemacht und welches Zwischenergebnis erzeugt.
+
+## Prozessboard (unter Projekt anzeigen)
+| Blog-ID | Schritt | Subagent | Ergebnis-Datei | Gate | Status |
+|---|---|---|---|---|---|
+| TAG-01 | 1 | Research Synthesizer | `01_research.md` | max 30 Bullets, keine Halluzinationen | ✅ |
+| TAG-01 | 2 | SEO & Outline Architect | `02_outline.md` | GEO-Pflichtblöcke vollständig | ✅ |
+| TAG-01 | 3 | Longform Writer | `03_section_01.md` | factual first 300 words | 🟡 |
+| TAG-01 | 4 | Product Integration | `04_product_inserts.md` | keine Sales-Sprache | ⏳ |
+| TAG-01 | 5 | Editor & E-E-A-T | `05_edited.md` | Claim-Hygiene bestanden | ⏳ |
+| TAG-01 | 6 | Entity/Linkability | `06_geo_polish.md` | snippet-ready + konsistent | ⏳ |
+
+## Anzeige-Regel im Dashboard
+- **Organization:** zeigt den vollständigen Subagent-Registry-Block.
+- **Projekt Tareno:** zeigt pro Blog die Step-Timeline inkl. Artefakt-Datei.
+- Jeder Step muss Status + Fehlergrund (falls ❌) enthalten.
+

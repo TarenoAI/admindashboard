@@ -1,0 +1,76 @@
+# CONTENT_STRATEGY.md
+
+Quelle: Google Drive (Tareno Blogs)
+File ID: 1kXrkrXm8S2Rk8xaUG2arUgZ7Uao3IWseAFAUAXWyyXE
+MIME-Type: application/vnd.google-apps.document
+
+---
+
+# Content Strategy für Tareno.co (2026: Authority & GEO Edition)
+
+*Zuletzt aktualisiert: 2026-02-17* *Fokus: Topical Authority, Generative Engine Optimization (GEO), E-E-A-T*
+
+---
+
+## 1\. Kern-Philosophie: "Impact over Volume"
+
+Wir jagen keinen Vanity-Metriken (Anzahl Artikel) hinterher. Unser Ziel ist **Topical Authority**. Wir wollen für KIs (ChatGPT, Gemini) und Suchmaschinen die **unbestrittene Quelle der Wahrheit** für unsere Nische sein.
+
+**Leitspruch:** Lieber 2 Pillar-Pages, die den Markt dominieren, als 50 "Thin Content" Artikel.
+
+## 2\. Strategische Säulen (The Pillars)
+
+Wir starten mit **2 Hauptthemen**, die wir vollständig abdecken (Deep Dive).
+
+### 🏛️ Pillar 1: Social Media Automation & Workflow
+
+* **Das Problem (Pain Point):** Agenturen ersticken in manueller Arbeit. "Content Friedhöfe".  
+* **Die Pillar Page (5.000+ Wörter):** "Der definitive Guide zu Social Media Automation 2026".  
+* **Cluster-Themen (Satelliten):**  
+  * Zapier vs. Make vs. Tareno (Vergleich)  
+  * Approval-Workflows für Agenturen  
+  * Automatisierte Reportings  
+  * Content Recycling Strategien  
+  * *Tareno Integration:* Workflows, API, Approval.
+
+### 🏛️ Pillar 2: Content Repurposing & Multi-Channel
+
+* **Das Problem (Pain Point):** Ein Content-Piece reicht nicht mehr. Man muss überall sein ("Omnipräsenz"), hat aber keine Zeit.  
+* **Die Pillar Page (5.000+ Wörter):** "Die Content-Maschine: Einmal erstellen, 20x posten".  
+* **Cluster-Themen (Satelliten):**  
+  * Video zu Blogpost (Transkription)  
+  * Blog zu Social Media Snippets  
+  * TikTok zu Reels & Shorts (ohne Wasserzeichen)  
+  * *Tareno Integration:* AI Repurposing, Media Library, Multi-Channel Composer.
+
+## 3\. GEO (Generative Engine Optimization) \- "Agentic Ready"
+
+Damit KIs unsere Inhalte zitieren, müssen sie maschinenlesbar strukturiert sein.
+
+* **Die 5-Fragen-Regel:** Jeder Artikel beantwortet klar: Was? Für wen? Welches Problem? Branche? Region?  
+* **Strukturierte Definitionen:** Absätze beginnen mit der Kernaussage ("Bottom Line Up Front").  
+* **Eigene Daten:** Wir nutzen Daten aus Tareno (anonymisiert) oder eigene Umfragen, um Primärquelle zu sein ("Unsere Daten zeigen...").  
+* **Opinionated Content:** Keine generischen Tipps. Wir beziehen Stellung ("Warum X tot ist").
+
+## 4\. E-E-A-T (Expertise, Authoritativeness, Trustworthiness)
+
+* **Autoren-Profile:** Jeder Artikel hat einen echten (oder gut inszenierten) Autor mit Bio & Expertise-Nachweis.  
+* **Quellen:** Wir verlinken auf Studien und seriöse Quellen (Knowledge Base).  
+* **Aktualität:** Ein "Last Updated" Datum ist Pflicht. Wir pflegen Inhalte ("Content Gardening").
+
+## 5\. Distribution (Der Turbo)
+
+* **Kein "Post & Pray":** Wir verlassen uns nicht nur auf SEO.  
+* **Paid Social:** Pillar Pages werden initial über LinkedIn Ads beworben.  
+* **Newsletter:** Lead Magnets (Templates) in jedem Artikel, um Emails zu sammeln.
+
+## 6\. Zeitplan (Phase 1\)
+
+* **Monat 1:** Erstellung der 2 Pillar Pages \+ 10 Cluster Artikel.  
+* **Monat 2:** Distribution & Backlink-Aufbau.  
+* **Monat 3:** Analyse & Optimierung (Content Cleanup).
+
+---
+
+*Diese Strategie ersetzt den alten frequenz-basierten Ansatz.*  
+

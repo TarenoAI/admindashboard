@@ -35,3 +35,11 @@ Then summarize:
 - at least 10 relevant competitor items
 - patterns and gaps are non-trivial and actionable
 - output stays within ~800–1200 words
+
+## Global Pipeline Integrity Gates (MANDATORY)
+- No repetition-loop content may pass to next stage.
+- No append-retry drift: on retry, regenerate from scratch (no append on failed artifacts).
+- Unresolved placeholders are forbidden in final candidate ({author}, {today}, {date}, {{...}}, [TODO], [TBD]).
+- Artifact leakage is forbidden in final candidate (e.g. # Research, # Outline, # Product Inserts, # GEO Polish, # Edited Draft, # Validation, # Gatekeeper Checklist).
+- If any gate fails: stop handoff and route back to responsible agent.
+

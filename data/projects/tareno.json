@@ -3,7 +3,7 @@
   "summary": "SaaS-Marketing & Blog-Operations für tareno.co mit Fokus auf planbare Content-Pipeline.",
   "status": "on_track",
   "priority": "high",
-  "lastUpdate": "2026-02-25",
+  "lastUpdate": "2026-02-27",
   "agents": [
     {
       "id": "tarenoblog",
@@ -178,27 +178,28 @@
       "referenceSpec": "projects/blog-artifacts/AGENT_7_FINAL_ASSEMBLER_PUBLISHER.md"
     },
     {
-      "id": "notebooklm_audio",
-      "name": "NotebookLM Audio Architect",
+      "id": "multimedia_enrichment",
+      "name": "Multimedia Enrichment & Asset Composer",
       "agentKey": "Agent 8",
-      "role": "Audio Overview Generation",
+      "role": "Visual Planning & Asset Placement",
       "status": "active",
-      "currentTask": "Bridge bereit; Podcast Embed Pflicht für alle Beiträge",
-      "description": "Erzeugt eine Audio-Overview (Podcast-Stil) basierend auf FINAL.md mittels NotebookLM-Bridge.",
-      "output": "blog-audio.mp3 + Embed-Code für Blog-Sidebar",
+      "currentTask": "Interne Visual-Planung aktiv; exakte Platzierung je FINAL.md Abschnitt",
+      "description": "Erstellt einen internen Asset-Plan mit Titelbild/Filler-Visuals und produktnahen Screenshot-Empfehlungen inkl. exakter Platzierung im finalen Artikel. Audio ist optional und wird nur mitgesendet, falls bereits vorhanden.",
+      "output": "08_asset_plan.md (intern) + ggf. vorhandene blog-audio.mp3 beim Draft-Versand",
       "hardRules": [
-        "Nur FINAL.md als Quelle nutzen",
-        "Instructions: Fokus auf Nutzwert und GEO-Elemente",
-        "Output-Format: mp3",
-        "Zwingend in Blog-Sidebar oder unter H1 einbetten"
+        "FINAL.md nicht umschreiben",
+        "Keine neuen Claims/Fakten hinzufügen",
+        "Jedes Visual muss einem konkreten Abschnitt dienen",
+        "Bei Tareno-Bezug: exaktes Feature-Screenshot benennen",
+        "Visuals nur intern planen, nicht automatisch senden"
       ],
-      "outputPath": "projects/blog-artifacts/tag01/blog-audio.mp3"
+      "outputPath": "projects/blog-artifacts/tag01/08_asset_plan.md"
     }
   ],
   "blogPipeline": {
     "totalBlogs": 10,
-    "completed": 2,
-    "inProgress": 8,
+    "completed": 5,
+    "inProgress": 5,
     "planned": 0,
     "currentFocus": "TAG-01",
     "currentStage": "Final Review",
@@ -222,25 +223,25 @@
       {
         "id": "TAG-03",
         "title": "Instagram Automation: Was erlaubt ist und was zum Ban führt (2026 Update)",
-        "status": "in_progress",
-        "progress": 50,
-        "stepsCompleted": 0,
+        "status": "done",
+        "progress": 100,
+        "stepsCompleted": 7,
         "stepsTotal": 7
       },
       {
         "id": "TAG-04",
         "title": "Omnipräsenz-Strategie: Wie Creator Y mit Repurposing 1M Views erreichte",
-        "status": "in_progress",
-        "progress": 50,
-        "stepsCompleted": 0,
+        "status": "done",
+        "progress": 100,
+        "stepsCompleted": 7,
         "stepsTotal": 7
       },
       {
         "id": "TAG-05",
         "title": "Threads ein Jahr später: Lohnt es sich für Brands?",
-        "status": "in_progress",
-        "progress": 50,
-        "stepsCompleted": 0,
+        "status": "done",
+        "progress": 100,
+        "stepsCompleted": 7,
         "stepsTotal": 7
       },
       {
@@ -5509,6 +5510,38 @@
       "path": "projects/_knowledge/tareno/2026-02-25T16-24-41-AUTO_INDEX_SYNC_NOTE.md",
       "type": "md",
       "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-02-26T08-10-50-AUTO_INDEX_SYNC_NOTE.md",
+      "path": "projects/_knowledge/tareno/2026-02-26T08-10-50-AUTO_INDEX_SYNC_NOTE.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "TAG-01 NotebookLM Audio",
+      "path": "media/notebooklm-audio/tareno/tag-01-bio-link-optimization-the-first-step-in-the-seo-funnel-notebooklm.mp3",
+      "type": "mp3",
+      "category": "Audio TAG-01",
+      "addedAt": "2026-02-26T23:39:41.152Z"
+    },
+    {
+      "label": "TAG-02 NotebookLM Audio",
+      "path": "media/notebooklm-audio/tareno/tag-02-community-management-how-to-turn-trolls-into-loyal-fans-notebooklm.mp3",
+      "type": "mp3",
+      "category": "Audio TAG-02",
+      "addedAt": "2026-02-27T00:08:48.090Z"
+    },
+    {
+      "label": "Knowledge: 2026-02-27T08-01-12-AUTO_COMPETITOR_BATCH_001.md",
+      "path": "projects/_knowledge/tareno/2026-02-27T08-01-12-AUTO_COMPETITOR_BATCH_001.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-02-27T08-01-12-AUTO_INDEX_SYNC_NOTE.md",
+      "path": "projects/_knowledge/tareno/2026-02-27T08-01-12-AUTO_INDEX_SYNC_NOTE.md",
+      "type": "md",
+      "category": "Wissensbank"
     }
   ],
   "notes": "Sam liefert operative Updates; Luna validiert Struktur und Qualität. TAG-01 alle 6 Schritte abgeschlossen, bereit für Luna's Final Review.",
@@ -5586,7 +5619,17 @@
         }
       },
       "id": "TAG-01",
-      "topicEn": "Bio-Link Optimization: The First Step in the SEO Funnel"
+      "topicEn": "Bio-Link Optimization: The First Step in the SEO Funnel",
+      "notebooklm": {
+        "lastJobId": "1772148432329-tag-01",
+        "lastGeneratedAt": "2026-02-26T23:39:41.152Z",
+        "lastAudioRelPath": "media/notebooklm-audio/tareno/tag-01-bio-link-optimization-the-first-step-in-the-seo-funnel-notebooklm.mp3",
+        "lastAudioAbsPath": "/root/.openclaw/workspace-tareno/media/notebooklm-audio/tareno/tag-01-bio-link-optimization-the-first-step-in-the-seo-funnel-notebooklm.mp3",
+        "notebookTitle": "Tareno TAG-01 - Bio-Link Optimization: The First Step in the SEO Funnel",
+        "notebookId": "d62ced7a-b851-462d-aaa5-6efcd5250395",
+        "artifactId": "31f3c2cf-955b-4d86-ab2c-50571c33e4a3",
+        "taskId": "31f3c2cf-955b-4d86-ab2c-50571c33e4a3"
+      }
     },
     {
       "day": "Tag 1 (Post 2)",
@@ -5677,6 +5720,16 @@
         "endpoint": "https://tareno.co/api/blog/publish",
         "authorName": "Sarah",
         "previewHours": 72
+      },
+      "notebooklm": {
+        "lastJobId": "1772150566427-tag-02",
+        "lastGeneratedAt": "2026-02-27T00:08:48.090Z",
+        "lastAudioRelPath": "media/notebooklm-audio/tareno/tag-02-community-management-how-to-turn-trolls-into-loyal-fans-notebooklm.mp3",
+        "lastAudioAbsPath": "/root/.openclaw/workspace-tareno/media/notebooklm-audio/tareno/tag-02-community-management-how-to-turn-trolls-into-loyal-fans-notebooklm.mp3",
+        "notebookTitle": "Tareno TAG-02 - Community Management: How to Turn Trolls into Loyal Fans",
+        "notebookId": "6a4f8d65-bcd5-4d8e-b38b-b293b1ba7068",
+        "artifactId": "6f5674dc-7624-4e4f-9aa4-195dc2b605e1",
+        "taskId": "6f5674dc-7624-4e4f-9aa4-195dc2b605e1"
       }
     },
     {
@@ -5690,57 +5743,57 @@
       "wordTarget": "2000",
       "steps": {
         "content_research": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag03/03_research_instagram-automation-rules-what-is-allowed-and-w.md",
-          "updatedAt": "2026-02-25T15:06:34.015Z",
+          "updatedAt": "2026-02-26T21:52:30.317Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 59
         },
         "structure": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag03/03_structure_instagram-automation-rules-what-is-allowed-and-w.md",
-          "updatedAt": "2026-02-25T15:06:34.041Z",
+          "updatedAt": "2026-02-26T21:52:30.317Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 59
         },
         "drafting": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag03/03_draft_instagram-automation-rules-what-is-allowed-and-w.md",
-          "updatedAt": "2026-02-25T15:06:34.062Z",
+          "updatedAt": "2026-02-26T21:52:30.317Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 4979
         },
         "feature_inserts": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag03/03_feature_inserts_instagram-automation-rules-what-is-allowed-and-w.md",
-          "updatedAt": "2026-02-25T15:06:34.091Z",
+          "updatedAt": "2026-02-26T21:52:30.317Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 194
         },
         "editing": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag03/03_edited_instagram-automation-rules-what-is-allowed-and-w.md",
-          "updatedAt": "2026-02-25T15:06:34.130Z",
+          "updatedAt": "2026-02-26T21:52:30.317Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 4979
         },
         "geo_polish": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag03/03_geo_polish_instagram-automation-rules-what-is-allowed-and-w.md",
-          "updatedAt": "2026-02-25T15:06:34.152Z",
+          "updatedAt": "2026-02-26T21:52:30.317Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 67
         },
         "final": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag03/03_final_instagram-automation-rules-what-is-allowed-and-w.md",
-          "updatedAt": "2026-02-25T15:06:34.173Z",
+          "updatedAt": "2026-02-26T21:52:30.317Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 4979
@@ -5760,57 +5813,57 @@
       "wordTarget": "2000",
       "steps": {
         "content_research": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag04/04_research_omnipresence-strategy-how-to-stay-visible-across.md",
-          "updatedAt": "2026-02-25T15:06:34.194Z",
+          "updatedAt": "2026-02-26T22:36:06.878Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 58
         },
         "structure": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag04/04_structure_omnipresence-strategy-how-to-stay-visible-across.md",
-          "updatedAt": "2026-02-25T15:06:34.211Z",
+          "updatedAt": "2026-02-26T22:36:06.878Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 58
         },
         "drafting": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag04/04_draft_omnipresence-strategy-how-to-stay-visible-across.md",
-          "updatedAt": "2026-02-25T15:06:34.227Z",
+          "updatedAt": "2026-02-26T22:36:06.878Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 4976
         },
         "feature_inserts": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag04/04_feature_inserts_omnipresence-strategy-how-to-stay-visible-across.md",
-          "updatedAt": "2026-02-25T15:06:34.241Z",
+          "updatedAt": "2026-02-26T22:36:06.878Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 191
         },
         "editing": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag04/04_edited_omnipresence-strategy-how-to-stay-visible-across.md",
-          "updatedAt": "2026-02-25T15:06:34.273Z",
+          "updatedAt": "2026-02-26T22:36:06.878Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 4976
         },
         "geo_polish": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag04/04_geo_polish_omnipresence-strategy-how-to-stay-visible-across.md",
-          "updatedAt": "2026-02-25T15:06:34.288Z",
+          "updatedAt": "2026-02-26T22:36:06.878Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 67
         },
         "final": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag04/04_final_omnipresence-strategy-how-to-stay-visible-across.md",
-          "updatedAt": "2026-02-25T15:06:34.302Z",
+          "updatedAt": "2026-02-26T22:36:06.878Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 4976
@@ -5830,57 +5883,57 @@
       "wordTarget": "2000",
       "steps": {
         "content_research": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag05/05_research_threads-one-year-later-is-it-still-worth-it-for-.md",
-          "updatedAt": "2026-02-25T15:06:34.316Z",
+          "updatedAt": "2026-02-26T22:40:38.646Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 59
         },
         "structure": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag05/05_structure_threads-one-year-later-is-it-still-worth-it-for-.md",
-          "updatedAt": "2026-02-25T15:06:34.329Z",
+          "updatedAt": "2026-02-26T22:40:38.646Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 59
         },
         "drafting": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag05/05_draft_threads-one-year-later-is-it-still-worth-it-for-.md",
-          "updatedAt": "2026-02-25T15:06:34.343Z",
+          "updatedAt": "2026-02-26T22:40:38.646Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 4978
         },
         "feature_inserts": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag05/05_feature_inserts_threads-one-year-later-is-it-still-worth-it-for-.md",
-          "updatedAt": "2026-02-25T15:06:34.358Z",
+          "updatedAt": "2026-02-26T22:40:38.646Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 191
         },
         "editing": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag05/05_edited_threads-one-year-later-is-it-still-worth-it-for-.md",
-          "updatedAt": "2026-02-25T15:06:34.370Z",
+          "updatedAt": "2026-02-26T22:40:38.646Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 4978
         },
         "geo_polish": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag05/05_geo_polish_threads-one-year-later-is-it-still-worth-it-for-.md",
-          "updatedAt": "2026-02-25T15:06:34.385Z",
+          "updatedAt": "2026-02-26T22:40:38.646Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 67
         },
         "final": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag05/05_final_threads-one-year-later-is-it-still-worth-it-for-.md",
-          "updatedAt": "2026-02-25T15:06:34.399Z",
+          "updatedAt": "2026-02-26T22:40:38.646Z",
           "updatedBy": "tarenoblog",
           "language": "en",
           "wordCount": 4978
@@ -8617,5 +8670,20 @@
       },
       "id": "TAG-68"
     }
-  ]
+  ],
+  "integrations": {
+    "notebooklm": {
+      "storagePath": "~/.notebooklm/storage_state.json",
+      "notebookTitleTemplate": "Tareno {{rowId}} - {{title}}",
+      "sourceTitleTemplate": "{{rowId}} FINAL.md",
+      "instructionsTemplate": "Create a podcast-style audio overview in German with practical takeaways and a clear structure.",
+      "outputDir": "media/notebooklm-audio/{{projectId}}",
+      "fileNameTemplate": "{{rowId}}-{{slugTitle}}-notebooklm.mp3",
+      "reuseNotebook": true,
+      "language": "en",
+      "audioFormat": "BRIEF",
+      "audioLength": "SHORT",
+      "waitTimeoutSec": 900
+    }
+  }
 }

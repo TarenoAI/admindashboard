@@ -132,6 +132,19 @@ FINAL.md darf nicht enthalten:
 - 07_geo_polish nur patch-basiert anwenden (Replace/Add/Delete)
 - ohne `FINAL.md` gilt der Run als nicht abgeschlossen
 
+### Hard Gate: Authority Protection (Pre-Final)
+Wenn `article_type: authority`:
+- keine strukturelle Komprimierung analytischer Abschnitte
+- keine Entfernung von Counterarguments
+- keine Kürzung von Trade-off- oder Edge-Case-Abschnitten
+- keine Normalisierung auf Supporting-Länge
+- wenn Authority-Draft >=1500 Wörter, darf FINAL nicht <1500 fallen (ohne explizite User-Freigabe)
+
+Bei Fail:
+- FINAL.md NICHT schreiben
+- STATE.md bleibt offen
+- Rücksprung an Agent 5 + Sam für depth-preserving Rebuild
+
 ### Acceptance Criteria (8/10)
 Ein Run gilt als erfolgreich, wenn:
 - `FINAL.md` existiert
@@ -150,3 +163,11 @@ Sam darf nicht:
 - neue Beispiele, Zahlen oder Studien hinzufügen
 - SEO/GEO durch Umschreiben "neu optimieren"
 - Agent 3-6 ersetzen
+
+## Global Pipeline Integrity Gates (MANDATORY)
+- No repetition-loop content may pass to next stage.
+- No append-retry drift: on retry, regenerate from scratch (no append on failed artifacts).
+- Unresolved placeholders are forbidden in final candidate ({author}, {today}, {date}, {{...}}, [TODO], [TBD]).
+- Artifact leakage is forbidden in final candidate (e.g. # Research, # Outline, # Product Inserts, # GEO Polish, # Edited Draft, # Validation, # Gatekeeper Checklist, Summary for AI/Editors, Summary for AI, For Editors).
+- If any gate fails: stop handoff and route back to responsible agent.
+

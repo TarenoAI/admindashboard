@@ -1,0 +1,42 @@
+# Redaktionsplan V4 (Cluster + Experts)
+
+Quelle: Google Drive (Tareno Blogs)
+File ID: 1CrawMM3ljeKs_0VqXnakXoVZoZ0rJ1efWgoOooShjvk
+MIME-Type: application/vnd.google-apps.spreadsheet
+
+---
+
+Cluster,Typ,Titel (Arbeitstitel),Fokus-Keyword,Tareno Feature / Tool,Autor (Experte),Status
+PILLAR 1: AUTOMATION,Pillar Page,Der definitive Guide zu Social Media Automation 2026: Strategien Tools & Workflows,Social Media Automation Guide,Workflow Builder + Automations-Engine,Alex (Tech Lead),Offen
+PILLAR 1: AUTOMATION,Cluster 1 (Problem),Warum manuelle Content-Planung Agenturen ruiniert (Die versteckten Kosten),Agentur Skalierung Probleme,Analytics Suite (Team Performance),Sarah (Growth),Offen
+PILLAR 1: AUTOMATION,Cluster 2 (Lösung),Zapier vs. Make vs. Native Integrationen: Der große Vergleich für Social Media,Social Media Integrations,Developer API + n8n Node,Alex (Tech Lead),Offen
+PILLAR 1: AUTOMATION,Cluster 3 (Deep Dive),Content Recycling 2.0: Wie du einen Blogpost in 20 Social Assets verwandelst,Content Repurposing Strategy,AI Assist + Repost Queue,Mia (Creative),Offen
+PILLAR 1: AUTOMATION,Cluster 4 (Workflow),Der perfekte Approval-Workflow: Wie du Freigabeschleifen halbierst,Social Media Approval Workflow,Team Management + Approvals (Beta),Sarah (Growth),Offen
+PILLAR 1: AUTOMATION,Cluster 5 (Tech),Bulk Scheduling: 100 Posts in 5 Minuten planen (Schritt-für-Schritt),Bulk Social Media Posting,Post Composer (Bulk Upload),Alex (Tech Lead),Offen
+PILLAR 1: AUTOMATION,Cluster 6 (Case Study),Wie Agentur X durch Automatisierung 20h pro Woche sparte,Social Media Case Study,Workflows (Templates),Sarah (Growth),Offen
+PILLAR 1: AUTOMATION,Cluster 7 (Tool),Instagram Automation: Was erlaubt ist und was zum Ban führt (2026 Update),Instagram Automation Rules,Channel Management (Safe API),Alex (Tech Lead),Offen
+PILLAR 1: AUTOMATION,Cluster 8 (Tool),LinkedIn Automation für B2B: Leads auf Autopilot?,LinkedIn B2B Automation,LinkedIn Post Generator (Free Tool),Sarah (Growth),Offen
+PILLAR 1: AUTOMATION,Cluster 9 (Trend),AI Agents im Social Media Management: Die Zukunft ist da,AI Social Media Agents,AI Content Strategy,Alex (Tech Lead),Offen
+PILLAR 1: AUTOMATION,Cluster 10 (Checkliste),Die ultimative Automation-Checkliste für Social Media Manager (Download),Social Media Automation Checklist,Reports Center (Export),Sarah (Growth),Offen
+PILLAR 2: REPURPOSING,Pillar Page,Die Content-Maschine: Einmal erstellen 20x posten (Omnipräsenz Guide),Content Repurposing Guide,Multi-Platform Publishing + Repost Queue,Mia (Creative),Offen
+PILLAR 2: REPURPOSING,Cluster 1 (Format),Video zu Text: Wie du aus YouTube-Videos Blogartikel machst (in Minuten),Video to Blog AI,YouTube Transcript Extractor (Free Tool),Mia (Creative),Offen
+PILLAR 2: REPURPOSING,Cluster 2 (Format),TikTok zu Reels zu Shorts: Der wasserzeichenfreie Workflow,Short Form Repurposing,TikTok Transcript Extractor (Free Tool),Mia (Creative),Offen
+PILLAR 2: REPURPOSING,Cluster 3 (Plattform),Warum du deine LinkedIn Posts auch auf Threads teilen musst,LinkedIn to Threads Repurposing,Threads Post Generator (Free Tool),Sarah (Growth),Offen
+PILLAR 2: REPURPOSING,Cluster 4 (Strategie),"Die ""Zero-Click"" Content Strategie: Plattform-native Inhalte skalieren",Zero Click Content,Brand Kit,Sarah (Growth),Offen
+PILLAR 2: REPURPOSING,Cluster 5 (Tool),Podcast Marketing: Audiogramme und Zitate automatisch erstellen,Podcast Promotion Social Media,Media Library (Video Editor),Mia (Creative),Offen
+PILLAR 2: REPURPOSING,Cluster 6 (How-To),Blog zu Social Media: 5 Posts aus einem Artikel generieren (Prompt Guide),Blog to Social Media AI,AI Assist (Custom Prompts),Alex (Tech Lead),Offen
+PILLAR 2: REPURPOSING,Cluster 7 (Deep Dive),Visuelles Repurposing: Infografiken aus Datenstudien erstellen,Data Visualization Social Media,Canva Integration + Media Library,Mia (Creative),Offen
+PILLAR 2: REPURPOSING,Cluster 8 (Case Study),Omnipräsenz-Strategie: Wie Creator Y mit Repurposing 1M Views erreichte,Social Media Omnipresence,Analytics Suite (Cross-Platform),Sarah (Growth),Offen
+PILLAR 2: REPURPOSING,Cluster 9 (Workflow),"Der ""Content Waterfall"": Von Longform zu Shortform (Template)",Content Waterfall Strategy,Workflow Builder,Alex (Tech Lead),Offen
+PILLAR 2: REPURPOSING,Cluster 10 (Tool),Evergreen Content: Alte Posts automatisch neu beleben (ohne Spam),Evergreen Content Strategy,Repost Queue (Evergreen Engine),Mia (Creative),Offen
+PILLAR 3: DISCOVERY (GEO),Pillar Page,Social SEO & GEO 2026: Wie du in KI-Antworten und Feeds gefunden wirst,Social Media SEO Guide,All Generator Tools + Hashtag Dashboard,Sarah (Growth),Offen
+PILLAR 3: DISCOVERY (GEO),Cluster 1 (Plattform),Instagram SEO: Keywords statt Hashtags (Der neue Standard),Instagram SEO 2026,Instagram Caption Generator (Free Tool),Mia (Creative),Offen
+PILLAR 3: DISCOVERY (GEO),Cluster 2 (Plattform),"TikTok SEO: Wie du für ""How-To"" Suchanfragen rankst",TikTok SEO Strategy,TikTok Hook Generator (Free Tool),Mia (Creative),Offen
+PILLAR 3: DISCOVERY (GEO),Cluster 3 (Plattform),Pinterest SEO: Die unterschätzte Suchmaschine für Traffic,Pinterest SEO Guide,Pinterest Pin Title Generator (Free Tool),Sarah (Growth),Offen
+PILLAR 3: DISCOVERY (GEO),Cluster 4 (Plattform),YouTube SEO: Titel & Beschreibungen die Klicks bringen,YouTube SEO Tools,YouTube Title Generator (Free Tool),Alex (Tech Lead),Offen
+PILLAR 3: DISCOVERY (GEO),Cluster 5 (Strategie),Generative Engine Optimization (GEO): Content für ChatGPT optimieren,GEO Marketing Strategy,Tareno Knowledge Base (Internal),Sarah (Growth),Offen
+PILLAR 3: DISCOVERY (GEO),Cluster 6 (Tool),Hashtag-Strategie 2026: Qualität vor Quantität (Daten-Analyse),Hashtag Strategy 2026,Hashtag Dashboard (AI Generated),Mia (Creative),Offen
+PILLAR 3: DISCOVERY (GEO),Cluster 7 (Deep Dive),Voice Search & Social Media: Optimierung für gesprochene Suchanfragen,Voice Search Social Media,YouTube/TikTok Transcript Extractor (Free Tools),Alex (Tech Lead),Offen
+PILLAR 3: DISCOVERY (GEO),Cluster 8 (Workflow),Lokales SEO mit Google Business Profile & Social Signals,Local SEO Social Media,Channel Management (Google Business),Sarah (Growth),Offen
+PILLAR 3: DISCOVERY (GEO),Cluster 9 (Case Study),Wie wir durch Social SEO unseren Traffic verdoppelt haben,Social SEO Case Study,Analytics (Traffic Source),Sarah (Growth),Offen
+PILLAR 3: DISCOVERY (GEO),Cluster 10 (Tool),Bio-Link Optimierung: Der erste Schritt im SEO-Funnel,Bio Link SEO,Links Modul (Bio Link Builder),Mia (Creative),Offen

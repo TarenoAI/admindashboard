@@ -87,6 +87,9 @@
   `MODE=CHUNKED_WRITING` oder `MODE=SINGLE_WRITER` → **nicht mid-run wechseln**.  
 - **Prompt Sanitation:** Keine irrelevanten Boilerplates (Svelte/Supabase/Bindings etc.) in Writing Tasks.  
 - **Kein “phantom success”:** Ein Step gilt nur als erfolgreich, wenn Datei existiert und gecheckt wurde.
+- **NEW Hard Rule:** Sam darf niemals mehrere vollständige Artikelkörper in einem finalen Stream ausgeben. Wenn mehrere Full Drafts erkannt werden, muss Sam stoppen und `FINAL.md` strikt neu bauen aus genau **einer** Basisdatei (`06_edited.md`) plus **einer** Patchdatei (`07_geo_polish.md`).
+- **NEW Merge Rule:** `FINAL.md` wird ausschließlich erzeugt aus genau einer Basis (`06_edited.md`) + angewandten Produkt-Inserts + angewandtem GEO-Patch. Roh-Artefakt-Überschriften wie `# Product Inserts` oder `# GEO Polish` sind in `FINAL.md` verboten.
+- **NEW QA Rule (Hard Fail):** Finalisierung scheitert sofort bei: mehrfacher Frontmatter, mehreren H1s für denselben Artikel, Überschriften `# Product Inserts`/`# GEO Polish`, duplizierten vollständigen Artikelkörpern.
 
 ## Timeout/Rate-Limit Policy (Pflicht)
 ### Bei HTTP 429
@@ -384,7 +387,8 @@ Finale Qualität + Vertrauensaufbau + Halluzinationsschutz.
 - ruleset
 
 ## Output
-- `06_edited.md`
+- `06_edited.md` (publish-ready; no labels/checklists/internal notes)
+- `06a_validation_notes.md` (internal QA log with claim labels + source checks)
 
 ## Aufgaben
 - Redundanzen kürzen  
@@ -397,6 +401,17 @@ Finale Qualität + Vertrauensaufbau + Halluzinationsschutz.
   - “Study/Survey claims” ohne Quelle umformulieren; **keine Institution nennen**
 - Tool-Sektionen konkretisieren (Kriterien statt Fülltext)
 - Obvious typo cleanup (harte Ausreißer entfernen)
+- **Product Insert Contract Validation vor Merge (Pflicht):**
+  - max. 3 Inserts
+  - jeder Insert enthält genau 1× "Tareno"
+  - jeder Insert enthält mind. 1 Feature-Term aus Allowlist
+  - 60–120 Wörter pro Insert
+  - keine Hype-Metaphern
+  - bei Verstoß: zurück an Agent 4
+- **Mandatory Final Dedupe Pass (Pflicht):**
+  - duplicate heading scan
+  - duplicate paragraph/block scan
+  - Duplikate konsolidieren (nicht nur kürzen)
 
 ## Hard Fail Checks (Stop & Return)
 - Mehr als 1 H1  
@@ -408,6 +423,12 @@ Finale Qualität + Vertrauensaufbau + Halluzinationsschutz.
 ## Quellen-Regel (Editor)
 - 1–3 hochwertige outbound links max, wenn sinnvoll (offizielle Produktseiten, offizielle docs, seriöse Reports)  
 - Keine Low-quality Quellen nur um Links zu haben.
+
+## Mandatory Publishing Separation (Agent 5)
+- `06_edited.md` darf **keine** Labels wie `[SOURCE]`, `[OPINION]`, `[UNVERIFIED]` enthalten.
+- `06_edited.md` darf **keine** Gatekeeper-Checklisten, Validation-Summaries oder interne QA-Texte enthalten.
+- Alle Labeling-/QA-Informationen gehören ausschließlich in `06a_validation_notes.md`.
+- Verstoß = Hard Fail, Rewrite vor Übergabe an Agent 6.
 
 ---
 
@@ -467,6 +488,22 @@ Macht den Artikel zitierbar und linkwürdig, ohne neue Fakten zu erfinden.
 - Fazit  
 - Author Bio + Last updated  
 - **keine** Scripts/JSON-LD im Markdown
+
+`FINAL.md` darf NICHT enthalten (Hard-Fail):
+- mehrere Frontmatter-Blöcke
+- mehrere H1s für denselben Artikel
+- Roh-Artefakt-Überschriften wie `# Product Inserts` oder `# GEO Polish`
+- duplizierte vollständige Artikelkörper
+- doppelte H2-Überschriften (gleicher Heading-Text mehrfach)
+- duplizierte Blöcke mit >80% Text-Overlap
+
+Bei Dedupe-Fail:
+- Rückgabe an **Agent 5** (Dedupe Cleanup), **nicht** an Agent 3.
+
+Patch-Idempotency (Pflicht):
+- Jeder Patch-Target darf pro Merge nur **einmal** angewendet werden.
+- Sam muss angewendete Patch-Targets/IDs tracken.
+- Ein erneuter Merge-Lauf darf keine zusätzlichen Duplikate erzeugen.
 
 **Website-Layer (nicht in .md):**
 - JSON-LD (Article/FAQ/HowTo) via Template/Head-Injection  

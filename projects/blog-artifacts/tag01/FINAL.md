@@ -152,6 +152,55 @@ FINAL.md darf nicht enthalten:
 - Patch-only Anwendung aus 07_geo_polish.md: Replace/Add/Delete
 - Wenn FINAL.md nicht existiert -> Run unvollstandig
 
+### Hard Gate: Repetition Loop (Pre-Final)
+FINAL.md darf nicht geschrieben werden, wenn:
+- ein Satz >2× im gesamten Kandidaten vorkommt (verbatim)
+- ein Absatz >1× vorkommt (verbatim)
+- >15% der Sätze semantisch stark redundant sind (near-duplicate)
+
+Bei Fail:
+- FINAL.md NICHT schreiben
+- STATE.md bleibt offen
+- Rücksprung: Agent 3 (Regenerate betroffene Sections) + Draft neu zusammenbauen (kein Append)
+
+### Hard Gate: Placeholder Scan (Pre-Final)
+FINAL.md darf keine Platzhalter enthalten, z. B.:
+- {author}, {today}, {date}, {{...}}, [TODO], [TBD]
+
+Bei Fail:
+- FINAL.md NICHT schreiben
+- Rücksprung: Metadata merge / template fill
+
+### Hard Gate: Artifact Leakage (Pre-Final)
+FINAL.md darf keine Artefakt-Headings/Prozessblöcke enthalten, z. B.:
+- # Research
+- # Outline
+- # Edited Draft
+- # Product Inserts
+- # GEO Polish
+- Gatekeeper Checklist
+- Status: Ready
+- Summary for AI/Editors
+- Summary for AI
+- For Editors
+
+Bei Fail:
+- FINAL.md NICHT schreiben
+- Sam muss finalen Content-Körper sauber extrahieren/mergen
+
+### Hard Gate: Authority Protection (Pre-Final)
+Wenn `article_type: authority`:
+- keine strukturelle Komprimierung analytischer Abschnitte
+- keine Entfernung von Counterarguments
+- keine Kürzung von Trade-off- oder Edge-Case-Abschnitten
+- keine Normalisierung auf Supporting-Länge
+- wenn Draft >=1500 Wörter, Final nicht unter 1500 Wörter (außer mit expliziter User-Freigabe)
+
+Bei Fail:
+- FINAL.md NICHT schreiben
+- STATE.md bleibt offen
+- Rücksprung an Agent 5 + Sam für depth-preserving Rebuild
+
 ### Acceptance Criteria (8/10)
 Ein Run gilt als erfolgreich, wenn:
 - FINAL.md existiert

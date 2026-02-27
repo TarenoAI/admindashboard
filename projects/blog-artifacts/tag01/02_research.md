@@ -14,6 +14,7 @@ Turn `kb_pack` into actionable research notes: intent, patterns, gaps, and diffe
 - Competitor gaps (Top 5–8)
 - Differentiation angle (1–2 sentences)
 - Risky/volatile claim zones (prices, limits, %s, institutions)
+- Mode recommendation: `article_type` = `standard` or `authority` (with 1-line reason)
 
 ## Hard Rules
 - No prose article writing
@@ -25,3 +26,11 @@ Turn `kb_pack` into actionable research notes: intent, patterns, gaps, and diffe
 - gaps are specific (templates/decision trees/processes), not vague (“more depth”)
 - differentiation angle is clear and usable by Agent 2
 - volatile zones are explicit
+
+## Global Pipeline Integrity Gates (MANDATORY)
+- No repetition-loop content may pass to next stage.
+- No append-retry drift: on retry, regenerate from scratch (no append on failed artifacts).
+- Unresolved placeholders are forbidden in final candidate ({author}, {today}, {date}, {{...}}, [TODO], [TBD]).
+- Artifact leakage is forbidden in final candidate (e.g. # Research, # Outline, # Product Inserts, # GEO Polish, # Edited Draft, # Validation, # Gatekeeper Checklist).
+- If any gate fails: stop handoff and route back to responsible agent.
+

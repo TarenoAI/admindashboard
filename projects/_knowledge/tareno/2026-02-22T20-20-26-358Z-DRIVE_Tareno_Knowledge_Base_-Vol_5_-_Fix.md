@@ -1,0 +1,861 @@
+\# Tareno Knowledge Base \- Volume 5 (Fixed)
+
+Generated: 2026-02-16T23:08:51.309Z
+
+\---
+
+\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#  
+\# ARTICLE: CoSchedule\_How\_To\_Write\_A\_Business\_Proposal\_In\_12\_Simple\_Step  
+\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#
+
+﻿How To Write A Business Proposal In 12 Simple Steps  
+Source: https://coschedule.com/blog/how-to-write-a-business-proposal
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+How To Write A Business Proposal In 12 Simple Steps  
+Zoe DevittoContent
+
+Are you looking to score new clients and grow your business? Then you’ll need to know how to write a business proposal that wins more deals.
+
+Your document will be one of many your prospect receives, so it’s crucial to get it right.
+
+Did you know that business proposals are no longer won over by price alone? The top reason for losing a bid is ‘A competitor/incumbent,’ according to Loopio’s statistics.
+
+You need to be succinct, persuasive, and follow a logical structure.
+
+I have participated in creating hundreds of proposals throughout my marketing career. In this article, I will share my steps for writing a business proposal with specific conversion optimizations to help you close more deals.
+
+Let’s win you new business\!
+
+Table of Contents- 12 Steps To Write A Business Proposal
+
+\* Use CoSchedule Marketing Suite To Streamline Your Business Proposal Process  
+\* It’s Time to Close Some Deals\!  
+12 Steps To Write A Business Proposal  
+In most cases, business proposals are written in response to a prospect outreach (formally or informally solicited).
+
+You can write yours from scratch in a Word document, from a template, or through proposal software.
+
+If you opt for the software solution, you’ll be able to track metrics (like the number of times the proposal was opened) or set automatic reminders.
+
+Make use of CoSchedule's Proposal Generator that makes custom and professional proposals\!
+
+Source
+
+Whichever method you choose, it’s good to familiarize yourself with the most commonly used sections of a business proposal.
+
+A business proposal typically consists of elements like:
+
+\- Title page
+
+\- Table of contents
+
+\- Executive summary
+
+\- A project section
+
+\- Portfolio
+
+\- Cost page
+
+One rookie mistake is to talk about yourself too much.
+
+This tactic might work for press releases but flops when it comes to business proposals. The trick is to showcase relevant results you achieved with previous customers and how your new prospect will benefit from your experience.
+
+Let's dive deeper into audience research and the nitty-gritty of how to write a business proposal.  
+Step \#1: Research Your Audience  
+Writing a business proposal will be familiar territory if you regularly write blog posts.
+
+What both mediums have in common is the need to understand the audience and tailor the content to them.
+
+Ensure you have the following details about your prospect:
+
+\- Goals and business objectives
+
+\- Pain points
+
+\- Communication preferences
+
+\- Timelines
+
+\- Budget
+
+You can easily get this information by asking targeted questions at the first few sales meetings.
+
+Maybe you write high-converting newsletters. Use audience learnings from those campaigns to your advantage.
+
+Additionally, you can provide an interactive client form within the proposal. These client forms have pre-populated data that helps your prospect select the right features, services, or quantities for their case.
+
+View the Proposify website here.
+
+The form will then automatically populate the costs accordingly.
+
+Be sure to optimize each proposal for each organization. Reference similar use cases throughout the proposal to make yourself the most suitable choice out of all the requests for proposals.  
+Step \#2: Design A Title Or Cover Page  
+Your title page or cover page is the first impression of your business proposal.
+
+Including a cover page accounts for a 4.6% increase in conversion rate.
+
+Not bad for a low-content page\!
+
+It should include the following elements:
+
+\- Your business name, logo, and contact information
+
+\- The prospect’s company name, logo, and contact information
+
+\- Date of submission
+
+\- Title and description of the project
+
+\- Name of the person to whom you’re submitting the proposal
+
+\- Bonus: a testimonial from one of your customers
+
+Aim for a professional, clean, yet creative look to make the proposal stand out from all the other submissions.  
+Step \#3: Generate A Table Of Contents  
+According to statistics, business proposals generally span 11 pages and are organized into 7 sections.
+
+It’s time to leverage a handy table of contents page for easy access\!
+
+Odds are that multiple people will be involved in the decision-making process at the prospect’s company. Including a table of contents lets your prospect quickly find specific information when needed.
+
+If you’re using Microsoft Word, you can generate this section by selecting the References tab and clicking the “Table of Contents” menu item.
+
+In Google Docs, click Insert, then select “Table of contents.”
+
+How you generate the table of contents section on proposal platforms may vary by software.  
+Step \#4: Write An Executive Summary  
+Your Executive Summary should briefly introduce the reader to your business and how you can help them solve their problem.
+
+This page, also sometimes called the Introduction, is the most read page in a proposal, so make sure it includes all of the necessary details that move the conversion needle.
+
+The summary should be written in a conversational tone, avoiding jargon and buzzwords as much as possible.
+
+Boost your credibility by listing your company’s qualifications, associations, and achievements in the form of badges or icons.
+
+Keep it at most half a page or about 200-300 words.  
+Step \#5: Outline A Problem & Solution  
+This is where you’ll outline the problem or opportunity your prospect has encountered.
+
+Use learnings from your audience research to create a tailored solution that meets their needs.
+
+Start with a description of the current situation, then connect it to a solution you offer. Highlight results from your past experiences and successes.
+
+You can make it about 400-500 words but balance the page with lots of white space.
+
+Use any of the following sales enablement elements in this section:
+
+\- Past results in the same industry
+
+\- Estimated cost and time savings
+
+\- Projected outcomes
+
+\- Images or a video (using media may result in up to 41-72% higher conversion rates, respectively)
+
+\- Supporting data from the industry
+
+\- Reviews and testimonials
+
+Check out this page on proposals.
+
+Business development expert Robyn Haydon says, "Customer testimonials bring your proposal to life. They show you have approached a similar contract or project in the past, and the results you achieved. And because they come from a third party, they also provide independent verification of the value of what you're offering."
+
+If you’re a SaaS business, use services like G2 or TrustRadius to find relevant reviews to feature.
+
+Read the full article on this page.
+
+Finally, you can also reference relevant statistics or research from one of your white papers to show authority.
+
+Are you just starting out and don’t have enough content yet? Use a widely known publication to support your case. For example, “According to Forbes’ recent study, businesses should…”  
+Step \#6: Add A Portfolio Page  
+Including a portfolio of your past work is vital if you’re in the creative niche, such as graphic design, web design, or even content writing.
+
+Highlight only your best work related to your prospect’s project. You can include your portfolio as screenshots or add a link to where you host them.
+
+Some great external portfolio sites include Behance, Dribbble, Coroflot, and even Microsoft Sway.
+
+Ideally, showcase 3-6 portfolio items in your business proposal.  
+Step \#7: Create The Projected Deliverables & Timelines  
+The deliverables section should outline the timeline of how and when you will complete the project. Break it down by tasks, start dates, end dates, approval details, and total duration.
+
+Support your outline with a Gantt chart which will help decision-makers visualize how long the project will take and how much time each task needs.
+
+You can also include how often you will be communicating with your client, how long it will take to receive feedback, and how they should request changes.
+
+Make sure the timeline is realistic and consider any holidays or other events that may delay progress.  
+Step \#8: Provide A Cost Breakdown  
+No pressure, but this page may be one of the main deciding factors for your prospects choosing you.
+
+The cost page is the second most read page in a business proposal. You need to list the project's total cost and how it’s broken down.
+
+\- Service or product name
+
+\- Item price
+
+\- Quantity
+
+\- Taxes
+
+\- Subtotal
+
+\- Discounts (Be very careful with this tactic \- data shows that discounted proposals see a 23.6% LOWER close rate)
+
+\- Total cost
+
+If you are using a proposal platform, take advantage of the interactive pricing tables.
+
+Being able to edit quantities (such as the number of software licenses or design versions) and opt in or out of elective items can improve your close rates by 35.8%.
+
+Include a Next Steps paragraph here, too, with at most 3-4 steps. You can explain to your prospect what to do next and add a payment schedule.
+
+Finally, it may be a small detail, but what you call the cost section can make a difference.
+
+According to Better Proposals, more than half of successfully signed proposals did NOT use the word “Cost” as a title but went with a variation of “Investment,” “ROI,” or similar.  
+Step \#9: Provide Your Terms & Conditions  
+This part is about protecting yourself, your business, and your clients.
+
+Include things like payment schedules, confidentiality agreements, allowed revisions, or warranty information.
+
+Add any costs that may arise due to a change in scope.
+
+This place is also where to mention how and when you expect to be paid \- will it be on delivery? On completion of specific milestones? What happens if they miss a payment or terminate the contract prematurely?
+
+When I worked at an agency, we found the best length of the T\&C section was about a page or a page and a half at most.  
+Step \#10: Add an About Us Page  
+The About Us page is where you can make a personal connection with the prospect.
+
+You can use some of the content from the About Us page of your website, such as the company history or mission statement.
+
+It’s a great chance to show how you and your team are the perfect fit for their project, so make sure to include a short bio of everyone involved.
+
+Add awards, certifications, or other relevant achievements for each team member.
+
+Listing their experience and individual strengths can help prospects visualize how your team will approach the project.
+
+Pro-tip: Adding a video to your business proposal can increase close rates by up to 41%.
+
+Simply face the camera, introduce yourself, and explain how you and your team can help the prospect and how excited you are to work with them.  
+Step \#11: Edit Your Business Proposal  
+On average, business proposals are viewed 7.1 times by prospects.
+
+That’s why it’s essential to pay special attention to the editing process and ensure that you hand over a flawless, professional document.
+
+Make a checklist for yourself to review:
+
+\- Typos
+
+\- Grammar and spelling errors
+
+\- Formatting issues
+
+\- Terms, abbreviations, or jargon that may be unclear
+
+\- The details around costs
+
+If you don’t have the bandwidth to re-read your work with fresh eyes, consider hiring a dedicated editor for a few hours.
+
+Pro-tip: Send your proposal already signed by your company. This way, the only thing left to do for your prospect is to sign it themselves. Proposals with e-signatures close 35% faster compared to proposals without.  
+Step \#12: Design Your Business Proposal  
+If you haven’t already, now is the time to design your business proposal.
+
+Start by applying a design theme to the proposal. If you’re using Word or PowerPoint, look for the templates or design section.
+
+Proposal generator platforms will have their own templates you can customize.
+
+In my experience of creating business proposals for a marketing agency, using some of the prospect's design palette often helped us advance to the next step.
+
+For example, we often use the prospect's brand color to evoke a familiar look and feel.
+
+If the prospect does not have a brand kit and you're uncomfortable digging into a page's source code, use a Chrome extension like the Eyedropper to extract the HEX color codes from the prospect’s website.
+
+Pro-tip: Keep them from printing your proposal\! If clients print your proposals, you decrease your chances of conversion by 88%. So, omit any print buttons.  
+Use CoSchedule Marketing Suite To Streamline Your Business Proposal Process  
+CoSchedule Marketing Suite is a family of agile marketing products that helps you coordinate your process, projects, and teams. With Marketing Suite, you can coordinate and execute your business proposal from start to finish.  
+1\.  Create A Marketing Campaign For Your Business Proposal  
+Use a Marketing Campaign to document all the individual projects that need to be completed for your business proposal.
+
+The Calendar View gives you visibility over all the project deadlines and due dates so you can move tasks and projects around based on capacity.  
+2\. Set Up Your Business Proposal Projects  
+Add all the projects to the campaign that need to be completed for
+
+Schedule your business proposal timeline and add project dates to track the completion of the whole project. View all the project deadlines for your proposal in one place.
+
+Add Tasks Under each project, create a list of tasks to ensure every detail is completed for the business proposal.
+
+Include tasks in each project to create deliverables, edit sections, and approve the copy. Attach Your Proposal Add a Google Doc or Microsoft Word to your business proposal project.
+
+Coordinate all the tasks required to create the proposal and allow all team members access to the proposal to make updates or ship the proposal. Add Proposal Details To Project Include additional business proposal details in the text editor attachment to contain clear instructions for creating content for the business proposal.
+
+From the design ideas to stakeholders names, write information that is prevalent to the proposal for the team to access.  
+3\. Delegate Tasks To Your Team  
+Assign tasks to the designated department to complete every project on time.
+
+Set the desired completion date with each team member name under each task.  
+4\. Save A Project Template For Your Proposal Process  
+Want to create more business proposals in the future? Save the entire campaign process as a project template to reuse.
+
+Simplify the process for future business proposals by including project details like project owner, tasks, and attachments to improve efficiency.  
+It’s Time to Close Some Deals\!  
+Learning how to write a business proposal is an art form.
+
+You must provide a lot of information to the prospective client while keeping your readers engaged and interested in your offer.
+
+It’s absolutely possible once you know what to optimize for the best results.
+
+In summary, you should understand how the prospect perceives value, then tailor your content on how you can deliver that value.
+
+Include your and your team members' relevant credentials, awards, or experience to make a personal connection with the prospect.
+
+Finally, design your proposal with the client’s brand in mind, and use interactive pricing features whenever possible. This will help speed up the process and increase close rates significantly.
+
+Good luck\! Now go out there and win those deals\!
+
+\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#  
+\# ARTICLE: CoSchedule\_10\_Marketing\_Operations\_Software\_To\_Boost\_Producti  
+\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#
+
+﻿10 Marketing Operations Software To Boost Productivity & Execute Marketing Activities  
+Source: https://coschedule.com/blog/marketing-operations-software-tools-platforms
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+10 Marketing Operations Software To Boost Productivity & Execute Marketing Activities  
+Sam TateContent
+
+Looking to streamline your marketing operations and increase performance?
+
+The right marketing operations software can transform how your team manages campaigns, automates workflows, and measures success. In this guide, you'l learn how to choose the ideal tools and features to support your business goals.
+
+Table of Contents- Marketing OperationsWhat Are Marketing Operations?
+
+\* What Is Marketing Operations Management?  
+\* What Makes Great Marketing Operations Software?  
+\* Top 10 Marketing Operations SoftwareCoSchedule Marketing Suite  
+\* Trello  
+\* Slack  
+\* Zapier  
+\* ZenDesk  
+\* Salesforce  
+\* BambooHR  
+\* Xero  
+\* Guru  
+\* Google Drive
+
+Marketing Operations  
+What Are Marketing Operations?  
+Marketing Operations
+
+Marketing operations are the practical implementation of marketing activities as executed through people, procedures, and technology.  
+What Is Marketing Operations Management?  
+Marketing Operations Management
+
+Marketing operations management organizes people, procedures, and technology to optimize marketing activities' efficiency, scale, consistency, and results by aligning practical implementation with strategic business objectives.  
+What Makes Great Marketing Operations Software?  
+Marketing operations software is the technology used to oversee marketing efforts and measure the performance of your marketing strategy. But what makes each software unique? The features.
+
+Take a look at these necessary features to find the optimal software for your marketing team:  
+1\. Team Collaboration & Management  
+Implement software that allows your team to collaborate on projects and manage workflows. Team collaboration and marketing management features improve communication and productivity across the department.  
+2\. Project Management  
+A project management component ensures your team achieves every marketing deadline and goal. Manage your team's marketing projects with software to boost efficiency and productivity.  
+3\. Reporting  
+Use marketing operations software that shares reports – metrics, reports, and workflow dashboards with stakeholders. Keep stakeholders informed with real-time insights on data and marketing actions to prove your team's value.  
+4\. Process & Workflow Automation  
+Process and workflow automation streamlines assigning marketing tasks. Incorporate software with process and workflow automation to enhance performance and reduce errors.  
+5\. Integrations  
+Adopt marketing operations software that connects with other third-party applications. Integrations connect all your tools in one place to access data and improve efficiency.
+
+Marketing Operations Software Integrations To Connect:
+
+\- Google Drive
+
+\- Microsoft
+
+\- Social media applications
+
+\- Sync your calendar
+
+\- WordPress
+
+\- Email marketing services  
+6\. Human Resources Management  
+Use software that allows your human resources team to oversee employee activities. Utilize a human resource management software to improve the employee’s experience.  
+7\. Document Management  
+Document management software stores, manages, and tracks the company’s electronic assets. Use a marketing operations software with document management to access consistent information across every department.  
+8\. Customer Relationship Management  
+Customer relationship management (CRM) software enables businesses to maintain information about customers and leads. Find software with CRM features to manage customer relationships and identify customer needs. Top 10 Marketing Operations Software Marketers focus on the strategy and creativity of marketing operations. Allow the software to handle the execution and measurement of your marketing initiatives.
+
+Check out our top picks for software to manage your marketing operations:  
+1\. CoSchedule Marketing Suite  
+Category: Project Management and Reporting
+
+For marketers with complex marketing operations needs, CoSchedule Marketing Suite helps busy teams complete more work, deliver projects on time, and prove their value to stakeholders.
+
+Source  
+Top Features  
+\- Calendar Organizer: Visualize every project on a unified calendar to keep stakeholders “in the know” and manage marketing requests.
+
+\- Content Organizer: Optimize your editorial process to eliminate content bottlenecks and deliver more content.
+
+\- Work Organizer: Implement workflows to maximize production and increase output
+
+\- Asset Organizer: Catalog and control brand assets to share files securely with shareholders.  
+Plans & Pricing  
+Marketing Suite is a flexible platform a customer success team creates for its customers, depending on the functionality you need. With Marketing Suite, you can organize all of your marketing in one place. Schedule your demo here.
+
+CoSchedule offers a forever-free plan called Marketing Calendar that you can create now. Premium functionality such as team task management, customizable task workflow templates, and unlimited social media scheduling is available for Marketing Calendar starting at just $29 per user per month.  
+Accolades  
+\- CoSchedule’s Marketing Suite has been named High Performer by G2 for 20 consecutive quarters.
+
+\- Forbes Advisor has recognized this product among the Best Project Management Software & Tools.
+
+\- CoSchedule is declared a leader in the Gartner Magic Quadrant for Content Marketing Platforms.
+
+Want to learn more about CoSchedule’s Marketing Suite? Check out the support page.  
+2\. Trello  
+Category: Workflow Management & Team Collaboration
+
+Trello is a visual operations tool that uses Kanban techniques to organize your workflow for any project.
+
+Source  
+Top Features  
+\- Butler Automation: Cards move across lists to show completion status.
+
+\- Templates: Use blueprints to group your boards, lists, and cards to fit your team’s objectives.
+
+\- Power-Ups: Add Power-Ups to your boards to build personalized workflows.  
+Plans & Pricing  
+Trello offers a free 14-day trial of Trello Premium, including workspace views, access to create unlimited boards, and security features. Trello Premium is $10 per user per month after your trial.
+
+Trello Premium is best for teams to track multiple projects and visualize work. Free, standard, premium, and enterprise plans are available based on the size of your team and the features you wish to include. Check out these plans on the Trello Pricing Page.  
+Accolades  
+\- Trello was honored by The Webby Awards as the People’s Voice Winner.
+
+\- G2 recognized this product as a Leader in collaboration tools.  
+3\. Slack  
+Category: Communication & Collaboration
+
+85% of teams say Slack has improved communication. Slack connects teams, unifies systems, and drives businesses forward.
+
+Source  
+Top Features  
+\- Channels: Organize all of your work communication into central spaces for conversations and tools.
+
+\- Integrations: Connect Slack with additional services like Google Drive, Office 365, and more.
+
+\- Enterprise Key Management: Control and access company data with your encryption keys.  
+Plans & Pricing  
+Slack provides four pricing options: Free, Pro, Business+, and Enterprise+. Business+ is recommended for mid-sized companies and costs $18 per month.
+
+The Business+ plan offers unlimited channels, user management, and data exports for all messages. Contact the Slack Help Center to troubleshoot your questions.  
+Accolades  
+\- Slack won Fastest Winning Startup at the Crunchies.
+
+\- Comparably awarded Slack with the Best Company eNPS.
+
+\- G2 named Slack in the Top 50 Best Business Instant Messaging Services.  
+4\. Zapier  
+Category: Process & Workflow Automation
+
+Zapier automates your workflows across over 5,000 integrations to customize your work and create flexible processes.
+
+Source  
+Top Features  
+\- Zaps: Build multiple Zaps to create workflows that perform actions from one trigger.
+
+\- Paths: Create paths to pivot your team’s dynamic workflow.
+
+\- Webhooks: Retrieve data and send requests without writing any code.
+
+\- Formatter: Format dates, text, and more to reflect your workflow.  
+Plans & Pricing  
+Zapier offers 4 plans for consumers based on their needs and company size: Free, Pro, Team, and Enterprise. Zapier provides a 14-day free trial of the Professional plan; after that, the Professional plan is $19.99 per month when billed annually.
+
+The Zapier Professional plan has access to unlimited premium apps, multi-step Zaps, Webhooks, and email and live chat support along with the faeatures from the free plan. View the Plans and Pricing Page for more information on the right plan for you.  
+Accolades  
+\- Zapier was honored with Overall SaaS Platform Category Winner by APPEALIE.
+
+\- InfoWorld awarded Zapier with one of the Technology of the Year Awards.
+
+\- G2 named Zapier the Best Productivity Bots Software.  
+5\. ZenDesk  
+Category: Customer Support
+
+Zendesk provides the complete customer service experience to meet consumers' needs and set your team up for success.
+
+Source  
+Top Features  
+\- Ticketing System: A centralized hub for all your customer’s requests, concerns, and questions.
+
+\- Messaging and Live Chat: Add messaging to all your platforms for customers to reach your team easily.
+
+\- Knowledge Base: Creates a searchable database for your users to view content in a help desk format.
+
+\- AI Chatbots: Use artificial intelligence to provide endless customer support and reduce manual support.  
+Plans & Pricing  
+Zendesk for service offers four total plans. The most popular plan is the Suite Professional, which is $115 per agent per month if billed annually.
+
+Zendesk’s Suite Professional plan provides a live agent activity dashboard, private conversation threads, and customizable dashboards. Look at the pricing plans to discover a plan for your customer support team.  
+Accolades  
+\- Zendesk is in the Top 50 Collaboration Products via G2.
+
+\- Comparably awarded Zendesk with several awards over multiple years that include:  Best Company Culture, Best CEO, Best Company Leadership, and Best Company Outlook.
+
+\- This product was honored with The Webby Tech For Good Stories Award.
+
+\- Zendesk won the Wisconsin Innovation Award for its customer service and help desk software.  
+6\. Salesforce  
+Category: Customer Relationship Management (CRM)
+
+Salesforce makes cloud-based software to help companies discover more leads, close more deals, and provide customer service. Salesforce’s Customer 360 product unites service, sales, IT, marketing, and commerce teams with a shared view of client information.
+
+Source  
+Top Features  
+\- Genie Customer Data Cloud: Personalize the customer experience with this automation intelligence tool to give your team a view of all customer data.
+
+\- Marketing Cloud: Automate content across multiple channels to save time and increase engagement.
+
+\- Service Cloud: Personalize every engagement with artificial intelligence and scale services with automation.  
+Plans & Pricing  
+Salesforce personalizes its prices based on the specific features that you are purchasing.  For example, Service Cloud pricing is separate from Marketing Cloud pricing.
+
+For Salesforce's customer relationship management aspect, let’s look at the Service Cloud pricing. Service Cloud pricing offers five plans: Starter Suite, Pro Suite, Enterprise Suite, Unlimited, and Agentforce 1 Service. Enterprise is the most popular customizable CRM, which is priced at $175 per user per month.
+
+Check out the pricing plans for each feature on the Salesforce Product Pricing page.  
+Accolades  
+\- Salesforce was honored with Best Mobile App for Business at the GSMA Glomo Awards.
+
+\- The Stevie Awards presented this product with the Award for Innovation in Customer Service.
+
+\- This product was named Deal Crunch Editor’s Retail Choice Award for Multi-Channel Sales Unification.  
+7\. BambooHR  
+Category: Human Resources Management
+
+BambooHR provides human resource software for small and medium-sized businesses. This human resources management software collects, maintains, and analyzes employee data.
+
+Source  
+Top Features  
+\- People Data & Analytics: Store and analyze employee data – employee records, workflows, and reporting – to manage worker information.
+
+\- Applicant Tracking System: Find the right employee and improve every stage of the hiring process with this software.
+
+\- Onboarding: BambooHR adds personality and formalities to onboarding checklists.
+
+\- Payroll: A three-step process to file state and federal taxes, pay employees, and export a payroll summary report.  
+Plans & Pricing  
+BambooHR provides three plans – Core, Pro, and Elite – and optional add-on capabilities for purchase.
+
+Get a free price quote to explore the plans and add-ons for your business on the Pricing Page.  
+Accolades  
+\- BambooHR won the Stevie Silver Award for Sales & Customer Service.
+
+\- GoodFirms presented the product as The Best HR Software.
+
+\- This product was awarded Best Usability, Best Product for HR, and Highest Satisfaction by G2.  
+8\. Xero  
+Category: Accounting
+
+Xero provides cloud accounting software for accountants, bookkeepers, and businesses to store financial information.
+
+Source  
+Top Features  
+\- Expense Management Tools: Submit reimbursement claims and manage spending with this tool.
+
+\- Bank Connections: Connect your company’s bank accounts to accept payments and track expenses.
+
+\- Project and Job Tracker Software: Monitor costs and profit margins on a dashboard.
+
+\- Gusto: Calculate employee payments and deductions with this payroll feature.
+
+\- Reporting: Use Xero for file storage to share financial documents with stakeholders.  
+Plans & Pricing  
+Xero has three plans, each covering the accounting essentials: Early, Growing, and Established. Growing is the most popular plan for small businesses, priced at $47 per month.
+
+The Xero Growing plan allows businesses to reconcile bulk transactions, send unlimited invoices, and enter unlimited bills. Check out the three pricing plans on the Xero Pricing Page.  
+Accolades  
+\- Xero was noticed as The Best for In-Depth and Customizable Reporting for Non-Profits by Forbes Advisor.
+
+\- The SaaS Customer Success Award, powered by the APPEALIE awards, was provided to Xero.
+
+\- This software was voted The Best Small Business Accounting Solution by K2 Enterprises.  
+9\. Guru  
+Category: Shared Knowledge Base
+
+Guru is a knowledge management software to create, access, and update a knowledge hub for your organization.
+
+Source  
+Top Features  
+\- Collections, Boards, Groups, & Cards: Organize knowledge, content, and other information to create a single source of truth for your company.
+
+\- Integrations: Guru captures information anywhere on the web, Slack, and even Google Docs to share expertise.
+
+\- Guru AI Suggestions: Use Guru’s AI to track insights on cards, guide employees to experts within the organization, and suggest new tags.  
+Plans & Pricing  
+Guru’s pricing plans include the Free trial, All-in-one, and Enterprise packages. Try out the Free trial option for free with a 30-day trial and continue your package for $15 per user per month.
+
+The All-in-one package allows businesses to embed Guru cards, customize the portal with their brand, and gain analytic insights. Learn more about Guru’s pricing plans here or get a quote for an Enterprise plan.  
+Accolades  
+\- G2 named Guru as Top 100 Software Products.
+
+\- Guru was appointed as the Best Salesforce Tool for Content Management by Cirrus Insight.  
+10\. Google Drive  
+Category: Document Management
+
+Google Drive is an asset storage service that creates and collaborates files from any device.
+
+Source  
+Top Features  
+\- Built-in Protections: Drive provides encrypted access to your files from malware, spam, and ransomware detections.
+
+\- Google Integrations: Docs, Slides, and Sheets are additional Google applications enabling content creation.
+
+\- Google Search & AI Technology: Search capabilities and Drive search chips are embedded to find files.
+
+\- File Integrations: Store over 100 additional file types – images, PDFs, Microsoft Office files, etc. – to share with your team.  
+Plans & Pricing  
+Google Workspace offers four business pricing plans – Starter, Standard, Plus, and Enterprise – and a free personal plan. Google Workspace includes every  Google software, which includes Google Drive.
+
+The most popular plan is the Standard plan which costs $14 per user per month. The Standard price includes 2 TB of storage per user, 150 participants for video conferencing, and security controls. Take a look at Google Workspace and the pricing plans for your business on Google’s Pricing Page.  
+Accolades  
+\- Google won Brand of The Year in the software and website category from Ace Metrix.
+
+\- Comparably has ranked Google as \#4 in the Tech Industry and \#1 in Top Brands for Gen Z.
+
+\- T3 Awards gave Google the Most Innovative Company award.
+
+\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#  
+\# ARTICLE: CoSchedule\_TikTok\_Influencer\_Marketing\_\_A\_Guide\_To\_Increase\_B  
+\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#
+
+﻿TikTok Influencer Marketing: A Guide To Increase Brand Awareness & Conversions  
+Source: https://coschedule.com/blog/tiktok-influencer-marketing
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+TikTok Influencer Marketing: A Guide To Increase Brand Awareness & Conversions  
+Sam TateContent
+
+Want to get started with TikTok influencer marketing for your business?
+
+Set the foundation for your TikTok influencer marketing strategy with this guide to improve your brand’s awareness, credibility, and conversion rates.
+
+Table of Contents- TikTok Influencer Marketing FundamentalsWhat Is TikTok?
+
+\* What Is TikTok Influencer Marketing?  
+\* Benefits Of TikTok Influencer MarketingIncrease Your Chances Of Going Viral  
+\* Improve Your Brand's Credibility  
+\* Reach Your Target Audience Directly  
+\* Boost Profits With TikTok Influencers  
+\* How To Run A Successful TikTok Influencer Marketing CampaignIdentify Your Target Audience  
+\* Determine Your Niche  
+\* Find Your Influencer  
+\* Create Promotional TikTok Content  
+\* Establish Your TikTok Influencer Marketing GoalsBrand Awareness  
+\* Conversions  
+\* 9 Examples Of TikTok Influencer MarketingTrend Videos  
+\* Educational Content  
+\* Series Content  
+\* What Is TikTok’s Demographic?  
+\* What Should I Send The Influencer?
+
+TikTok Influencer Marketing Fundamentals  
+What Is TikTok?  
+TikTok
+
+A social media app that allows users to create, watch, and share short-form videos.  
+What Is TikTok Influencer Marketing?  
+TikTok Influencer Marketing A social media marketing strategy that allows brands on TikTok to partner with an influencer to create content for the business.
+
+Benefits Of TikTok Influencer Marketing You might be thinking: Out of all the social media platforms to market for, why try influencer marketing on TikTok?
+
+Take a look at the benefits of applying a TikTok influencer marketing strategy to discover if TikTok marketing is for your business:  
+1\. Increase Your Chances Of Going Viral  
+About 10% of small businesses that use TikTok go viral. TikTok’s algorithm recommends content to users based on user preferences – likes, following, and interactions – to boost video views.
+
+The publicity from TikTok’s viral content increases website traffic and brand awareness. Recommended Reading: How to Follow A Six-Part Recipe for Viral Content Success  
+2\. Improve Your Brand's Credibility  
+90% of consumers of all ages would trust an influencer over a celebrity. Followers trust the expertise of an influencer’s opinion to build a brand’s credibility.  
+3\. Reach Your Target Audience Directly  
+Select an influencer in your niche to target your market audience. Target your audience to increase conversion rates and move leads down the sales funnel.  
+4\. Boost Profits With TikTok Influencers  
+On average, businesses and brands earn $5.20 for every dollar they spend on influencer marketing. The return on investment (ROI) from TikTok influencer marketing increase conversions and boosts sales.
+
+Take a look at the average cost per TikTok video based on the influencer tiers:
+
+How To Run A Successful TikTok Influencer Marketing Campaign Use a TikTok influencer to promote your business's products or services. Get started running your TikTok influencer marketing campaign with these 4 steps:  
+1\. Identify Your Target Audience  
+Does your target audience use TikTok? Or are you targeting a new audience on TikTok? Create personas to determine your target audience.
+
+Build your marketing campaign strategy on your target audience’s interests to find the right influencers and create discoverable content.
+
+Recommended Reading: How To Find Your Target Audience To Do Better Marketing  
+2\. Determine Your Niche  
+The TikTok algorithm shares content with audiences based on their interests. Discover your niche to align your content with your audience’s interests.
+
+Conduct a hashtag search to identify your niche. TikTok’s Creative Center allows you to discover ranking hashtags based on your industry.  
+3\. Find Your Influencer  
+Research TikTok influencers to reach your target audience and create desired content.
+
+Connect with TikTok creators using Creator Marketplace to discover influencers for your brand.
+
+Source  
+4\. Create Promotional TikTok Content  
+Build a content strategy that boosts your influencer marketing campaign. Create viral content within your niche to reach your audience and expand the number of viewers.
+
+Establish Your TikTok Influencer Marketing Goals Analyze your goals with key performance indicators (KPI) to measure the performance of your TikTok influencer marketing strategy goals. Use a TikTok influencer marketing strategy to complete these main goals:  
+1\. Brand Awareness  
+The average organic reach for brands on TikTok is about 118%. TikTok’s algorithm promotes content rather than boosting paid advertisements to reach the 1 billion monthly active users.
+
+Analyze brand awareness KPIs to determine the influencer’s effectiveness in reaching new customers.
+
+TikTok Awareness Metrics
+
+\- Impressions: The number of times your content is placed in front of viewers
+
+\- Reach: Number of unique viewers on your TikTok page
+
+\- Brand mentions: The number of company mentions (i.e., tags)
+
+\- Follower growth: The total number of new TikTok followers
+
+\- Social share of voice: Percentage of conversations about your company on TikTok
+
+TikTok Analytics allows you to analyze brand awareness metrics to calculate the level of familiarity customers have with your brand.
+
+Source
+
+3 Ways To Measure An Influencer’s Brand Awareness Using TikTok Analytics:
+
+\- Number Of Views
+
+\- Post Reach Percentage
+
+\- Number Of Likes
+
+Tr our new The \#1 Free TikTok Name Generator\!  
+2\. Conversions  
+TikTok's average conversion rate is around 3.4%. Track your influencer’s conversion rate to gauge the success of their TikTok campaigns and drive viewers down the marketing funnel.
+
+Analyze conversion KPIs to determine the influencer’s effectiveness in converting social media viewers to customers.
+
+3 TikTok Influencer Campaign Conversions KPIs To Measure:
+
+\- Traffic to your website from an influencer’s video
+
+\- Sales from an influencer’s promo code
+
+\- Accounts registered by clicking a link in the influencer&\#x27;s bio
+
+Recommended: TikTok Bio Generator and Social Media Metrics: 10 Key Factors, 3 Tools, & Valuable Channel-Specific Metrics
+
+9 Examples Of TikTok Influencer Marketing Inspire your TikTok influencer marketing strategy by looking at brands already using the platform successfully.  
+Trend Videos  
+1\. Gymshark  
+Gymshark is a fitness apparel and accessories brand that uses TikTok influencers to market its products. Influencers create fitness trend videos in their Gymshark apparel to boost brand awareness.
+
+Gymshark repurposes creator content on their TikTok to increase their online presence.
+
+Source  
+2\. Duolingo  
+Duolingo is a technology company that creates learning apps. The notorious owl mascot is considered a TikTok influencer, posting trending content on the brand’s page.
+
+The owl’scontent on Duolingo’s TikTok attracts new customers with content that consistently goes viral.
+
+Source  
+3\. Bloom Nutrition  
+Bloom Nutrition produces supplements and uses TikTok to increase product sales. Bloom pays influencers to create trendy videos on their accounts.
+
+Source  
+Educational Content  
+4\. Fenty Beauty  
+Fenty Beauty is a cosmetics brand that markets its products on TikTok with educational makeup videos. These educational videos enhance the audience’s understanding of products to increase brand loyalty.
+
+Rihanna, Fenty Beauty CEO and influencer, educates followers on how to use the brand’s products.
+
+Source  
+5\. Spikeball  
+Ever wonder how Spikeball became so popular? Spikeball has 1.2M followers on TikTok and is now a household game.
+
+Spikeball uses its TikTok platform to inform followers about the game and increase product sales. The brand uses professional Spikeball players as influencers to teach others how to play.
+
+Source  
+6\. Chipotle  
+Chipotle creates educational content videos to establish the brand’s expertise in the restaurant industry.
+
+Source
+
+Influencer, Nick Digiovanni, shows how to make the chipotle vinaigrette on Chipotle’s account.  
+Series Content  
+7\. Dunkin  
+Dunkin is a coffee chain that uses video series with famous influencers to promote the brand.
+
+Charli D’Amelio has 149.9M followers on TikTok and has been featured in a series on Dunkin’s TikTok page.
+
+Source  
+8\. NBA  
+The NBA’s TikTok account hosts a series of mic’d-up content. Basketball influencers with a high following promote the association to gain NBA fans.
+
+Source  
+9\. Calvin Klein  
+Calvin Klein is a fashion label that uses a hashtag series on TikTok to boost brand awareness. Influencers post TikTok videos using \#mycalvins to encourage audience engagement.
+
+Source  
+What Is TikTok’s Demographic?  
+21.5% of TikTok's global audience are women between the ages of 18 and 24 years.
+
+Source  
+What Should I Send The Influencer?  
+TikTok content is designed to be user-controlled and short-form. Allow the influencer to be the expert in their field but be sure to share some specific goals if you have them.
+
+Items To Outline For An Influencer:
+
+\- Write out the main goal to establish a cohesive strategy.
+
+\- Share any specific talking points you would like the influencer to discuss in the content.
+
+\- Outline a timeline for the influencer to follow.
+
+Use CoSchedule’s Marketing Calendar to schedule a marketing campaign with an influencer. Create, schedule, and publish social campaigns to promote your influencer marketing initiatives.
+
+\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#  
+\# ARTICLE: CoSchedule\_9\_Awesome\_Marketing\_Workflow\_Software\_Tools\_To\_Ach  
+\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#
+
+﻿9 Awesome Marketing Workflow Software Tools To Achieve Marketing Greatness  
+Source: https://coschedule.com/blog/marketing-workflow-software-tools
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+9 Awesome Marketing Workflow Software Tools To Achieve Marketing Greatness  
+Rana BanoContent
+
+When you’re ready to go beyond traditional marketing tactics and run complex, multi-channel marketing campaigns, you’ll want to invest in a marketing workflow software solution.
+
+This handy tool simplifies and automates management processes, keeping you on top of your marketing campaigns without surprises like unexpected budget overruns and poor campaign tracking.
+
+So what’s the catch? Too many choices.
+
+You have several options to choose from, each suitable for different use cases. But that’s where we come in. After days of research, chats with industry experts, and company deep dives, we present our top picks for the best marketing workflow software.
+
+But first, the basics.
+
+Table of Contents- What Is Marketing Workflow?
+
+\* What Is Marketing Workflow Software?  
+\* What Features & Services Make The Best Marketing Workflow Software?Campaign Management  
+\* Project Management  
+\* Task Management  
+\* Task Automation  
+\* Proofs, Approvals, & Compliance  
+\* Project Views  
+\* How We Shortlisted The Best Marketing Workflow ToolsBuilt For Marketers  
+\* Robust Task Management Functionality  
+\* Superior Workflow Visibility  
+\* Collaboration Tools  
+\* Reporting & Analytics  
+\* 8 Marketing Workflow Software ToolsCoS
+
+[Hinweis: gekürzt beim Import ins Admin-Dashboard]

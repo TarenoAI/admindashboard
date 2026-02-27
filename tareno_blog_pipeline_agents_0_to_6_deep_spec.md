@@ -9,27 +9,30 @@
 
 ---
 
-# Agent 8 — NotebookLM Audio Architect
+# Agent 8 — Multimedia Enrichment & Asset Composer
 
 ## Purpose
-Generate an Audio Overview (Podcast-style) based on `FINAL.md` via the NotebookLM bridge.
+Create an internal visual asset plan for the finalized article (`FINAL.md`) with exact placement guidance.
 
 ## Inputs
 - `FINAL.md`
-- `instructions` (language, tone, focus points)
+- optional media/style instructions
 
 ## Output
-- `blog-audio.mp3`
-- Embed meta-tag for the CMS
+- `08_asset_plan.md` (internal)
+- optional `08_visual_prompts.md` (internal)
+- optional `blog-audio.mp3` passthrough only if already generated externally
 
 ## Hard Rules
 - **Source-Lock:** Use only content from the finalized article.
-- **Tone:** Professional Podcast overview.
-- **Format:** High-quality mp3.
+- **No Rewrite:** Do not alter `FINAL.md`.
+- **Visual Purpose:** Every visual must map to a concrete section purpose.
+- **Placement Precision:** Specify exact H2 + before/after position.
 
 ## Acceptance Criteria (8/10)
-- Audio generated successfully and matches context.
-- Mentions "Tareno" and key frameworks correctly.
+- Asset plan is clear and section-linked.
+- Tareno-related sections map to explicit feature screenshots.
+- No process/meta labels leak into publish content.
 
 ---
 
@@ -46,7 +49,7 @@ Generate an Audio Overview (Podcast-style) based on `FINAL.md` via the NotebookL
 9. [Agent 4 — Product-Native Integration](#agent-4--product-native-integration)  
 10. [Agent 5 — Editor & E-E-A-T + Claim Hygiene](#agent-5--editor--e-e-a-t--claim-hygiene)  
 11. [Agent 6 — Entity, Claims & Linkability Architect](#agent-6--entity-claims--linkability-architect)  
-13. [Agent 8 — NotebookLM Audio Architect](#agent-8--notebooklm-audio-architect)
+13. [Agent 8 — Multimedia Enrichment & Asset Composer](#agent-8--multimedia-enrichment--asset-composer)
 14. [Acceptance Criteria & Scoring](#acceptance-criteria--scoring)  
 13. [Operational Playbooks (429/Timeout/Drift)](#operational-playbooks-429timeoutdrift)  
 
