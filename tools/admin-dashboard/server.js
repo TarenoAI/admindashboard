@@ -561,6 +561,142 @@ function readWordCountFromFile(absPath) {
     }
 }
 
+function escapeRegex(value) {
+    return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function collectNotebookLmAudioFiles(projectId, limit = 8000) {
+    const projectDir = path.join(WORKSPACE_ROOT, 'media', 'notebooklm-audio', String(projectId || '').trim());
+    const globalDir = path.join(WORKSPACE_ROOT, 'media', 'notebooklm-audio');
+    const roots = [projectDir, globalDir];
+
+    const files = [];
+    const seen = new Set();
+    for (const root of roots) {
+        if (!root || !fs.existsSync(root)) continue;
+        const queue = [root];
+        let visited = 0;
+        while (queue.length > 0 && visited < limit) {
+            const dir = queue.shift();
+            let entries = [];
+            try {
+                entries = fs.readdirSync(dir, { withFileTypes: true });
+            } catch {
+                continue;
+            }
+            for (const entry of entries) {
+                visited += 1;
+                const full = path.join(dir, entry.name);
+                if (entry.isDirectory()) {
+                    queue.push(full);
+                    continue;
+                }
+                if (!entry.isFile()) continue;
+                if (seen.has(full)) continue;
+                seen.add(full);
+
+                const lower = String(entry.name || '').toLowerCase();
+                if (!lower.endsWith('.mp3') && !lower.endsWith('.wav') && !lower.endsWith('.m4a')) continue;
+                if (!lower.includes('notebooklm')) continue;
+                if (!isAllowedWorkspacePath(full)) continue;
+
+                let stat = null;
+                try {
+                    stat = fs.statSync(full);
+                } catch {
+                    stat = null;
+                }
+                files.push({
+                    absPath: full,
+                    relPath: path.relative(WORKSPACE_ROOT, full),
+                    fileName: entry.name,
+                    lowerName: lower,
+                    mtimeMs: Number(stat?.mtimeMs || 0),
+                    generatedAt: stat?.mtime ? new Date(stat.mtime).toISOString() : null,
+                    size: Number(stat?.size || 0)
+                });
+            }
+        }
+    }
+
+    files.sort((a, b) => Number(b.mtimeMs || 0) - Number(a.mtimeMs || 0));
+    return files;
+}
+
+function resolveNotebookLmAudioForRow(projectId, row, rowIndex, audioFiles = null) {
+    if (!row || typeof row !== 'object') return null;
+
+    const rowId = String(row.id || pipelineRowId(rowIndex));
+    const rowIdSlug = safeSlug(rowId, `tag-${String(Number(rowIndex) + 1).padStart(2, '0')}`).toLowerCase();
+    const rowIdCompact = rowIdSlug.replace(/-/g, '');
+    const topicToken = safeSlug(row.topicEn || row.topic || '', '').toLowerCase();
+
+    const resolvedFromRow = [];
+    const nlm = (row.notebooklm && typeof row.notebooklm === 'object') ? row.notebooklm : {};
+    const candidateAbs = nlm.lastAudioAbsPath ? path.resolve(String(nlm.lastAudioAbsPath)) : null;
+    const candidateRel = nlm.lastAudioRelPath ? path.resolve(WORKSPACE_ROOT, String(nlm.lastAudioRelPath)) : null;
+    for (const abs of [candidateAbs, candidateRel]) {
+        if (!abs) continue;
+        if (!isAllowedWorkspacePath(abs)) continue;
+        if (!fs.existsSync(abs)) continue;
+        let stat = null;
+        try {
+            stat = fs.statSync(abs);
+        } catch {
+            stat = null;
+        }
+        resolvedFromRow.push({
+            absPath: abs,
+            relPath: path.relative(WORKSPACE_ROOT, abs),
+            fileName: path.basename(abs),
+            mtimeMs: Number(stat?.mtimeMs || 0),
+            generatedAt: stat?.mtime ? new Date(stat.mtime).toISOString() : null,
+            size: Number(stat?.size || 0),
+            source: 'row'
+        });
+    }
+    if (resolvedFromRow.length > 0) {
+        resolvedFromRow.sort((a, b) => Number(b.mtimeMs || 0) - Number(a.mtimeMs || 0));
+        return resolvedFromRow[0];
+    }
+
+    const files = Array.isArray(audioFiles) ? audioFiles : collectNotebookLmAudioFiles(projectId);
+    const boundaryTokenMatch = (name, token) => {
+        if (!token) return false;
+        const re = new RegExp(`(^|[^a-z0-9])${escapeRegex(token)}([^a-z0-9]|$)`, 'i');
+        return re.test(String(name || ''));
+    };
+
+    const matches = files.filter((file) => {
+        const name = file?.lowerName || '';
+        if (!name) return false;
+        if (boundaryTokenMatch(name, rowIdSlug)) return true;
+        if (boundaryTokenMatch(name, rowIdCompact)) return true;
+        if (topicToken && topicToken.length >= 10 && name.includes(topicToken.slice(0, 18))) return true;
+        return false;
+    });
+
+    if (matches.length === 0) return null;
+    matches.sort((a, b) => Number(b.mtimeMs || 0) - Number(a.mtimeMs || 0));
+    return { ...matches[0], source: 'filesystem' };
+}
+
+function hydrateNotebookLmAudioRows(projectData, projectId) {
+    if (!projectData || !Array.isArray(projectData.contentPipeline)) return;
+    const audioFiles = collectNotebookLmAudioFiles(projectId);
+    for (let cpIndex = 0; cpIndex < projectData.contentPipeline.length; cpIndex += 1) {
+        const row = projectData.contentPipeline[cpIndex];
+        const resolved = resolveNotebookLmAudioForRow(projectId, row, cpIndex, audioFiles);
+        if (!resolved) continue;
+        row.notebooklm = {
+            ...(row.notebooklm && typeof row.notebooklm === 'object' ? row.notebooklm : {}),
+            lastAudioAbsPath: resolved.absPath,
+            lastAudioRelPath: resolved.relPath,
+            lastGeneratedAt: row?.notebooklm?.lastGeneratedAt || resolved.generatedAt || null
+        };
+    }
+}
+
 function findPipelineRowIndex(contentPipeline, selector = {}) {
     if (!Array.isArray(contentPipeline) || contentPipeline.length === 0) return -1;
 
@@ -818,6 +954,7 @@ app.get("/api/projects", async (_, res) => {
                     if (wordCount != null) step.wordCount = wordCount;
                 }
             }
+            hydrateNotebookLmAudioRows(result, projectId);
 
             return result;
         } catch (e) {
@@ -870,6 +1007,7 @@ app.get("/api/projects/:projectId", (req, res) => {
                 if (wordCount != null) step.wordCount = wordCount;
             }
         }
+        hydrateNotebookLmAudioRows(project, projectId);
 
         return ok(res, { project, workspaceRoot: WORKSPACE_ROOT });
     } catch (e) {
@@ -1471,16 +1609,11 @@ app.get("/api/projects/:projectId/pipeline/:cpIndex/notebooklm-audio/stream", (r
 
         const row = data.contentPipeline?.[rowIndex];
         if (!row) return res.status(404).json({ error: "Pipeline row not found" });
-
-        const nlm = row.notebooklm;
-        if (!nlm?.lastAudioRelPath && !nlm?.lastAudioAbsPath) {
+        const resolvedAudio = resolveNotebookLmAudioForRow(projectId, row, rowIndex);
+        if (!resolvedAudio?.absPath) {
             return res.status(404).json({ error: "No audio available for this row. Generate it first via NotebookLM." });
         }
-
-        // Prefer the abs path saved by the bridge, fall back to resolving relative
-        let audioAbs = nlm.lastAudioAbsPath
-            ? path.resolve(nlm.lastAudioAbsPath)
-            : path.resolve(WORKSPACE_ROOT, nlm.lastAudioRelPath);
+        const audioAbs = path.resolve(resolvedAudio.absPath);
 
         if (!fs.existsSync(audioAbs)) {
             return res.status(404).json({ error: `Audio file not found on disk: ${audioAbs}` });
