@@ -3099,6 +3099,7 @@ const YTDLP_BIN = process.env.YTDLP_BIN || 'yt-dlp';
 const YTDLP_TIMEOUT_MS = Number(process.env.YTDLP_TIMEOUT_MS || 45000);
 const YTDLP_COOKIES_FROM_BROWSER = process.env.YTDLP_COOKIES_FROM_BROWSER || 'chromium:/root/InstaFollow/data/browser-profiles/instagram';
 const YTDLP_LOG_FILE = process.env.YTDLP_LOG_FILE || path.join(__dirname, 'logs', 'ytdlp-bridge.log');
+const YTDLP_OUT_DIR = process.env.YTDLP_OUT_DIR || path.join(__dirname, 'downloads', 'bridge');
 const ytdlpRateBucket = new Map();
 
 function bridgeReqId() {
@@ -3112,6 +3113,12 @@ function bridgeLog(entry) {
         fs.appendFileSync(YTDLP_LOG_FILE, JSON.stringify({ ts: new Date().toISOString(), ...entry }) + '\n', 'utf8');
     } catch (_) { }
 }
+
+function safeFileName(name) {
+    return String(name || '').replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 120);
+}
+
+if (!fs.existsSync(YTDLP_OUT_DIR)) fs.mkdirSync(YTDLP_OUT_DIR, { recursive: true });
 
 function ytdlpBridgeAuth(req, res, next) {
     if (!YTDLP_BRIDGE_SECRET) {
@@ -3229,6 +3236,70 @@ app.post('/api/ytdlp/download', ytdlpRateLimit, ytdlpBridgeAuth, async (req, res
         });
         return res.status(502).json({ success: false, reqId, error: String(stderr).slice(0, 8000) });
     }
+});
+
+app.post('/api/ytdlp/fetch', ytdlpRateLimit, ytdlpBridgeAuth, async (req, res) => {
+    const reqId = bridgeReqId();
+    const started = Date.now();
+    const { url } = req.body || {};
+
+    if (!isInstagramUrl(url)) {
+        bridgeLog({ reqId, ok: false, phase: 'validate', error: 'Invalid Instagram URL', url: String(url || '') });
+        return res.status(400).json({ success: false, reqId, error: 'Invalid Instagram URL' });
+    }
+
+    const baseName = safeFileName(reqId);
+    const rawPattern = path.join(YTDLP_OUT_DIR, `${baseName}.%(ext)s`);
+    const rawMp4 = path.join(YTDLP_OUT_DIR, `${baseName}.mp4`);
+    const outMp4 = path.join(YTDLP_OUT_DIR, `${baseName}_telegram.mp4`);
+
+    try {
+        await execFileAsync(YTDLP_BIN, [
+            '--force-overwrites',
+            '--cookies-from-browser', YTDLP_COOKIES_FROM_BROWSER,
+            '-o', rawPattern,
+            String(url)
+        ], { timeout: 120000, maxBuffer: 10 * 1024 * 1024 });
+
+        await execFileAsync('ffmpeg', [
+            '-y', '-i', rawMp4,
+            '-vf', 'scale=720:-2',
+            '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '28', '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
+            '-c:a', 'aac', '-b:a', '96k',
+            outMp4
+        ], { timeout: 180000, maxBuffer: 10 * 1024 * 1024 });
+
+        const stat = fs.statSync(outMp4);
+        const fileName = path.basename(outMp4);
+        bridgeLog({ reqId, ok: true, phase: 'fetch', url, ms: Date.now() - started, fileName, size: stat.size });
+
+        return res.json({
+            success: true,
+            reqId,
+            fileName,
+            size: stat.size,
+            downloadUrl: `/api/ytdlp/file/${encodeURIComponent(fileName)}`,
+            expiresHint: 'Temporary local file on VPS'
+        });
+    } catch (e) {
+        const errText = (e?.stderr || e?.err?.message || String(e || 'failed')).toString().slice(0, 4000);
+        bridgeLog({ reqId, ok: false, phase: 'fetch', url, ms: Date.now() - started, error: errText });
+        return res.status(502).json({ success: false, reqId, error: errText });
+    }
+});
+
+app.get('/api/ytdlp/file/:fileName', ytdlpBridgeAuth, (req, res) => {
+    const fileName = safeFileName(req.params.fileName || '');
+    const abs = path.join(YTDLP_OUT_DIR, fileName);
+    if (!abs.startsWith(path.resolve(YTDLP_OUT_DIR))) {
+        return res.status(400).json({ success: false, error: 'Invalid file path' });
+    }
+    if (!fs.existsSync(abs)) {
+        return res.status(404).json({ success: false, error: 'File not found' });
+    }
+    res.setHeader('Content-Type', 'video/mp4');
+    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+    return res.sendFile(abs);
 });
 
 app.listen(PORT, () => console.log(`OpenClaw Admin Dashboard läuft auf http://localhost:${PORT}`));
