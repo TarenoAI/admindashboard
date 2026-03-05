@@ -3098,7 +3098,20 @@ const YTDLP_BRIDGE_SECRET = process.env.YTDLP_BRIDGE_SECRET || '';
 const YTDLP_BIN = process.env.YTDLP_BIN || 'yt-dlp';
 const YTDLP_TIMEOUT_MS = Number(process.env.YTDLP_TIMEOUT_MS || 45000);
 const YTDLP_COOKIES_FROM_BROWSER = process.env.YTDLP_COOKIES_FROM_BROWSER || 'chromium:/root/InstaFollow/data/browser-profiles/instagram';
+const YTDLP_LOG_FILE = process.env.YTDLP_LOG_FILE || path.join(__dirname, 'logs', 'ytdlp-bridge.log');
 const ytdlpRateBucket = new Map();
+
+function bridgeReqId() {
+    return `yd_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function bridgeLog(entry) {
+    try {
+        const dir = path.dirname(YTDLP_LOG_FILE);
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+        fs.appendFileSync(YTDLP_LOG_FILE, JSON.stringify({ ts: new Date().toISOString(), ...entry }) + '\n', 'utf8');
+    } catch (_) { }
+}
 
 function ytdlpBridgeAuth(req, res, next) {
     if (!YTDLP_BRIDGE_SECRET) {
@@ -3155,9 +3168,13 @@ app.get('/api/ytdlp/health', (req, res) => {
 });
 
 app.post('/api/ytdlp/download', ytdlpRateLimit, ytdlpBridgeAuth, async (req, res) => {
+    const reqId = bridgeReqId();
+    const started = Date.now();
     const { url } = req.body || {};
+
     if (!isInstagramUrl(url)) {
-        return res.status(400).json({ success: false, error: 'Invalid Instagram URL' });
+        bridgeLog({ reqId, ok: false, phase: 'validate', error: 'Invalid Instagram URL', url: String(url || '') });
+        return res.status(400).json({ success: false, reqId, error: 'Invalid Instagram URL' });
     }
 
     const args = [
@@ -3170,13 +3187,24 @@ app.post('/api/ytdlp/download', ytdlpRateLimit, ytdlpBridgeAuth, async (req, res
     ];
 
     try {
-        const { stdout } = await execFileAsync(YTDLP_BIN, args, { timeout: YTDLP_TIMEOUT_MS, maxBuffer: 20 * 1024 * 1024 });
+        const { stdout, stderr } = await execFileAsync(YTDLP_BIN, args, { timeout: YTDLP_TIMEOUT_MS, maxBuffer: 20 * 1024 * 1024 });
         const lines = String(stdout || '').split('\n').map(s => s.trim()).filter(Boolean);
         const last = lines[lines.length - 1];
         const data = JSON.parse(last || '{}');
 
+        bridgeLog({
+            reqId,
+            ok: true,
+            url,
+            ms: Date.now() - started,
+            id: data.id || null,
+            duration: data.duration || null,
+            stderr: String(stderr || '').slice(0, 600)
+        });
+
         const out = {
             success: true,
+            reqId,
             id: data.id || null,
             title: data.title || null,
             duration: data.duration || null,
@@ -3192,7 +3220,14 @@ app.post('/api/ytdlp/download', ytdlpRateLimit, ytdlpBridgeAuth, async (req, res
         return res.json(out);
     } catch (e) {
         const stderr = e?.stderr || e?.err?.message || 'yt-dlp failed';
-        return res.status(502).json({ success: false, error: stderr.toString().slice(0, 8000) });
+        bridgeLog({
+            reqId,
+            ok: false,
+            url,
+            ms: Date.now() - started,
+            error: String(stderr).slice(0, 1500)
+        });
+        return res.status(502).json({ success: false, reqId, error: String(stderr).slice(0, 8000) });
     }
 });
 
