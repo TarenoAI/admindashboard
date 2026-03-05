@@ -3288,7 +3288,7 @@ app.post('/api/ytdlp/fetch', ytdlpRateLimit, ytdlpBridgeAuth, async (req, res) =
     }
 });
 
-app.get('/api/ytdlp/file/:fileName', ytdlpBridgeAuth, (req, res) => {
+app.get('/api/ytdlp/file/:fileName', (req, res) => {
     const fileName = safeFileName(req.params.fileName || '');
     const abs = path.join(YTDLP_OUT_DIR, fileName);
     if (!abs.startsWith(path.resolve(YTDLP_OUT_DIR))) {
