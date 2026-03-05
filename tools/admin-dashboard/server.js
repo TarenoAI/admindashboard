@@ -1,7 +1,7 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const { exec } = require("child_process");
+const { exec, execFile } = require("child_process");
 const os = require("os");
 
 const app = express();
@@ -33,6 +33,9 @@ const authCfg = loadAuthConfig();
 console.log(`[Auth] Dashboard-Login: user="${authCfg.user}", pass-source=${fs.existsSync(path.join(__dirname, 'dashboard-auth.json')) ? 'dashboard-auth.json' : 'env/default'}`);
 
 app.use((req, res, next) => {
+    // Public bridge routes are protected by x-bridge-secret instead of BasicAuth
+    if ((req.path || '').startsWith('/api/ytdlp/')) return next();
+
     const ip = (req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown').toString().split(',')[0].trim();
     const now = Date.now();
     const state = authAttempts.get(ip) || { fails: [], lockedUntil: 0 };
@@ -3090,5 +3093,107 @@ app.post('/api/skills/policy', (req, res) => {
     }
 });
 
+// ---- yt-dlp bridge (for Vercel -> VPS media download) ----
+const YTDLP_BRIDGE_SECRET = process.env.YTDLP_BRIDGE_SECRET || '';
+const YTDLP_BIN = process.env.YTDLP_BIN || 'yt-dlp';
+const YTDLP_TIMEOUT_MS = Number(process.env.YTDLP_TIMEOUT_MS || 45000);
+const YTDLP_COOKIES_FROM_BROWSER = process.env.YTDLP_COOKIES_FROM_BROWSER || 'chromium:/root/InstaFollow/data/browser-profiles/instagram';
+const ytdlpRateBucket = new Map();
+
+function ytdlpBridgeAuth(req, res, next) {
+    if (!YTDLP_BRIDGE_SECRET) {
+        return res.status(503).json({ success: false, error: 'Bridge secret not configured on server.' });
+    }
+    const provided = req.headers['x-bridge-secret'] || req.body?.secret;
+    if (!provided || String(provided) !== String(YTDLP_BRIDGE_SECRET)) {
+        return res.status(401).json({ success: false, error: 'Unauthorized: Invalid Secret' });
+    }
+    return next();
+}
+
+function ytdlpRateLimit(req, res, next) {
+    const ip = (req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown').toString().split(',')[0].trim();
+    const now = Date.now();
+    const winMs = 60 * 1000;
+    const max = 30;
+    const state = ytdlpRateBucket.get(ip) || { ts: now, count: 0 };
+    if (now - state.ts > winMs) {
+        state.ts = now;
+        state.count = 0;
+    }
+    state.count += 1;
+    ytdlpRateBucket.set(ip, state);
+    if (state.count > max) return res.status(429).json({ success: false, error: 'Rate limit exceeded' });
+    next();
+}
+
+function isInstagramUrl(url) {
+    try {
+        const u = new URL(String(url || ''));
+        return /(^|\.)instagram\.com$/i.test(u.hostname);
+    } catch {
+        return false;
+    }
+}
+
+const execFileAsync = (bin, args, options = {}) => new Promise((resolve, reject) => {
+    execFile(bin, args, options, (err, stdout, stderr) => {
+        if (err) return reject({ err, stdout: stdout || '', stderr: stderr || '' });
+        resolve({ stdout: stdout || '', stderr: stderr || '' });
+    });
+});
+
+app.get('/api/ytdlp/health', (req, res) => {
+    res.json({
+        success: true,
+        status: 'ok',
+        service: 'yt-dlp-bridge',
+        ytdlpBin: YTDLP_BIN,
+        cookiesMode: YTDLP_COOKIES_FROM_BROWSER,
+        secretConfigured: Boolean(YTDLP_BRIDGE_SECRET)
+    });
+});
+
+app.post('/api/ytdlp/download', ytdlpRateLimit, ytdlpBridgeAuth, async (req, res) => {
+    const { url } = req.body || {};
+    if (!isInstagramUrl(url)) {
+        return res.status(400).json({ success: false, error: 'Invalid Instagram URL' });
+    }
+
+    const args = [
+        '-j',
+        '--no-playlist',
+        '--socket-timeout', '20',
+        '--extractor-retries', '2',
+        '--cookies-from-browser', YTDLP_COOKIES_FROM_BROWSER,
+        String(url)
+    ];
+
+    try {
+        const { stdout } = await execFileAsync(YTDLP_BIN, args, { timeout: YTDLP_TIMEOUT_MS, maxBuffer: 20 * 1024 * 1024 });
+        const lines = String(stdout || '').split('\n').map(s => s.trim()).filter(Boolean);
+        const last = lines[lines.length - 1];
+        const data = JSON.parse(last || '{}');
+
+        const out = {
+            success: true,
+            id: data.id || null,
+            title: data.title || null,
+            duration: data.duration || null,
+            webpage_url: data.webpage_url || url,
+            uploader: data.uploader || null,
+            thumbnail: data.thumbnail || null,
+            ext: data.ext || null,
+            format: data.format || null,
+            requested_downloads: data.requested_downloads || null,
+            url: data.url || null,
+            raw: data
+        };
+        return res.json(out);
+    } catch (e) {
+        const stderr = e?.stderr || e?.err?.message || 'yt-dlp failed';
+        return res.status(502).json({ success: false, error: stderr.toString().slice(0, 8000) });
+    }
+});
 
 app.listen(PORT, () => console.log(`OpenClaw Admin Dashboard läuft auf http://localhost:${PORT}`));
