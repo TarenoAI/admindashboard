@@ -1,0 +1,48 @@
+{
+  "name": "Tareno Tools",
+  "summary": "Tooling- und API-Projekt für Media-Download-Automation (Instagram/YouTube) mit Bridge-Integration.",
+  "status": "in_progress",
+  "priority": "high",
+  "lastUpdate": "2026-03-05",
+  "agents": [
+    { "id": "main", "name": "Luna", "role": "lead" }
+  ],
+  "milestones": [
+    { "title": "YTDLP Bridge URL auf :3477 umgestellt", "due": "2026-03-05", "status": "done" },
+    { "title": "Instagram Reel Flow stabilisieren (Telegram-kompatibel)", "due": "2026-03-06", "status": "in_progress" },
+    { "title": "API Endpoint für Webseite bereitstellen", "due": "2026-03-07", "status": "planned" }
+  ],
+  "tasks": [
+    {
+      "id": "TT-1",
+      "title": "Bridge-Konfiguration dokumentieren",
+      "status": "done",
+      "priority": "high",
+      "assignee": "Luna",
+      "due": "2026-03-05",
+      "blocker": null
+    },
+    {
+      "id": "TT-2",
+      "title": "IG Reel Download + Telegram-Encode Pipeline",
+      "status": "in_progress",
+      "priority": "high",
+      "assignee": "Luna",
+      "due": "2026-03-06",
+      "blocker": null
+    },
+    {
+      "id": "TT-3",
+      "title": "HTTP API für tareno.co vorbereiten",
+      "status": "planned",
+      "priority": "high",
+      "assignee": "Luna",
+      "due": "2026-03-07",
+      "blocker": null
+    }
+  ],
+  "dataRefs": [
+    { "label": "Project Notes", "path": "projects/tareno-tools.md", "type": "markdown" }
+  ],
+  "notes": "Bridge-URL aktiv auf http://31.97.32.40:3477/. Secret wird nicht im Repo gespeichert."
+}
