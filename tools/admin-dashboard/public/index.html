@@ -221,9 +221,6 @@
             <div class="nav-item" onclick="switchTab('projects', this)">
                 <span>📂</span> Projekte
             </div>
-            <div class="nav-item" onclick="switchTab('capabilities', this)">
-                <span>✨</span> Was geht aktuell?
-            </div>
             <div class="nav-item" onclick="switchTab('skills', this)">
                 <span>🧠</span> Skills & Docs
             </div>
@@ -934,6 +931,25 @@
                             return catHtml;
                         }).join('') : '<p class="text-[10px] text-text-muted italic">Keine Datenquellen</p>';
 
+                    const isTarenoProject = (p.id || '').toLowerCase() === 'tareno' || (p.name || '').toLowerCase().includes('tareno');
+                    const tarenoFeatureTools = Array.from(new Set((p.contentPipeline || []).map(cp => cp.feature).filter(v => v && v !== 'nan')));
+                    const tarenoTools = [
+                        ...tarenoFeatureTools,
+                        'Kanban Task Board (Drag & Drop)',
+                        'Pipeline Freigaben (Review / Reject / Accept all)',
+                        'NotebookLM Audio (Generate + Stream/Download)',
+                        'Knowledge Upload & Data Sources',
+                        'Markdown Upload/Replace je Pipeline-Step'
+                    ];
+                    const tarenoToolsHtml = isTarenoProject ? `
+                        <div>
+                            <h4 class="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-4 flex items-center gap-2 pb-2 border-b border-white/5">🧰 Tareno Tools</h4>
+                            <div class="flex flex-col gap-1.5">
+                                ${tarenoTools.map(tool => `<div class="text-[10px] text-text-secondary bg-black/20 border border-white/5 rounded px-2 py-1.5">${tool}</div>`).join('')}
+                            </div>
+                        </div>
+                    ` : '';
+
                     const renderTask = (t) => {
                         const prioColors = { high: 'text-red-400 border-red-500/30 bg-red-500/10', medium: 'text-yellow-400 border-yellow-500/30 bg-yellow-500/10', low: 'text-blue-400 border-blue-500/30 bg-blue-500/10' };
                         const pc = prioColors[t.priority] || 'text-text-muted border-white/10 bg-white/5';
@@ -979,6 +995,7 @@
                                         <h4 class="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-4 flex items-center gap-2 pb-2 border-b border-white/5">👥 Core Team</h4>
                                         <div class="flex flex-col gap-2">${agentHtml}</div>
                                     </div>
+                                    ${tarenoToolsHtml}
                                     <div class="flex flex-col flex-1 overflow-hidden">
                                         <h4 class="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-4 flex items-center justify-between pb-2 border-b border-white/5 flex-shrink-0">
                                             <span class="flex items-center gap-2">📚 Data Sources</span>
@@ -2446,7 +2463,7 @@
         // Init first view - check URL hash for direct navigation
         function initFromHash() {
             const hash = window.location.hash.replace('#', '');
-            const validTabs = ['agents', 'organization', 'activity', 'cron', 'projects', 'skills', 'agent-builder', 'channels', 'capabilities'];
+            const validTabs = ['agents', 'organization', 'activity', 'cron', 'projects', 'skills', 'agent-builder', 'channels'];
             if (hash && validTabs.includes(hash)) {
                 currentTab = hash;
                 document.getElementById('view-title').innerText = hash.charAt(0).toUpperCase() + hash.slice(1);
