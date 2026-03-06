@@ -48,3 +48,12 @@ Add whatever helps you do your job. This is your cheat sheet.
   - **Alle Agenten** = nur Agenten (keine Cron-/Session-Duplikate)
   - **Cron Jobs** = alle OpenClaw-Cronjobs inkl. Agent-Zuordnung
   - Agent-Karten zeigen Knowledge-Bank (SOUL/MEMORY/AGENTS/USER/HEARTBEAT/IDENTITY)
+
+### Telegram Media Sending Skill (Mert)
+
+- Standardpfad für Medien: `public/status/`
+- Bilder/Videos in Chat senden mit: `MEDIA:./public/status/<datei>`
+- Bevorzugter Workflow:
+  1) Erst Vorschau senden
+  2) Optional zusätzlich in Originalqualität als Datei/Dokument
+- Wenn Zustellung hakt: kleinere JPG/MP4-Variante erzeugen und erneut über `MEDIA:` senden
