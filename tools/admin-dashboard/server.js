@@ -2771,6 +2771,99 @@ app.get("/api/channels", async (_, res) => {
     ok(res, { channels: enriched, raw });
 });
 
+app.get('/api/capabilities', async (_, res) => {
+    const [agentsResp, channelsResp, cronResp, skillsResp] = await Promise.all([
+        runFirstOk([
+            '/usr/bin/openclaw --profile tareno agents list --json',
+            '/usr/local/bin/openclaw --profile tareno agents list --json',
+            '/usr/bin/openclaw agents list --json'
+        ]),
+        runFirstOk([
+            '/usr/bin/openclaw --profile tareno status --all',
+            '/usr/local/bin/openclaw --profile tareno status --all',
+            '/usr/bin/openclaw status --all'
+        ]),
+        runFirstOk([
+            '/usr/bin/openclaw --profile tareno cron list',
+            '/usr/local/bin/openclaw --profile tareno cron list',
+            '/usr/bin/openclaw cron list'
+        ]),
+        runFirstOk([
+            '/usr/bin/openclaw --profile tareno skills list',
+            '/usr/local/bin/openclaw --profile tareno skills list',
+            '/usr/bin/openclaw skills list'
+        ])
+    ]);
+
+    const agentsJson = tryParseJson(agentsResp.stdout);
+    const agentCount = Array.isArray(agentsJson?.agents) ? agentsJson.agents.length : 0;
+
+    const channelRaw = channelsResp.stdout || channelsResp.stderr || '';
+    const activeChannels = [];
+    channelRaw.split('\n').forEach(line => {
+        const m = line.match(/│\s*([A-Za-z0-9\/_ -]+)\s*│\s*ON\s*│\s*OK\s*│/i);
+        if (m) activeChannels.push(m[1].trim());
+    });
+
+    const cronJobs = parseOpenClawCronList(cronResp.stdout || cronResp.stderr || '');
+    const skillLines = (skillsResp.stdout || '').split('\n').filter(l => l.trim());
+
+    const blocks = [
+        {
+            title: 'Agent Control',
+            items: [
+                `${agentCount} Agenten erkannt (Config/Runtime).`,
+                'Agenten-Detailansicht inkl. Knowledge-Bank (SOUL, MEMORY, AGENTS, USER, HEARTBEAT, IDENTITY).',
+                'Agent Builder für neue Telegram-gebundene Agenten.'
+            ]
+        },
+        {
+            title: 'Projektsteuerung',
+            items: [
+                'Projekt-Hub mit Status, Teamrollen, Task-Fortschritt und Blockern.',
+                'Kanban Drag&Drop inkl. API-Update.',
+                'Capability-Checks pro Agent (read/write) vor Write-Aktionen.',
+                'Data-Refs, Wissens-Uploads, Pipeline- und Markdown-Dokument-Handling.'
+            ]
+        },
+        {
+            title: 'Automation / Cron',
+            items: [
+                `${cronJobs.length} OpenClaw Cron-Jobs erkannt.`,
+                'Cron-Liveübersicht inkl. nächster Lauf, letzter Lauf und Run-Details.',
+                'System-Crontab + Syslog Verlauf einsehbar.'
+            ]
+        },
+        {
+            title: 'Channels live',
+            items: activeChannels.length
+                ? activeChannels.map(c => `${c} ist aktiv verbunden.`)
+                : ['Aktuell kein Channel als ON/OK erkannt.']
+        },
+        {
+            title: 'Content Pipeline',
+            items: [
+                'Review/Approve/Reject pro Step (Research → Multimedia).',
+                'Accept-All, Draft/Publish-now, Download einzelner oder aller Step-Artefakte.',
+                'NotebookLM Audio-Workflow (Config, Generate, Stream/Download).'
+            ]
+        },
+        {
+            title: 'Skills & Docs',
+            items: [
+                `Skills-Endpunkt aktiv (${skillLines.length || 'mehrere'} Einträge erkannt).`,
+                'Globale Skill-Policy + Agent-spezifische Aktivierung aus dem Dashboard.',
+                'Integration-Hinweise (ClawHub, Docs, Skill Creator) sichtbar.'
+            ]
+        }
+    ];
+
+    return ok(res, {
+        generatedAt: new Date().toISOString(),
+        blocks
+    });
+});
+
 app.get("/api/activity", async (_, res) => {
     const dashLog = await runCmd("tail -n 80 dashboard.log");
     const openclawLog = await runFirstOk([

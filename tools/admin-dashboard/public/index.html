@@ -230,6 +230,9 @@
             <div class="nav-item" onclick="switchTab('agent-builder', this)">
                 <span>🛠️</span> Agent Builder
             </div>
+            <div class="nav-item" onclick="switchTab('capabilities', this)">
+                <span>✨</span> Was geht aktuell?
+            </div>
         </nav>
 
         <div class="p-4 border-t border-border-subtle">
@@ -1272,6 +1275,27 @@
                     html += `</div></div>`;
                 });
                 html += `</div>`;
+            }
+
+            else if (tab === 'capabilities') {
+                const blocks = data.blocks || [];
+                html = `<div class="space-y-6">
+                    <div class="glass-card p-5 bg-gradient-to-r from-brand/10 to-transparent border-brand/20">
+                        <h3 class="text-lg font-bold text-white mb-1">Was aktuell schon möglich ist</h3>
+                        <p class="text-xs text-text-muted">Live-Stand aus dem Server — zuletzt geprüft: ${formatBerlinDateTime(data.generatedAt)}</p>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        ${blocks.map(block => `
+                            <div class="glass-card p-5">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h4 class="text-sm font-semibold text-white">${block.title}</h4>
+                                    <span class="text-[10px] px-2 py-0.5 rounded-full border ${block.items?.length ? 'bg-green-500/10 text-green-300 border-green-500/30' : 'bg-white/5 text-text-muted border-white/10'}">${block.items?.length || 0}</span>
+                                </div>
+                                ${(block.items || []).length ? `<ul class="space-y-2">${(block.items || []).map(item => `<li class="text-xs text-text-secondary leading-relaxed flex items-start gap-2"><span class="text-brand">•</span><span>${item}</span></li>`).join('')}</ul>` : '<p class="text-xs text-text-muted">Noch keine Einträge.</p>'}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>`;
             }
 
             container.innerHTML = `<div class="animate-fade-in">${html}</div>`;
@@ -2422,7 +2446,7 @@
         // Init first view - check URL hash for direct navigation
         function initFromHash() {
             const hash = window.location.hash.replace('#', '');
-            const validTabs = ['agents', 'organization', 'activity', 'cron', 'projects', 'skills', 'agent-builder'];
+            const validTabs = ['agents', 'organization', 'activity', 'cron', 'projects', 'skills', 'agent-builder', 'channels', 'capabilities'];
             if (hash && validTabs.includes(hash)) {
                 currentTab = hash;
                 document.getElementById('view-title').innerText = hash.charAt(0).toUpperCase() + hash.slice(1);
