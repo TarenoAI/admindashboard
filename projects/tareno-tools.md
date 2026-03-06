@@ -16,4 +16,7 @@ Ein dediziertes Projekt für Tooling rund um Video-Download und Delivery (Instag
 ## Nächste Schritte
 - API-Endpoint für tareno.co (`POST /api/video/download`)
 - Queue/Worker für stabile Verarbeitung
-- Optional Plattform-Autodetect (Instagram/YouTube)
+- Optional Plattform-Autodetect (Instagram/YouTube/TikTok/Facebook)
+
+## Zusätzliche Dokumentation
+- TikTok Download Workflow: `projects/tareno-tools-tiktok-download.md`
