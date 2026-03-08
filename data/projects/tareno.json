@@ -5788,6 +5788,13 @@
       "path": "projects/_knowledge/tareno/2026-03-08T08-02-33-AUTO_INDEX_SYNC_NOTE.md",
       "type": "md",
       "category": "Wissensbank"
+    },
+    {
+      "label": "TAG-16 NotebookLM Audio",
+      "path": "media/notebooklm-audio/tareno/tag-16-wie-der-tiktok-algorithmus-wirklich-funktioniert-leaked-docs-notebooklm.mp3",
+      "type": "mp3",
+      "category": "Audio TAG-16",
+      "addedAt": "2026-03-08T16:46:29.507Z"
     }
   ],
   "notes": [
@@ -7146,7 +7153,32 @@
       "id": "TAG-16",
       "status": "done",
       "language": "en",
-      "lastUpdated": "2026-03-08T16:26:33Z"
+      "lastUpdated": "2026-03-08T16:26:33Z",
+      "notebooklm": {
+        "lastJobId": "1772987632431-tag-16",
+        "lastGeneratedAt": "2026-03-08T16:46:29.506Z",
+        "lastAudioRelPath": "media/notebooklm-audio/tareno/tag-16-wie-der-tiktok-algorithmus-wirklich-funktioniert-leaked-docs-notebooklm.mp3",
+        "lastAudioAbsPath": "/root/.openclaw/workspace-tareno/media/notebooklm-audio/tareno/tag-16-wie-der-tiktok-algorithmus-wirklich-funktioniert-leaked-docs-notebooklm.mp3",
+        "notebookTitle": "Tareno TAG-16 - Wie der TikTok Algorithmus *wirklich* funktioniert (Leaked Docs)",
+        "notebookId": "d840ac2c-5568-4b8b-b79e-a45ef77e6397",
+        "artifactId": "28327432-8cc4-48f4-8470-fb6d4c701cfe",
+        "taskId": "28327432-8cc4-48f4-8470-fb6d4c701cfe",
+        "history": [
+          {
+            "generatedAt": "2026-03-08T16:46:29.506Z",
+            "outputRelPath": "media/notebooklm-audio/tareno/tag-16-wie-der-tiktok-algorithmus-wirklich-funktioniert-leaked-docs-notebooklm.mp3",
+            "outputAbsPath": "/root/.openclaw/workspace-tareno/media/notebooklm-audio/tareno/tag-16-wie-der-tiktok-algorithmus-wirklich-funktioniert-leaked-docs-notebooklm.mp3",
+            "notebookTitle": "Tareno TAG-16 - Wie der TikTok Algorithmus *wirklich* funktioniert (Leaked Docs)",
+            "notebookId": "d840ac2c-5568-4b8b-b79e-a45ef77e6397",
+            "artifactId": "28327432-8cc4-48f4-8470-fb6d4c701cfe",
+            "taskId": "28327432-8cc4-48f4-8470-fb6d4c701cfe",
+            "language": "en",
+            "audioFormat": "DEEP_DIVE",
+            "audioLength": "LONG",
+            "createNewVersion": false
+          }
+        ]
+      }
     },
     {
       "day": "Tag 9 (Post 1)",
@@ -7162,7 +7194,7 @@
           "status": "done",
           "doc": "projects/blog-artifacts/tag17/17_research_video-zu-text-youtube-blog.md",
           "language": "en",
-          "updatedAt": "2026-03-08T16:38:00Z",
+          "updatedAt": "2026-03-08T10:59:13Z",
           "updatedBy": "sam",
           "wordCount": 1744
         },
@@ -7170,7 +7202,7 @@
           "status": "done",
           "doc": "projects/blog-artifacts/tag17/17_structure_video-zu-text-youtube-blog.md",
           "language": "en",
-          "updatedAt": "2026-03-08T16:38:00Z",
+          "updatedAt": "2026-03-08T10:59:13Z",
           "updatedBy": "sam",
           "wordCount": 589
         },
@@ -7178,15 +7210,15 @@
           "status": "done",
           "doc": "projects/blog-artifacts/tag17/17_draft_video-zu-text-youtube-blog.md",
           "language": "en",
-          "updatedAt": "2026-03-08T16:38:00Z",
+          "updatedAt": "2026-03-08T10:59:13Z",
           "updatedBy": "sam",
-          "wordCount": 2600
+          "wordCount": 1673
         },
         "feature_inserts": {
           "status": "done",
           "doc": "projects/blog-artifacts/tag17/17_feature_inserts_video-zu-text-youtube-blog.md",
           "language": "en",
-          "updatedAt": "2026-03-08T16:38:00Z",
+          "updatedAt": "2026-03-08T10:59:13Z",
           "updatedBy": "sam",
           "wordCount": 1705
         },
@@ -7194,39 +7226,38 @@
           "status": "done",
           "doc": "projects/blog-artifacts/tag17/17_edited_video-zu-text-youtube-blog.md",
           "language": "en",
-          "updatedAt": "2026-03-08T16:38:00Z",
+          "updatedAt": "2026-03-08T10:59:13Z",
           "updatedBy": "sam",
-          "wordCount": 2600
+          "wordCount": 1685
         },
         "geo_polish": {
           "status": "done",
           "doc": "projects/blog-artifacts/tag17/17_geo_polish_video-zu-text-youtube-blog.md",
           "language": "en",
-          "updatedAt": "2026-03-08T16:38:00Z",
+          "updatedAt": "2026-03-08T10:59:13Z",
           "updatedBy": "sam",
-          "wordCount": 2600
+          "wordCount": 1685
         },
         "final": {
           "status": "done",
           "doc": "projects/blog-artifacts/tag17/17_final_video-zu-text-youtube-blog.md",
           "language": "en",
-          "updatedAt": "2026-03-08T16:38:00Z",
+          "updatedAt": "2026-03-08T10:59:13Z",
           "updatedBy": "sam",
-          "wordCount": 2600
+          "wordCount": 1708
         },
         "multimedia_enrichment": {
           "status": "done",
           "doc": "projects/blog-artifacts/tag17/08_asset_plan.md",
           "language": "en",
-          "updatedAt": "2026-03-08T16:38:00Z",
+          "updatedAt": "2026-03-08T10:59:13Z",
           "updatedBy": "sam",
           "wordCount": 13
         }
       },
       "id": "TAG-17",
       "status": "done",
-      "language": "en",
-      "lastUpdated": "2026-03-08T16:38:00Z"
+      "language": "en"
     },
     {
       "day": "Tag 9 (Post 2)",
@@ -7242,7 +7273,7 @@
           "status": "done",
           "doc": "projects/blog-artifacts/tag18/18_research_instagram-seo-keywords-statt-hashtags.md",
           "language": "en",
-          "updatedAt": "2026-03-08T10:59:13Z",
+          "updatedAt": "2026-03-08T16:53:02Z",
           "updatedBy": "sam",
           "wordCount": 1751
         },
@@ -7250,7 +7281,7 @@
           "status": "done",
           "doc": "projects/blog-artifacts/tag18/18_structure_instagram-seo-keywords-statt-hashtags.md",
           "language": "en",
-          "updatedAt": "2026-03-08T10:59:13Z",
+          "updatedAt": "2026-03-08T16:53:02Z",
           "updatedBy": "sam",
           "wordCount": 586
         },
@@ -7258,15 +7289,15 @@
           "status": "done",
           "doc": "projects/blog-artifacts/tag18/18_draft_instagram-seo-keywords-statt-hashtags.md",
           "language": "en",
-          "updatedAt": "2026-03-08T10:59:13Z",
+          "updatedAt": "2026-03-08T16:53:02Z",
           "updatedBy": "sam",
-          "wordCount": 1811
+          "wordCount": 1331
         },
         "feature_inserts": {
           "status": "done",
           "doc": "projects/blog-artifacts/tag18/18_feature_inserts_instagram-seo-keywords-statt-hashtags.md",
           "language": "en",
-          "updatedAt": "2026-03-08T10:59:13Z",
+          "updatedAt": "2026-03-08T16:53:02Z",
           "updatedBy": "sam",
           "wordCount": 1843
         },
@@ -7274,38 +7305,39 @@
           "status": "done",
           "doc": "projects/blog-artifacts/tag18/18_edited_instagram-seo-keywords-statt-hashtags.md",
           "language": "en",
-          "updatedAt": "2026-03-08T10:59:13Z",
+          "updatedAt": "2026-03-08T16:53:02Z",
           "updatedBy": "sam",
-          "wordCount": 1823
+          "wordCount": 1331
         },
         "geo_polish": {
           "status": "done",
           "doc": "projects/blog-artifacts/tag18/18_geo_polish_instagram-seo-keywords-statt-hashtags.md",
           "language": "en",
-          "updatedAt": "2026-03-08T10:59:13Z",
+          "updatedAt": "2026-03-08T16:53:02Z",
           "updatedBy": "sam",
-          "wordCount": 1823
+          "wordCount": 1331
         },
         "final": {
           "status": "done",
           "doc": "projects/blog-artifacts/tag18/18_final_instagram-seo-keywords-statt-hashtags.md",
           "language": "en",
-          "updatedAt": "2026-03-08T10:59:13Z",
+          "updatedAt": "2026-03-08T16:53:02Z",
           "updatedBy": "sam",
-          "wordCount": 1846
+          "wordCount": 1331
         },
         "multimedia_enrichment": {
           "status": "done",
           "doc": "projects/blog-artifacts/tag18/08_asset_plan.md",
           "language": "en",
-          "updatedAt": "2026-03-08T10:59:13Z",
+          "updatedAt": "2026-03-08T16:53:02Z",
           "updatedBy": "sam",
           "wordCount": 13
         }
       },
       "id": "TAG-18",
       "status": "done",
-      "language": "en"
+      "language": "en",
+      "lastUpdated": "2026-03-08T16:53:02Z"
     },
     {
       "day": "Tag 10 (Post 1)",
@@ -9604,7 +9636,7 @@
       "newVersionOnGenerate": false,
       "language": "en",
       "audioFormat": "DEEP_DIVE",
-      "audioLength": "DEFAULT",
+      "audioLength": "LONG",
       "waitTimeoutSec": 900
     }
   },
