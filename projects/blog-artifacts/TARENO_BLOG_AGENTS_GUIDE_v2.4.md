@@ -217,6 +217,12 @@ If detected -> regenerate section from heading only.
 - Authority mode: 1800-3000 words
 - Any full article draft under 1500 words -> automatic fail
 - Authority mode under 1800 words -> automatic fail
+- Wordcount must never be reached via repetition/boilerplate loops
+- If underfill occurs, Agent 3 must expand with new information layers only:
+  - edge case
+  - trade-off
+  - concrete scenario
+  - decision rule
 - Keep depth and avoid filler; expand with new information only
 
 **Quality Intent by Mode:**
@@ -515,38 +521,42 @@ If such labels appear -> FAIL and rewrite patch before handoff.
 - On dedupe fail: return to Agent 5 (not Agent 3)
 - Patch idempotency is mandatory: each patch target may be applied only once per merge run
 
-**🆕 Hard Gate: Repetition Loop Detection (Pre-Editor)**
-Sam must fail the draft before Agent 5 if repetitive loop patterns are detected.
+**🆕 Reject Gate 1: Repetition Gate (Pre-Editor + Pre-Final, MANDATORY)**
+Sam must fail draft/final if repetitive loop patterns are detected.
 
 Fail conditions:
-- Same sentence appears more than 2 times in the draft
+- Same sentence appears more than 2 times in the artifact
 - Same paragraph appears more than 1 time
-- Any phrase pattern dominates multiple sections with minimal semantic change
+- Numbered/iterative blocks with near-identical wording used as filler
 
 If failed:
-- Do not send to Editor
-- Route back to Agent 3 for section regeneration
-- Rebuild draft from clean section files (no append retry)
+- Do not send to Editor / do not write FINAL.md
+- Route to Agent 3 only
+- Agent 3 must regenerate affected sections from heading intent
+- **No append retry allowed** (overwrite section files only)
 
-**🆕 Hard Gate: Repetition Loop Detection (Pre-Final)**
-Sam must fail finalization if FINAL candidate contains repetitive sentence blocks or duplicated paragraph patterns.
-
-If failed:
-- FINAL.md must not be written
-- STATE.md remains not done
-- Route back to Agent 3 / Draft rebuild
-
-**🆕 Hard Gate: Topic Consistency (Pre-Final, MANDATORY)**
-Sam must fail finalization if the FINAL candidate drifts away from the core topic/entities defined in Research + Outline.
+**🆕 Reject Gate 2: FAQ Uniqueness Gate (Pre-Final, MANDATORY)**
+Sam must fail finalization if FAQ answers are duplicated or generic templates.
 
 Fail conditions:
-- Core topic terms from research/outline are missing or underrepresented in final core sections
-- Generic boilerplate dominates multiple sections (>30% of section text)
-- Final sections do not answer the declared core question/problem statement
+- Any FAQ answer is identical or near-identical to another
+- Any FAQ answer lacks at least 1 unique concrete detail (placement hint, decision criterion, metric, or mini-example)
 
 If failed:
 - FINAL.md must not be written
-- Route back to Agent 3 for full section regeneration from heading intent
+- Route to Agent 3 for FAQ rewrite (not Agent 6)
+
+**🆕 Reject Gate 3: Topic Specificity Gate (Pre-Editor + Pre-Final, MANDATORY)**
+Sam must fail artifact if sections drift into generic prose.
+
+Fail conditions (per H2):
+- Fewer than 2-3 topic-anchor terms
+- Missing at least 1 mini-example or concrete scenario
+- Generic boilerplate dominates section text
+
+Routing:
+- If outline itself is too abstract/missing anchor map -> Route to Agent 2
+- Otherwise -> Route to Agent 3 for section regeneration
 - Do not attempt repair via Agent 6 GEO patch
 
 **🆕 Hard Rule: GEO Patch Is Not a Rescue Layer**
@@ -566,8 +576,8 @@ If violated:
 - FINAL.md must not be written
 - Route back to Agent 5 and Sam for depth-preserving rebuild
 
-**🆕 Hard Gate: Placeholder Validation (Pre-Final)**
-Sam must scan the final candidate for unresolved template placeholders.
+**🆕 Reject Gate 4: Placeholder/Artifact Gate (Pre-Final, MANDATORY)**
+Sam must scan final candidate for unresolved placeholders and internal artifact leakage.
 
 Fail if any placeholder-like token remains, including:
 - {author}
@@ -577,14 +587,7 @@ Fail if any placeholder-like token remains, including:
 - [TODO]
 - [TBD]
 
-If failed:
-- FINAL.md must not be written
-- Route to responsible step (metadata merge / template fill)
-
-**🆕 Hard Gate: Artifact Leakage (Pre-Final)**
-FINAL.md must not contain raw artifact sections or process headings.
-
-Fail if FINAL candidate contains headings such as:
+Fail if FINAL candidate contains process/artifact headings such as:
 - # Research
 - # Outline
 - # Product Inserts
@@ -595,6 +598,11 @@ Fail if FINAL candidate contains headings such as:
 - Summary for AI/Editors
 - Summary for AI
 - For Editors
+
+If failed:
+- FINAL.md must not be written
+- Route to **Sam only** for final cleanup/template merge correction
+- Do not route to Agent 3 unless content-level gates also fail
 
 **🆕 Hard Rule: No Append Retry on Failed Section**
 If a section generation fails or is retried, the section file must be regenerated from scratch.
