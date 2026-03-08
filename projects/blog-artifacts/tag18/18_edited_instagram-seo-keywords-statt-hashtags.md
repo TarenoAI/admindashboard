@@ -415,6 +415,17 @@ A mature Instagram SEO workflow includes explicit brakes against over-optimizati
 
 These controls protect both discoverability and brand credibility.
 
+## Final Pre-Publish Authority Check
+Before publishing an authority-grade Instagram SEO article, run a strict final check:
+
+- Does the first screen provide immediate utility for the query?
+- Does each core section include at least one mini-example and one decision rule?
+- Are hashtags framed as secondary support rather than primary discovery engine?
+- Is the keyword placement logic explicit across profile, bio, caption, and visual text?
+- Are test methods and thresholds clear enough for team replication?
+
+If two or more answers are “no,” the article should not move to final. This simple rule prevents weak pages from being marked complete under schedule pressure.
+
 ## Key Takeaways
 - Keywords generally outperform hashtag-only tactics because they live in stronger semantic fields.
 - Hashtags still matter as secondary context signals when used strategically.
