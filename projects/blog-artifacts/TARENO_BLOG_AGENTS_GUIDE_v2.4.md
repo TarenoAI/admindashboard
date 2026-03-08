@@ -212,18 +212,17 @@ If detected -> regenerate section from heading only.
 - No fluff or filler expansion
 - Safe language for volatile topics (rewrite unsourced specifics)
 
-**Wordcount Gate Adjustment:**
-- Standard mode: 1500-2200 words
-- Authority mode: 1800-3000 words
-- Any full article draft under 1500 words -> automatic fail
-- Authority mode under 1800 words -> automatic fail
-- Wordcount must never be reached via repetition/boilerplate loops
-- If underfill occurs, Agent 3 must expand with new information layers only:
-  - edge case
-  - trade-off
-  - concrete scenario
-  - decision rule
-- Keep depth and avoid filler; expand with new information only
+**Wordcount Target Rule (Mandatory):**
+- Standard mode target: 1600 words (tolerance: 1450-1750)
+- Authority mode target: 2800 words (tolerance: 2550-3050)
+- Remove open ranges; enforce one target with tolerance window
+- If under target: regenerate with new information layers only
+  - examples
+  - edge cases
+  - trade-offs
+  - decision rules
+- Under target must never be solved by repetition or template padding
+- Keep depth and avoid filler; expand with genuinely new information only
 
 **Quality Intent by Mode:**
 - Standard mode -> operational clarity
