@@ -1489,20 +1489,20 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
 
             const patchForm = new FormData();
             const audioStats = fs.statSync(blogAudio.absPath);
-            if (audioStats.size > BLOG_DIRECT_UPLOAD_THRESHOLD_BYTES) {
-                const uploadedAudio = await uploadFileDirectToBlogStorage(
-                    publishCfg,
-                    blogAudio.absPath,
-                    blogAudio.fileName || 'blog-audio.mp3',
-                    'audio'
-                );
-                patchForm.append('audioUrl', uploadedAudio.publicUrl);
-                patchForm.append('audioPath', blogAudio.relPath);
-            } else {
-                const audioBuffer = fs.readFileSync(blogAudio.absPath);
-                patchForm.append('audioFile', new Blob([audioBuffer], { type: 'audio/mpeg' }), blogAudio.fileName || 'blog-audio.mp3');
-                patchForm.append('audioPath', blogAudio.relPath);
-            }
+            const uploadedAudio = await uploadFileDirectToBlogStorage(
+                publishCfg,
+                blogAudio.absPath,
+                blogAudio.fileName || 'blog-audio.mp3',
+                'audio'
+            );
+            console.log('[publish-now] audio-only direct upload', {
+                file: blogAudio.relPath,
+                sizeBytes: audioStats.size,
+                sizeLabel: formatBytesLabel(audioStats.size),
+                publicUrl: uploadedAudio.publicUrl
+            });
+            patchForm.append('audioUrl', uploadedAudio.publicUrl);
+            patchForm.append('audioPath', blogAudio.relPath);
 
             const patchResp = await fetch(patchUrl.toString(), {
                 method: 'PATCH',
@@ -1577,20 +1577,20 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
         form.append('assetPlanPath', multimediaDoc.relPath);
         if (blogAudio) {
             const audioStats = fs.statSync(blogAudio.absPath);
-            if (audioStats.size > BLOG_DIRECT_UPLOAD_THRESHOLD_BYTES) {
-                const uploadedAudio = await uploadFileDirectToBlogStorage(
-                    publishCfg,
-                    blogAudio.absPath,
-                    blogAudio.fileName || 'blog-audio.mp3',
-                    'audio'
-                );
-                form.append('audioUrl', uploadedAudio.publicUrl);
-                form.append('audioPath', blogAudio.relPath);
-            } else {
-                const audioBuffer = fs.readFileSync(blogAudio.absPath);
-                form.append('audioFile', new Blob([audioBuffer], { type: 'audio/mpeg' }), blogAudio.fileName || 'blog-audio.mp3');
-                form.append('audioPath', blogAudio.relPath);
-            }
+            const uploadedAudio = await uploadFileDirectToBlogStorage(
+                publishCfg,
+                blogAudio.absPath,
+                blogAudio.fileName || 'blog-audio.mp3',
+                'audio'
+            );
+            console.log('[publish-now] direct audio upload', {
+                file: blogAudio.relPath,
+                sizeBytes: audioStats.size,
+                sizeLabel: formatBytesLabel(audioStats.size),
+                publicUrl: uploadedAudio.publicUrl
+            });
+            form.append('audioUrl', uploadedAudio.publicUrl);
+            form.append('audioPath', blogAudio.relPath);
         }
         form.append('title', title);
         form.append('slug', slug);
@@ -1636,7 +1636,8 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
             contentFormat: String(body.contentFormat || 'markdown').trim().toLowerCase() || 'markdown',
             finalDoc: finalDoc.relPath,
             assetPlanDoc: multimediaDoc.relPath,
-            blogAudio: blogAudio?.relPath || null
+            blogAudio: blogAudio?.relPath || null,
+            audioTransferMode: blogAudio ? 'direct_url' : 'none'
         };
         if (row.steps?.final) {
             row.steps.final.status = publishCfg.mode === 'publish' ? 'done' : row.steps.final.status;
