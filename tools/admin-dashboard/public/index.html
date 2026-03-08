@@ -1810,13 +1810,23 @@
                     if (String(data?.error || '').includes('Missing BLOG_API_SECRET')) {
                         sessionStorage.removeItem(secretKey);
                     }
-                    throw new Error(data.error || `Publish fehlgeschlagen (${res.status})`);
+                    let detail = '';
+                    if (data?.status) detail += ` | upstream: ${data.status}`;
+                    if (data?.response) {
+                        const raw = typeof data.response === 'string' ? data.response : JSON.stringify(data.response);
+                        detail += ` | response: ${raw.slice(0, 280)}`;
+                    }
+                    throw new Error((data.error || `Publish fehlgeschlagen (${res.status})`) + detail);
                 }
                 if (btn) btn.innerText = isDraft ? 'Draft saved' : 'Published';
+                if (Array.isArray(data?.warnings) && data.warnings.length) {
+                    alert(`Hinweis:\n${data.warnings.join('\n')}`);
+                }
                 loadCurrentView();
             } catch (e) {
                 console.error(e);
                 if (btn) btn.innerText = 'Failed';
+                alert(e?.message || 'Draft/Publish fehlgeschlagen.');
             } finally {
                 if (btn) {
                     setTimeout(() => {

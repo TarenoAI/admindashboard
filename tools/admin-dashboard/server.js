@@ -1575,22 +1575,54 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
         form.append('assetPlanFile', new Blob([assetPlanMarkdown], { type: 'text/markdown; charset=utf-8' }), path.basename(multimediaDoc.absPath) || '08_asset_plan.md');
         form.append('assetPlanContent', assetPlanMarkdown);
         form.append('assetPlanPath', multimediaDoc.relPath);
+        let attachedBlogAudio = null;
+        let audioTransferMode = 'none';
+        let audioUploadWarning = null;
         if (blogAudio) {
             const audioStats = fs.statSync(blogAudio.absPath);
-            const uploadedAudio = await uploadFileDirectToBlogStorage(
-                publishCfg,
-                blogAudio.absPath,
-                blogAudio.fileName || 'blog-audio.mp3',
-                'audio'
-            );
-            console.log('[publish-now] direct audio upload', {
-                file: blogAudio.relPath,
-                sizeBytes: audioStats.size,
-                sizeLabel: formatBytesLabel(audioStats.size),
-                publicUrl: uploadedAudio.publicUrl
-            });
-            form.append('audioUrl', uploadedAudio.publicUrl);
-            form.append('audioPath', blogAudio.relPath);
+            try {
+                const uploadedAudio = await uploadFileDirectToBlogStorage(
+                    publishCfg,
+                    blogAudio.absPath,
+                    blogAudio.fileName || 'blog-audio.mp3',
+                    'audio'
+                );
+                console.log('[publish-now] direct audio upload', {
+                    file: blogAudio.relPath,
+                    sizeBytes: audioStats.size,
+                    sizeLabel: formatBytesLabel(audioStats.size),
+                    publicUrl: uploadedAudio.publicUrl
+                });
+                form.append('audioUrl', uploadedAudio.publicUrl);
+                form.append('audioPath', blogAudio.relPath);
+                attachedBlogAudio = blogAudio.relPath;
+                audioTransferMode = 'direct_url';
+            } catch (uploadErr) {
+                const uploadMsg = String(uploadErr?.message || uploadErr || 'direct upload failed');
+                if (audioStats.size <= BLOG_DIRECT_UPLOAD_THRESHOLD_BYTES) {
+                    const audioBuffer = fs.readFileSync(blogAudio.absPath);
+                    form.append('audioFile', new Blob([audioBuffer], { type: 'audio/mpeg' }), blogAudio.fileName || 'blog-audio.mp3');
+                    form.append('audioPath', blogAudio.relPath);
+                    attachedBlogAudio = blogAudio.relPath;
+                    audioTransferMode = 'inline_file_fallback';
+                    audioUploadWarning = `Direct audio upload failed, fell back to inline file: ${uploadMsg}`;
+                    console.warn('[publish-now] direct audio upload failed, using inline file fallback', {
+                        file: blogAudio.relPath,
+                        sizeBytes: audioStats.size,
+                        sizeLabel: formatBytesLabel(audioStats.size),
+                        error: uploadMsg
+                    });
+                } else {
+                    audioTransferMode = 'skipped_large_audio';
+                    audioUploadWarning = `Audio upload skipped (${formatBytesLabel(audioStats.size)}): ${uploadMsg}`;
+                    console.warn('[publish-now] direct audio upload failed, skipping large audio', {
+                        file: blogAudio.relPath,
+                        sizeBytes: audioStats.size,
+                        sizeLabel: formatBytesLabel(audioStats.size),
+                        error: uploadMsg
+                    });
+                }
+            }
         }
         form.append('title', title);
         form.append('slug', slug);
@@ -1636,8 +1668,9 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
             contentFormat: String(body.contentFormat || 'markdown').trim().toLowerCase() || 'markdown',
             finalDoc: finalDoc.relPath,
             assetPlanDoc: multimediaDoc.relPath,
-            blogAudio: blogAudio?.relPath || null,
-            audioTransferMode: blogAudio ? 'direct_url' : 'none'
+            blogAudio: attachedBlogAudio || null,
+            audioTransferMode,
+            audioUploadWarning
         };
         if (row.steps?.final) {
             row.steps.final.status = publishCfg.mode === 'publish' ? 'done' : row.steps.final.status;
@@ -1659,8 +1692,9 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
             sentFiles: {
                 finalDoc: finalDoc.relPath,
                 assetPlanDoc: multimediaDoc.relPath,
-                blogAudio: blogAudio?.relPath || null
+                blogAudio: attachedBlogAudio || null
             },
+            warnings: audioUploadWarning ? [audioUploadWarning] : [],
             sync
         });
     } catch (e) {
