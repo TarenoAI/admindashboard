@@ -3163,7 +3163,8 @@ app.get("/api/cron", async (_, res) => {
     });
 });
 
-app.get("/api/projects", (_, res) => {
+// Legacy markdown-based projects endpoint (kept for backward compatibility)
+app.get("/api/projects-md-legacy", (_, res) => {
     const projectsDir = path.join(WORKSPACE_ROOT, "projects");
     const files = listFilesSafe(projectsDir).filter(f => f.endsWith(".md"));
     const projects = files.map(f => {
