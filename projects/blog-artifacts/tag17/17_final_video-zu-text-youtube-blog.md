@@ -4,9 +4,11 @@ slug: "video-zu-text-youtube-blog"
 language: "en"
 status: "ready_for_review"
 author: "Sam / Tareno"
-last_updated: "2026-03-08T16:38:00Z"
+last_updated: "2026-03-08T16:47:36Z"
 article_type: "authority"
+run_build_id: "TAG-17-20260308-164736-CONTENTFIX"
 ---
+
 
 # Video-to-Blog Workflow: Turn YouTube Videos into Search-Intent Articles That Rank
 
