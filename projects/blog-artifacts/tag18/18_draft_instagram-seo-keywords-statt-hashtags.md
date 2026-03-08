@@ -259,6 +259,118 @@ Use fixed review windows such as 14 days with matched batches and predefined thr
 ### Should hashtags be removed completely?
 Usually no. Keep a focused supporting set while maintaining keyword-first structure.
 
+## Advanced Scenarios by Business Model
+### Scenario A: Local service business
+A local business usually benefits from geo-intent language and service specificity. Generic hashtags may add visibility noise, but profile and caption keywords tied to actual service queries improve qualified discovery.
+
+**Example setup:**
+- Profile name: “Dental Studio Berlin | Invisalign & Smile Design”
+- Bio phrase: “Helping Berlin professionals improve smile confidence with modern aligner plans”
+- Caption lead: “Invisalign consultation in Berlin: 3 things to check before booking.”
+
+**Decision boundary:**
+If your business depends on local bookings, prioritize location-intent terms over broad global hashtag stacks.
+
+### Scenario B: Personal brand educator
+Education creators need query consistency and format clarity. A keyword-first system works best when each content cluster maps to one skill problem.
+
+**Example cluster:**
+- “Instagram SEO basics”
+- “Profile keyword setup”
+- “Caption intent templates”
+- “Hashtag layering mistakes”
+- “Search diagnostics workflow”
+
+**Trade-off:**
+High specificity may reduce broad viral reach but often increases trust and conversion relevance.
+
+### Scenario C: E-commerce brand
+Product-focused brands need to combine category terms, use-case language, and outcome framing. Hashtags can support categorization but cannot replace keyword-rich product context.
+
+**Example approach:**
+Use primary terms tied to product problem-solving (“summer acne-safe SPF routine”) rather than generic category tags only.
+
+### Scenario D: Agency account
+Agencies often publish mixed-topic content and lose semantic focus. A keyword-first authority strategy requires service-line clusters.
+
+**Fix:**
+Segment content by vertical or service lane and avoid mixing unrelated campaign examples inside one sequence.
+
+## Edge Cases That Break Naive SEO Advice
+### Edge case 1: High entertainment niche
+In meme-heavy niches, discovery may look hashtag-influenced because trend tags match high-velocity audience behavior. Yet even here, clear keyword context improves profile-level conversion intent.
+
+### Edge case 2: New accounts with low baseline data
+Small accounts can produce noisy results where one post looks conclusive. Use wider test windows and avoid process changes based on single-post spikes.
+
+### Edge case 3: Multilingual audiences
+If audience language differs by region, keyword mapping must include linguistic variants. Blindly applying one-language hashtag sets weakens intent fit.
+
+### Edge case 4: Seasonal campaigns
+Seasonal terms can inflate reach temporarily. Treat seasonal wins separately from evergreen keyword systems to avoid false process assumptions.
+
+## Trade-Off Matrix for Practical Decision-Making
+| Choice | Benefit | Cost | Best Use |
+|---|---|---|---|
+| High specificity keywords | Better relevance and conversion fit | Smaller broad-reach potential | service or intent-driven accounts |
+| Broad discovery framing | Potentially larger top-of-funnel exposure | Lower intent quality | awareness campaigns |
+| Heavy hashtag use | Fast deployment and campaign grouping | weak semantic control | short-term event pushes |
+| Keyword-first hybrid | Balanced discoverability and clarity | needs editorial discipline | long-term authority growth |
+
+The purpose of this matrix is not to pick one universal winner. It is to reduce decision confusion by making trade-offs explicit before publishing.
+
+## 30-Day Operational Plan for Authority Growth
+### Week 1: Baseline setup
+- define primary query clusters
+- align profile and bio terms
+- establish first caption templates by intent class
+
+### Week 2: Controlled publishing batch
+- publish matched posts by cluster
+- log placement differences and early diagnostics
+
+### Week 3: Review and correction
+- compare search-origin and non-follower quality indicators
+- remove weak structures and preserve repeat winners
+
+### Week 4: Scale with constraints
+- increase output only for stable formats
+- keep one controlled experiment lane open
+
+**Rule:**
+Scale proven structures, not assumptions.
+
+## Editorial Checklist for Human-Looking, SEO-Safe Captions
+1. Does the first line contain a clear intent phrase?
+2. Would a human understand the value promise in under five seconds?
+3. Are support keywords integrated naturally?
+4. Does on-screen text reinforce the same topic?
+5. Are hashtags relevant and proportionate?
+6. Is the post connected to a topic cluster pathway?
+
+If two or more checks fail, revise before publishing.
+
+## Diagnostic Playbook When Results Drop
+### Symptom: Reach is stable, conversion intent is weak
+Likely cause: keywords are broad but not buyer-relevant.
+
+Fix: tighten phrase specificity and CTA alignment.
+
+### Symptom: Reach drops after optimization
+Likely cause: over-optimized robotic caption style.
+
+Fix: keep keyword meaning, rewrite with natural sentence rhythm.
+
+### Symptom: Good one-week results, weak month-long consistency
+Likely cause: no cluster continuity or inconsistent publishing context.
+
+Fix: commit to cluster sequence before changing thematic lane.
+
+### Symptom: Saves low despite impressions
+Likely cause: content is informative but not actionable.
+
+Fix: add checklist format and explicit implementation steps.
+
 ## Key Takeaways
 - Keywords generally outperform hashtag-only tactics because they live in stronger semantic fields.
 - Hashtags still matter as secondary context signals when used strategically.
