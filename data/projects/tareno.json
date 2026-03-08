@@ -3,7 +3,7 @@
   "summary": "📊 Dashboard: Indexiert 2.725 | Volltext 1.541 | Final 2/30 | Veröffentlicht 0/30",
   "status": "on_track",
   "priority": "high",
-  "lastUpdate": "2026-03-06",
+  "lastUpdate": "2026-03-08T09:59:17Z",
   "agents": [
     {
       "id": "tarenoblog",
@@ -197,10 +197,10 @@
     }
   ],
   "blogPipeline": {
-    "totalBlogs": 30,
-    "completed": 2,
-    "inProgress": 3,
-    "planned": 25,
+    "totalBlogs": 68,
+    "completed": 4,
+    "inProgress": 0,
+    "planned": 64,
     "currentFocus": "TAG-03",
     "currentStage": "Production",
     "blogs": [
@@ -284,7 +284,8 @@
         "stepsCompleted": 4,
         "stepsTotal": 7
       }
-    ]
+    ],
+    "lastUpdate": "2026-03-08T09:59:17Z"
   },
   "milestones": [
     {
@@ -7070,39 +7071,73 @@
       "wordTarget": "2000",
       "steps": {
         "content_research": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag16/16_research_tiktok-algorithmus-leaked-docs.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2836
         },
         "structure": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag16/16_structure_tiktok-algorithmus-leaked-docs.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2172
         },
         "drafting": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag16/16_draft_tiktok-algorithmus-leaked-docs.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2961
         },
         "feature_inserts": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag16/16_feature_inserts_tiktok-algorithmus-leaked-docs.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 3002
         },
         "editing": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag16/16_edited_tiktok-algorithmus-leaked-docs.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2982
         },
         "geo_polish": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag16/16_geo_polish_tiktok-algorithmus-leaked-docs.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2982
         },
         "final": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag16/16_final_tiktok-algorithmus-leaked-docs.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2993
         },
         "multimedia_enrichment": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag16/08_asset_plan.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 19
         }
       },
-      "id": "TAG-16"
+      "id": "TAG-16",
+      "status": "done",
+      "language": "en"
     },
     {
       "day": "Tag 9 (Post 1)",
@@ -7115,39 +7150,73 @@
       "wordTarget": "2000",
       "steps": {
         "content_research": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag17/17_research_video-zu-text-youtube-blog.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2836
         },
         "structure": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag17/17_structure_video-zu-text-youtube-blog.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2173
         },
         "drafting": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag17/17_draft_video-zu-text-youtube-blog.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2960
         },
         "feature_inserts": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag17/17_feature_inserts_video-zu-text-youtube-blog.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 3001
         },
         "editing": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag17/17_edited_video-zu-text-youtube-blog.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2981
         },
         "geo_polish": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag17/17_geo_polish_video-zu-text-youtube-blog.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2981
         },
         "final": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag17/17_final_video-zu-text-youtube-blog.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2992
         },
         "multimedia_enrichment": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag17/08_asset_plan.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 19
         }
       },
-      "id": "TAG-17"
+      "id": "TAG-17",
+      "status": "done",
+      "language": "en"
     },
     {
       "day": "Tag 9 (Post 2)",
@@ -7160,39 +7229,73 @@
       "wordTarget": "2000",
       "steps": {
         "content_research": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag18/18_research_instagram-seo-keywords-statt-hashtags.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2834
         },
         "structure": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag18/18_structure_instagram-seo-keywords-statt-hashtags.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2167
         },
         "drafting": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag18/18_draft_instagram-seo-keywords-statt-hashtags.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2949
         },
         "feature_inserts": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag18/18_feature_inserts_instagram-seo-keywords-statt-hashtags.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2990
         },
         "editing": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag18/18_edited_instagram-seo-keywords-statt-hashtags.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2970
         },
         "geo_polish": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag18/18_geo_polish_instagram-seo-keywords-statt-hashtags.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2970
         },
         "final": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag18/18_final_instagram-seo-keywords-statt-hashtags.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2981
         },
         "multimedia_enrichment": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag18/08_asset_plan.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 19
         }
       },
-      "id": "TAG-18"
+      "id": "TAG-18",
+      "status": "done",
+      "language": "en"
     },
     {
       "day": "Tag 10 (Post 1)",
@@ -7205,39 +7308,73 @@
       "wordTarget": "2000",
       "steps": {
         "content_research": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag19/19_research_pinterest-automatisierung.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2835
         },
         "structure": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag19/19_structure_pinterest-automatisierung.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2168
         },
         "drafting": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag19/19_draft_pinterest-automatisierung.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2956
         },
         "feature_inserts": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag19/19_feature_inserts_pinterest-automatisierung.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2997
         },
         "editing": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag19/19_edited_pinterest-automatisierung.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2977
         },
         "geo_polish": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag19/19_geo_polish_pinterest-automatisierung.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2977
         },
         "final": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag19/19_final_pinterest-automatisierung.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 2988
         },
         "multimedia_enrichment": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag19/08_asset_plan.md",
+          "language": "en",
+          "updatedAt": "2026-03-08T09:59:17Z",
+          "updatedBy": "tarenoblog",
+          "wordCount": 19
         }
       },
-      "id": "TAG-19"
+      "id": "TAG-19",
+      "status": "done",
+      "language": "en"
     },
     {
       "day": "Tag 10 (Post 2)",
