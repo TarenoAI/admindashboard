@@ -432,6 +432,7 @@ If two or more answers are “no,” the article should not move to final. This 
 - Profile name, bio, caption lead, and visual text should align around one intent theme.
 - Batch testing with fixed windows is essential for reliable improvement.
 - Authority growth comes from topic clusters, governance, and repeatable decision rules.
+- Long-term wins come from disciplined review cadence, not isolated tactical spikes.
 
 ## Final Implementation Checklist
 - Define one primary query and support terms for each post.
