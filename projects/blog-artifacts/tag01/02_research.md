@@ -1,3 +1,4 @@
+<!-- RUN_BUILD_ID: TAG-01-20260308-160905-REFRESH | FILE: 02_research.md | UTC: 2026-03-08T16:09:05Z -->
 # Agent 1 — Research Synthesizer
 
 ## Purpose

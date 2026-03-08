@@ -1,3 +1,4 @@
+<!-- RUN_BUILD_ID: TAG-01-20260308-160905-REFRESH | FILE: 04_draft.md | UTC: 2026-03-08T16:09:05Z -->
 # Agent 3 — Longform Writer (Section Writer)
 
 ## Purpose

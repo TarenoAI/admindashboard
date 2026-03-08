@@ -1,3 +1,4 @@
+<!-- RUN_BUILD_ID: TAG-01-20260308-160905-REFRESH | FILE: FINAL.md | UTC: 2026-03-08T16:09:05Z -->
 # FINAL.md Contract - Tareno Blog Pipeline
 
 ## Die Rolle von FINAL.md im Tareno-Blog-System

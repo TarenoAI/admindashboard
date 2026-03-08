@@ -5827,49 +5827,56 @@
           "status": "done",
           "doc": "projects/blog-artifacts/tag02/02_research_bio-link-optimization-the-first-step-in-the-seo-.md",
           "language": "en",
-          "updatedBy": "tarenoblog"
+          "updatedBy": "sam",
+          "updatedAt": "2026-03-08T16:09:11Z"
         },
         "structure": {
           "status": "done",
           "doc": "projects/blog-artifacts/tag02/02_structure_bio-link-optimization-the-first-step-in-the-seo-.md",
           "language": "en",
-          "updatedBy": "tarenoblog"
+          "updatedBy": "sam",
+          "updatedAt": "2026-03-08T16:09:11Z"
         },
         "drafting": {
           "status": "done",
           "doc": "projects/blog-artifacts/tag02/02_draft_bio-link-optimization-the-first-step-in-the-seo-.md",
           "language": "en",
-          "updatedBy": "tarenoblog"
+          "updatedBy": "sam",
+          "updatedAt": "2026-03-08T16:09:11Z"
         },
         "feature_inserts": {
           "status": "done",
           "doc": "projects/blog-artifacts/tag02/02_feature_inserts_bio-link-optimization-the-first-step-in-the-seo-.md",
           "language": "en",
-          "updatedBy": "tarenoblog"
+          "updatedBy": "sam",
+          "updatedAt": "2026-03-08T16:09:11Z"
         },
         "editing": {
           "status": "done",
           "doc": "projects/blog-artifacts/tag02/02_edited_bio-link-optimization-the-first-step-in-the-seo-.md",
           "language": "en",
-          "updatedBy": "tarenoblog"
+          "updatedBy": "sam",
+          "updatedAt": "2026-03-08T16:09:11Z"
         },
         "geo_polish": {
           "status": "done",
           "doc": "projects/blog-artifacts/tag02/02_geo_polish_bio-link-optimization-the-first-step-in-the-seo-.md",
           "language": "en",
-          "updatedBy": "tarenoblog"
+          "updatedBy": "sam",
+          "updatedAt": "2026-03-08T16:09:11Z"
         },
         "final": {
           "status": "done",
           "doc": "projects/blog-artifacts/tag02/02_final_bio-link-optimization-the-first-step-in-the-seo-.md",
           "language": "en",
-          "updatedBy": "tarenoblog"
+          "updatedBy": "sam",
+          "updatedAt": "2026-03-08T16:09:11Z"
         },
         "multimedia_enrichment": {
           "status": "review",
           "doc": "projects/blog-artifacts/tag01/08_asset_plan.md",
-          "updatedBy": "tarenoblog",
-          "updatedAt": "2026-02-27T10:43:55.657Z"
+          "updatedBy": "sam",
+          "updatedAt": "2026-03-08T16:09:11Z"
         }
       },
       "id": "TAG-01",
@@ -5883,7 +5890,8 @@
         "notebookId": "d62ced7a-b851-462d-aaa5-6efcd5250395",
         "artifactId": "31f3c2cf-955b-4d86-ab2c-50571c33e4a3",
         "taskId": "31f3c2cf-955b-4d86-ab2c-50571c33e4a3"
-      }
+      },
+      "lastUpdated": "2026-03-08T16:09:11Z"
     },
     {
       "day": "Tag 1 (Post 2)",
