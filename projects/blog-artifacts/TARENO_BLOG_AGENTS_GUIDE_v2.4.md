@@ -619,4 +619,60 @@ Sam must never construct a new draft by appending retry outputs onto an existing
 
 ---
 
-**Version:** 2.4 | **Last Updated:** 2026-02-26 | **Focus:** GEO Optimization + Anti-Loop + Final Integrity Gates
+## 🧱 Mandatory Failure Ledger + Restart Protocol (ALL AGENTS)
+
+This protocol is mandatory for Agent 0 through Agent 8.
+If any gate fails, the run is not only rejected — the reason must be recorded and used in the immediate retry.
+
+### 1) Failure Ledger (mandatory write on every fail)
+On every fail, Sam must write/update:
+- `projects/blog-artifacts/PIPELINE_FAILURE_LEDGER.md`
+
+Each fail entry must include:
+- timestamp (UTC)
+- rowId (e.g. TAG-17)
+- stepId / agentId
+- fail_gate_id (e.g. `REPETITION_LOOP`, `FAQ_DUPLICATE`, `TOPIC_DRIFT`, `PLACEHOLDER_LEAK`)
+- fail_reason (1-3 precise bullets)
+- evidence (line snippets or pattern summary)
+- retry_instructions (clear, actionable)
+- attempt_number
+- status: `open` | `resolved`
+
+### 2) Retry Input Contract (mandatory)
+Before restarting a failed step, Sam must pass a "Failure Context" block to the responsible agent:
+- last_fail_gate_id
+- last_fail_reason
+- do_not_repeat list
+- required_fixes list
+
+If "Failure Context" is missing -> retry is invalid.
+
+### 3) Gate ownership by agent (mandatory)
+- Agent 1 (Research): source freshness/coverage gates
+- Agent 2 (Outline): mandatory block + link-placeholder completeness
+- Agent 3 (Writer): repetition, topic depth, FAQ uniqueness, first-300 factuality
+- Agent 4 (Feature Inserts): product insert contract gates
+- Agent 5 (Editor): claim/source/volatile rewrite + dedupe verification
+- Agent 6 (Entity/GEO): snippet safety + no internal meta leakage
+- Agent 7 (Publisher): publish safety + artifact completeness
+- Agent 8 (Multimedia): no claim rewrite + asset relevance + safe mapping
+- Sam (Assembler/Gate Layer): pre-editor + pre-final hard gates and deterministic rebuild
+
+### 4) Hard fail behavior (mandatory)
+If any hard gate fails:
+- do NOT write/update FINAL.md
+- do NOT mark pipeline step as done
+- write ledger entry first
+- route only to the responsible upstream step
+- restart from clean step output (no append retry)
+
+### 5) Closure rule
+A failed gate is considered resolved only when:
+- corresponding gate check passes in the new artifact
+- the prior ledger entry is marked `resolved`
+- retry references that resolved entry ID
+
+---
+
+**Version:** 2.5 | **Last Updated:** 2026-03-08 | **Focus:** GEO Optimization + Anti-Loop + Final Integrity + Failure-Ledger Restart Control
