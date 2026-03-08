@@ -831,6 +831,85 @@ function resolvePublishConfig(projectData, body = {}) {
     };
 }
 
+const BLOG_DIRECT_UPLOAD_THRESHOLD_BYTES = (() => {
+    const mb = Number(process.env.BLOG_DIRECT_UPLOAD_THRESHOLD_MB || '4');
+    if (!Number.isFinite(mb) || mb <= 0) return 4 * 1024 * 1024;
+    return Math.max(1, Math.floor(mb)) * 1024 * 1024;
+})();
+
+function inferMimeType(fileName, fallback = 'application/octet-stream') {
+    const ext = String(path.extname(String(fileName || '')).toLowerCase());
+    const table = {
+        '.mp3': 'audio/mpeg',
+        '.m4a': 'audio/mp4',
+        '.wav': 'audio/wav',
+        '.ogg': 'audio/ogg',
+        '.aac': 'audio/aac',
+        '.flac': 'audio/flac',
+        '.png': 'image/png',
+        '.jpg': 'image/jpeg',
+        '.jpeg': 'image/jpeg',
+        '.webp': 'image/webp',
+        '.gif': 'image/gif',
+        '.md': 'text/markdown; charset=utf-8',
+        '.txt': 'text/plain; charset=utf-8'
+    };
+    return table[ext] || fallback;
+}
+
+function formatBytesLabel(bytes) {
+    if (!Number.isFinite(bytes) || bytes < 0) return '0 B';
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+async function uploadFileDirectToBlogStorage(publishCfg, absPath, fileName, kind = 'audio') {
+    const contentType = inferMimeType(fileName, kind === 'audio' ? 'audio/mpeg' : 'application/octet-stream');
+
+    const signResp = await fetch(`${publishCfg.apiBase}/api/blog/upload/sign`, {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${publishCfg.apiSecret}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            fileName: fileName || path.basename(absPath),
+            contentType,
+            kind
+        })
+    });
+
+    const signRaw = await signResp.text();
+    const signParsed = tryParseJson(signRaw);
+    if (!signResp.ok) {
+        throw new Error(`Direct upload sign failed (${signResp.status}): ${(signParsed && signParsed.error) || signRaw || signResp.statusText}`);
+    }
+
+    const signedUrl = signParsed?.signedUrl;
+    const publicUrl = signParsed?.publicUrl;
+    if (!signedUrl || !publicUrl) {
+        throw new Error('Direct upload sign response missing signedUrl/publicUrl');
+    }
+
+    const binary = fs.readFileSync(absPath);
+    const uploadResp = await fetch(signedUrl, {
+        method: 'PUT',
+        headers: { 'content-type': contentType },
+        body: binary
+    });
+    if (!uploadResp.ok) {
+        const uploadRaw = await uploadResp.text();
+        throw new Error(`Direct upload failed (${uploadResp.status}): ${uploadRaw || uploadResp.statusText}`);
+    }
+
+    return {
+        publicUrl,
+        bytes: binary.length,
+        contentType
+    };
+}
+
 function renderTemplate(template, vars = {}) {
     const source = String(template || '');
     return source.replace(/\{\{\s*([a-zA-Z0-9_]+)\s*\}\}/g, (_, key) => {
@@ -1409,9 +1488,21 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
             }
 
             const patchForm = new FormData();
-            const audioBuffer = fs.readFileSync(blogAudio.absPath);
-            patchForm.append('audioFile', new Blob([audioBuffer], { type: 'audio/mpeg' }), blogAudio.fileName || 'blog-audio.mp3');
-            patchForm.append('audioPath', blogAudio.relPath);
+            const audioStats = fs.statSync(blogAudio.absPath);
+            if (audioStats.size > BLOG_DIRECT_UPLOAD_THRESHOLD_BYTES) {
+                const uploadedAudio = await uploadFileDirectToBlogStorage(
+                    publishCfg,
+                    blogAudio.absPath,
+                    blogAudio.fileName || 'blog-audio.mp3',
+                    'audio'
+                );
+                patchForm.append('audioUrl', uploadedAudio.publicUrl);
+                patchForm.append('audioPath', blogAudio.relPath);
+            } else {
+                const audioBuffer = fs.readFileSync(blogAudio.absPath);
+                patchForm.append('audioFile', new Blob([audioBuffer], { type: 'audio/mpeg' }), blogAudio.fileName || 'blog-audio.mp3');
+                patchForm.append('audioPath', blogAudio.relPath);
+            }
 
             const patchResp = await fetch(patchUrl.toString(), {
                 method: 'PATCH',
@@ -1485,9 +1576,21 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
         form.append('assetPlanContent', assetPlanMarkdown);
         form.append('assetPlanPath', multimediaDoc.relPath);
         if (blogAudio) {
-            const audioBuffer = fs.readFileSync(blogAudio.absPath);
-            form.append('audioFile', new Blob([audioBuffer], { type: 'audio/mpeg' }), blogAudio.fileName || 'blog-audio.mp3');
-            form.append('audioPath', blogAudio.relPath);
+            const audioStats = fs.statSync(blogAudio.absPath);
+            if (audioStats.size > BLOG_DIRECT_UPLOAD_THRESHOLD_BYTES) {
+                const uploadedAudio = await uploadFileDirectToBlogStorage(
+                    publishCfg,
+                    blogAudio.absPath,
+                    blogAudio.fileName || 'blog-audio.mp3',
+                    'audio'
+                );
+                form.append('audioUrl', uploadedAudio.publicUrl);
+                form.append('audioPath', blogAudio.relPath);
+            } else {
+                const audioBuffer = fs.readFileSync(blogAudio.absPath);
+                form.append('audioFile', new Blob([audioBuffer], { type: 'audio/mpeg' }), blogAudio.fileName || 'blog-audio.mp3');
+                form.append('audioPath', blogAudio.relPath);
+            }
         }
         form.append('title', title);
         form.append('slug', slug);
