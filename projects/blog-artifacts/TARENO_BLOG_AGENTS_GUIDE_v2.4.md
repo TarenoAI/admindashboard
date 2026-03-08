@@ -603,6 +603,23 @@ If failed:
 - Route to **Sam only** for final cleanup/template merge correction
 - Do not route to Agent 3 unless content-level gates also fail
 
+**🆕 Reject Gate 5: Final Contract Block Gate (Pre-Final, MANDATORY)**
+Preconditions for FINAL.md:
+- FINAL.md must contain YAML frontmatter with:
+  - `title`
+  - `slug`
+  - `language`
+  - `status`
+  - `author`
+  - `last_updated`
+- FINAL.md must contain a `TL;DR` block (3-5 bullets) before `Quick Definition`
+- FINAL.md must contain a `Key Takeaways` block (3-6 bullets) near the end
+
+If any contract block is missing:
+- FAIL immediately
+- Route to responsible content step (Writer/Editor)
+- Sam must not perform content-authoring rescue
+
 **🆕 Hard Rule: No Append Retry on Failed Section**
 If a section generation fails or is retried, the section file must be regenerated from scratch.
 Never append to a partially failed section file.
@@ -674,6 +691,7 @@ If "Failure Context" is missing -> retry is invalid.
   - else -> Agent 3
 - `INTERNAL_META_LEAK_IN_PUBLISH` -> Sam (Final Cleanup), not Agent 6
 - `PLACEHOLDER_ARTIFACT_GATE` -> Sam (Final Cleanup)
+- `FINAL_CONTRACT_BLOCK_MISSING` -> Agent 5 (default) or Agent 3 if the source issue is section-level generation
 - `OUTLINE_MISSING_BLOCK` -> Agent 2
 - `OUTLINE_MISSING_LINK_PLACEHOLDER` -> Agent 2
 - `UNSOURCED_VOLATILE_CLAIM` -> Agent 5
