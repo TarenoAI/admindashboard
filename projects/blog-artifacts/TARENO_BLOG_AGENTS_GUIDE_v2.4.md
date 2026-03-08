@@ -709,7 +709,43 @@ If any hard gate fails:
 - route only to the responsible upstream step
 - restart from clean step output (no append retry)
 
-### 5) Closure rule
+### 5) Auto-Remediation Loop (Mandatory)
+If any mandatory gate fails, Sam must automatically attempt remediation without user prompting.
+
+**Loop limits (hard):**
+- Max remediation cycles per article: 3
+- Max retries per failing step: 2
+- If still failing after limits: stop and output FAIL report
+
+**Routing (mandatory):**
+- `WORDCOUNT_UNDER_TARGET` -> Agent 3 regenerate missing depth (rewrite sections; no append)
+- `REPETITION_LOOP` -> Agent 3 regenerate affected sections
+- `OUTLINE_CONTRACT_MISSING` -> Agent 2 regenerate outline
+- `PRODUCT_INSERT_CONTRACT_FAIL` -> Agent 4 regenerate inserts
+- `META_LEAK` / `PLACEHOLDER_LEAK` / `ARTIFACT_LEAKAGE` -> Sam cleanup pass (no content writing)
+- `UNSOURCED_VOLATILE_CLAIM` -> Agent 5 rewrite
+
+**Retry method (hard):**
+- No append-retry drift: regenerate section files from scratch, then rebuild draft deterministically
+- For wordcount under-target: expand ONLY with new information layers:
+  - examples
+  - edge cases
+  - trade-offs
+  - decision rules
+  - scenarios
+- Never expand by rephrasing the same claim
+
+**Backoff (hard):**
+- If retry hits 429/timeout: backoff 30s -> 60s -> 120s, then retry
+- After 2 consecutive failures: switch provider/model if available
+
+### 6) Stop condition (hard)
+If max remediation cycles are exhausted and gates still fail, Sam must stop and output one FAIL report containing:
+- failed gate(s)
+- last attempted remediation
+- exact next step required
+
+### 7) Closure rule
 A failed gate is considered resolved only when:
 - corresponding gate check passes in the new artifact
 - the prior ledger entry is marked `resolved`

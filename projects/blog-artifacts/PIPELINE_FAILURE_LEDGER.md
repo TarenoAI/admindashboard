@@ -23,6 +23,10 @@ Sam may route and enforce only; no content rescue for Writer/Outline failures.
   - 
 - routed_to_agent:
 - routing_basis: (matrix rule + conditional decision, if any)
+- remediation_cycle: (1..3)
+- step_retry_count: (0..2)
+- backoff_applied_seconds:
+- model_switch_applied: yes|no
 - do_not_repeat:
   - 
 - required_fixes:
