@@ -6,10 +6,10 @@
 - Slug: instagram-seo-keywords-statt-hashtags
 - Language: en
 - Focus keyword: instagram seo keywords vs hashtags
-- Secondary keywords: instagram search signals, profile keyword optimization, caption intent, hashtag layering strategy
-- Cluster/Topic: Content Repurposing & Organic Discovery Systems
+- Secondary keywords: instagram search signals, profile name keywords, caption intent matching, hashtag layering
+- Cluster/Topic: Organic Discovery & Content Repurposing
 - Search intent: Informational + Advanced Implementation
-- Audience: creators, social media managers, growth leads, lean marketing teams
+- Audience: creators, social media managers, growth leads, small marketing teams
 - Article type: authority
 - Word target: 2800 (tolerance 2550-3050)
 
@@ -20,71 +20,92 @@
 ## C) Agent Execution Plan (Mandatory)
 
 ### Step 01 — Agent 0a -> 01_kb_pack.md
-- Input files: TAG-18 plan row, strategy docs, gate policy
-- Scope constraints: context pack only; no drafting
-- Hard stop conditions: missing keyword scope, missing audience or outcome definition
+- Input files: TAG-18 plan row, strategy docs, gate/routing policy
+- Scope constraints: compile context + constraints only
+- Hard stop conditions: missing keyword scope, missing audience, unclear article promise
 
 ### Step 02 — Agent 1 -> 02_research.md
 - Input files: 01_kb_pack.md
-- Scope constraints: source-backed research on Instagram search behavior, keyword placement, hashtag role, and measurement
-- Hard stop conditions: weak source reliability, missing topic anchors, no practical test hypotheses
+- Scope constraints: source-backed Instagram SEO research with explicit reliability notes
+- Hard stop conditions: weak/unsourced claims, missing anchor terms, no measurable hypotheses
 
 ### Step 03 — Agent 2 -> 03_outline.md
 - Input files: 01_kb_pack.md, 02_research.md
-- Scope constraints: full mandatory GEO blocks + authority depth plan + topic-anchor mapping per H2
-- Hard stop conditions: missing mandatory blocks/placeholders, abstract outline, no comparison/workflow block
+- Scope constraints: mandatory GEO blocks + authority section plan + topic-anchor map per H2
+- Hard stop conditions: missing mandatory blocks, missing source placeholders, abstract outline without Instagram-specific mechanics
 
 ### Step 04 — Agent 3 -> 04_sections/section_XX.md
 - Input files: 03_outline.md
-- Scope constraints: first 300 words factual, authority depth, concrete Instagram-specific mechanisms, no append retries
-- Hard stop conditions: repetition loops, FAQ duplication, topic drift, missing mini-examples, under-target without new information layers
+- Scope constraints: first 300 words factual; authority depth per section; no append retries
+- Hard stop conditions: repetition loop, FAQ duplication, topic drift, missing mini-example, missing trade-off/edge-case/decision rule
 
 ### Step 05 — Agent 4 -> 05_product_inserts.md
 - Input files: 04_sections/*
 - Scope constraints: product insert contract only
-- Hard stop conditions: insert count/term/length violations
+- Hard stop conditions: insert count/length/term violations
 
 ### Step 06 — Agent 5 -> 06_edited.md
 - Input files: 04_sections/*, 05_product_inserts.md
-- Scope constraints: source/claim validation, volatile claim rewrite, dedupe pass, final-contract precheck
-- Hard stop conditions: unsourced volatile claims, unresolved placeholders, duplicated blocks
+- Scope constraints: claim/source checks, volatile claim rewrite, dedupe, final-contract precheck
+- Hard stop conditions: unresolved sources, unsourced volatile statements, duplicate blocks, meta leakage in publish body
 
 ### Step 07 — Agent 6 -> 07_geo_polish.md
 - Input files: 06_edited.md
-- Scope constraints: patch-only GEO polish; no body rescue
-- Hard stop conditions: internal meta leak, snippet volatility violations
+- Scope constraints: additive GEO patch only; no structural rewrite
+- Hard stop conditions: internal meta headings, volatile snippet content, content rescue behavior
 
 ### Step 08 — Sam merge -> FINAL.md
 - Input files: 06_edited.md, 07_geo_polish.md, 05_product_inserts.md
-- Scope constraints: deterministic merge + reject-gate validation
-- Hard stop conditions: any reject-gate fail, final-contract block missing, placeholder/artifact leak
+- Scope constraints: deterministic merge + full gate execution + routing only
+- Hard stop conditions: any reject gate fail; Sam must not content-author
 
 ### Step 09 — Agent 7 -> 08_asset_plan.md (optional)
 - Input files: FINAL.md
 - Scope constraints: internal asset mapping only
-- Hard stop conditions: decorative-only mapping, policy/sensitivity issues
+- Hard stop conditions: decorative-only plan, policy/safety issues
 
 ## D) Artifact Contract (Mandatory)
-- 01_kb_pack.md: authority context + constraints + anchor inventory
-- 02_research.md: evidence base + source notes + reliability framing
-- 03_outline.md: mandatory structure + anchor map + section word targets
-- 04_sections/*: authority section drafts with mechanism + mini-example per section
-- 05_product_inserts.md: contract-compliant inserts
-- 06_edited.md: publish-ready edited article
+- 01_kb_pack.md: context package + constraints
+- 02_research.md: source-backed findings + anchor inventory
+- 03_outline.md: mandatory architecture + section targets + anchor map
+- 04_sections/*: authority sections with mechanism + mini-example
+- 05_product_inserts.md: validated insert blocks
+- 06_edited.md: publish-ready edited body
 - 07_geo_polish.md: additive GEO patch only
-- FINAL.md: merged final artifact
-- 08_asset_plan.md (optional): internal visual/audio plan
+- FINAL.md: single merged final artifact
+- 08_asset_plan.md (optional): internal visual/audio map
 
 ## E) Integrity Gates (Mandatory)
-- Repetition Gate: sentence >2x or paragraph >1x -> FAIL
-- FAQ Uniqueness Gate: duplicate/generic FAQ answers or missing unique detail -> FAIL
-- Topic Specificity Gate: per H2 at least 2-3 topic anchors + 1 mini-example -> FAIL
-- Placeholder/Artifact Gate: unresolved placeholders or internal process headings in FINAL -> FAIL
-- Final Contract Block Gate: missing YAML frontmatter / TL;DR / Key Takeaways -> FAIL
-- Outline Contract Gate: missing mandatory blocks/placeholders -> FAIL
-- Product Insert Contract Gate: insert rule breach -> FAIL
-- Authority Structure Gate: each core section includes counterargument + trade-off + edge case + scenario + misconception
-- Wordcount Target Gate: authority target 2800 (2550-3050); under target -> regenerate via examples/edge cases/trade-offs/decision rules (never repetition)
+1. Repetition Gate
+- sentence appears >2x OR paragraph appears >1x -> FAIL
+
+2. FAQ Uniqueness Gate
+- duplicate/near-duplicate FAQ answers OR missing unique detail -> FAIL
+
+3. Topic Specificity Gate
+- each H2 must include >=2 topic anchors + >=1 mini-example -> FAIL
+
+4. Placeholder/Artifact Gate
+- unresolved placeholders OR internal process headings in FINAL -> FAIL
+
+5. Final Contract Block Gate
+- YAML frontmatter missing required keys (`title`, `slug`, `language`, `status`, `author`, `last_updated`) -> FAIL
+- TL;DR (3-5 bullets) missing before Quick Definition -> FAIL
+- Key Takeaways (3-6 bullets) missing near end -> FAIL
+
+6. Outline Contract Gate
+- missing required blocks/placeholders -> FAIL
+
+7. Product Insert Contract Gate
+- rule mismatch -> FAIL
+
+8. Authority Structure Gate
+- each core section must include: counterargument + trade-off + edge case + concrete scenario + decision rule
+
+9. Wordcount Target Gate
+- authority target 2800 (2550-3050)
+- under target -> regenerate with new information layers only (examples, edge cases, trade-offs, decision rules)
+- repetition/template padding forbidden
 
 ## F) Failure Routing Matrix (Mandatory)
 - REPETITION_GATE -> Agent 3
@@ -96,13 +117,13 @@
 - OUTLINE_MISSING_LINK_PLACEHOLDER -> Agent 2
 - PRODUCT_INSERT_CONTRACT_FAIL -> Agent 4
 - UNSOURCED_VOLATILE_CLAIM -> Agent 5
-- FINAL_CONTRACT_BLOCK_MISSING -> Agent 5 (default) or Agent 3 if section-level root cause
-- INTERNAL_META_LEAK_IN_PUBLISH -> Sam (Final Cleanup)
-- PLACEHOLDER_ARTIFACT_GATE -> Sam (Final Cleanup)
+- FINAL_CONTRACT_BLOCK_MISSING -> Agent 5 (or Agent 3 if section-generation root cause)
+- INTERNAL_META_LEAK_IN_PUBLISH -> Sam (Final Cleanup only)
+- PLACEHOLDER_ARTIFACT_GATE -> Sam (Final Cleanup only)
 
 Hard rule:
-- Sam may route, validate, merge, and insert.
-- Sam must not do content-authoring rescue for Writer/Outline failures.
+- Sam routes, validates, merges, inserts.
+- Sam does not author/repair content for Writer/Editor failures.
 
 ## G) Admin Dashboard Insertion Map (Mandatory)
 - Content insertion target:
@@ -110,25 +131,30 @@ Hard rule:
   - record: instagram-seo-keywords-statt-hashtags
   - field: content_markdown
   - input: FINAL.md
+
 - Metadata fields:
   - title: Instagram SEO in Practice: Why Keywords Usually Outperform Hashtag-Only Strategies
   - slug: instagram-seo-keywords-statt-hashtags
   - author: Sam / Tareno
   - last_updated: <UTC runtime timestamp>
   - language: en
+
 - Audio attachment (if present):
   - field: audio_url
   - source: blog-audio.mp3
+
 - Cover image:
   - field: cover_image
   - source: hero asset from 08_asset_plan.md (or manual upload)
+
 - Asset plan storage (internal):
   - field: internal_notes or attachments/private
   - source: 08_asset_plan.md
 
 ## Acceptance Checklist
-- [x] Full run possible with only this brief
+- [x] Run can execute end-to-end with only this brief
 - [x] No context loss
-- [x] Deterministic insertion points defined
-- [x] Gates + routing binding
+- [x] Deterministic dashboard insertion points
+- [x] Binding gates + routing
 - [x] Sam orchestration-only
+- [x] Authority wordcount target explicitly enforced
