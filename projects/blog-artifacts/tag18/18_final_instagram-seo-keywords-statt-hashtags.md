@@ -371,6 +371,50 @@ Likely cause: content is informative but not actionable.
 
 Fix: add checklist format and explicit implementation steps.
 
+## Advanced Governance Metrics for Authority Teams
+To keep Instagram SEO quality stable over time, teams should track governance metrics in addition to content metrics.
+
+### Governance KPIs
+- percentage of posts with complete keyword placement map
+- percentage of posts passing readability review without major edits
+- percentage of posts with clear intent tag before publication
+- percentage of weekly decisions documented with threshold rationale
+
+These KPIs do not replace reach metrics, but they reveal process health. A team with weak governance often gets volatile outcomes even when individual posts seem strong.
+
+## Quarterly Optimization Framework
+Authority growth is usually won in quarterly cycles, not week-by-week reactions.
+
+### Quarter planning structure
+1. Retain high-performing query clusters.
+2. Sunset underperforming topic lanes.
+3. Introduce one experimental sub-cluster.
+4. Update keyword maps and caption templates.
+5. Recalibrate hashtag layering by niche behavior.
+
+### Why quarterly framing helps
+Short windows are good for tactical fixes. Quarterly windows are better for strategic recalibration and avoiding endless tactical churn.
+
+**Scenario:**
+If educational checklist posts consistently outperform motivational opinion posts in non-follower discovery and profile action quality, the next quarter should allocate more production capacity to checklist and comparison cluster formats.
+
+## Risk Control: Preventing Over-Optimization
+A mature Instagram SEO workflow includes explicit brakes against over-optimization.
+
+### Red flags
+- captions start sounding interchangeable
+- creators lose brand voice in pursuit of keyword density
+- every post uses the same hashtag stack regardless of topic
+- decision logs only track reach, not intent quality
+
+### Control actions
+- rotate opening structures by intent class
+- enforce natural-language edit pass before publish
+- require one unique supporting term per post
+- include “do-not-use” rules for each cluster
+
+These controls protect both discoverability and brand credibility.
+
 ## Key Takeaways
 - Keywords generally outperform hashtag-only tactics because they live in stronger semantic fields.
 - Hashtags still matter as secondary context signals when used strategically.
