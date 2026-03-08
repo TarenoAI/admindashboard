@@ -6,12 +6,12 @@
 - Slug: tiktok-algorithmus-leaked-docs
 - Language: en
 - Focus keyword: tiktok algorithm leaked docs
-- Secondary keywords: tiktok watch time signals, completion rate, rewatch triggers, tiktok growth workflow
+- Secondary keywords: tiktok ranking signals, watch time distribution, completion and rewatch, content testing workflow
 - Cluster/Topic: Social Media Automation & Platform Mechanics
-- Search intent: Informational + Practical Implementation
-- Audience: founders, social media managers, creator teams, lean content teams
-- Article type: standard
-- Word target: 2500-3000
+- Search intent: Informational + Strategic + Implementation
+- Audience: founders, content leads, social media managers, creator teams
+- Article type: authority
+- Word target: 2800 (tolerance 2550-3050)
 
 ## B) Mode Lock (Mandatory)
 - MODE=CHUNKED_WRITING
@@ -20,69 +20,70 @@
 ## C) Agent Execution Plan (Mandatory)
 
 ### Step 01 — Agent 0a -> 01_kb_pack.md
-- Input files: content plan row TAG-16, existing Tareno strategy docs, prior gate rules
-- Scope constraints: only compile context and constraints; no drafting
-- Hard stop conditions: missing tag metadata; missing topic scope
+- Input files: TAG-16 row context, strategy docs, current gate/routing rules
+- Scope constraints: compile authoritative context only; no drafting
+- Hard stop conditions: missing keyword scope, unclear article promise, missing audience definition
 
 ### Step 02 — Agent 1 -> 02_research.md
 - Input files: 01_kb_pack.md
-- Scope constraints: current, relevant sources; platform-specific findings; no generic filler
-- Hard stop conditions: missing source links, weak evidence coverage, missing core topic entities
+- Scope constraints: source-first research with platform-native references and recent evidence
+- Hard stop conditions: weak source quality, missing leaked-docs framing, no testable hypotheses
 
 ### Step 03 — Agent 2 -> 03_outline.md
 - Input files: 01_kb_pack.md, 02_research.md
-- Scope constraints: include all mandatory GEO blocks + topic anchor map + section word targets
-- Hard stop conditions: missing mandatory blocks; missing link placeholders; abstract outline without anchor terms
+- Scope constraints: mandatory GEO blocks + authority depth map + topic-anchor map per H2
+- Hard stop conditions: missing mandatory blocks, missing link placeholders, abstract sections without TikTok-specific anchors
 
 ### Step 04 — Agent 3 -> 04_sections/section_XX.md
 - Input files: 03_outline.md
-- Scope constraints: factual first 300 words; section-by-section writing; no append retries
-- Hard stop conditions: repetition loop, FAQ duplication, low topic specificity, missing mini-examples
+- Scope constraints: first 300 words factual; authority depth; each core section must include counterargument, trade-off, edge case, concrete scenario, misconception fix
+- Hard stop conditions: repetition loops, FAQ template duplication, topic drift, missing mini-examples, under-target without new information layers
 
 ### Step 05 — Agent 4 -> 05_product_inserts.md
 - Input files: 04_sections/*
-- Scope constraints: strict product insert contract only
-- Hard stop conditions: insert count/term/length violations
+- Scope constraints: product insert contract only
+- Hard stop conditions: insert rule violations (count/term/length/feature mapping)
 
 ### Step 06 — Agent 5 -> 06_edited.md
 - Input files: 04_sections/*, 05_product_inserts.md
-- Scope constraints: claim/source validation, volatile claim rewrite, final dedupe pass
-- Hard stop conditions: unsourced volatile claims; unresolved source requirements; duplicate blocks
+- Scope constraints: claim/source validation, volatile claim rewrite, final dedupe
+- Hard stop conditions: unsourced volatile claims, unresolved source placeholders, duplicate blocks
 
 ### Step 07 — Agent 6 -> 07_geo_polish.md
 - Input files: 06_edited.md
-- Scope constraints: patch-only GEO/linkability polish; no structural rewrite
-- Hard stop conditions: internal meta leakage; snippet volatility violations
+- Scope constraints: patch-only GEO polish; no structural rescue
+- Hard stop conditions: internal-meta leak, snippet volatility violations
 
 ### Step 08 — Sam merge -> FINAL.md
 - Input files: 06_edited.md, 07_geo_polish.md, 05_product_inserts.md
-- Scope constraints: deterministic merge only; run all reject gates; no content rescue writing
-- Hard stop conditions: any reject gate fail, placeholder/artifact leak, duplicate body merge
+- Scope constraints: deterministic merge + full reject-gate validation
+- Hard stop conditions: any gate fail, placeholder/artifact leak, duplicate body merge
 
 ### Step 09 — Agent 7 -> 08_asset_plan.md (optional)
 - Input files: FINAL.md
-- Scope constraints: visual mapping only; no claim/content changes
-- Hard stop conditions: decorative-only assets; policy/sensitivity risks
+- Scope constraints: internal asset mapping only; no claim changes
+- Hard stop conditions: decorative-only asset plan, policy/sensitivity issues
 
 ## D) Artifact Contract (Mandatory)
-- 01_kb_pack.md: consolidated context, constraints, quality targets
-- 02_research.md: evidence base with source list and topic entities
-- 03_outline.md: mandatory block-complete architecture + anchor map
-- 04_sections/*: section drafts generated from outline intent
-- 05_product_inserts.md: contract-compliant product insert blocks
-- 06_edited.md: publish-ready core body after validation
+- 01_kb_pack.md: authority context package + constraints + anchor inventory
+- 02_research.md: evidence base + source list + leaked-docs reliability framing
+- 03_outline.md: mandatory structure + section word targets + anchor map
+- 04_sections/*: section-wise authority draft files
+- 05_product_inserts.md: validated product insert blocks
+- 06_edited.md: publish-ready edited body
 - 07_geo_polish.md: additive GEO patch only
-- FINAL.md: merged final publish artifact
-- 08_asset_plan.md (optional): internal visual/audio mapping plan
+- FINAL.md: single merged final artifact
+- 08_asset_plan.md (optional): internal visual/audio plan
 
 ## E) Integrity Gates (Mandatory)
 - Repetition Gate: sentence >2x or paragraph >1x -> FAIL
-- FAQ Uniqueness Gate: identical/near-identical FAQ answers or missing unique detail -> FAIL
-- Topic Specificity Gate: per H2 at least 2-3 topic anchors + 1 mini-example -> FAIL
-- Placeholder/Artifact Gate: unresolved placeholders or internal process headings in FINAL -> FAIL
+- FAQ Uniqueness Gate: duplicate or generic FAQ answers -> FAIL
+- Topic Specificity Gate: each H2 has at least 2-3 topic anchors + 1 mini-example -> FAIL
+- Placeholder/Artifact Gate: unresolved placeholders/meta headings in FINAL -> FAIL
 - Outline Contract Gate: missing mandatory blocks/placeholders -> FAIL
-- Product Insert Contract Gate: insert contract violation -> FAIL
-- Wordcount integrity rule: wordcount must never be reached via repetition/filler loops; underfill must be expanded with edge case, trade-off, scenario, decision rule
+- Product Insert Contract Gate: insert rule breach -> FAIL
+- Authority Structure Gate: each core section must include counterargument + trade-off + edge case + scenario + misconception -> FAIL
+- Wordcount Target Gate: authority target 2800 (2550-3050). Under target -> regenerate with new layers (examples, edge cases, trade-offs, decision rules), never repetition
 
 ## F) Failure Routing Matrix (Mandatory)
 - REPETITION_GATE -> Agent 3
@@ -124,8 +125,8 @@ Hard rule:
   - source: 08_asset_plan.md
 
 ## Acceptance Checklist
-- [x] Start-to-finish run possible with only this brief
-- [x] No context loss
-- [x] Deterministic insertion points
-- [x] Gates + routing enforce quality
+- [x] Full run is possible using only this brief
+- [x] No context loss between runs
+- [x] Deterministic insertion points are defined
+- [x] Gates + routing are binding
 - [x] Sam is orchestration-only

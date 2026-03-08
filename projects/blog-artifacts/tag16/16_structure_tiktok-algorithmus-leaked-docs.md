@@ -1,88 +1,43 @@
-<!-- RUN_BUILD_ID: TAG-16-20260308-155831-LATEST | FILE: 16_structure_tiktok-algorithmus-leaked-docs.md | UTC: 2026-03-08T15:58:31Z -->
-# 16_structure_tiktok-algorithmus-leaked-docs
+# TAG-16 Outline — TikTok Algorithm in 2026
 
-H1: TikTok Algorithm in 2026: What “Leaked Docs” Actually Mean for Predictable Growth
+## Quick Definition
+Two-sentence neutral definition of TikTok recommendation system + role of leaked docs as hypothesis inputs.
 
-Framework: CORE Loop
-Mode: standard
-Target words: 1,700–2,300
+## Named Framework
+CORE-Loop (Clarity, Opening, Retention Design, Evaluation Loop).
 
-## Mandatory Blocks
-1. Quick Definition
-2. Framework with named components
-3. When to use / when not to use
-4. Comparison table/checklist
-5. Step-by-step workflow
-6. FAQ (5+)
-7. Free tools quick links
+## When to Use / When Not to Use
+Decision block with explicit boundaries.
+
+## Comparison Element
+Checklist: leak-driven superstition vs leak-driven testing discipline.
+
+## Step-by-Step Workflow
+5-step controlled experiment protocol.
 
 ## H2 Plan
-- Why this topic matters now
-- Core mechanics explained
-- Framework in practice
-- When to use / when not to use
-- Step-by-step implementation
-- Mistakes and diagnostics
-- Tools and evaluation criteria
-- FAQ
-- Final checklist
+1. Why leaked docs matter without becoming dogma
+2. What is stable vs what is volatile
+3. CORE-Loop framework in practice
+4. Distribution waves and signal stack
+5. Test protocol and decision thresholds
+6. Failure patterns and fixes
+7. Tool stack and workflow fit
+8. FAQ
+9. Key takeaways + implementation checklist
 
-## Section Word Targets
-- Intro + definition: 220
-- Mechanics: 300
-- Framework: 280
-- Decision boundaries: 220
-- Workflow: 320
-- Mistakes/diagnostics: 220
-- Tools: 170
-- FAQ + close: 280
+## Section Word Targets (Authority)
+- Intro + definition + TL;DR: 320
+- Core mechanics and framework: 650
+- Distribution and testing: 750
+- Errors, tools, FAQ, conclusion: 1080
+- Total target: 2800 (2550–3050)
 
-## Topic Anchors (must appear across sections)
-- watch time distribution
-- completion rate
-- rewatch trigger
-- hook clarity
-- comment intent
-- save behavior
-- share velocity
-- audience fit
+## Topic Anchor Map
+Each H2 must contain at least 2–3 anchors and one mini-example.
 
-## FAQ Questions
-- Are leaked TikTok documents still useful in 2026?
-- What matters more: completion rate or comments?
-- Can small accounts still grow without paid reach?
-- How often should a brand publish?
-- Should we copy trending formats exactly?
-
-## Validation Gates
-- Any sentence repeated 3x+ => FAIL
-- Any duplicate FAQ answer => FAIL
-- Any section missing topic anchor terms => FAIL
-
-## Outline Rationale
-This structure forces concrete platform depth and prevents generic systems prose. Each section has a distinct function and must add new information.
-Note 1: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 2: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 3: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 4: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 5: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 6: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 7: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 8: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 9: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 10: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 11: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 12: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 13: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 14: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 15: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 16: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 17: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 18: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 19: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 20: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 21: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 22: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 23: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 24: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
-Note 25: Keep section transitions explicit so readers can scan quickly without losing argument continuity.
+## Mandatory Links
+- TikTok Creative Center [SOURCE: https://ads.tiktok.com/business/creativecenter]
+- CapCut [SOURCE: https://www.capcut.com]
+- Notion [SOURCE: https://www.notion.so]
+- Google Sheets [SOURCE: https://workspace.google.com/products/sheets/]
