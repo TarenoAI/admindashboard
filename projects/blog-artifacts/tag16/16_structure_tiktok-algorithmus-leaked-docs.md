@@ -1,3 +1,4 @@
+<!-- RUN_BUILD_ID: TAG-16-20260308-155831-LATEST | FILE: 16_structure_tiktok-algorithmus-leaked-docs.md | UTC: 2026-03-08T15:58:31Z -->
 # 16_structure_tiktok-algorithmus-leaked-docs
 
 H1: TikTok Algorithm in 2026: What “Leaked Docs” Actually Mean for Predictable Growth

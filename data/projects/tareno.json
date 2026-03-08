@@ -7074,7 +7074,7 @@
           "status": "done",
           "doc": "projects/blog-artifacts/tag16/16_research_tiktok-algorithmus-leaked-docs.md",
           "language": "en",
-          "updatedAt": "2026-03-08T10:59:13Z",
+          "updatedAt": "2026-03-08T15:58:37Z",
           "updatedBy": "sam",
           "wordCount": 1741
         },
@@ -7082,7 +7082,7 @@
           "status": "done",
           "doc": "projects/blog-artifacts/tag16/16_structure_tiktok-algorithmus-leaked-docs.md",
           "language": "en",
-          "updatedAt": "2026-03-08T10:59:13Z",
+          "updatedAt": "2026-03-08T15:58:37Z",
           "updatedBy": "sam",
           "wordCount": 591
         },
@@ -7090,7 +7090,7 @@
           "status": "done",
           "doc": "projects/blog-artifacts/tag16/16_draft_tiktok-algorithmus-leaked-docs.md",
           "language": "en",
-          "updatedAt": "2026-03-08T10:59:13Z",
+          "updatedAt": "2026-03-08T15:58:37Z",
           "updatedBy": "sam",
           "wordCount": 1717
         },
@@ -7098,7 +7098,7 @@
           "status": "done",
           "doc": "projects/blog-artifacts/tag16/16_feature_inserts_tiktok-algorithmus-leaked-docs.md",
           "language": "en",
-          "updatedAt": "2026-03-08T10:59:13Z",
+          "updatedAt": "2026-03-08T15:58:37Z",
           "updatedBy": "sam",
           "wordCount": 1749
         },
@@ -7106,7 +7106,7 @@
           "status": "done",
           "doc": "projects/blog-artifacts/tag16/16_edited_tiktok-algorithmus-leaked-docs.md",
           "language": "en",
-          "updatedAt": "2026-03-08T10:59:13Z",
+          "updatedAt": "2026-03-08T15:58:37Z",
           "updatedBy": "sam",
           "wordCount": 1729
         },
@@ -7114,7 +7114,7 @@
           "status": "done",
           "doc": "projects/blog-artifacts/tag16/16_geo_polish_tiktok-algorithmus-leaked-docs.md",
           "language": "en",
-          "updatedAt": "2026-03-08T10:59:13Z",
+          "updatedAt": "2026-03-08T15:58:37Z",
           "updatedBy": "sam",
           "wordCount": 1729
         },
@@ -7122,7 +7122,7 @@
           "status": "done",
           "doc": "projects/blog-artifacts/tag16/16_final_tiktok-algorithmus-leaked-docs.md",
           "language": "en",
-          "updatedAt": "2026-03-08T10:59:13Z",
+          "updatedAt": "2026-03-08T15:58:37Z",
           "updatedBy": "sam",
           "wordCount": 1752
         },
@@ -7130,14 +7130,15 @@
           "status": "done",
           "doc": "projects/blog-artifacts/tag16/08_asset_plan.md",
           "language": "en",
-          "updatedAt": "2026-03-08T10:59:13Z",
+          "updatedAt": "2026-03-08T15:58:37Z",
           "updatedBy": "sam",
           "wordCount": 13
         }
       },
       "id": "TAG-16",
       "status": "done",
-      "language": "en"
+      "language": "en",
+      "lastUpdated": "2026-03-08T15:58:37Z"
     },
     {
       "day": "Tag 9 (Post 1)",
