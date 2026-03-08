@@ -1,6 +1,8 @@
 # PIPELINE_FAILURE_LEDGER
 
 Track every hard-fail before retrying. No retry without a ledger entry.
+Routing is binding and must follow the matrix in `TARENO_BLOG_AGENTS_GUIDE_v2.4.md`.
+Sam may route and enforce only; no content rescue for Writer/Outline failures.
 
 ## Entry Template
 
@@ -19,6 +21,8 @@ Track every hard-fail before retrying. No retry without a ledger entry.
 - retry_instructions:
   - 
   - 
+- routed_to_agent:
+- routing_basis: (matrix rule + conditional decision, if any)
 - do_not_repeat:
   - 
 - required_fixes:

@@ -662,10 +662,27 @@ If "Failure Context" is missing -> retry is invalid.
 - Agent 3 (Writer): repetition, topic depth, FAQ uniqueness, first-300 factuality
 - Agent 4 (Feature Inserts): product insert contract gates
 - Agent 5 (Editor): claim/source/volatile rewrite + dedupe verification
-- Agent 6 (Entity/GEO): snippet safety + no internal meta leakage
+- Agent 6 (Entity/GEO): snippet safety only (no rescue of body-quality failures)
 - Agent 7 (Publisher): publish safety + artifact completeness
 - Agent 8 (Multimedia): no claim rewrite + asset relevance + safe mapping
-- Sam (Assembler/Gate Layer): pre-editor + pre-final hard gates and deterministic rebuild
+- Sam (Assembler/Gate Layer): pre-editor + pre-final hard gates, deterministic rebuild, and routing
+
+### 3a) Mandatory Reject Routing Matrix (binding)
+- `REPETITION_GATE` -> Agent 3
+- `FAQ_UNIQUENESS_GATE` -> Agent 3
+- `TOPIC_DRIFT` -> conditional:
+  - if outline has no topic-anchor map / anchor terms are missing -> Agent 2
+  - else -> Agent 3
+- `INTERNAL_META_LEAK_IN_PUBLISH` -> Sam (Final Cleanup), not Agent 6
+- `PLACEHOLDER_ARTIFACT_GATE` -> Sam (Final Cleanup)
+- `OUTLINE_MISSING_BLOCK` -> Agent 2
+- `OUTLINE_MISSING_LINK_PLACEHOLDER` -> Agent 2
+- `UNSOURCED_VOLATILE_CLAIM` -> Agent 5
+- `PRODUCT_INSERT_CONTRACT_FAIL` -> Agent 4
+
+Hard rule:
+- Sam may route, block, and enforce gates.
+- Sam must not do content-authoring rescue for Writer/Outline failures.
 
 ### 4) Hard fail behavior (mandatory)
 If any hard gate fails:
