@@ -7,16 +7,16 @@
 - [x] Review memory files and update MEMORY.md if needed
 
 ## Status
-- Last Check: 2026-02-27 11:10 UTC
-- VPS Space: 21GB Free (Good) ✅
-- Xvfb: Active ✅
+- Last Check: 2026-03-05 01:09 UTC ✅
+- VPS Space: 17GB Free (Good) ✅
+- Xvfb: Active (1 process) ✅
 - Cron: Executable ✅
-- Instafollows: Monitor läuft ✅
-- Instagram Scraper: Browser context errors (nur X/Twitter sollte jetzt funktionieren) ⚠️
-- X/Twitter: ✅ Session WIEDERHERGESTELLT (Cookie-Login erfolgreich)
-- Tareno: Active. Sam (Blog Agent) läuft alle 6h. ✅
-- Media Handling: Working. ✅
-- PM2: admin-dashboard & backend online ✅
+- Instafollows: Monitor NOT RUNNING ⚠️ (not in PM2 list)
+- Instagram Scraper: Status unknown ⚠️
+- X/Twitter: Needs verification
+- Tareno: Needs verification
+- Media Handling: Needs verification
+- PM2: admin-dashboard online ✅
 
 ## Letzte Aktionen
-- 2026-02-27 00:55 UTC: Heartbeat check completed successfully
+- 2026-03-05 01:09 UTC: Heartbeat check — memory/2026-03-05.md created

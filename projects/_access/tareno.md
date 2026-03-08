@@ -2,7 +2,7 @@
 
 - Project ID: tareno
 - Permission: read
-- Last Sync: 2026-02-27T10:21:04.303Z
+- Last Sync: 2026-03-04T22:28:52.390Z
 
 ## Summary
 SaaS-Marketing & Blog-Operations für tareno.co mit Fokus auf planbare Content-Pipeline.
@@ -876,3 +876,6 @@ SaaS-Marketing & Blog-Operations für tareno.co mit Fokus auf planbare Content-P
 - TAG-02 NotebookLM Audio: media/notebooklm-audio/tareno/tag-02-community-management-how-to-turn-trolls-into-loyal-fans-notebooklm.mp3 (mp3)
 - Knowledge: 2026-02-27T08-01-12-AUTO_COMPETITOR_BATCH_001.md: projects/_knowledge/tareno/2026-02-27T08-01-12-AUTO_COMPETITOR_BATCH_001.md (md)
 - Knowledge: 2026-02-27T08-01-12-AUTO_INDEX_SYNC_NOTE.md: projects/_knowledge/tareno/2026-02-27T08-01-12-AUTO_INDEX_SYNC_NOTE.md (md)
+- TAG-15 NotebookLM Audio: media/notebooklm-audio/tareno/tag-15-7-tools-fur-bessere-instagram-stories-die-nicht-instagram-sind-notebooklm.mp3 (mp3)
+- TAG-09 NotebookLM Audio: media/notebooklm-audio/tareno/tag-09-the-practical-social-media-tech-stack-for-lean-teams-notebooklm.mp3 (mp3)
+- TAG-10 NotebookLM Audio: media/notebooklm-audio/tareno/tag-10-content-recycling-2-0-turn-one-blog-post-into-20-social-assets-notebooklm.mp3 (mp3)

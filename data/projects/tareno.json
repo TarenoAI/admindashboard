@@ -1,9 +1,9 @@
 {
   "name": "Tareno",
-  "summary": "SaaS-Marketing & Blog-Operations für tareno.co mit Fokus auf planbare Content-Pipeline.",
+  "summary": "📊 Dashboard: Indexiert 2.725 | Volltext 1.541 | Final 2/30 | Veröffentlicht 0/30",
   "status": "on_track",
   "priority": "high",
-  "lastUpdate": "2026-02-27",
+  "lastUpdate": "2026-03-06",
   "agents": [
     {
       "id": "tarenoblog",
@@ -197,12 +197,12 @@
     }
   ],
   "blogPipeline": {
-    "totalBlogs": 10,
-    "completed": 6,
-    "inProgress": 4,
-    "planned": 0,
-    "currentFocus": "TAG-01",
-    "currentStage": "Final Review",
+    "totalBlogs": 30,
+    "completed": 2,
+    "inProgress": 3,
+    "planned": 25,
+    "currentFocus": "TAG-03",
+    "currentStage": "Production",
     "blogs": [
       {
         "id": "TAG-01",
@@ -264,56 +264,58 @@
         "id": "TAG-08",
         "title": "UGC (User Generated Content): Der heilige Gral für Trust?",
         "status": "in_progress",
-        "progress": 50,
-        "stepsCompleted": 0,
+        "progress": 79,
+        "stepsCompleted": 4,
         "stepsTotal": 7
       },
       {
         "id": "TAG-09",
         "title": "Der perfekte Social Media Tech Stack 2026 (unter 100€)",
         "status": "in_progress",
-        "progress": 50,
-        "stepsCompleted": 0,
+        "progress": 79,
+        "stepsCompleted": 4,
         "stepsTotal": 7
       },
       {
         "id": "TAG-10",
         "title": "Content Recycling 2.0: Wie du einen Blogpost in 20 Social Assets verwandelst",
         "status": "in_progress",
-        "progress": 50,
-        "stepsCompleted": 0,
+        "progress": 79,
+        "stepsCompleted": 4,
         "stepsTotal": 7
       }
     ]
   },
   "milestones": [
     {
-      "title": "Content-System strukturieren",
-      "due": "2026-02-23",
+      "title": "Konkurrenz-Index > 850 erreicht",
+      "due": "2026-03-05",
       "status": "done",
-      "note": "Subagent-Pipeline etabliert"
+      "note": "2.725 indexierte Artikel-URLs"
     },
     {
-      "title": "TAG-01 fertigstellen",
-      "due": "2026-02-23",
+      "title": "Volltext-Korpus für Agent 0/1",
+      "due": "2026-03-05",
       "status": "done",
-      "note": "Alle 6 Subagent-Schritte abgeschlossen"
+      "note": "1.541 Artikel als .md gespeichert"
+    },
+    {
+      "title": "TAG-01 bis TAG-02 finalisiert",
+      "due": "2026-03-05",
+      "status": "in_progress",
+      "note": "2 fertige Blogs (Final-Datei vorhanden)"
     },
     {
       "title": "TAG-01 veröffentlichen",
-      "due": "2026-02-24",
-      "status": "in_progress",
-      "note": "Ready for final review"
+      "due": "2026-03-06",
+      "status": "planned",
+      "note": "Publish-Slot setzen und freigeben"
     },
     {
-      "title": "TAG-02-03 in Produktion",
-      "due": "2026-02-25",
-      "status": "planned"
-    },
-    {
-      "title": "Erste 7 Tage Content vorausgeplant",
-      "due": "2026-02-25",
-      "status": "planned"
+      "title": "30-Tage-Plan skalieren",
+      "due": "2026-03-12",
+      "status": "planned",
+      "note": "Weitere 8 Final-Blogs in Produktion"
     }
   ],
   "tasks": [
@@ -385,6 +387,12 @@
     }
   ],
   "dataRefs": [
+    {
+      "label": "Tareno Dashboard",
+      "path": "/root/.openclaw/workspace-blog/TARENO_DASHBOARD.md",
+      "type": "md",
+      "category": "Dashboard"
+    },
     {
       "label": "REDAKTIONSPLAN_30_TAGE_SUBAGENTS",
       "path": "projects/_knowledge/tareno/2026-02-23T00-44-16-446Z-REDAKTIONSPLAN_30_TAGE_SUBAGENTS.md",
@@ -5542,9 +5550,248 @@
       "path": "projects/_knowledge/tareno/2026-02-27T08-01-12-AUTO_INDEX_SYNC_NOTE.md",
       "type": "md",
       "category": "Wissensbank"
+    },
+    {
+      "label": "TAG-15 NotebookLM Audio",
+      "path": "media/notebooklm-audio/tareno/tag-15-7-tools-fur-bessere-instagram-stories-die-nicht-instagram-sind-notebooklm.mp3",
+      "type": "mp3",
+      "category": "Audio TAG-15",
+      "addedAt": "2026-03-04T21:28:56.202Z"
+    },
+    {
+      "label": "TAG-09 NotebookLM Audio",
+      "path": "media/notebooklm-audio/tareno/tag-09-the-practical-social-media-tech-stack-for-lean-teams-notebooklm.mp3",
+      "type": "mp3",
+      "category": "Audio TAG-09",
+      "addedAt": "2026-03-04T22:19:03.946Z"
+    },
+    {
+      "label": "TAG-10 NotebookLM Audio",
+      "path": "media/notebooklm-audio/tareno/tag-10-content-recycling-2-0-turn-one-blog-post-into-20-social-assets-notebooklm.mp3",
+      "type": "mp3",
+      "category": "Audio TAG-10",
+      "addedAt": "2026-03-04T22:28:52.382Z"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T08-01-54-AUTO_INDEX_SYNC_NOTE.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T08-01-54-AUTO_INDEX_SYNC_NOTE.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-33-15-AUTO_COMPETITOR_BATCH_001.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-33-15-AUTO_COMPETITOR_BATCH_001.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-33-15-AUTO_INDEX_SYNC_NOTE.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-33-15-AUTO_INDEX_SYNC_NOTE.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_001.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_001.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_002.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_002.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_003.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_003.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_004.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_004.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_005.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_005.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_006.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_006.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_007.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_007.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_008.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_008.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_009.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_009.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_010.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_010.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_011.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_011.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_012.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_012.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_013.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_013.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_014.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_014.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_015.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_015.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_016.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_016.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_017.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_017.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_018.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_018.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_019.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_019.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_020.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_020.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_021.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_021.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_022.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_022.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_023.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_023.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_024.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_024.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_025.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_025.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_026.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_026.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_027.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_COMPETITOR_BATCH_027.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-05T13-41-12-AUTO_INDEX_SYNC_NOTE.md",
+      "path": "projects/_knowledge/tareno/2026-03-05T13-41-12-AUTO_INDEX_SYNC_NOTE.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-06T08-00-57-AUTO_COMPETITOR_BATCH_001.md",
+      "path": "projects/_knowledge/tareno/2026-03-06T08-00-57-AUTO_COMPETITOR_BATCH_001.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-06T08-00-57-AUTO_INDEX_SYNC_NOTE.md",
+      "path": "projects/_knowledge/tareno/2026-03-06T08-00-57-AUTO_INDEX_SYNC_NOTE.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-07T08-01-34-AUTO_COMPETITOR_BATCH_001.md",
+      "path": "projects/_knowledge/tareno/2026-03-07T08-01-34-AUTO_COMPETITOR_BATCH_001.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-07T08-01-34-AUTO_INDEX_SYNC_NOTE.md",
+      "path": "projects/_knowledge/tareno/2026-03-07T08-01-34-AUTO_INDEX_SYNC_NOTE.md",
+      "type": "md",
+      "category": "Wissensbank"
+    },
+    {
+      "label": "Knowledge: 2026-03-08T08-02-33-AUTO_INDEX_SYNC_NOTE.md",
+      "path": "projects/_knowledge/tareno/2026-03-08T08-02-33-AUTO_INDEX_SYNC_NOTE.md",
+      "type": "md",
+      "category": "Wissensbank"
     }
   ],
-  "notes": "Sam liefert operative Updates; Luna validiert Struktur und Qualität. TAG-01 alle 6 Schritte abgeschlossen, bereit für Luna's Final Review.",
+  "notes": [
+    "## 📊 Tareno KPI Dashboard\n\n| KPI | Ist | Ziel | Status |\n|---|---:|---:|---|\n| Konkurrenz indexiert | **2.725** | 850+ | 🟢 |\n| Konkurrenz Volltext (`.md`) | **1.541** | 1.000+ | 🟢 |\n| Fertige Blogs (Final) | **2** | 30 | 🟡 |\n| Veröffentlichte Blogs | **0** | 30 | 🔴 |\n\n**Pipeline:** Final 2 · In Produktion 3 · Geplant 25 · Fokus TAG-03\n"
+  ],
   "lastStatusUpdate": {
     "timestamp": "2026-02-23T10:55:00Z",
     "agent": "tarenoblog",
@@ -6151,12 +6398,12 @@
           "wordCount": 55
         },
         "drafting": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag08/08_draft_ugc-strategy-trust-engine-or-overhyped-tactic.md",
-          "updatedAt": "2026-02-25T15:06:34.801Z",
+          "updatedAt": "2026-03-04T22:07:29.614Z",
           "updatedBy": "tarenoblog",
           "language": "en",
-          "wordCount": 4970
+          "wordCount": 1610
         },
         "feature_inserts": {
           "status": "review",
@@ -6167,28 +6414,28 @@
           "wordCount": 191
         },
         "editing": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag08/08_edited_ugc-strategy-trust-engine-or-overhyped-tactic.md",
-          "updatedAt": "2026-02-25T15:06:34.855Z",
+          "updatedAt": "2026-03-04T22:07:29.631Z",
           "updatedBy": "tarenoblog",
           "language": "en",
-          "wordCount": 4970
+          "wordCount": 1610
         },
         "geo_polish": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag08/08_geo_polish_ugc-strategy-trust-engine-or-overhyped-tactic.md",
-          "updatedAt": "2026-02-25T15:06:34.878Z",
+          "updatedAt": "2026-03-04T22:07:29.645Z",
           "updatedBy": "tarenoblog",
           "language": "en",
-          "wordCount": 67
+          "wordCount": 1610
         },
         "final": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag08/08_final_ugc-strategy-trust-engine-or-overhyped-tactic.md",
-          "updatedAt": "2026-02-25T15:06:35.030Z",
+          "updatedAt": "2026-03-04T22:07:29.669Z",
           "updatedBy": "tarenoblog",
           "language": "en",
-          "wordCount": 4970
+          "wordCount": 1610
         },
         "multimedia_enrichment": {
           "status": "review",
@@ -6227,12 +6474,12 @@
           "wordCount": 57
         },
         "drafting": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag09/09_draft_the-practical-social-media-tech-stack-for-lean-t.md",
-          "updatedAt": "2026-02-25T15:09:06.727Z",
+          "updatedAt": "2026-03-04T22:07:29.692Z",
           "updatedBy": "tarenoblog",
           "language": "en",
-          "wordCount": 4977
+          "wordCount": 1508
         },
         "feature_inserts": {
           "status": "review",
@@ -6243,28 +6490,28 @@
           "wordCount": 200
         },
         "editing": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag09/09_edited_the-practical-social-media-tech-stack-for-lean-t.md",
-          "updatedAt": "2026-02-25T15:09:06.769Z",
+          "updatedAt": "2026-03-04T22:07:29.705Z",
           "updatedBy": "tarenoblog",
           "language": "en",
-          "wordCount": 4977
+          "wordCount": 1508
         },
         "geo_polish": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag09/09_geo_polish_the-practical-social-media-tech-stack-for-lean-t.md",
-          "updatedAt": "2026-02-25T15:09:06.785Z",
+          "updatedAt": "2026-03-04T22:07:29.722Z",
           "updatedBy": "tarenoblog",
           "language": "en",
-          "wordCount": 67
+          "wordCount": 1508
         },
         "final": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag09/09_final_the-practical-social-media-tech-stack-for-lean-t.md",
-          "updatedAt": "2026-02-25T15:09:06.808Z",
+          "updatedAt": "2026-03-04T22:07:29.740Z",
           "updatedBy": "tarenoblog",
           "language": "en",
-          "wordCount": 4977
+          "wordCount": 1508
         },
         "multimedia_enrichment": {
           "status": "review",
@@ -6274,7 +6521,32 @@
         }
       },
       "id": "TAG-09",
-      "topicEn": "The Practical Social Media Tech Stack for Lean Teams"
+      "topicEn": "The Practical Social Media Tech Stack for Lean Teams",
+      "notebooklm": {
+        "lastJobId": "1772662213737-tag-09",
+        "lastGeneratedAt": "2026-03-04T22:19:03.946Z",
+        "lastAudioRelPath": "media/notebooklm-audio/tareno/tag-09-the-practical-social-media-tech-stack-for-lean-teams-notebooklm.mp3",
+        "lastAudioAbsPath": "/root/.openclaw/workspace-tareno/media/notebooklm-audio/tareno/tag-09-the-practical-social-media-tech-stack-for-lean-teams-notebooklm.mp3",
+        "notebookTitle": "Tareno TAG-09 - The Practical Social Media Tech Stack for Lean Teams",
+        "notebookId": "9e789b44-5c9f-459c-bc7e-cc4b7848f65d",
+        "artifactId": "fca1876b-0824-4e65-af99-3ac2b17c0bbe",
+        "taskId": "fca1876b-0824-4e65-af99-3ac2b17c0bbe",
+        "history": [
+          {
+            "generatedAt": "2026-03-04T22:19:03.946Z",
+            "outputRelPath": "media/notebooklm-audio/tareno/tag-09-the-practical-social-media-tech-stack-for-lean-teams-notebooklm.mp3",
+            "outputAbsPath": "/root/.openclaw/workspace-tareno/media/notebooklm-audio/tareno/tag-09-the-practical-social-media-tech-stack-for-lean-teams-notebooklm.mp3",
+            "notebookTitle": "Tareno TAG-09 - The Practical Social Media Tech Stack for Lean Teams",
+            "notebookId": "9e789b44-5c9f-459c-bc7e-cc4b7848f65d",
+            "artifactId": "fca1876b-0824-4e65-af99-3ac2b17c0bbe",
+            "taskId": "fca1876b-0824-4e65-af99-3ac2b17c0bbe",
+            "language": "en",
+            "audioFormat": "DEEP_DIVE",
+            "audioLength": "DEFAULT",
+            "createNewVersion": false
+          }
+        ]
+      }
     },
     {
       "day": "Tag 5 (Post 2)",
@@ -6303,12 +6575,12 @@
           "wordCount": 59
         },
         "drafting": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag10/10_draft_content-recycling-2-0-turn-one-blog-post-into-20.md",
-          "updatedAt": "2026-02-25T15:09:06.870Z",
+          "updatedAt": "2026-03-04T22:07:29.754Z",
           "updatedBy": "tarenoblog",
           "language": "en",
-          "wordCount": 4979
+          "wordCount": 1562
         },
         "feature_inserts": {
           "status": "review",
@@ -6319,28 +6591,28 @@
           "wordCount": 209
         },
         "editing": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag10/10_edited_content-recycling-2-0-turn-one-blog-post-into-20.md",
-          "updatedAt": "2026-02-25T15:09:06.901Z",
+          "updatedAt": "2026-03-04T22:07:29.765Z",
           "updatedBy": "tarenoblog",
           "language": "en",
-          "wordCount": 4979
+          "wordCount": 1562
         },
         "geo_polish": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag10/10_geo_polish_content-recycling-2-0-turn-one-blog-post-into-20.md",
-          "updatedAt": "2026-02-25T15:09:06.916Z",
+          "updatedAt": "2026-03-04T22:07:29.777Z",
           "updatedBy": "tarenoblog",
           "language": "en",
-          "wordCount": 67
+          "wordCount": 1562
         },
         "final": {
-          "status": "review",
+          "status": "done",
           "doc": "projects/blog-artifacts/tag10/10_final_content-recycling-2-0-turn-one-blog-post-into-20.md",
-          "updatedAt": "2026-02-25T15:09:06.933Z",
+          "updatedAt": "2026-03-04T22:07:29.786Z",
           "updatedBy": "tarenoblog",
           "language": "en",
-          "wordCount": 4979
+          "wordCount": 1562
         },
         "multimedia_enrichment": {
           "status": "review",
@@ -6350,7 +6622,32 @@
         }
       },
       "id": "TAG-10",
-      "topicEn": "Content Recycling 2.0: Turn One Blog Post into 20 Social Assets"
+      "topicEn": "Content Recycling 2.0: Turn One Blog Post into 20 Social Assets",
+      "notebooklm": {
+        "lastJobId": "1772662769706-tag-10",
+        "lastGeneratedAt": "2026-03-04T22:28:52.382Z",
+        "lastAudioRelPath": "media/notebooklm-audio/tareno/tag-10-content-recycling-2-0-turn-one-blog-post-into-20-social-assets-notebooklm.mp3",
+        "lastAudioAbsPath": "/root/.openclaw/workspace-tareno/media/notebooklm-audio/tareno/tag-10-content-recycling-2-0-turn-one-blog-post-into-20-social-assets-notebooklm.mp3",
+        "notebookTitle": "Tareno TAG-10 - Content Recycling 2.0: Turn One Blog Post into 20 Social Assets",
+        "notebookId": "30cd507e-de75-4858-9bec-426a373e6710",
+        "artifactId": "8c2e014f-4a1a-4613-ac31-ad0aa85503a6",
+        "taskId": "8c2e014f-4a1a-4613-ac31-ad0aa85503a6",
+        "history": [
+          {
+            "generatedAt": "2026-03-04T22:28:52.382Z",
+            "outputRelPath": "media/notebooklm-audio/tareno/tag-10-content-recycling-2-0-turn-one-blog-post-into-20-social-assets-notebooklm.mp3",
+            "outputAbsPath": "/root/.openclaw/workspace-tareno/media/notebooklm-audio/tareno/tag-10-content-recycling-2-0-turn-one-blog-post-into-20-social-assets-notebooklm.mp3",
+            "notebookTitle": "Tareno TAG-10 - Content Recycling 2.0: Turn One Blog Post into 20 Social Assets",
+            "notebookId": "30cd507e-de75-4858-9bec-426a373e6710",
+            "artifactId": "8c2e014f-4a1a-4613-ac31-ad0aa85503a6",
+            "taskId": "8c2e014f-4a1a-4613-ac31-ad0aa85503a6",
+            "language": "en",
+            "audioFormat": "DEEP_DIVE",
+            "audioLength": "DEFAULT",
+            "createNewVersion": false
+          }
+        ]
+      }
     },
     {
       "day": "Tag 6 (Post 1)",
@@ -6363,32 +6660,68 @@
       "wordTarget": "2000",
       "steps": {
         "content_research": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag11/11_research_content-batching-for-solopreneurs-1-month-in-1-day.md",
+          "updatedAt": "2026-03-04T21:12:10.784Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 173
         },
         "structure": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag11/11_structure_content-batching-for-solopreneurs-1-month-in-1-day.md",
+          "updatedAt": "2026-03-04T21:12:10.799Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 180
         },
         "drafting": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag11/11_draft_content-batching-for-solopreneurs-1-month-in-1-day.md",
+          "updatedAt": "2026-03-04T21:12:10.816Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 933
         },
         "feature_inserts": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag11/11_feature_inserts_content-batching-for-solopreneurs-1-month-in-1-day.md",
+          "updatedAt": "2026-03-04T21:12:10.830Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 114
         },
         "editing": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag11/11_edited_content-batching-for-solopreneurs-1-month-in-1-day.md",
+          "updatedAt": "2026-03-04T21:12:10.843Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 1045
         },
         "geo_polish": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag11/11_geo_polish_content-batching-for-solopreneurs-1-month-in-1-day.md",
+          "updatedAt": "2026-03-04T21:12:10.858Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 1036
         },
         "final": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag11/11_final_content-batching-for-solopreneurs-1-month-in-1-day.md",
+          "updatedAt": "2026-03-04T21:12:10.871Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 933
+        },
+        "multimedia_enrichment": {
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag11/08_asset_plan.md",
+          "updatedAt": "2026-03-04T21:12:10.884Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 439
         }
       },
       "id": "TAG-11"
@@ -6404,32 +6737,68 @@
       "wordTarget": "3500",
       "steps": {
         "content_research": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag12/12_research_voice-search-social-media-optimization-for-spoken-queries.md",
+          "updatedAt": "2026-03-04T21:12:10.898Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 174
         },
         "structure": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag12/12_structure_voice-search-social-media-optimization-for-spoken-queries.md",
+          "updatedAt": "2026-03-04T21:12:10.915Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 184
         },
         "drafting": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag12/12_draft_voice-search-social-media-optimization-for-spoken-queries.md",
+          "updatedAt": "2026-03-04T21:12:10.925Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 1286
         },
         "feature_inserts": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag12/12_feature_inserts_voice-search-social-media-optimization-for-spoken-queries.md",
+          "updatedAt": "2026-03-04T21:12:10.938Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 114
         },
         "editing": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag12/12_edited_voice-search-social-media-optimization-for-spoken-queries.md",
+          "updatedAt": "2026-03-04T21:12:10.950Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 1393
         },
         "geo_polish": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag12/12_geo_polish_voice-search-social-media-optimization-for-spoken-queries.md",
+          "updatedAt": "2026-03-04T21:12:10.965Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 1390
         },
         "final": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag12/12_final_voice-search-social-media-optimization-for-spoken-queries.md",
+          "updatedAt": "2026-03-04T21:12:10.980Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 1286
+        },
+        "multimedia_enrichment": {
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag12/08_asset_plan.md",
+          "updatedAt": "2026-03-04T21:12:10.995Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 444
         }
       },
       "id": "TAG-12"
@@ -6445,32 +6814,68 @@
       "wordTarget": "2000",
       "steps": {
         "content_research": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag13/13_research_tiktok-to-reels-to-shorts-the-watermark-free-workflow.md",
+          "updatedAt": "2026-03-04T21:12:11.031Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 171
         },
         "structure": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag13/13_structure_tiktok-to-reels-to-shorts-the-watermark-free-workflow.md",
+          "updatedAt": "2026-03-04T21:12:11.043Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 218
         },
         "drafting": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag13/13_draft_tiktok-to-reels-to-shorts-the-watermark-free-workflow.md",
+          "updatedAt": "2026-03-04T21:12:11.055Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 2018
         },
         "feature_inserts": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag13/13_feature_inserts_tiktok-to-reels-to-shorts-the-watermark-free-workflow.md",
+          "updatedAt": "2026-03-04T21:12:11.071Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 114
         },
         "editing": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag13/13_edited_tiktok-to-reels-to-shorts-the-watermark-free-workflow.md",
+          "updatedAt": "2026-03-04T21:12:11.085Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 2140
         },
         "geo_polish": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag13/13_geo_polish_tiktok-to-reels-to-shorts-the-watermark-free-workflow.md",
+          "updatedAt": "2026-03-04T21:12:11.098Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 2119
         },
         "final": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag13/13_final_tiktok-to-reels-to-shorts-the-watermark-free-workflow.md",
+          "updatedAt": "2026-03-04T21:12:11.111Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 2018
+        },
+        "multimedia_enrichment": {
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag13/08_asset_plan.md",
+          "updatedAt": "2026-03-04T21:12:11.124Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 348
         }
       },
       "id": "TAG-13"
@@ -6486,32 +6891,68 @@
       "wordTarget": "3500",
       "steps": {
         "content_research": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag14/14_research_linkedin-algorithm-2026-what-actually-matters-now.md",
+          "updatedAt": "2026-03-04T21:12:11.137Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 170
         },
         "structure": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag14/14_structure_linkedin-algorithm-2026-what-actually-matters-now.md",
+          "updatedAt": "2026-03-04T21:12:11.148Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 227
         },
         "drafting": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag14/14_draft_linkedin-algorithm-2026-what-actually-matters-now.md",
+          "updatedAt": "2026-03-04T21:12:11.160Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 2020
         },
         "feature_inserts": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag14/14_feature_inserts_linkedin-algorithm-2026-what-actually-matters-now.md",
+          "updatedAt": "2026-03-04T21:12:11.175Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 114
         },
         "editing": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag14/14_edited_linkedin-algorithm-2026-what-actually-matters-now.md",
+          "updatedAt": "2026-03-04T21:12:11.185Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 2141
         },
         "geo_polish": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag14/14_geo_polish_linkedin-algorithm-2026-what-actually-matters-now.md",
+          "updatedAt": "2026-03-04T21:12:11.198Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 2120
         },
         "final": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag14/14_final_linkedin-algorithm-2026-what-actually-matters-now.md",
+          "updatedAt": "2026-03-04T21:12:11.208Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 2020
+        },
+        "multimedia_enrichment": {
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag14/08_asset_plan.md",
+          "updatedAt": "2026-03-04T21:12:11.220Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 309
         }
       },
       "id": "TAG-14"
@@ -6527,35 +6968,96 @@
       "wordTarget": "2000",
       "steps": {
         "content_research": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag15/15_research_7-tools-for-better-instagram-stories-not-built-by-instagram.md",
+          "updatedAt": "2026-03-04T21:51:22.385Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 175
         },
         "structure": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag15/15_structure_7-tools-for-better-instagram-stories-not-built-by-instagram.md",
+          "updatedAt": "2026-03-04T21:51:22.385Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 233
         },
         "drafting": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag15/15_draft_7-tools-for-better-instagram-stories-not-built-by-instagram.md",
+          "updatedAt": "2026-03-04T21:51:22.385Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 2000
         },
         "feature_inserts": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag15/15_feature_inserts_7-tools-for-better-instagram-stories-not-built-by-instagram.md",
+          "updatedAt": "2026-03-04T21:51:22.385Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 114
         },
         "editing": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag15/15_edited_7-tools-for-better-instagram-stories-not-built-by-instagram.md",
+          "updatedAt": "2026-03-04T21:51:22.385Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 2116
         },
         "geo_polish": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag15/15_geo_polish_7-tools-for-better-instagram-stories-not-built-by-instagram.md",
+          "updatedAt": "2026-03-04T21:51:22.385Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 2105
         },
         "final": {
-          "status": "pending",
-          "doc": null
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag15/15_final_7-tools-for-better-instagram-stories-not-built-by-instagram.md",
+          "updatedAt": "2026-03-04T21:51:22.385Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 2000
+        },
+        "multimedia_enrichment": {
+          "status": "done",
+          "doc": "projects/blog-artifacts/tag15/08_asset_plan.md",
+          "updatedAt": "2026-03-04T21:12:11.330Z",
+          "updatedBy": "tarenoblog",
+          "language": "en",
+          "wordCount": 436
         }
       },
-      "id": "TAG-15"
+      "id": "TAG-15",
+      "notebooklm": {
+        "lastJobId": "1772659289242-tag-15",
+        "lastGeneratedAt": "2026-03-04T21:28:56.202Z",
+        "lastAudioRelPath": "media/notebooklm-audio/tareno/tag-15-7-tools-fur-bessere-instagram-stories-die-nicht-instagram-sind-notebooklm.mp3",
+        "lastAudioAbsPath": "/root/.openclaw/workspace-tareno/media/notebooklm-audio/tareno/tag-15-7-tools-fur-bessere-instagram-stories-die-nicht-instagram-sind-notebooklm.mp3",
+        "notebookTitle": "Tareno TAG-15 - 7 Tools für bessere Instagram Stories (die nicht Instagram sind)",
+        "notebookId": "e14d3963-34dd-445a-987d-a1520afd7a2d",
+        "artifactId": "e7906e1d-6ca6-494a-aebc-dd9a931b6241",
+        "taskId": "e7906e1d-6ca6-494a-aebc-dd9a931b6241",
+        "history": [
+          {
+            "generatedAt": "2026-03-04T21:28:56.202Z",
+            "outputRelPath": "media/notebooklm-audio/tareno/tag-15-7-tools-fur-bessere-instagram-stories-die-nicht-instagram-sind-notebooklm.mp3",
+            "outputAbsPath": "/root/.openclaw/workspace-tareno/media/notebooklm-audio/tareno/tag-15-7-tools-fur-bessere-instagram-stories-die-nicht-instagram-sind-notebooklm.mp3",
+            "notebookTitle": "Tareno TAG-15 - 7 Tools für bessere Instagram Stories (die nicht Instagram sind)",
+            "notebookId": "e14d3963-34dd-445a-987d-a1520afd7a2d",
+            "artifactId": "e7906e1d-6ca6-494a-aebc-dd9a931b6241",
+            "taskId": "e7906e1d-6ca6-494a-aebc-dd9a931b6241",
+            "language": "en",
+            "audioFormat": "BRIEF",
+            "audioLength": "DEFAULT",
+            "createNewVersion": false
+          }
+        ]
+      }
     },
     {
       "day": "Tag 8 (Post 2)",
@@ -6592,6 +7094,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -6635,6 +7141,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-17"
@@ -6674,6 +7184,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -6717,6 +7231,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-19"
@@ -6756,6 +7274,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -6799,6 +7321,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-21"
@@ -6838,6 +7364,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -6881,6 +7411,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-23"
@@ -6920,6 +7454,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -6963,6 +7501,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-25"
@@ -7002,6 +7544,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -7045,6 +7591,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-27"
@@ -7084,6 +7634,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -7127,6 +7681,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-29"
@@ -7166,6 +7724,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -7209,6 +7771,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-31"
@@ -7248,6 +7814,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -7291,6 +7861,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-33"
@@ -7330,6 +7904,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -7373,6 +7951,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-35"
@@ -7412,6 +7994,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -7455,6 +8041,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-37"
@@ -7494,6 +8084,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -7537,6 +8131,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-39"
@@ -7576,6 +8174,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -7619,6 +8221,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-41"
@@ -7658,6 +8264,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -7701,6 +8311,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-43"
@@ -7740,6 +8354,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -7783,6 +8401,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-45"
@@ -7822,6 +8444,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -7865,6 +8491,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-47"
@@ -7904,6 +8534,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -7947,6 +8581,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-49"
@@ -7986,6 +8624,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -8029,6 +8671,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-51"
@@ -8068,6 +8714,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -8111,6 +8761,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-53"
@@ -8150,6 +8804,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -8193,6 +8851,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-55"
@@ -8232,6 +8894,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -8275,6 +8941,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-57"
@@ -8314,6 +8984,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -8357,6 +9031,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-59"
@@ -8396,6 +9074,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -8439,6 +9121,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-61"
@@ -8478,6 +9164,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -8521,6 +9211,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-63"
@@ -8560,6 +9254,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -8603,6 +9301,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-65"
@@ -8642,6 +9344,10 @@
           "doc": null
         },
         "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
           "status": "pending",
           "doc": null
         }
@@ -8685,6 +9391,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-67"
@@ -8726,6 +9436,10 @@
         "final": {
           "status": "pending",
           "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
         }
       },
       "id": "TAG-68"
@@ -8740,10 +9454,19 @@
       "outputDir": "media/notebooklm-audio/{{projectId}}",
       "fileNameTemplate": "{{rowId}}-{{slugTitle}}-notebooklm.mp3",
       "reuseNotebook": true,
+      "newVersionOnGenerate": false,
       "language": "en",
-      "audioFormat": "BRIEF",
-      "audioLength": "SHORT",
+      "audioFormat": "DEEP_DIVE",
+      "audioLength": "DEFAULT",
       "waitTimeoutSec": 900
     }
+  },
+  "kpiHeader": {
+    "asOf": "2026-03-05",
+    "competitorIndexed": 2725,
+    "competitorFulltextMd": 1541,
+    "finishedBlogs": 2,
+    "publishedBlogs": 0,
+    "planTotal": 30
   }
 }
