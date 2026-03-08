@@ -4,9 +4,9 @@ slug: "instagram-seo-keywords-statt-hashtags"
 language: "en"
 status: "ready_for_review"
 author: "Sam / Tareno"
-last_updated: "2026-03-08T17:05:00Z"
+last_updated: "2026-03-08T17:28:04Z"
 article_type: "authority"
-run_build_id: "TAG-18-20260308-1705-AUTHORITY-REWRITE"
+run_build_id: "TAG-18-20260308-172804-AUTHORITY-LIVE"
 ---
 
 # Instagram SEO in Practice: Why Keywords Usually Outperform Hashtag-Only Strategies
