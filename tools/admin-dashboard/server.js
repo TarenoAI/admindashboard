@@ -286,6 +286,7 @@ const PIPELINE_STEP_ALIASES = {
     features: 'feature_inserts',
     feature: 'feature_inserts',
     editing: 'editing',
+    edited: 'editing',
     edit: 'editing',
     redaktion: 'editing',
     geo_polish: 'geo_polish',
@@ -297,9 +298,13 @@ const PIPELINE_STEP_ALIASES = {
     review_final: 'final',
     multimedia_enrichment: 'multimedia_enrichment',
     multimedia: 'multimedia_enrichment',
+    multimedia_md: 'multimedia_enrichment',
     assets: 'multimedia_enrichment',
     asset: 'multimedia_enrichment',
     asset_plan: 'multimedia_enrichment',
+    assetplan: 'multimedia_enrichment',
+    '08_asset_plan': 'multimedia_enrichment',
+    '08_multimedia_enrichment': 'multimedia_enrichment',
     media_plan: 'multimedia_enrichment',
     visual_plan: 'multimedia_enrichment'
 };
@@ -710,7 +715,13 @@ function findPipelineRowIndex(contentPipeline, selector = {}) {
 
     const wantedId = String(selector.rowId || selector.id || selector.tag || '').trim().toLowerCase();
     if (wantedId) {
-        const byId = contentPipeline.findIndex((row, idx) => String(row?.id || pipelineRowId(idx)).toLowerCase() === wantedId);
+        const wantedIdCompact = wantedId.replace(/[^a-z0-9]/g, '');
+        const byId = contentPipeline.findIndex((row, idx) => {
+            const rowIdRaw = String(row?.id || pipelineRowId(idx)).toLowerCase();
+            if (rowIdRaw === wantedId) return true;
+            const rowIdCompact = rowIdRaw.replace(/[^a-z0-9]/g, '');
+            return rowIdCompact && rowIdCompact === wantedIdCompact;
+        });
         if (byId >= 0) return byId;
     }
 
