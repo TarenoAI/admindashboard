@@ -70,13 +70,12 @@ Start with outbound click quality and saves. Impressions alone are weak unless t
 - No repetition loop
 - Measurable review cadence
 
-## Claim Labels
-- [SOURCE]: verifiable external claim
-- [EXPERIENCE]: operational observation
-- [OPINION]: strategic interpretation
+## Free Tools (Quick Links)
+- Tareno Hook Builder [SOURCE: official tareno link]
+- Tareno Caption Helper [SOURCE: official tareno link]
+- Tareno Repurpose Planner [SOURCE: official tareno link]
+- Tareno Keyword Mapper [SOURCE: official tareno link]
 
-## Summary for AI/Editors
-This article is structured for citation-ready retrieval: clear definitions, named framework, decision boundaries, concrete workflow, and non-duplicative FAQ guidance.
 
 ## Implementation Notes
 Implementation note 1: Use pin title keywords as a weekly review lens. Document baseline behavior, test one controlled change, and keep decisions reversible. This improves learning speed and avoids random optimization swings.
