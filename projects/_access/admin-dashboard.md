@@ -19,7 +19,12 @@
 - `POST /api/projects/capability-check` mit `{projectId, agentId, action:"write"}`
 - `POST /api/projects/knowledge` mit `{projectId,title,content,kind,actorAgentId}`
 - `POST /api/projects/:projectId/pipeline/upload` mit `{actorAgentId, rowId|cpIndex, stepId, content|docPath, status?, language?, title?}`
+- `POST /api/projects/:projectId/pipeline/sync-artifacts` mit `{actorAgentId, fromTag?, toTag?, statusOnFound?}` (scannt `projects/blog-artifacts/tagXX/*` und setzt step docs + wordCount)
 - `GET /api/projects/:projectId/pipeline/:cpIndex/:stepId/doc` (liefert aufgelösten Dokumentpfad)
+
+## Hinweise für Tareno Blog Publish
+- `POST /api/projects/:projectId/pipeline/:cpIndex/publish-now` sendet `FINAL.md + optional NotebookLM Audio + 08_asset_plan.md`.
+- Bei `Slug exists` wird automatisch Upsert versucht über `PATCH /api/blog/admin/posts/:slug` (statt hart zu fehlschlagen).
 
 ## Wichtige Bereiche
 - Alle Agenten

@@ -331,6 +331,17 @@ const PIPELINE_STEP_DOC_FALLBACKS = {
     multimedia_enrichment: ['08_asset_plan.md', 'asset_plan.md', '08_multimedia_enrichment.md', 'multimedia_enrichment.md']
 };
 
+const PIPELINE_STEP_DISCOVERY_TOKENS = {
+    content_research: ['research', 'kb_pack'],
+    structure: ['structure', 'outline', 'seo'],
+    drafting: ['draft'],
+    feature_inserts: ['feature_inserts', 'product_inserts'],
+    editing: ['edited', 'editing', 'edit'],
+    geo_polish: ['geo_polish'],
+    final: ['final'],
+    multimedia_enrichment: ['asset_plan', 'multimedia_enrichment']
+};
+
 function normalizePipelineStepId(stepId) {
     const key = String(stepId || '').trim().toLowerCase().replace(/[\s-]+/g, '_');
     return PIPELINE_STEP_ALIASES[key] || null;
@@ -364,6 +375,90 @@ function getPipelineRowFolder(row, index) {
     const m = compact.match(/^tag(\d+)$/);
     if (m) return `tag${String(Number(m[1])).padStart(2, '0')}`;
     return compact || `tag${String(Number(index) + 1).padStart(2, '0')}`;
+}
+
+function normalizeFileStem(input) {
+    return String(input || '')
+        .toLowerCase()
+        .replace(/\.[a-z0-9]+$/i, '')
+        .replace(/[^a-z0-9]+/g, '_')
+        .replace(/^_+|_+$/g, '');
+}
+
+function findPipelineStepFileByConvention(folderRoot, rowIndex, stepId) {
+    if (!folderRoot || !fs.existsSync(folderRoot)) return null;
+    const normalizedStepId = normalizePipelineStepId(stepId);
+    if (!normalizedStepId) return null;
+
+    const tokens = (PIPELINE_STEP_DISCOVERY_TOKENS[normalizedStepId] || []).map(normalizeFileStem).filter(Boolean);
+    if (tokens.length === 0) return null;
+
+    const rowNo = String(Number(rowIndex) + 1);
+    const rowNoPad = rowNo.padStart(2, '0');
+
+    let entries = [];
+    try {
+        entries = fs.readdirSync(folderRoot, { withFileTypes: true });
+    } catch {
+        entries = [];
+    }
+
+    let best = null;
+    for (const entry of entries) {
+        if (!entry.isFile()) continue;
+        const ext = String(path.extname(entry.name || '')).toLowerCase();
+        if (ext !== '.md' && ext !== '.txt') continue;
+
+        const stem = normalizeFileStem(entry.name);
+        if (!stem) continue;
+
+        let tokenScore = -1;
+        for (let idx = 0; idx < tokens.length; idx += 1) {
+            const token = tokens[idx];
+            if (!token) continue;
+            const isExact = stem === token;
+            const isBoundary =
+                stem.startsWith(`${token}_`)
+                || stem.endsWith(`_${token}`)
+                || stem.includes(`_${token}_`);
+            const isLoose = stem.includes(token);
+            if (!isExact && !isBoundary && !isLoose) continue;
+
+            const base = isExact ? 65 : (isBoundary ? 55 : 30);
+            const priority = Math.max(0, (tokens.length - idx) * 2);
+            tokenScore = Math.max(tokenScore, base + priority);
+        }
+        if (tokenScore < 0) continue;
+
+        const hasRowPrefix =
+            stem.startsWith(`${rowNoPad}_`)
+            || stem.startsWith(`${rowNo}_`)
+            || stem.startsWith(`tag_${rowNoPad}_`)
+            || stem.startsWith(`tag_${rowNo}_`);
+        const hasRowInside =
+            stem.includes(`_${rowNoPad}_`)
+            || stem.includes(`_${rowNo}_`);
+
+        let score = tokenScore + (hasRowPrefix ? 80 : (hasRowInside ? 24 : 0));
+        if (normalizedStepId === 'multimedia_enrichment' && String(entry.name).toLowerCase() === '08_asset_plan.md') {
+            score += 60;
+        }
+
+        const abs = path.join(folderRoot, entry.name);
+        if (!isAllowedWorkspacePath(abs)) continue;
+        let mtimeMs = 0;
+        try {
+            mtimeMs = Number(fs.statSync(abs).mtimeMs || 0);
+        } catch {
+            mtimeMs = 0;
+        }
+
+        if (!best || score > best.score || (score === best.score && mtimeMs >= best.mtimeMs)) {
+            best = { absPath: abs, score, mtimeMs };
+        }
+    }
+
+    return best ? best.absPath : null;
 }
 
 function ensurePipelineShape(projectData) {
@@ -550,6 +645,11 @@ function resolvePipelineDocPath(projectData, cpIndex, stepId) {
         return { absPath: resolved, relPath: path.relative(WORKSPACE_ROOT, resolved) };
     }
 
+    const byConvention = findPipelineStepFileByConvention(folderRoot, rowIndex, normalizedStepId);
+    if (byConvention && isAllowedWorkspacePath(byConvention)) {
+        return { absPath: byConvention, relPath: path.relative(WORKSPACE_ROOT, byConvention) };
+    }
+
     if (docBase) {
         const byName = findFileByNameRecursive(path.join(WORKSPACE_ROOT, 'projects', 'blog-artifacts'), docBase);
         if (byName && isAllowedWorkspacePath(byName)) {
@@ -566,6 +666,22 @@ function readWordCountFromFile(absPath) {
         return text.trim() ? text.trim().split(/\s+/).length : 0;
     } catch {
         return null;
+    }
+}
+
+function hydratePipelineDocsAndWordCounts(projectData) {
+    if (!projectData || !Array.isArray(projectData.contentPipeline)) return;
+    for (let cpIndex = 0; cpIndex < projectData.contentPipeline.length; cpIndex += 1) {
+        const cp = projectData.contentPipeline[cpIndex];
+        for (const stepId of PIPELINE_STEP_IDS) {
+            const step = cp?.steps?.[stepId];
+            if (!step || typeof step !== 'object') continue;
+            const resolved = resolvePipelineDocPath(projectData, cpIndex, stepId);
+            if (!resolved) continue;
+            step.doc = resolved.relPath;
+            const wordCount = readWordCountFromFile(resolved.absPath);
+            if (wordCount != null) step.wordCount = wordCount;
+        }
     }
 }
 
@@ -755,6 +871,16 @@ function findPipelineRowIndex(contentPipeline, selector = {}) {
     return -1;
 }
 
+function parsePipelineTagToIndex(value) {
+    const raw = String(value || '').trim();
+    if (!raw) return null;
+    const m = raw.match(/(\d{1,3})/);
+    if (!m) return null;
+    const n = Number(m[1]);
+    if (!Number.isFinite(n) || n < 1) return null;
+    return n - 1;
+}
+
 function buildPipelineArtifactName(cpIndex, stepId, ext, title) {
     const stepBase = PIPELINE_STEP_FILE_NAMES[stepId] || safeSlug(stepId, 'step');
     const rowNo = String(Number(cpIndex) + 1).padStart(2, '0');
@@ -829,6 +955,32 @@ function resolvePublishConfig(projectData, body = {}) {
         apiSecret,
         mode
     };
+}
+
+function responseHasSlugConflict(statusCode, parsed, raw) {
+    if (Number(statusCode) === 409) return true;
+    const fragments = [];
+    if (typeof raw === 'string') fragments.push(raw);
+    if (parsed && typeof parsed === 'object') {
+        for (const key of ['error', 'message', 'detail', 'reason']) {
+            if (typeof parsed[key] === 'string') fragments.push(parsed[key]);
+        }
+        if (parsed.response && typeof parsed.response === 'object') {
+            for (const key of ['error', 'message', 'detail', 'reason']) {
+                if (typeof parsed.response[key] === 'string') fragments.push(parsed.response[key]);
+            }
+        }
+    }
+    const haystack = fragments.join(' ').toLowerCase();
+    if (!haystack) return false;
+    const hasSlug = haystack.includes('slug');
+    const hasConflict = haystack.includes('exist')
+        || haystack.includes('already')
+        || haystack.includes('duplicate')
+        || haystack.includes('conflict')
+        || haystack.includes('bereits')
+        || haystack.includes('konflikt');
+    return hasSlug && hasConflict;
 }
 
 const BLOG_DIRECT_UPLOAD_THRESHOLD_BYTES = (() => {
@@ -1034,20 +1186,7 @@ app.get("/api/projects", async (_, res) => {
             };
 
             ensurePipelineShape(result);
-
-            for (let cpIndex = 0; cpIndex < result.contentPipeline.length; cpIndex += 1) {
-                const cp = result.contentPipeline[cpIndex];
-                for (const stepId of PIPELINE_STEP_IDS) {
-                    const step = cp?.steps?.[stepId];
-                    if (!step?.doc) continue;
-                    const resolved = resolvePipelineDocPath(result, cpIndex, stepId);
-                    if (!resolved) continue;
-
-                    step.doc = resolved.relPath;
-                    const wordCount = readWordCountFromFile(resolved.absPath);
-                    if (wordCount != null) step.wordCount = wordCount;
-                }
-            }
+            hydratePipelineDocsAndWordCounts(result);
             hydrateNotebookLmAudioRows(result, projectId);
 
             return result;
@@ -1087,20 +1226,7 @@ app.get("/api/projects/:projectId", (req, res) => {
         };
 
         ensurePipelineShape(project);
-
-        for (let cpIndex = 0; cpIndex < project.contentPipeline.length; cpIndex += 1) {
-            const cp = project.contentPipeline[cpIndex];
-            for (const stepId of PIPELINE_STEP_IDS) {
-                const step = cp?.steps?.[stepId];
-                if (!step?.doc) continue;
-                const resolved = resolvePipelineDocPath(project, cpIndex, stepId);
-                if (!resolved) continue;
-
-                step.doc = resolved.relPath;
-                const wordCount = readWordCountFromFile(resolved.absPath);
-                if (wordCount != null) step.wordCount = wordCount;
-            }
-        }
+        hydratePipelineDocsAndWordCounts(project);
         hydrateNotebookLmAudioRows(project, projectId);
 
         return ok(res, { project, workspaceRoot: WORKSPACE_ROOT });
@@ -1320,6 +1446,163 @@ app.post("/api/projects/:projectId/pipeline/upload", express.json({ limit: '50mb
             status: step.status,
             path: resolvedRel,
             wroteFile,
+            sync
+        });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
+});
+
+app.post("/api/projects/:projectId/pipeline/sync-artifacts", express.json({ limit: '50mb' }), (req, res) => {
+    try {
+        const { projectId } = req.params;
+        const body = req.body || {};
+        const actorAgentId = body.actorAgentId;
+
+        const data = loadProjectMeta(projectId);
+        if (!data) return res.status(404).json({ success: false, error: "Project not found" });
+        ensurePipelineShape(data);
+
+        if (!hasProjectWritePermission(data, actorAgentId)) {
+            return res.status(403).json({ success: false, error: `Agent ${actorAgentId} has no write permission for project ${projectId}` });
+        }
+
+        const selectedStepIds = Array.isArray(body.steps)
+            ? body.steps.map(normalizePipelineStepId).filter(Boolean)
+            : PIPELINE_STEP_IDS.slice();
+        if (selectedStepIds.length === 0) {
+            return res.status(400).json({ success: false, error: "No valid step ids provided in steps[]" });
+        }
+
+        const selectorProvided = ['cpIndex', 'rowId', 'day', 'topic', 'title', 'keyword', 'id', 'tag']
+            .some((key) => body[key] !== undefined && String(body[key]).trim() !== '');
+        const rowIndexes = [];
+
+        if (Array.isArray(body.rowIds) && body.rowIds.length > 0) {
+            for (const candidate of body.rowIds) {
+                const idx = findPipelineRowIndex(data.contentPipeline, { rowId: candidate });
+                if (idx >= 0 && !rowIndexes.includes(idx)) rowIndexes.push(idx);
+            }
+        } else if (selectorProvided) {
+            const idx = findPipelineRowIndex(data.contentPipeline, {
+                cpIndex: body.cpIndex,
+                rowId: body.rowId,
+                day: body.day,
+                topic: body.topic,
+                title: body.title,
+                keyword: body.keyword,
+                id: body.id,
+                tag: body.tag
+            });
+            if (idx < 0) {
+                return res.status(404).json({ success: false, error: "Pipeline row not found (use cpIndex, rowId/TAG-xx, day, topic, or keyword)" });
+            }
+            rowIndexes.push(idx);
+        } else {
+            let fromIndex = Number.isInteger(Number(body.fromCpIndex)) ? Number(body.fromCpIndex) : null;
+            let toIndex = Number.isInteger(Number(body.toCpIndex)) ? Number(body.toCpIndex) : null;
+
+            const fromTagIndex = parsePipelineTagToIndex(body.fromTag ?? body.tagFrom ?? body.startTag);
+            const toTagIndex = parsePipelineTagToIndex(body.toTag ?? body.tagTo ?? body.endTag);
+            if (fromIndex == null && fromTagIndex != null) fromIndex = fromTagIndex;
+            if (toIndex == null && toTagIndex != null) toIndex = toTagIndex;
+
+            if (fromIndex == null) fromIndex = 0;
+            if (toIndex == null) toIndex = data.contentPipeline.length - 1;
+            if (fromIndex > toIndex) {
+                const tmp = fromIndex;
+                fromIndex = toIndex;
+                toIndex = tmp;
+            }
+
+            fromIndex = Math.max(0, Math.min(data.contentPipeline.length - 1, fromIndex));
+            toIndex = Math.max(0, Math.min(data.contentPipeline.length - 1, toIndex));
+            for (let i = fromIndex; i <= toIndex; i += 1) {
+                rowIndexes.push(i);
+            }
+        }
+
+        if (rowIndexes.length === 0) {
+            return res.status(404).json({ success: false, error: "No pipeline rows selected for sync" });
+        }
+
+        const statusRaw = String(body.statusOnFound ?? body.status ?? 'review').trim().toLowerCase();
+        const statusOnFound = statusRaw === 'keep' ? null : (statusRaw || 'review');
+        const onlyIfMissingDoc = body.onlyIfMissingDoc === true;
+        const nowIso = new Date().toISOString();
+
+        const rows = [];
+        let totalStepsUpdated = 0;
+        for (const rowIndex of rowIndexes) {
+            const row = data.contentPipeline[rowIndex];
+            if (!row || !row.steps) continue;
+
+            let rowUpdated = 0;
+            const steps = {};
+            for (const stepId of selectedStepIds) {
+                const step = row.steps[stepId];
+                if (!step || typeof step !== 'object') continue;
+
+                if (onlyIfMissingDoc && step.doc) {
+                    steps[stepId] = {
+                        found: true,
+                        path: step.doc,
+                        skipped: true,
+                        reason: 'doc_already_set',
+                        wordCount: step.wordCount ?? null,
+                        status: step.status
+                    };
+                    continue;
+                }
+
+                const resolved = resolvePipelineDocPath(data, rowIndex, stepId);
+                if (!resolved) {
+                    steps[stepId] = { found: false };
+                    continue;
+                }
+
+                step.doc = resolved.relPath;
+                const wordCount = readWordCountFromFile(resolved.absPath);
+                if (wordCount != null) step.wordCount = wordCount;
+                if (statusOnFound) step.status = statusOnFound;
+                if (step.status !== 'rejected' && step.rejectReason != null) delete step.rejectReason;
+                step.updatedAt = nowIso;
+                if (actorAgentId) step.updatedBy = actorAgentId;
+
+                rowUpdated += 1;
+                totalStepsUpdated += 1;
+                steps[stepId] = {
+                    found: true,
+                    path: resolved.relPath,
+                    wordCount: step.wordCount ?? null,
+                    status: step.status
+                };
+            }
+
+            updateBlogPipelineProgress(data, rowIndex);
+            rows.push({
+                rowIndex,
+                rowId: String(row.id || pipelineRowId(rowIndex)),
+                updatedSteps: rowUpdated,
+                steps
+            });
+        }
+
+        if (totalStepsUpdated > 0) {
+            data.lastUpdate = new Date().toISOString().slice(0, 10);
+            saveProjectMeta(projectId, data);
+        }
+
+        const sync = totalStepsUpdated > 0 ? syncAllAssignedAgents(projectId, data) : [];
+        return ok(res, {
+            synced: true,
+            projectId,
+            rowsProcessed: rowIndexes.length,
+            rowsUpdated: rows.filter(r => Number(r.updatedSteps || 0) > 0).length,
+            stepsUpdated: totalStepsUpdated,
+            statusOnFound: statusOnFound || 'keep',
+            onlyIfMissingDoc,
+            rows,
             sync
         });
     } catch (e) {
@@ -1571,11 +1854,7 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
             return res.status(400).json({ success: false, error: "08_asset_plan.md is empty" });
         }
 
-        const form = new FormData();
-        form.append('file', new Blob([markdown], { type: 'text/markdown; charset=utf-8' }), fileName);
-        form.append('assetPlanFile', new Blob([assetPlanMarkdown], { type: 'text/markdown; charset=utf-8' }), path.basename(multimediaDoc.absPath) || '08_asset_plan.md');
-        form.append('assetPlanContent', assetPlanMarkdown);
-        form.append('assetPlanPath', multimediaDoc.relPath);
+        let attachedAudioUrl = null;
         let attachedBlogAudio = null;
         let audioTransferMode = 'none';
         let audioUploadWarning = null;
@@ -1594,16 +1873,12 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
                     sizeLabel: formatBytesLabel(audioStats.size),
                     publicUrl: uploadedAudio.publicUrl
                 });
-                form.append('audioUrl', uploadedAudio.publicUrl);
-                form.append('audioPath', blogAudio.relPath);
+                attachedAudioUrl = uploadedAudio.publicUrl;
                 attachedBlogAudio = blogAudio.relPath;
                 audioTransferMode = 'direct_url';
             } catch (uploadErr) {
                 const uploadMsg = String(uploadErr?.message || uploadErr || 'direct upload failed');
                 if (audioStats.size <= BLOG_DIRECT_UPLOAD_THRESHOLD_BYTES) {
-                    const audioBuffer = fs.readFileSync(blogAudio.absPath);
-                    form.append('audioFile', new Blob([audioBuffer], { type: 'audio/mpeg' }), blogAudio.fileName || 'blog-audio.mp3');
-                    form.append('audioPath', blogAudio.relPath);
                     attachedBlogAudio = blogAudio.relPath;
                     audioTransferMode = 'inline_file_fallback';
                     audioUploadWarning = `Direct audio upload failed, fell back to inline file: ${uploadMsg}`;
@@ -1625,53 +1900,116 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
                 }
             }
         }
-        form.append('title', title);
-        form.append('slug', slug);
-        form.append('mode', publishCfg.mode);
-        form.append('authorName', authorName);
-        form.append('contentFormat', String(body.contentFormat || 'markdown').trim().toLowerCase() || 'markdown');
-        if (body.scheduledFor) {
-            form.append('scheduledFor', String(body.scheduledFor).trim());
-        }
-        if (publishCfg.mode === 'draft') {
-            form.append('previewHours', String(previewHours));
-        }
-        form.append('content', markdown);
+        const contentFormat = String(body.contentFormat || 'markdown').trim().toLowerCase() || 'markdown';
+        const scheduledFor = body.scheduledFor ? String(body.scheduledFor).trim() : null;
+        const createPublishForm = () => {
+            const out = new FormData();
+            out.append('file', new Blob([markdown], { type: 'text/markdown; charset=utf-8' }), fileName);
+            out.append('assetPlanFile', new Blob([assetPlanMarkdown], { type: 'text/markdown; charset=utf-8' }), path.basename(multimediaDoc.absPath) || '08_asset_plan.md');
+            out.append('assetPlanContent', assetPlanMarkdown);
+            out.append('assetPlanPath', multimediaDoc.relPath);
+
+            if (attachedAudioUrl) {
+                out.append('audioUrl', attachedAudioUrl);
+                if (attachedBlogAudio) out.append('audioPath', attachedBlogAudio);
+            } else if (audioTransferMode === 'inline_file_fallback' && blogAudio) {
+                const audioBuffer = fs.readFileSync(blogAudio.absPath);
+                out.append('audioFile', new Blob([audioBuffer], { type: 'audio/mpeg' }), blogAudio.fileName || 'blog-audio.mp3');
+                out.append('audioPath', blogAudio.relPath);
+            } else if (attachedBlogAudio) {
+                out.append('audioPath', attachedBlogAudio);
+            }
+
+            out.append('title', title);
+            out.append('slug', slug);
+            out.append('mode', publishCfg.mode);
+            out.append('authorName', authorName);
+            out.append('contentFormat', contentFormat);
+            if (scheduledFor) out.append('scheduledFor', scheduledFor);
+            if (publishCfg.mode === 'draft') out.append('previewHours', String(previewHours));
+            out.append('content', markdown);
+            return out;
+        };
 
         const upstream = await fetch(publishUrl.toString(), {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${publishCfg.apiSecret}`
             },
-            body: form
+            body: createPublishForm()
         });
 
         const raw = await upstream.text();
         const parsed = tryParseJson(raw);
+        let publishOperation = 'create';
+        let publishEndpoint = publishUrl.toString();
+        let publishResponse = parsed || raw;
+        let publishStatusCode = upstream.status;
         if (!upstream.ok) {
-            return res.status(502).json({
-                success: false,
-                error: "Publish endpoint rejected request",
-                status: upstream.status,
-                response: parsed || raw
+            const shouldTryUpsert = body.upsert !== false && body.updateExisting !== false;
+            const slugConflict = responseHasSlugConflict(upstream.status, parsed, raw);
+            if (!shouldTryUpsert || !slugConflict) {
+                return res.status(502).json({
+                    success: false,
+                    error: "Publish endpoint rejected request",
+                    status: upstream.status,
+                    response: parsed || raw
+                });
+            }
+
+            const patchEndpointRaw = String(
+                body.patchEndpoint || `${publishCfg.apiBase}/api/blog/admin/posts/${encodeURIComponent(slug)}`
+            ).trim();
+            let patchUrl;
+            try {
+                patchUrl = new URL(patchEndpointRaw);
+            } catch {
+                return res.status(400).json({ success: false, error: "Invalid patch endpoint URL for slug-conflict upsert fallback" });
+            }
+
+            const patchResp = await fetch(patchUrl.toString(), {
+                method: 'PATCH',
+                headers: {
+                    Authorization: `Bearer ${publishCfg.apiSecret}`
+                },
+                body: createPublishForm()
             });
+            const patchRaw = await patchResp.text();
+            const patchParsed = tryParseJson(patchRaw);
+            if (!patchResp.ok) {
+                return res.status(502).json({
+                    success: false,
+                    error: "Publish create conflicted and patch update failed",
+                    createStatus: upstream.status,
+                    createResponse: parsed || raw,
+                    patchStatus: patchResp.status,
+                    patchResponse: patchParsed || patchRaw
+                });
+            }
+
+            publishOperation = 'upsert_patch';
+            publishEndpoint = patchUrl.toString();
+            publishResponse = patchParsed || patchRaw;
+            publishStatusCode = patchResp.status;
         }
 
         row.publishedAt = new Date().toISOString();
         row.publishStatus = publishCfg.mode === 'draft' ? 'draft' : 'published';
-        row.publishResult = parsed || raw;
+        row.publishResult = publishResponse;
         row.publishMeta = {
             mode: publishCfg.mode,
-            endpoint: publishCfg.endpoint,
+            operation: publishOperation,
+            endpoint: publishEndpoint,
             authorName,
             previewHours: publishCfg.mode === 'draft' ? previewHours : null,
-            scheduledFor: body.scheduledFor ? String(body.scheduledFor).trim() : null,
-            contentFormat: String(body.contentFormat || 'markdown').trim().toLowerCase() || 'markdown',
+            scheduledFor,
+            contentFormat,
             finalDoc: finalDoc.relPath,
             assetPlanDoc: multimediaDoc.relPath,
             blogAudio: attachedBlogAudio || null,
             audioTransferMode,
-            audioUploadWarning
+            audioUploadWarning,
+            status: publishStatusCode
         };
         if (row.steps?.final) {
             row.steps.final.status = publishCfg.mode === 'publish' ? 'done' : row.steps.final.status;
@@ -1688,8 +2026,9 @@ app.post("/api/projects/:projectId/pipeline/:cpIndex/publish-now", express.json(
             projectId,
             rowIndex,
             rowId,
-            endpoint: publishCfg.endpoint,
-            response: parsed || raw,
+            operation: publishOperation,
+            endpoint: publishEndpoint,
+            response: publishResponse,
             sentFiles: {
                 finalDoc: finalDoc.relPath,
                 assetPlanDoc: multimediaDoc.relPath,
