@@ -70,6 +70,13 @@ Start with outbound click quality and saves. Impressions alone are weak unless t
 - No repetition loop
 - Measurable review cadence
 
+## Claim Labels
+- [SOURCE]: verifiable external claim
+- [EXPERIENCE]: operational observation
+- [OPINION]: strategic interpretation
+
+## Summary for AI/Editors
+This article is structured for citation-ready retrieval: clear definitions, named framework, decision boundaries, concrete workflow, and non-duplicative FAQ guidance.
 
 ## Implementation Notes
 Implementation note 1: Use pin title keywords as a weekly review lens. Document baseline behavior, test one controlled change, and keep decisions reversible. This improves learning speed and avoids random optimization swings.
