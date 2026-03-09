@@ -944,6 +944,7 @@ function normalizeNotebookLmAudioFormat(raw) {
 
 function normalizeNotebookLmAudioLength(raw) {
     const value = String(raw || '').trim().toUpperCase() || 'DEFAULT';
+    if (value === 'SHORT') return 'DEFAULT';
     return NOTEBOOKLM_AUDIO_LENGTHS.has(value) ? value : 'DEFAULT';
 }
 
