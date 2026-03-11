@@ -4007,7 +4007,60 @@ app.post('/api/ytdlp/transcript', ytdlpRateLimit, ytdlpBridgeAuth, async (req, r
   console.warn(`[transcript ${reqId}] auto-subs failed:`, err?.message?.slice(0, 150));
  }
 
- return res.status(404).json({ success: false, reqId, error: 'No transcript found' });
+ const whisperBin = process.env.WHISPER_BIN || '/usr/local/bin/whisper';
+ const audioFile = path.join(transcriptDir, `${baseName}_audio.mp3`);
+ try {
+  const carg = YTDLP_COOKIES_FROM_BROWSER ? ['--cookies-from-browser', YTDLP_COOKIES_FROM_BROWSER] : [];
+  await execFileAsync(
+   YTDLP_BIN,
+   [
+    '--no-playlist',
+    '-f', 'bestaudio[ext=m4a]/bestaudio/best',
+    ...carg,
+    '-o', path.join(transcriptDir, `${baseName}_raw.%(ext)s`),
+    url,
+   ],
+   { timeout: 60000, maxBuffer: 10 * 1024 * 1024 }
+  );
+
+  const dlFiles = fs.readdirSync(transcriptDir).filter(f => f.startsWith(`${baseName}_raw`));
+  if (!dlFiles.length) throw new Error('no output');
+
+  const dlFile = path.join(transcriptDir, dlFiles[0]);
+  await execFileAsync('ffmpeg', ['-y', '-i', dlFile, '-vn', '-ar', '16000', '-ac', '1', '-f', 'mp3', audioFile], {
+   timeout: 60000,
+  });
+  fs.unlink(dlFile, () => {});
+
+  await execFileAsync(
+   whisperBin,
+   [audioFile, '--output_format', 'txt', '--output_dir', transcriptDir, '--language', 'en', '--model', 'base', '--fp16', 'False'],
+   { timeout: 300000, maxBuffer: 50 * 1024 * 1024 }
+  );
+
+  const whisperTxt = path.join(transcriptDir, `${baseName}_audio.txt`);
+  fs.unlink(audioFile, () => {});
+
+  if (fs.existsSync(whisperTxt)) {
+   const transcript = fs.readFileSync(whisperTxt, 'utf-8').trim();
+   fs.unlink(whisperTxt, () => {});
+   if (transcript.length > 20) {
+    console.log(`[transcript ${reqId}] Whisper OK: ${transcript.length} chars`);
+    return res.json({
+     success: true,
+     reqId,
+     transcript: transcript.slice(0, 32000),
+     source: 'whisper',
+     lineCount: transcript.split('\n').filter(l => l.trim()).length,
+    });
+   }
+  }
+ } catch (err) {
+  console.error(`[transcript ${reqId}] Whisper failed:`, err?.message?.slice(0, 200));
+  if (fs.existsSync(audioFile)) fs.unlink(audioFile, () => {});
+ }
+
+ return res.status(502).json({ success: false, reqId, error: 'No transcript found.' });
 });
 
 app.listen(PORT, () => console.log(`OpenClaw Admin Dashboard läuft auf http://localhost:${PORT}`));
