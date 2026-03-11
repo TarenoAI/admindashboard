@@ -3970,6 +3970,7 @@ app.post('/api/ytdlp/transcript', ytdlpRateLimit, ytdlpBridgeAuth, async (req, r
    YTDLP_BIN,
    [
     '--no-playlist',
+    '--impersonate', 'chrome',
     '--skip-download',
     '--write-auto-subs',
     '--write-subs',
