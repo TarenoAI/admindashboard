@@ -8,13 +8,18 @@ description: Prüfe den Live-Login- und Session-Status der zwei Instagram-Accoun
 Führe reproduzierbare Live-Checks für beide Instagram-Accounts aus und liefere:
 1) frische Screenshots, 2) klaren Login-/Session-Status, 3) kurze Handlungsempfehlung.
 
+Wenn der User nach „aktuellem Screenshot“ fragt, immer diesen Skill-Flow verwenden und die Server-Endpunkte senden.
+
 ## Workflow
 
 1. Starte den Check-Script:
    - `node .agents/skills/instagram-status-check/scripts/check_instagram_status.js`
-2. Lies den JSON-Report im Output-Ordner:
+2. Nutze immer die **Server-Endpunkte** für das Teilen im Chat:
+   - `http://31.97.32.40:3477/bulifollows-latest.png`
+   - `http://31.97.32.40:3477/bulifollows_update-latest.png`
+3. Lies den JSON-Report im Output-Ordner (für Diagnose):
    - Standard: `/root/.openclaw/workspace-tareno/media/instagram-status`
-3. Bewerte pro Account den `state`:
+4. Bewerte pro Account den `state`:
    - `kontoauswahl`: Session nicht direkt im Zielkonto (Account picker)
    - `login_erforderlich`/`login_redirect`: neu einloggen nötig
    - `challenge`: Sicherheitsprüfung aktiv

@@ -9,6 +9,9 @@ try {
 }
 
 const DEFAULT_OUTPUT_DIR = '/root/.openclaw/workspace-tareno/media/instagram-status';
+const LATEST_DIR = '/root/.openclaw/workspace-tareno/media/instagram-status/latest';
+const DASHBOARD_PUBLIC_DIR = '/root/.openclaw/workspace-tareno/tools/admin-dashboard/public';
+const PUBLIC_BASE_URL = 'http://31.97.32.40:3477';
 const DEVICE = devices['iPhone 13 Pro'];
 
 const TARGETS = [
@@ -92,6 +95,20 @@ async function run(outputDir) {
       await context.close();
       await browser.close();
     }
+  }
+
+  fs.mkdirSync(LATEST_DIR, { recursive: true });
+  fs.mkdirSync(DASHBOARD_PUBLIC_DIR, { recursive: true });
+
+  for (const item of results) {
+    if (!item.screenshot || !fs.existsSync(item.screenshot)) continue;
+    const latestName = `${item.account}-latest.png`;
+    const latestPath = path.join(LATEST_DIR, latestName);
+    const publicPath = path.join(DASHBOARD_PUBLIC_DIR, latestName);
+    fs.copyFileSync(item.screenshot, latestPath);
+    fs.copyFileSync(item.screenshot, publicPath);
+    item.latest = latestPath;
+    item.publicUrl = `${PUBLIC_BASE_URL}/${latestName}`;
   }
 
   const reportPath = path.join(outputDir, `${runId}-report.json`);
