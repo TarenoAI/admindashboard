@@ -5,6 +5,7 @@
 - [x] Verify Xvfb service is active
 - [x] Check Instafollows logs for errors
 - [x] Review memory files and update MEMORY.md if needed
+- [ ] Every 60 minutes: run Instagram Live-Check and send status update to Mert
 
 ## Status
 - Last Check: 2026-03-05 01:09 UTC ✅
@@ -18,5 +19,11 @@
 - Media Handling: Needs verification
 - PM2: admin-dashboard online ✅
 
+## Instagram Hourly Rule
+- Bei Heartbeat prüfen: Ist die letzte Instagram-Statusmeldung >60 Minuten her?
+- Wenn ja: `instagram-status-check` ausführen und Status mit den 2 Server-Links an Mert senden.
+- Wenn nein: normaler Heartbeat ohne neue IG-Meldung.
+
 ## Letzte Aktionen
+- 2026-03-11 21:58 UTC: Hourly Instagram-Status-Regel aktiviert.
 - 2026-03-05 01:09 UTC: Heartbeat check — memory/2026-03-05.md created
