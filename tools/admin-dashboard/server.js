@@ -3946,4 +3946,68 @@ function parseSrtToText(content) {
  }).join(' ').replace(/\s+/g,' ').trim();
 }
 
+app.post('/api/ytdlp/transcript', ytdlpRateLimit, ytdlpBridgeAuth, async (req, res) => {
+ const reqId = `tr_${Date.now().toString(36)}`;
+ const { url } = req.body || {};
+ if (!url) return res.status(400).json({ success: false, error: 'url required' });
+
+ try {
+  const host = new URL(url).hostname.toLowerCase();
+  if (!['tiktok.com', 'instagram.com', 'facebook.com', 'fb.watch', 'youtube.com', 'youtu.be'].some(h => host.includes(h))) {
+   return res.status(400).json({ success: false, error: 'Unsupported URL' });
+  }
+ } catch {
+  return res.status(400).json({ success: false, error: 'Invalid URL' });
+ }
+
+ const transcriptDir = path.join(YTDLP_OUT_DIR, 'transcripts');
+ if (!fs.existsSync(transcriptDir)) fs.mkdirSync(transcriptDir, { recursive: true });
+ const baseName = reqId;
+
+ try {
+  const carg = YTDLP_COOKIES_FROM_BROWSER ? ['--cookies-from-browser', YTDLP_COOKIES_FROM_BROWSER] : [];
+  await execFileAsync(
+   YTDLP_BIN,
+   [
+    '--no-playlist',
+    '--skip-download',
+    '--write-auto-subs',
+    '--write-subs',
+    '--sub-format', 'vtt/srt/best',
+    '--sub-langs', 'en.*,en',
+    ...carg,
+    '-o', path.join(transcriptDir, `${baseName}.%(ext)s`),
+    url,
+   ],
+   { timeout: 30000, maxBuffer: 5 * 1024 * 1024 }
+  );
+
+  const files = fs.readdirSync(transcriptDir).filter(
+   f => f.startsWith(baseName) && (f.endsWith('.vtt') || f.endsWith('.srt'))
+  );
+
+  if (files.length > 0) {
+   const picked = files[0];
+   const content = fs.readFileSync(path.join(transcriptDir, picked), 'utf-8');
+   const transcript = picked.endsWith('.vtt') ? parseVttToText(content) : parseSrtToText(content);
+   files.forEach(f => fs.unlink(path.join(transcriptDir, f), () => {}));
+
+   if (transcript && transcript.length > 30) {
+    console.log(`[transcript ${reqId}] auto-subs OK: ${transcript.length} chars`);
+    return res.json({
+     success: true,
+     reqId,
+     transcript: transcript.slice(0, 32000),
+     source: 'auto-subs',
+     lineCount: transcript.split('\n').filter(l => l.trim()).length,
+    });
+   }
+  }
+ } catch (err) {
+  console.warn(`[transcript ${reqId}] auto-subs failed:`, err?.message?.slice(0, 150));
+ }
+
+ return res.status(404).json({ success: false, reqId, error: 'No transcript found' });
+});
+
 app.listen(PORT, () => console.log(`OpenClaw Admin Dashboard läuft auf http://localhost:${PORT}`));
