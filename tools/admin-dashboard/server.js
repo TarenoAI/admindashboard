@@ -3928,4 +3928,22 @@ app.get('/api/ytdlp/file/:fileName', (req, res) => {
     return res.sendFile(abs);
 });
 
+function parseVttToText(content) {
+ return content.replace(/^WEBVTT.*\n\n/s,'').split('\n').filter(line => {
+ const t=line.trim();
+ if(!t) return false;
+ if(/^\d{2}:\d{2}/.test(t)) return false;
+ if(/^NOTE/.test(t)) return false;
+ return true;
+ }).map(l=>l.replace(/<[^>]*>/g,'').trim()).filter(Boolean)
+ .reduce((a,l)=>{if(a[a.length-1]!==l)a.push(l);return a;},[]).join('\n');
+}
+
+function parseSrtToText(content) {
+ return content.split('\n').filter(l=>{
+ const t=l.trim();
+ return t && !/^\d+$/.test(t) && !/^\d{2}:\d{2}:\d{2}/.test(t);
+ }).join(' ').replace(/\s+/g,' ').trim();
+}
+
 app.listen(PORT, () => console.log(`OpenClaw Admin Dashboard läuft auf http://localhost:${PORT}`));
