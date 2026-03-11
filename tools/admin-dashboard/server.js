@@ -3681,6 +3681,11 @@ const YTDLP_BRIDGE_SECRET = process.env.YTDLP_BRIDGE_SECRET || '';
 const YTDLP_BIN = process.env.YTDLP_BIN || 'yt-dlp';
 const YTDLP_TIMEOUT_MS = Number(process.env.YTDLP_TIMEOUT_MS || 45000);
 const YTDLP_COOKIES_FROM_BROWSER = process.env.YTDLP_COOKIES_FROM_BROWSER || 'chromium:/root/InstaFollow/data/browser-profiles/instagram';
+const YTDLP_COOKIES_FALLBACKS = process.env.YTDLP_COOKIES_FALLBACKS || 'chromium:/root/InstaFollow/data/browser-profiles/instagram_2';
+const YTDLP_COOKIE_SOURCES = [
+    YTDLP_COOKIES_FROM_BROWSER,
+    ...String(YTDLP_COOKIES_FALLBACKS || '').split(',').map(s => s.trim()).filter(Boolean)
+].filter((v, i, arr) => arr.indexOf(v) === i);
 const YTDLP_LOG_FILE = process.env.YTDLP_LOG_FILE || path.join(__dirname, 'logs', 'ytdlp-bridge.log');
 const YTDLP_OUT_DIR = process.env.YTDLP_OUT_DIR || path.join(__dirname, 'downloads', 'bridge');
 const ytdlpRateBucket = new Map();
@@ -3746,6 +3751,31 @@ const execFileAsync = (bin, args, options = {}) => new Promise((resolve, reject)
     });
 });
 
+function isYtdlpAuthOrRateLimitError(errText) {
+    const t = String(errText || '').toLowerCase();
+    return t.includes('login required') || t.includes('rate-limit reached') || t.includes('instagram api is not granting access');
+}
+
+async function runYtdlpWithCookieFallback(makeArgs, options) {
+    const attempts = [];
+    let lastError = null;
+
+    for (const cookieSource of YTDLP_COOKIE_SOURCES) {
+        try {
+            const args = makeArgs(cookieSource);
+            const result = await execFileAsync(YTDLP_BIN, args, options);
+            return { ...result, cookieSource, attempts };
+        } catch (e) {
+            const errText = e?.stderr || e?.err?.message || String(e || 'yt-dlp failed');
+            attempts.push({ cookieSource, error: String(errText).slice(0, 700) });
+            lastError = e;
+            if (!isYtdlpAuthOrRateLimitError(errText)) break;
+        }
+    }
+
+    throw { ...(lastError || {}), attempts };
+}
+
 app.get('/api/ytdlp/health', (req, res) => {
     res.json({
         success: true,
@@ -3753,6 +3783,7 @@ app.get('/api/ytdlp/health', (req, res) => {
         service: 'yt-dlp-bridge',
         ytdlpBin: YTDLP_BIN,
         cookiesMode: YTDLP_COOKIES_FROM_BROWSER,
+        cookieSources: YTDLP_COOKIE_SOURCES,
         secretConfigured: Boolean(YTDLP_BRIDGE_SECRET)
     });
 });
@@ -3767,17 +3798,18 @@ app.post('/api/ytdlp/download', ytdlpRateLimit, ytdlpBridgeAuth, async (req, res
         return res.status(400).json({ success: false, reqId, error: 'Invalid Instagram URL' });
     }
 
-    const args = [
-        '-j',
-        '--no-playlist',
-        '--socket-timeout', '20',
-        '--extractor-retries', '2',
-        '--cookies-from-browser', YTDLP_COOKIES_FROM_BROWSER,
-        String(url)
-    ];
-
     try {
-        const { stdout, stderr } = await execFileAsync(YTDLP_BIN, args, { timeout: YTDLP_TIMEOUT_MS, maxBuffer: 20 * 1024 * 1024 });
+        const { stdout, stderr, cookieSource, attempts } = await runYtdlpWithCookieFallback(
+            (cookieSource) => [
+                '-j',
+                '--no-playlist',
+                '--socket-timeout', '20',
+                '--extractor-retries', '2',
+                '--cookies-from-browser', cookieSource,
+                String(url)
+            ],
+            { timeout: YTDLP_TIMEOUT_MS, maxBuffer: 20 * 1024 * 1024 }
+        );
         const lines = String(stdout || '').split('\n').map(s => s.trim()).filter(Boolean);
         const last = lines[lines.length - 1];
         const data = JSON.parse(last || '{}');
@@ -3789,6 +3821,8 @@ app.post('/api/ytdlp/download', ytdlpRateLimit, ytdlpBridgeAuth, async (req, res
             ms: Date.now() - started,
             id: data.id || null,
             duration: data.duration || null,
+            cookieSource,
+            fallbackAttempts: attempts,
             stderr: String(stderr || '').slice(0, 600)
         });
 
@@ -3805,6 +3839,7 @@ app.post('/api/ytdlp/download', ytdlpRateLimit, ytdlpBridgeAuth, async (req, res
             format: data.format || null,
             requested_downloads: data.requested_downloads || null,
             url: data.url || null,
+            cookieSource,
             raw: data
         };
         return res.json(out);
@@ -3815,9 +3850,10 @@ app.post('/api/ytdlp/download', ytdlpRateLimit, ytdlpBridgeAuth, async (req, res
             ok: false,
             url,
             ms: Date.now() - started,
+            attempts: e?.attempts || [],
             error: String(stderr).slice(0, 1500)
         });
-        return res.status(502).json({ success: false, reqId, error: String(stderr).slice(0, 8000) });
+        return res.status(502).json({ success: false, reqId, attempts: e?.attempts || [], error: String(stderr).slice(0, 8000) });
     }
 });
 
@@ -3837,12 +3873,15 @@ app.post('/api/ytdlp/fetch', ytdlpRateLimit, ytdlpBridgeAuth, async (req, res) =
     const outMp4 = path.join(YTDLP_OUT_DIR, `${baseName}_telegram.mp4`);
 
     try {
-        await execFileAsync(YTDLP_BIN, [
-            '--force-overwrites',
-            '--cookies-from-browser', YTDLP_COOKIES_FROM_BROWSER,
-            '-o', rawPattern,
-            String(url)
-        ], { timeout: 120000, maxBuffer: 10 * 1024 * 1024 });
+        const { cookieSource, attempts } = await runYtdlpWithCookieFallback(
+            (cookieSource) => [
+                '--force-overwrites',
+                '--cookies-from-browser', cookieSource,
+                '-o', rawPattern,
+                String(url)
+            ],
+            { timeout: 120000, maxBuffer: 10 * 1024 * 1024 }
+        );
 
         await execFileAsync('ffmpeg', [
             '-y', '-i', rawMp4,
@@ -3854,20 +3893,21 @@ app.post('/api/ytdlp/fetch', ytdlpRateLimit, ytdlpBridgeAuth, async (req, res) =
 
         const stat = fs.statSync(outMp4);
         const fileName = path.basename(outMp4);
-        bridgeLog({ reqId, ok: true, phase: 'fetch', url, ms: Date.now() - started, fileName, size: stat.size });
+        bridgeLog({ reqId, ok: true, phase: 'fetch', url, ms: Date.now() - started, fileName, size: stat.size, cookieSource, fallbackAttempts: attempts });
 
         return res.json({
             success: true,
             reqId,
             fileName,
             size: stat.size,
+            cookieSource,
             downloadUrl: `/api/ytdlp/file/${encodeURIComponent(fileName)}`,
             expiresHint: 'Temporary local file on VPS'
         });
     } catch (e) {
         const errText = (e?.stderr || e?.err?.message || String(e || 'failed')).toString().slice(0, 4000);
-        bridgeLog({ reqId, ok: false, phase: 'fetch', url, ms: Date.now() - started, error: errText });
-        return res.status(502).json({ success: false, reqId, error: errText });
+        bridgeLog({ reqId, ok: false, phase: 'fetch', url, ms: Date.now() - started, attempts: e?.attempts || [], error: errText });
+        return res.status(502).json({ success: false, reqId, attempts: e?.attempts || [], error: errText });
     }
 });
 
