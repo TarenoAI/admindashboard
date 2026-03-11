@@ -4004,7 +4004,7 @@ app.post('/api/ytdlp/transcript', ytdlpRateLimit, ytdlpBridgeAuth, async (req, r
    }
   }
  } catch (err) {
-  console.warn(`[transcript ${reqId}] auto-subs failed:`, err?.message?.slice(0, 150));
+  console.warn(`[transcript ${reqId}] auto-subs failed:`, String(err));
  }
 
  const whisperBin = process.env.WHISPER_BIN || '/usr/local/bin/whisper';
@@ -4056,7 +4056,7 @@ app.post('/api/ytdlp/transcript', ytdlpRateLimit, ytdlpBridgeAuth, async (req, r
    }
   }
  } catch (err) {
-  console.error(`[transcript ${reqId}] Whisper failed:`, err?.message?.slice(0, 200));
+  console.error(`[transcript ${reqId}] Whisper failed:`, String(err));
   if (fs.existsSync(audioFile)) fs.unlink(audioFile, () => {});
  }
 
