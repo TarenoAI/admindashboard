@@ -34,7 +34,10 @@ console.log(`[Auth] Dashboard-Login: user="${authCfg.user}", pass-source=${fs.ex
 
 app.use((req, res, next) => {
     // Public bridge routes are protected by x-bridge-secret instead of BasicAuth
-    if ((req.path || '').startsWith('/api/ytdlp/')) return next();
+    const p = (req.path || '');
+    if (p.startsWith('/api/ytdlp/')) return next();
+    // Public screenshot endpoints for quick share in chat
+    if (p === '/bulifollows-latest.png' || p === '/bulifollows_update-latest.png') return next();
 
     const ip = (req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown').toString().split(',')[0].trim();
     const now = Date.now();
