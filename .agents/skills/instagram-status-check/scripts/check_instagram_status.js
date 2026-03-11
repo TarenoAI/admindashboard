@@ -49,6 +49,29 @@ function summarizePage(url, text) {
   return 'unbekannt_oder_eingeloggt';
 }
 
+async function clickWeiterIfVisible(page) {
+  const selectors = [
+    'button:has-text("Weiter")',
+    'div[role="button"]:has-text("Weiter")',
+    'button:has-text("Continue")',
+    'div[role="button"]:has-text("Continue")',
+  ];
+
+  for (const sel of selectors) {
+    const locator = page.locator(sel).first();
+    if (await locator.count()) {
+      try {
+        await locator.click({ timeout: 3000 });
+        await page.waitForTimeout(4500);
+        return true;
+      } catch (_) {
+        // try next selector
+      }
+    }
+  }
+  return false;
+}
+
 async function run(outputDir) {
   fs.mkdirSync(outputDir, { recursive: true });
   const runId = timestampUtc();
@@ -69,9 +92,17 @@ async function run(outputDir) {
       await page.goto(target.url, { waitUntil: 'domcontentloaded', timeout: 60000 });
       await page.waitForTimeout(4500);
 
-      const finalUrl = page.url();
-      const bodyText = await page.locator('body').innerText().catch(() => '');
-      const state = summarizePage(finalUrl, bodyText);
+      let finalUrl = page.url();
+      let bodyText = await page.locator('body').innerText().catch(() => '');
+      let state = summarizePage(finalUrl, bodyText);
+      let autoClickedWeiter = false;
+
+      if (state === 'kontoauswahl') {
+        autoClickedWeiter = await clickWeiterIfVisible(page);
+        finalUrl = page.url();
+        bodyText = await page.locator('body').innerText().catch(() => '');
+        state = summarizePage(finalUrl, bodyText);
+      }
 
       const fileName = `${runId}-${target.key}.png`;
       const filePath = path.join(outputDir, fileName);
@@ -81,6 +112,7 @@ async function run(outputDir) {
         account: target.key,
         state,
         finalUrl,
+        autoClickedWeiter,
         screenshot: filePath,
         sessionFile: target.sessionFile,
       });

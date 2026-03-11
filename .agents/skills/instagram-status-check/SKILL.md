@@ -9,6 +9,7 @@ Führe reproduzierbare Live-Checks für beide Instagram-Accounts aus und liefere
 1) frische Screenshots, 2) klaren Login-/Session-Status, 3) kurze Handlungsempfehlung.
 
 Wenn der User nach „aktuellem Screenshot“ fragt, immer diesen Skill-Flow verwenden und die Server-Endpunkte senden.
+Wenn die IG-Kontoauswahl erscheint, automatisch „Weiter“ klicken, dann Status und Screenshot erneut bewerten.
 
 ## Workflow
 
