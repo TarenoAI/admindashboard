@@ -1115,6 +1115,7 @@
                                                    <button id="draft-now-${p.id}-${cpIndex}" class="px-3 py-1.5 bg-amber-500/15 border border-amber-500/30 text-amber-300 shadow hover:shadow-[0_0_12px_rgba(245,158,11,0.25)] transition-all rounded text-[10px] font-bold w-full uppercase" onclick="publishPipelineNow('${p.id}', ${cpIndex}, 'draft')">📝 Draft now</button>
                                                    <button id="publish-now-${p.id}-${cpIndex}" class="px-3 py-1.5 bg-brand/20 border border-brand/30 text-brand shadow hover:shadow-[0_0_15px_rgba(130,81,238,0.3)] transition-all rounded text-[10px] font-bold w-full uppercase" onclick="publishPipelineNow('${p.id}', ${cpIndex}, 'publish')">⚡ Publish now</button>
                                                    <button id="notebooklm-audio-${p.id}-${cpIndex}" class="px-3 py-1.5 bg-orange-500/15 border border-orange-500/30 text-orange-300 shadow hover:shadow-[0_0_12px_rgba(251,146,60,0.25)] transition-all rounded text-[10px] font-bold w-full uppercase" onclick="openNotebookLmModal('${p.id}', ${cpIndex})">🎙 NotebookLM Audio</button>
+                                                   <div id="pipeline-action-status-${p.id}-${cpIndex}" aria-live="polite" class="text-[9px] leading-relaxed px-2 py-1.5 rounded border border-white/5 bg-white/[0.02] text-text-muted min-h-[34px] opacity-0 transition-all"></div>
                                                    ${cp.notebooklm?.lastAudioRelPath ? `<div class="mt-1 rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-1.5">
                                                      <div class="text-[9px] text-emerald-400 font-bold uppercase tracking-wider mb-1 flex items-center gap-1">🎧 <span>NotebookLM Audio</span></div>
                                                      <audio id="nlm-audio-${p.id}-${cpIndex}" controls preload="none" style="width:100%;height:28px;filter:invert(0.85) hue-rotate(90deg);border-radius:6px;outline:none;" src="/api/projects/${p.id}/pipeline/${cpIndex}/notebooklm-audio/stream?ts=${encodeURIComponent(cp.notebooklm?.lastGeneratedAt || '')}">
@@ -1736,6 +1737,47 @@
             return lead?.id || project.agents?.[0]?.id || 'tarenoblog';
         };
 
+        window.setPipelineActionStatus = (projectId, cpIndex, message = '', type = 'info') => {
+            const el = document.getElementById(`pipeline-action-status-${projectId}-${cpIndex}`);
+            if (!el) return;
+
+            const baseClass = 'text-[9px] leading-relaxed px-2 py-1.5 rounded border min-h-[34px] transition-all';
+            const toneClass = {
+                idle: 'border-white/5 bg-white/[0.02] text-text-muted opacity-0',
+                info: 'border-blue-500/20 bg-blue-500/10 text-blue-200 opacity-100',
+                success: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-200 opacity-100',
+                warning: 'border-amber-500/30 bg-amber-500/10 text-amber-200 opacity-100',
+                error: 'border-red-500/30 bg-red-500/10 text-red-200 opacity-100'
+            };
+
+            const normalizedType = message ? (toneClass[type] ? type : 'info') : 'idle';
+            el.className = `${baseClass} ${toneClass[normalizedType]}`;
+            el.textContent = message || '';
+            el.title = message || '';
+        };
+
+        async function syncProjectSnapshotIntoState(projectId) {
+            const refreshed = await fetchProjectSnapshot(projectId);
+            if (!refreshed) return null;
+
+            if (selectedProject?.id === projectId) {
+                selectedProject = refreshed;
+            }
+
+            if (currentData && (currentData.project?.id === projectId || Array.isArray(currentData.projects))) {
+                const nextData = { ...currentData };
+                if (currentData.project?.id === projectId) {
+                    nextData.project = refreshed;
+                }
+                if (Array.isArray(currentData.projects)) {
+                    nextData.projects = currentData.projects.map(project => project?.id === projectId ? refreshed : project);
+                }
+                currentData = nextData;
+            }
+
+            return refreshed;
+        }
+
         window.acceptAllPipelineSteps = async (projectId, cpIndex) => {
             const btn = document.getElementById(`accept-all-${projectId}-${cpIndex}`);
             const oldText = btn?.innerText || 'Accept all';
@@ -1779,6 +1821,12 @@
                 btn.innerText = isDraft ? 'Drafting...' : 'Publishing...';
                 btn.disabled = true;
             }
+            window.setPipelineActionStatus(
+                projectId,
+                cpIndex,
+                isDraft ? 'Draft wird gesendet...' : 'Publish wird gesendet...',
+                'info'
+            );
             try {
                 const secretKey = 'tareno_blog_api_secret';
                 let apiSecret = sessionStorage.getItem(secretKey) || '';
@@ -1819,14 +1867,20 @@
                     throw new Error((data.error || `Publish fehlgeschlagen (${res.status})`) + detail);
                 }
                 if (btn) btn.innerText = isDraft ? 'Draft saved' : 'Published';
-                if (Array.isArray(data?.warnings) && data.warnings.length) {
-                    alert(`Hinweis:\n${data.warnings.join('\n')}`);
-                }
-                loadCurrentView();
+                const warningText = Array.isArray(data?.warnings) && data.warnings.length
+                    ? ` Hinweis: ${data.warnings.join(' ')}`
+                    : '';
+                window.setPipelineActionStatus(
+                    projectId,
+                    cpIndex,
+                    `${isDraft ? 'Draft erfolgreich gesendet.' : 'Publish erfolgreich gesendet.'} Du kannst direkt mit der nächsten Zeile weitermachen.${warningText}`,
+                    warningText ? 'warning' : 'success'
+                );
+                await syncProjectSnapshotIntoState(projectId);
             } catch (e) {
                 console.error(e);
                 if (btn) btn.innerText = 'Failed';
-                alert(e?.message || 'Draft/Publish fehlgeschlagen.');
+                window.setPipelineActionStatus(projectId, cpIndex, e?.message || 'Draft/Publish fehlgeschlagen.', 'error');
             } finally {
                 if (btn) {
                     setTimeout(() => {
