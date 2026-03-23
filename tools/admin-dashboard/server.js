@@ -1,7 +1,7 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const { exec, execFile } = require("child_process");
+const { exec, execFile, spawn } = require("child_process");
 const os = require("os");
 
 const app = express();
@@ -3682,6 +3682,7 @@ app.post('/api/skills/policy', (req, res) => {
 // ---- yt-dlp bridge (for Vercel -> VPS media download) ----
 const YTDLP_BRIDGE_SECRET = process.env.YTDLP_BRIDGE_SECRET || '';
 const YTDLP_BIN = process.env.YTDLP_BIN || 'yt-dlp';
+const FFMPEG_BIN = process.env.FFMPEG_BIN || (fs.existsSync('/opt/homebrew/bin/ffmpeg') ? '/opt/homebrew/bin/ffmpeg' : 'ffmpeg');
 const YTDLP_TIMEOUT_MS = Number(process.env.YTDLP_TIMEOUT_MS || 45000);
 const YTDLP_COOKIES_FROM_BROWSER = process.env.YTDLP_COOKIES_FROM_BROWSER || 'chromium:/root/InstaFollow/data/browser-profiles/instagram';
 const YTDLP_COOKIES_FALLBACKS = process.env.YTDLP_COOKIES_FALLBACKS || 'chromium:/root/InstaFollow/data/browser-profiles/instagram_2';
@@ -3691,6 +3692,7 @@ const YTDLP_COOKIE_SOURCES = [
 ].filter((v, i, arr) => arr.indexOf(v) === i);
 const YTDLP_LOG_FILE = process.env.YTDLP_LOG_FILE || path.join(__dirname, 'logs', 'ytdlp-bridge.log');
 const YTDLP_OUT_DIR = process.env.YTDLP_OUT_DIR || path.join(__dirname, 'downloads', 'bridge');
+const MP4_TO_MP3_MAX_BYTES = Number(process.env.MP4_TO_MP3_MAX_BYTES || 300 * 1024 * 1024);
 const ytdlpRateBucket = new Map();
 
 function bridgeReqId() {
@@ -3707,6 +3709,12 @@ function bridgeLog(entry) {
 
 function safeFileName(name) {
     return String(name || '').replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 120);
+}
+
+function buildMp3DownloadName(fileName) {
+    const safeInput = safeFileName(fileName || 'audio.mp4');
+    const base = safeInput.replace(/\.[^.]+$/, '') || 'audio';
+    return `${base}.mp3`;
 }
 
 if (!fs.existsSync(YTDLP_OUT_DIR)) fs.mkdirSync(YTDLP_OUT_DIR, { recursive: true });
@@ -3789,6 +3797,216 @@ app.get('/api/ytdlp/health', (req, res) => {
         cookieSources: YTDLP_COOKIE_SOURCES,
         secretConfigured: Boolean(YTDLP_BRIDGE_SECRET)
     });
+});
+
+app.post('/api/projects/media/mp4-to-mp3', (req, res) => {
+    const reqId = bridgeReqId();
+    const started = Date.now();
+    const fileName = String(req.query.fileName || req.query.filename || req.headers['x-file-name'] || 'video.mp4');
+    const contentType = String(req.headers['content-type'] || '').toLowerCase();
+    const contentLength = Number(req.headers['content-length'] || 0);
+    const downloadName = buildMp3DownloadName(fileName);
+    const acceptedType = contentType.startsWith('video/') || contentType === 'application/octet-stream';
+
+    if (!acceptedType) {
+        bridgeLog({ reqId, ok: false, phase: 'mp4-to-mp3-validate', error: 'Unsupported content type', contentType, fileName });
+        return res.status(415).json({
+            success: false,
+            reqId,
+            error: 'Nur Video-Uploads werden akzeptiert (z.B. video/mp4).'
+        });
+    }
+
+    if (contentLength > MP4_TO_MP3_MAX_BYTES) {
+        bridgeLog({
+            reqId,
+            ok: false,
+            phase: 'mp4-to-mp3-validate',
+            error: 'Upload too large',
+            contentLength,
+            fileName
+        });
+        return res.status(413).json({
+            success: false,
+            reqId,
+            error: `Datei ist zu groß. Maximal ${Math.round(MP4_TO_MP3_MAX_BYTES / (1024 * 1024))} MB erlaubt.`
+        });
+    }
+
+    const ffmpegArgs = [
+        '-hide_banner',
+        '-loglevel', 'error',
+        '-i', 'pipe:0',
+        '-vn',
+        '-map', '0:a:0',
+        '-c:a', 'libmp3lame',
+        '-b:a', '192k',
+        '-f', 'mp3',
+        'pipe:1'
+    ];
+
+    const ffmpegProc = spawn(FFMPEG_BIN, ffmpegArgs, {
+        stdio: ['pipe', 'pipe', 'pipe']
+    });
+
+    let uploadedBytes = 0;
+    let stderr = '';
+    let responseStarted = false;
+    let requestAborted = false;
+
+    const abortWithJson = (status, errorMessage) => {
+        if (res.headersSent) {
+            res.destroy();
+            return;
+        }
+        res.status(status).json({ success: false, reqId, error: errorMessage });
+    };
+
+    const normalizeConvertError = (message) => {
+        const raw = String(message || '').trim();
+        if (!raw) return 'Konvertierung fehlgeschlagen. Prüfe, ob die MP4 eine Audiospur enthält.';
+        if (/matches no streams/i.test(raw) || (/option 'map'/i.test(raw) && /invalid argument/i.test(raw))) {
+            return 'Konvertierung fehlgeschlagen: Die MP4 enthält keine lesbare Audiospur.';
+        }
+        return raw;
+    };
+
+    const killFfmpeg = () => {
+        if (!ffmpegProc.killed) {
+            try { ffmpegProc.kill('SIGKILL'); } catch (_) { }
+        }
+    };
+
+    ffmpegProc.stderr.on('data', chunk => {
+        stderr += String(chunk || '');
+        if (stderr.length > 4000) stderr = stderr.slice(-4000);
+    });
+
+    ffmpegProc.stdin.on('error', err => {
+        if (err?.code === 'EPIPE' || err?.code === 'ERR_STREAM_DESTROYED') return;
+        stderr += `\n${String(err?.message || err || 'stdin pipe failed')}`;
+        if (stderr.length > 4000) stderr = stderr.slice(-4000);
+    });
+
+    ffmpegProc.stdout.on('data', chunk => {
+        if (!responseStarted) {
+            responseStarted = true;
+            res.status(200);
+            res.setHeader('Content-Type', 'audio/mpeg');
+            res.setHeader('Content-Disposition', `attachment; filename="${downloadName}"`);
+            res.setHeader('Cache-Control', 'no-store');
+            res.setHeader('X-Convert-Req-Id', reqId);
+        }
+        res.write(chunk);
+    });
+
+    ffmpegProc.on('error', err => {
+        bridgeLog({
+            reqId,
+            ok: false,
+            phase: 'mp4-to-mp3-spawn',
+            error: String(err?.message || err || 'ffmpeg spawn failed').slice(0, 1000),
+            fileName
+        });
+        abortWithJson(500, 'FFmpeg konnte nicht gestartet werden.');
+    });
+
+    ffmpegProc.on('close', code => {
+        const errorText = stderr.trim().split('\n').slice(-3).join(' ').trim();
+        const normalizedError = normalizeConvertError(errorText);
+        if (code === 0) {
+            if (!responseStarted) {
+                res.status(200).setHeader('Content-Type', 'audio/mpeg');
+                res.setHeader('Content-Disposition', `attachment; filename="${downloadName}"`);
+                res.setHeader('Cache-Control', 'no-store');
+            }
+            res.end();
+            bridgeLog({
+                reqId,
+                ok: true,
+                phase: 'mp4-to-mp3',
+                fileName,
+                downloadName,
+                bytesIn: uploadedBytes,
+                ms: Date.now() - started
+            });
+            return;
+        }
+
+        if (requestAborted) {
+            bridgeLog({
+                reqId,
+                ok: false,
+                phase: 'mp4-to-mp3-aborted',
+                fileName,
+                bytesIn: uploadedBytes,
+                ms: Date.now() - started
+            });
+            return;
+        }
+
+        bridgeLog({
+            reqId,
+            ok: false,
+            phase: 'mp4-to-mp3-ffmpeg',
+            fileName,
+            bytesIn: uploadedBytes,
+            ms: Date.now() - started,
+            code,
+            error: normalizedError || 'ffmpeg conversion failed'
+        });
+
+        if (!responseStarted) {
+            return abortWithJson(422, normalizedError);
+        }
+        res.destroy();
+    });
+
+    req.on('data', chunk => {
+        uploadedBytes += chunk.length;
+        if (uploadedBytes > MP4_TO_MP3_MAX_BYTES) {
+            requestAborted = true;
+            bridgeLog({
+                reqId,
+                ok: false,
+                phase: 'mp4-to-mp3-limit',
+                fileName,
+                bytesIn: uploadedBytes,
+                error: 'Upload exceeded byte limit'
+            });
+            req.unpipe(ffmpegProc.stdin);
+            ffmpegProc.stdin.destroy();
+            killFfmpeg();
+            abortWithJson(413, `Datei ist zu groß. Maximal ${Math.round(MP4_TO_MP3_MAX_BYTES / (1024 * 1024))} MB erlaubt.`);
+            req.destroy();
+        }
+    });
+
+    req.on('aborted', () => {
+        requestAborted = true;
+        killFfmpeg();
+    });
+
+    req.on('close', () => {
+        if (!res.writableEnded && !requestAborted) return;
+        killFfmpeg();
+    });
+
+    req.on('error', err => {
+        requestAborted = true;
+        bridgeLog({
+            reqId,
+            ok: false,
+            phase: 'mp4-to-mp3-request',
+            fileName,
+            bytesIn: uploadedBytes,
+            error: String(err?.message || err || 'request stream failed').slice(0, 1000)
+        });
+        killFfmpeg();
+        abortWithJson(400, 'Upload-Stream wurde unterbrochen.');
+    });
+
+    req.pipe(ffmpegProc.stdin);
 });
 
 app.post('/api/ytdlp/download', ytdlpRateLimit, ytdlpBridgeAuth, async (req, res) => {

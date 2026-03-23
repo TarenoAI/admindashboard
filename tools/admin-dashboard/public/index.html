@@ -274,6 +274,7 @@
         let selectedAgent = null;
         let notebookLmModalCtx = null;
         let pipelineUploadModalCtx = null;
+        let mediaConvertModalCtx = null;
         const notebooklmJobs = new Map(); // jobKey -> { projectId, cpIndex, tagId, startedAt }
         let notebooklmPollInterval = null;
         let organizationAutoRefreshTimer = null;
@@ -938,6 +939,7 @@
                         'Kanban Task Board (Drag & Drop)',
                         'Pipeline Freigaben (Review / Reject / Accept all)',
                         'NotebookLM Audio (Generate + Stream/Download)',
+                        'MP4 -> MP3 Converter (ohne persistente Projektablage)',
                         'Knowledge Upload & Data Sources',
                         'Markdown Upload/Replace je Pipeline-Step'
                     ];
@@ -949,6 +951,15 @@
                             </div>
                         </div>
                     ` : '';
+                    const mediaConvertHtml = `
+                        <div>
+                            <h4 class="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-4 flex items-center gap-2 pb-2 border-b border-white/5">🎵 Media Tools</h4>
+                            <div class="rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-3 space-y-3">
+                                <p class="text-[10px] text-text-secondary leading-relaxed">MP4 hochladen, serverseitig direkt zu MP3 konvertieren und sofort wieder herunterladen. Keine dauerhafte Ablage im Projekt-Workspace.</p>
+                                <button onclick="openMediaConvertModal('${p.id}')" class="w-full px-3 py-2 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-400/30 text-cyan-200 text-[10px] font-bold uppercase tracking-wider transition-colors shadow-[0_0_12px_rgba(34,211,238,0.12)]">MP4 → MP3 öffnen</button>
+                            </div>
+                        </div>
+                    `;
 
                     const renderTask = (t) => {
                         const prioColors = { high: 'text-red-400 border-red-500/30 bg-red-500/10', medium: 'text-yellow-400 border-yellow-500/30 bg-yellow-500/10', low: 'text-blue-400 border-blue-500/30 bg-blue-500/10' };
@@ -996,6 +1007,7 @@
                                         <div class="flex flex-col gap-2">${agentHtml}</div>
                                     </div>
                                     ${tarenoToolsHtml}
+                                    ${mediaConvertHtml}
                                     <div class="flex flex-col flex-1 overflow-hidden">
                                         <h4 class="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-4 flex items-center justify-between pb-2 border-b border-white/5 flex-shrink-0">
                                             <span class="flex items-center gap-2">📚 Data Sources</span>
@@ -1584,6 +1596,27 @@
             setTimeout(() => URL.revokeObjectURL(href), 1000);
         };
 
+        window.downloadBlobAsFile = (blob, fileName) => {
+            const href = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = href;
+            a.download = fileName || 'download.bin';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(href), 1000);
+        };
+
+        window.parseContentDispositionFilename = (value) => {
+            const raw = String(value || '');
+            const utf8Match = raw.match(/filename\*=UTF-8''([^;]+)/i);
+            if (utf8Match?.[1]) {
+                try { return decodeURIComponent(utf8Match[1]); } catch (_) { }
+            }
+            const plainMatch = raw.match(/filename="?([^";]+)"?/i);
+            return plainMatch?.[1] || null;
+        };
+
         window.downloadPipelineDoc = async (projectId, cpIndex, stepId, rowId) => {
             try {
                 const meta = await window.getPipelineDocMeta(projectId, cpIndex, stepId);
@@ -1723,6 +1756,99 @@
                 if (btn) {
                     btn.disabled = false;
                     btn.innerText = 'Markdown hochladen';
+                }
+            }
+        };
+
+        window.openMediaConvertModal = (projectId) => {
+            const project = currentData?.project?.id === projectId
+                ? currentData.project
+                : (currentData?.projects || []).find(p => p.id === projectId) || selectedProject;
+            if (!project) return;
+
+            mediaConvertModalCtx = { projectId, projectName: project.name || projectId };
+            const subtitle = document.getElementById('media-convert-project-info');
+            const fileInput = document.getElementById('media-convert-file');
+            const fileName = document.getElementById('media-convert-file-name');
+            const result = document.getElementById('media-convert-result');
+            if (subtitle) subtitle.innerText = `${project.name || projectId} • Direkter Audio-Download`;
+            if (fileInput) fileInput.value = '';
+            if (fileName) fileName.innerText = 'Keine MP4 ausgewählt';
+            if (result) result.innerText = 'Bereit. Video wird nicht im Projekt gespeichert.';
+            document.getElementById('media-convert-modal')?.classList.remove('hidden');
+        };
+
+        window.closeMediaConvertModal = () => {
+            document.getElementById('media-convert-modal')?.classList.add('hidden');
+            mediaConvertModalCtx = null;
+        };
+
+        window.onMediaConvertFileChange = () => {
+            const fileInput = document.getElementById('media-convert-file');
+            const fileName = document.getElementById('media-convert-file-name');
+            const file = fileInput?.files?.[0];
+            if (fileName) fileName.innerText = file ? `${file.name} • ${Math.round(file.size / (1024 * 1024) * 10) / 10} MB` : 'Keine MP4 ausgewählt';
+        };
+
+        window.submitMediaConvert = async () => {
+            const ctx = mediaConvertModalCtx;
+            if (!ctx) return;
+
+            const fileInput = document.getElementById('media-convert-file');
+            const file = fileInput?.files?.[0];
+            const result = document.getElementById('media-convert-result');
+            const btn = document.getElementById('media-convert-submit');
+
+            if (!file) {
+                if (result) result.innerText = 'Bitte zuerst eine MP4-Datei auswählen.';
+                return;
+            }
+
+            const lowerName = String(file.name || '').toLowerCase();
+            if (!(file.type === 'video/mp4' || lowerName.endsWith('.mp4'))) {
+                if (result) result.innerText = 'Bitte eine MP4-Datei hochladen.';
+                return;
+            }
+
+            if (btn) {
+                btn.disabled = true;
+                btn.innerText = 'Konvertiere...';
+            }
+            if (result) result.innerText = 'Upload läuft, ffmpeg konvertiert direkt im Stream...';
+
+            try {
+                const res = await fetch(`/api/projects/media/mp4-to-mp3?fileName=${encodeURIComponent(file.name)}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': file.type || 'application/octet-stream',
+                        'X-File-Name': file.name
+                    },
+                    body: file
+                });
+
+                if (!res.ok) {
+                    const contentType = String(res.headers.get('content-type') || '').toLowerCase();
+                    let message = `Konvertierung fehlgeschlagen (${res.status})`;
+                    if (contentType.includes('application/json')) {
+                        const data = await res.json().catch(() => null);
+                        if (data?.error) message = data.error;
+                    } else {
+                        const text = await res.text().catch(() => '');
+                        if (text) message = text;
+                    }
+                    throw new Error(message);
+                }
+
+                const blob = await res.blob();
+                const suggestedName = window.parseContentDispositionFilename(res.headers.get('content-disposition')) || `${window.slugifyForFile(file.name.replace(/\.[^.]+$/, ''))}.mp3`;
+                window.downloadBlobAsFile(blob, suggestedName);
+                if (result) result.innerText = `Fertig. MP3 wurde heruntergeladen: ${suggestedName}`;
+            } catch (e) {
+                if (result) result.innerText = `Fehler: ${e.message || e}`;
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerText = 'MP3 herunterladen';
                 }
             }
         };
@@ -2704,6 +2830,50 @@
                 <button id="notebooklm-run-btn" onclick="generateNotebookLmAudio()"
                     class="px-4 py-2 border border-orange-400/40 bg-orange-500/20 rounded-lg text-xs font-bold text-orange-200 hover:text-white hover:bg-orange-500/40 transition-colors shadow-[0_0_15px_rgba(251,146,60,0.15)]">Audio
                     aus FINAL.md erzeugen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Media Convert Modal -->
+    <div id="media-convert-modal"
+        class="hidden fixed inset-0 z-[106] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div
+            class="glass-card w-full max-w-xl p-0 flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-white/10 rounded-2xl overflow-hidden animate-slide-up">
+            <div
+                class="p-5 border-b border-white/5 bg-gradient-to-r from-black/40 to-transparent flex items-start justify-between gap-3">
+                <div>
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <span class="text-cyan-300">🎵</span> MP4 → MP3 Converter
+                    </h3>
+                    <p id="media-convert-project-info"
+                        class="text-[10px] text-text-muted uppercase tracking-wider mt-1 font-bold">
+                        Projekt • Direkter Audio-Download
+                    </p>
+                </div>
+                <button onclick="closeMediaConvertModal()"
+                    class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 flex items-center justify-center text-text-muted hover:text-white transition-colors">✕</button>
+            </div>
+            <div class="p-5 space-y-4">
+                <div class="rounded-xl border border-cyan-500/20 bg-cyan-500/5 px-3 py-2.5">
+                    <p class="text-[10px] text-cyan-200 leading-relaxed">Das Video wird nur für die Dauer der Konvertierung an den Server gestreamt. Es landet nicht als Projektdatei im Workspace.</p>
+                </div>
+                <div>
+                    <label
+                        class="block text-[10px] uppercase font-bold tracking-wider text-text-muted mb-1.5 ml-1">MP4-Datei</label>
+                    <input id="media-convert-file" type="file" accept=".mp4,video/mp4"
+                        onchange="onMediaConvertFileChange()"
+                        class="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white file:mr-3 file:rounded file:border-0 file:bg-cyan-500/20 file:px-3 file:py-1 file:text-cyan-200 file:cursor-pointer focus:outline-none focus:border-cyan-400/50 transition-colors" />
+                    <p id="media-convert-file-name" class="text-[10px] text-text-muted mt-1.5">Keine MP4 ausgewählt</p>
+                </div>
+
+                <pre id="media-convert-result"
+                    class="m-0 text-xs text-text-secondary whitespace-pre-wrap bg-black/30 border border-white/10 rounded-lg p-3 min-h-[64px]">Bereit. Video wird nicht im Projekt gespeichert.</pre>
+            </div>
+            <div class="p-4 border-t border-white/5 bg-black/20 flex justify-end gap-3">
+                <button onclick="closeMediaConvertModal()"
+                    class="px-4 py-2 border border-white/10 rounded-lg text-xs font-semibold text-text-muted hover:text-white hover:bg-white/5 transition-colors">Abbrechen</button>
+                <button id="media-convert-submit" onclick="submitMediaConvert()"
+                    class="px-4 py-2 border border-cyan-400/40 bg-cyan-500/20 rounded-lg text-xs font-bold text-cyan-200 hover:text-white hover:bg-cyan-500/40 transition-colors shadow-[0_0_15px_rgba(34,211,238,0.15)]">MP3 herunterladen</button>
             </div>
         </div>
     </div>
