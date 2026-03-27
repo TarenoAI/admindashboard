@@ -955,8 +955,8 @@
                         <div>
                             <h4 class="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-4 flex items-center gap-2 pb-2 border-b border-white/5">🎵 Media Tools</h4>
                             <div class="rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-3 space-y-3">
-                                <p class="text-[10px] text-text-secondary leading-relaxed">MP4 hochladen, serverseitig direkt zu MP3 konvertieren und sofort wieder herunterladen. Keine dauerhafte Ablage im Projekt-Workspace.</p>
-                                <button onclick="openMediaConvertModal('${p.id}')" class="w-full px-3 py-2 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-400/30 text-cyan-200 text-[10px] font-bold uppercase tracking-wider transition-colors shadow-[0_0_12px_rgba(34,211,238,0.12)]">MP4 → MP3 öffnen</button>
+                                <p class="text-[10px] text-text-secondary leading-relaxed">Eine oder mehrere MP4s hochladen, serverseitig direkt zu MP3 konvertieren und sofort wieder herunterladen. Keine dauerhafte Ablage im Projekt-Workspace.</p>
+                                <button onclick="openMediaConvertModal('${p.id}')" class="w-full px-3 py-2 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-400/30 text-cyan-200 text-[10px] font-bold uppercase tracking-wider transition-colors shadow-[0_0_12px_rgba(34,211,238,0.12)]">Bulk MP4 → MP3 öffnen</button>
                             </div>
                         </div>
                     `;
@@ -1617,6 +1617,45 @@
             return plainMatch?.[1] || null;
         };
 
+        window.escapeHtml = (value) => {
+            return String(value || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        };
+
+        window.formatMediaConvertSize = (bytes) => {
+            const sizeMb = (Number(bytes || 0) / (1024 * 1024));
+            return `${Math.round(sizeMb * 10) / 10} MB`;
+        };
+
+        window.renderMediaConvertSelectedFiles = (files) => {
+            const box = document.getElementById('media-convert-selected-list');
+            if (!box) return;
+
+            if (!Array.isArray(files) || files.length === 0) {
+                box.innerHTML = '';
+                box.classList.add('hidden');
+                return;
+            }
+
+            const previewItems = files.slice(0, 6).map(file => `
+                <div class="rounded-lg border border-white/10 bg-black/30 px-2.5 py-2">
+                    <p class="text-[10px] text-white truncate">${window.escapeHtml(file.name)}</p>
+                    <p class="text-[9px] text-text-muted mt-1">${window.formatMediaConvertSize(file.size)}</p>
+                </div>
+            `).join('');
+            const extraCount = files.length - 6;
+            const extraHtml = extraCount > 0
+                ? `<div class="rounded-lg border border-cyan-500/20 bg-cyan-500/5 px-2.5 py-2 text-[10px] text-cyan-200 flex items-center justify-center">+${extraCount} weitere Datei${extraCount === 1 ? '' : 'en'}</div>`
+                : '';
+
+            box.innerHTML = previewItems + extraHtml;
+            box.classList.remove('hidden');
+        };
+
         window.downloadPipelineDoc = async (projectId, cpIndex, stepId, rowId) => {
             try {
                 const meta = await window.getPipelineDocMeta(projectId, cpIndex, stepId);
@@ -1771,10 +1810,16 @@
             const fileInput = document.getElementById('media-convert-file');
             const fileName = document.getElementById('media-convert-file-name');
             const result = document.getElementById('media-convert-result');
+            const submitBtn = document.getElementById('media-convert-submit');
             if (subtitle) subtitle.innerText = `${project.name || projectId} • Direkter Audio-Download`;
             if (fileInput) fileInput.value = '';
-            if (fileName) fileName.innerText = 'Keine MP4 ausgewählt';
-            if (result) result.innerText = 'Bereit. Video wird nicht im Projekt gespeichert.';
+            if (fileName) fileName.innerText = 'Keine MP4s ausgewählt';
+            if (result) result.innerText = 'Bereit. Einzel- und Bulk-Upload landen nicht als Projektdatei im Workspace.';
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Bulk MP3 herunterladen';
+            }
+            window.renderMediaConvertSelectedFiles([]);
             document.getElementById('media-convert-modal')?.classList.remove('hidden');
         };
 
@@ -1786,8 +1831,20 @@
         window.onMediaConvertFileChange = () => {
             const fileInput = document.getElementById('media-convert-file');
             const fileName = document.getElementById('media-convert-file-name');
-            const file = fileInput?.files?.[0];
-            if (fileName) fileName.innerText = file ? `${file.name} • ${Math.round(file.size / (1024 * 1024) * 10) / 10} MB` : 'Keine MP4 ausgewählt';
+            const submitBtn = document.getElementById('media-convert-submit');
+            const files = Array.from(fileInput?.files || []);
+            if (fileName) {
+                if (files.length === 0) {
+                    fileName.innerText = 'Keine MP4s ausgewählt';
+                } else if (files.length === 1) {
+                    fileName.innerText = `${files[0].name} • ${window.formatMediaConvertSize(files[0].size)}`;
+                } else {
+                    const totalSize = files.reduce((sum, file) => sum + Number(file.size || 0), 0);
+                    fileName.innerText = `${files.length} MP4-Dateien • ${window.formatMediaConvertSize(totalSize)}`;
+                }
+            }
+            if (submitBtn) submitBtn.innerText = files.length === 1 ? 'MP3 herunterladen' : 'Bulk MP3 herunterladen';
+            window.renderMediaConvertSelectedFiles(files);
         };
 
         window.submitMediaConvert = async () => {
@@ -1795,60 +1852,93 @@
             if (!ctx) return;
 
             const fileInput = document.getElementById('media-convert-file');
-            const file = fileInput?.files?.[0];
+            const files = Array.from(fileInput?.files || []);
             const result = document.getElementById('media-convert-result');
             const btn = document.getElementById('media-convert-submit');
 
-            if (!file) {
-                if (result) result.innerText = 'Bitte zuerst eine MP4-Datei auswählen.';
+            if (files.length === 0) {
+                if (result) result.innerText = 'Bitte zuerst mindestens eine MP4-Datei auswählen.';
                 return;
             }
 
-            const lowerName = String(file.name || '').toLowerCase();
-            if (!(file.type === 'video/mp4' || lowerName.endsWith('.mp4'))) {
-                if (result) result.innerText = 'Bitte eine MP4-Datei hochladen.';
+            const invalidFiles = files.filter(file => {
+                const lowerName = String(file.name || '').toLowerCase();
+                return !(file.type === 'video/mp4' || lowerName.endsWith('.mp4'));
+            });
+            if (invalidFiles.length > 0) {
+                if (result) result.innerText = `Bitte nur MP4-Dateien hochladen. Ungültig: ${invalidFiles.map(file => file.name).join(', ')}`;
                 return;
             }
 
+            const defaultButtonText = files.length > 1 ? 'Bulk MP3 herunterladen' : 'MP3 herunterladen';
             if (btn) {
                 btn.disabled = true;
-                btn.innerText = 'Konvertiere...';
+                btn.innerText = files.length > 1 ? 'Bulk läuft...' : 'Konvertiere...';
             }
-            if (result) result.innerText = 'Upload läuft, ffmpeg konvertiert direkt im Stream...';
+            if (result) result.innerText = files.length > 1
+                ? `Bulk-Queue gestartet. ${files.length} Videos werden nacheinander konvertiert...`
+                : 'Upload läuft, ffmpeg konvertiert direkt im Stream...';
 
+            const summaries = [];
+            let successCount = 0;
             try {
-                const res = await fetch(`/api/projects/media/mp4-to-mp3?fileName=${encodeURIComponent(file.name)}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': file.type || 'application/octet-stream',
-                        'X-File-Name': file.name
-                    },
-                    body: file
-                });
-
-                if (!res.ok) {
-                    const contentType = String(res.headers.get('content-type') || '').toLowerCase();
-                    let message = `Konvertierung fehlgeschlagen (${res.status})`;
-                    if (contentType.includes('application/json')) {
-                        const data = await res.json().catch(() => null);
-                        if (data?.error) message = data.error;
-                    } else {
-                        const text = await res.text().catch(() => '');
-                        if (text) message = text;
+                for (let index = 0; index < files.length; index += 1) {
+                    const file = files[index];
+                    if (result) {
+                        result.innerText = `Verarbeite ${index + 1}/${files.length}: ${file.name}\n\n${summaries.join('\n') || 'Warteschlange läuft...'}`;
                     }
-                    throw new Error(message);
-                }
 
-                const blob = await res.blob();
-                const suggestedName = window.parseContentDispositionFilename(res.headers.get('content-disposition')) || `${window.slugifyForFile(file.name.replace(/\.[^.]+$/, ''))}.mp3`;
-                window.downloadBlobAsFile(blob, suggestedName);
-                if (result) result.innerText = `Fertig. MP3 wurde heruntergeladen: ${suggestedName}`;
+                    try {
+                        const res = await fetch(`/api/projects/media/mp4-to-mp3?fileName=${encodeURIComponent(file.name)}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': file.type || 'application/octet-stream',
+                                'X-File-Name': file.name
+                            },
+                            body: file
+                        });
+
+                        if (!res.ok) {
+                            const contentType = String(res.headers.get('content-type') || '').toLowerCase();
+                            let message = `Konvertierung fehlgeschlagen (${res.status})`;
+                            if (contentType.includes('application/json')) {
+                                const data = await res.json().catch(() => null);
+                                if (data?.error) message = data.error;
+                            } else {
+                                const text = await res.text().catch(() => '');
+                                if (text) message = text;
+                            }
+                            throw new Error(message);
+                        }
+
+                        const blob = await res.blob();
+                        const suggestedName = window.parseContentDispositionFilename(res.headers.get('content-disposition')) || `${window.slugifyForFile(file.name.replace(/\.[^.]+$/, ''))}.mp3`;
+                        window.downloadBlobAsFile(blob, suggestedName);
+                        successCount += 1;
+                        summaries.push(`✓ ${file.name} → ${suggestedName}`);
+                    } catch (e) {
+                        summaries.push(`✕ ${file.name} → ${e.message || e}`);
+                    }
+
+                    if (files.length > 1) {
+                        await new Promise(resolve => setTimeout(resolve, 150));
+                    }
+                }
             } catch (e) {
                 if (result) result.innerText = `Fehler: ${e.message || e}`;
             } finally {
+                if (result) {
+                    const summaryHeader = successCount === files.length
+                        ? `Fertig. ${successCount}/${files.length} MP3-Datei${successCount === 1 ? '' : 'en'} wurde${successCount === 1 ? '' : 'n'} heruntergeladen.`
+                        : `Bulk fertig. ${successCount}/${files.length} erfolgreich verarbeitet.`;
+                    const browserNote = files.length > 1
+                        ? '\n\nHinweis: Manche Browser fragen bei mehreren Dateien nach Freigabe für Mehrfach-Downloads.'
+                        : '';
+                    result.innerText = `${summaryHeader}\n\n${summaries.join('\n')}${browserNote}`;
+                }
                 if (btn) {
                     btn.disabled = false;
-                    btn.innerText = 'MP3 herunterladen';
+                    btn.innerText = defaultButtonText;
                 }
             }
         };
@@ -2855,25 +2945,27 @@
             </div>
             <div class="p-5 space-y-4">
                 <div class="rounded-xl border border-cyan-500/20 bg-cyan-500/5 px-3 py-2.5">
-                    <p class="text-[10px] text-cyan-200 leading-relaxed">Das Video wird nur für die Dauer der Konvertierung an den Server gestreamt. Es landet nicht als Projektdatei im Workspace.</p>
+                    <p class="text-[10px] text-cyan-200 leading-relaxed">Die Videos werden nur für die Dauer der Konvertierung an den Server gestreamt. Sie landen nicht als Projektdatei im Workspace. Bei Bulk Upload läuft die Queue bewusst nacheinander, damit die VPS-Last stabil bleibt.</p>
                 </div>
                 <div>
                     <label
-                        class="block text-[10px] uppercase font-bold tracking-wider text-text-muted mb-1.5 ml-1">MP4-Datei</label>
-                    <input id="media-convert-file" type="file" accept=".mp4,video/mp4"
+                        class="block text-[10px] uppercase font-bold tracking-wider text-text-muted mb-1.5 ml-1">MP4-Dateien</label>
+                    <input id="media-convert-file" type="file" accept=".mp4,video/mp4" multiple
                         onchange="onMediaConvertFileChange()"
                         class="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white file:mr-3 file:rounded file:border-0 file:bg-cyan-500/20 file:px-3 file:py-1 file:text-cyan-200 file:cursor-pointer focus:outline-none focus:border-cyan-400/50 transition-colors" />
-                    <p id="media-convert-file-name" class="text-[10px] text-text-muted mt-1.5">Keine MP4 ausgewählt</p>
+                    <p id="media-convert-file-name" class="text-[10px] text-text-muted mt-1.5">Keine MP4s ausgewählt</p>
                 </div>
+                <div id="media-convert-selected-list"
+                    class="hidden grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
 
                 <pre id="media-convert-result"
-                    class="m-0 text-xs text-text-secondary whitespace-pre-wrap bg-black/30 border border-white/10 rounded-lg p-3 min-h-[64px]">Bereit. Video wird nicht im Projekt gespeichert.</pre>
+                    class="m-0 text-xs text-text-secondary whitespace-pre-wrap bg-black/30 border border-white/10 rounded-lg p-3 min-h-[96px]">Bereit. Einzel- und Bulk-Upload landen nicht als Projektdatei im Workspace.</pre>
             </div>
             <div class="p-4 border-t border-white/5 bg-black/20 flex justify-end gap-3">
                 <button onclick="closeMediaConvertModal()"
                     class="px-4 py-2 border border-white/10 rounded-lg text-xs font-semibold text-text-muted hover:text-white hover:bg-white/5 transition-colors">Abbrechen</button>
                 <button id="media-convert-submit" onclick="submitMediaConvert()"
-                    class="px-4 py-2 border border-cyan-400/40 bg-cyan-500/20 rounded-lg text-xs font-bold text-cyan-200 hover:text-white hover:bg-cyan-500/40 transition-colors shadow-[0_0_15px_rgba(34,211,238,0.15)]">MP3 herunterladen</button>
+                    class="px-4 py-2 border border-cyan-400/40 bg-cyan-500/20 rounded-lg text-xs font-bold text-cyan-200 hover:text-white hover:bg-cyan-500/40 transition-colors shadow-[0_0_15px_rgba(34,211,238,0.15)]">Bulk MP3 herunterladen</button>
             </div>
         </div>
     </div>
