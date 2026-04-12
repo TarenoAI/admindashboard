@@ -1,22 +1,22 @@
-# Anweisung fuer den VPS-Agenten: Torino Compact Pages hochladen
+# Anweisung fuer den VPS-Agenten: Tareno Compact Pages hochladen
 
 ## Arbeitsverzeichnis
 
 Wenn der Workspace auf dem VPS gespiegelt ist, liegt der Bereich hier:
 
 ```text
-/root/.openclaw/workspace-tareno/projects/compact-pages/torino
+/root/.openclaw/workspace-tareno/projects/compact-pages/tareno
 ```
 
 Lokal im Repo liegt derselbe Bereich hier:
 
 ```text
-projects/compact-pages/torino
+projects/compact-pages/tareno
 ```
 
 ## Was du hochladen sollst
 
-Scanne alle Unterordner in `projects/compact-pages/torino/`, aber ignoriere `_template/`.
+Scanne alle Unterordner in `projects/compact-pages/tareno/`, aber ignoriere `_template/`.
 
 Pro Ordner gilt:
 
@@ -47,7 +47,7 @@ Wenn eine dieser Bedingungen fehlt, nichts hochladen.
    - `upload_ready`
    - `last_updated`
 4. Nutze den Markdown-Body unterhalb des Frontmatters als Seiteninhalt
-5. Lade die Page in das Torino-Zielsystem anhand von `route` und `slug` hoch
+5. Lade die Page in das Tareno-Zielsystem anhand von `route` und `slug` hoch
 
 ## Harte Stop-Kriterien
 
@@ -80,7 +80,7 @@ Dann nichts raten. Page ueberspringen und den blockierenden Grund reporten.
 ```text
 Arbeite im Workspace unter /root/.openclaw/workspace-tareno.
 
-Pruefe den Ordner /root/.openclaw/workspace-tareno/projects/compact-pages/torino.
+Pruefe den Ordner /root/.openclaw/workspace-tareno/projects/compact-pages/tareno.
 Ignoriere _template.
 
 Fuer jeden Page-Ordner gilt:

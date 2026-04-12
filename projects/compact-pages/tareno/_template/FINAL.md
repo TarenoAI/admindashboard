@@ -1,6 +1,6 @@
 ---
-project: torino
-brand: torino
+project: tareno
+brand: tareno
 content_type: bof_compact_page
 slug: replace-with-page-slug
 route: /replace-with-final-route
@@ -20,7 +20,7 @@ Write a concise introduction that frames the problem and the commercial context.
 
 Describe the pain, buying trigger, or conversion problem this page addresses.
 
-## Why Torino Fits
+## Why Tareno Fits
 
 Explain the solution fit clearly and concretely.
 

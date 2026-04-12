@@ -1,19 +1,19 @@
-# Torino Compact Page Upload Contract
+# Tareno Compact Page Upload Contract
 
 ## Zweck
 
-Dieser Vertrag definiert, welche Datei fuer eine Torino Compact Page kanonisch ist und welche Metadaten der Upload-Agent auslesen muss.
+Dieser Vertrag definiert, welche Datei fuer eine Tareno Compact Page kanonisch ist und welche Metadaten der Upload-Agent auslesen muss.
 
 ## Kanonisches Artefakt
 
 - Datei: `FINAL.md`
-- Ort: `projects/compact-pages/torino/{page-slug}/FINAL.md`
+- Ort: `projects/compact-pages/tareno/{page-slug}/FINAL.md`
 - Bedeutung: Die Datei ist publish-ready und ersetzt alle frueheren Zwischenstaende.
 
 ## Statusdatei
 
 - Datei: `STATE.md`
-- Ort: `projects/compact-pages/torino/{page-slug}/STATE.md`
+- Ort: `projects/compact-pages/tareno/{page-slug}/STATE.md`
 - Bedeutung: Steuert, ob Upload erlaubt ist.
 
 ## Erlaubte Upload-Voraussetzungen
@@ -29,8 +29,8 @@ Ein Upload ist nur erlaubt, wenn:
 Minimal erforderlich:
 
 ```yaml
-project: torino
-brand: torino
+project: tareno
+brand: tareno
 content_type: bof_compact_page
 slug: example-slug
 route: /example-route

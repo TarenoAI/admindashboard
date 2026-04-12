@@ -28,4 +28,4 @@ projects/compact-pages/{brand}/{page-slug}/
 
 ## Aktive Bereiche
 
-- `torino/` - Bottom-of-Funnel Compact Pages fuer Torino
+- `tareno/` - Bottom-of-Funnel Compact Pages fuer Tareno

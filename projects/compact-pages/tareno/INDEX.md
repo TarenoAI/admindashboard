@@ -1,6 +1,6 @@
-# Torino Compact Pages
+# Tareno Compact Pages
 
-Dedizierter Bereich fuer Torino Bottom-of-Funnel Compact Pages.
+Dedizierter Bereich fuer Tareno Bottom-of-Funnel Compact Pages.
 
 ## Ziel
 
@@ -11,7 +11,7 @@ Hier liegen finale, uploadbare Compact Pages, die kein Blog-Format haben und des
 Jede Page bekommt einen eigenen Ordner:
 
 ```text
-projects/compact-pages/torino/{page-slug}/
+projects/compact-pages/tareno/{page-slug}/
 ├── FINAL.md
 ├── STATE.md
 └── assets/
@@ -48,5 +48,5 @@ Ein VPS-Agent darf eine Page nur hochladen, wenn beide Bedingungen erfuellt sind
 Die Referenzvorlage liegt unter:
 
 ```text
-projects/compact-pages/torino/_template/
+projects/compact-pages/tareno/_template/
 ```
