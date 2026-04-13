@@ -939,6 +939,7 @@
                         'Kanban Task Board (Drag & Drop)',
                         'Pipeline Freigaben (Review / Reject / Accept all)',
                         'NotebookLM Audio (Generate + Stream/Download)',
+                        'Compact Pages Monitor (FINAL.md / STATE.md)',
                         'MP4 -> MP3 Converter (ohne persistente Projektablage)',
                         'Knowledge Upload & Data Sources',
                         'Markdown Upload/Replace je Pipeline-Step'
@@ -960,6 +961,116 @@
                             </div>
                         </div>
                     `;
+
+                    const compactPages = Array.isArray(p.compactPages) ? p.compactPages : [];
+                    const compactPagesMeta = (p.compactPagesMeta && typeof p.compactPagesMeta === 'object') ? p.compactPagesMeta : {};
+                    const compactPagesCounts = (compactPagesMeta.counts && typeof compactPagesMeta.counts === 'object')
+                        ? compactPagesMeta.counts
+                        : {
+                            total: compactPages.length,
+                            ready: compactPages.filter(cp => cp.readyForUpload).length,
+                            uploaded: compactPages.filter(cp => cp.uploaded).length,
+                            blocked: compactPages.filter(cp => cp.hasFinal && !cp.readyForUpload && !cp.uploaded).length
+                        };
+                    const compactPagesRoot = compactPagesMeta.rootRelPath || `projects/compact-pages/${(p.id || '').toLowerCase()}`;
+                    const compactTemplateFinal = compactPagesMeta.template?.finalRelPath || null;
+                    const compactTemplateState = compactPagesMeta.template?.stateRelPath || null;
+                    const compactPageCardsHtml = compactPages.length > 0
+                        ? `<div class="grid grid-cols-1 xl:grid-cols-2 gap-4 p-6 md:p-8">
+                            ${compactPages.map(cp => {
+                                const stateStatus = String(cp.stateStatus || (cp.hasState ? 'UNKNOWN' : 'MISSING')).toUpperCase();
+                                const stateStatusClass = stateStatus === 'UPLOADED'
+                                    ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30'
+                                    : stateStatus === 'READY_FOR_UPLOAD'
+                                        ? 'bg-amber-500/10 text-amber-300 border-amber-500/30'
+                                        : stateStatus === 'DRAFT'
+                                            ? 'bg-blue-500/10 text-blue-300 border-blue-500/30'
+                                            : 'bg-white/5 text-text-muted border-white/10';
+                                const warnings = [];
+                                if (!cp.hasFinal) warnings.push('FINAL fehlt');
+                                if (!cp.hasState) warnings.push('STATE fehlt');
+                                if (cp.hasPlaceholders) warnings.push('Platzhalter gefunden');
+                                const warningsHtml = warnings.length
+                                    ? `<div class="flex flex-wrap gap-1.5 mt-3">${warnings.map(item => `<span class="px-2 py-1 rounded-md text-[9px] font-semibold bg-red-500/10 text-red-300 border border-red-500/20">${item}</span>`).join('')}</div>`
+                                    : '';
+                                const uploadGateHtml = cp.readyForUpload
+                                    ? '<span class="px-2 py-1 rounded-md text-[9px] font-semibold bg-green-500/10 text-green-300 border border-green-500/30">Upload erlaubt</span>'
+                                    : '<span class="px-2 py-1 rounded-md text-[9px] font-semibold bg-white/5 text-text-muted border border-white/10">Noch nicht freigegeben</span>';
+                                const uploadReadyHtml = cp.uploadReady === true
+                                    ? '<span class="px-2 py-1 rounded-md text-[9px] font-semibold bg-green-500/10 text-green-300 border border-green-500/30">upload_ready: true</span>'
+                                    : '<span class="px-2 py-1 rounded-md text-[9px] font-semibold bg-white/5 text-text-muted border border-white/10">upload_ready: false</span>';
+                                return `
+                                <div class="rounded-2xl border border-white/10 bg-black/30 p-5 shadow-[0_0_20px_rgba(0,0,0,0.18)]">
+                                    <div class="flex flex-wrap items-start justify-between gap-3">
+                                        <div class="min-w-0">
+                                            <div class="flex flex-wrap items-center gap-2 mb-2">
+                                                <span class="px-2 py-1 rounded-md text-[9px] uppercase tracking-widest font-bold bg-brand/15 text-brand border border-brand/30">${cp.slug || cp.dirName || 'page'}</span>
+                                                <span class="px-2 py-1 rounded-md text-[9px] uppercase tracking-widest font-bold border ${stateStatusClass}">${stateStatus}</span>
+                                            </div>
+                                            <h5 class="text-sm font-semibold text-white leading-snug">${window.escapeHtml(cp.title || cp.slug || cp.dirName || 'Unbenannte Compact Page')}</h5>
+                                            <p class="text-[10px] text-text-muted font-mono mt-2 break-all">${window.escapeHtml(cp.route || 'Route fehlt')}</p>
+                                        </div>
+                                        <div class="flex flex-wrap gap-1.5 justify-end">
+                                            ${uploadGateHtml}
+                                            ${uploadReadyHtml}
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+                                        <div class="rounded-xl border border-white/5 bg-white/[0.02] p-3">
+                                            <p class="text-[9px] uppercase tracking-widest text-text-muted font-bold mb-1">Dateien</p>
+                                            <div class="flex flex-wrap gap-2">
+                                                ${cp.finalRelPath ? `<button onclick="openProjectRef('${cp.finalRelPath}')" class="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[10px] text-white transition-colors">FINAL.md öffnen</button>` : `<span class="px-2.5 py-1.5 rounded-lg bg-white/5 border border-white/10 text-[10px] text-text-muted opacity-60">FINAL.md fehlt</span>`}
+                                                ${cp.stateRelPath ? `<button onclick="openProjectRef('${cp.stateRelPath}')" class="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[10px] text-white transition-colors">STATE.md öffnen</button>` : `<span class="px-2.5 py-1.5 rounded-lg bg-white/5 border border-white/10 text-[10px] text-text-muted opacity-60">STATE.md fehlt</span>`}
+                                            </div>
+                                            <p class="text-[10px] text-text-muted mt-3 font-mono break-all">${window.escapeHtml(cp.dirRelPath || '')}</p>
+                                        </div>
+                                        <div class="rounded-xl border border-white/5 bg-white/[0.02] p-3">
+                                            <p class="text-[9px] uppercase tracking-widest text-text-muted font-bold mb-1">Metadaten</p>
+                                            <div class="space-y-1.5 text-[10px] text-text-secondary">
+                                                <p><span class="text-text-muted">Typ:</span> ${window.escapeHtml(cp.contentType || '—')}</p>
+                                                <p><span class="text-text-muted">Wörter:</span> ${cp.bodyWordCount || 0}</p>
+                                                <p><span class="text-text-muted">Last updated:</span> ${window.escapeHtml(cp.lastUpdated || '—')}</p>
+                                                <p><span class="text-text-muted">Datei geändert:</span> ${window.escapeHtml(formatBerlinDateTime(cp.updatedAt) || '—')}</p>
+                                                ${cp.uploadedAt ? `<p><span class="text-text-muted">Upload:</span> ${window.escapeHtml(formatBerlinDateTime(cp.uploadedAt) || cp.uploadedAt)}</p>` : ''}
+                                                ${cp.uploadedBy ? `<p><span class="text-text-muted">By:</span> ${window.escapeHtml(cp.uploadedBy)}</p>` : ''}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    ${cp.description ? `<p class="text-[11px] text-text-secondary leading-relaxed mt-4">${window.escapeHtml(cp.description)}</p>` : ''}
+                                    ${warningsHtml}
+                                </div>`;
+                            }).join('')}
+                        </div>`
+                        : `<div class="p-6 md:p-8">
+                            <div class="rounded-2xl border border-dashed border-white/10 bg-black/20 p-5">
+                                <p class="text-sm font-semibold text-white">Noch keine echten Compact Pages vorhanden</p>
+                                <p class="text-xs text-text-muted mt-2 leading-relaxed">Der Dashboard-Block liest direkt aus <span class="font-mono">${window.escapeHtml(compactPagesRoot)}</span>. Sichtbar werden nur echte Unterordner wie <span class="font-mono">projects/compact-pages/tareno/dein-slug/</span>, nicht nur <span class="font-mono">_template</span>.</p>
+                                <div class="flex flex-wrap gap-2 mt-4">
+                                    ${compactTemplateFinal ? `<button onclick="openProjectRef('${compactTemplateFinal}')" class="px-3 py-1.5 rounded-lg bg-brand/15 hover:bg-brand/25 border border-brand/30 text-brand text-[10px] font-semibold transition-colors">Template FINAL öffnen</button>` : ''}
+                                    ${compactTemplateState ? `<button onclick="openProjectRef('${compactTemplateState}')" class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white text-[10px] font-semibold transition-colors">Template STATE öffnen</button>` : ''}
+                                </div>
+                            </div>
+                        </div>`;
+                    const compactPagesHtml = isTarenoProject ? `
+                        <div class="glass-card mt-6 p-0 overflow-hidden shadow-2xl border border-white/10 bg-black/40">
+                            <div class="p-6 md:p-8 border-b border-white/5 bg-gradient-to-r from-cyan-500/10 to-transparent relative">
+                                <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                                    <div>
+                                        <h4 class="text-xs uppercase tracking-widest text-cyan-200 font-extrabold flex items-center gap-2">📦 Compact Pages</h4>
+                                        <p class="text-xs text-text-muted mt-2 max-w-3xl">Bottom-of-Funnel Compact Pages fuer Tareno, getrennt von der Blog-Pipeline. Das Dashboard scannt direkt <span class="font-mono">${window.escapeHtml(compactPagesRoot)}</span> und zeigt <span class="font-mono">FINAL.md</span> plus <span class="font-mono">STATE.md</span> als Upload-Gates.</p>
+                                    </div>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-white/5 border border-white/10 text-white">${compactPagesCounts.total || 0} total</span>
+                                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-amber-500/10 border border-amber-500/30 text-amber-300">${compactPagesCounts.ready || 0} ready</span>
+                                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-emerald-500/10 border border-emerald-500/30 text-emerald-300">${compactPagesCounts.uploaded || 0} uploaded</span>
+                                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-red-500/10 border border-red-500/30 text-red-300">${compactPagesCounts.blocked || 0} blocked</span>
+                                    </div>
+                                </div>
+                            </div>
+                            ${compactPageCardsHtml}
+                        </div>` : '';
 
                     const renderTask = (t) => {
                         const prioColors = { high: 'text-red-400 border-red-500/30 bg-red-500/10', medium: 'text-yellow-400 border-yellow-500/30 bg-yellow-500/10', low: 'text-blue-400 border-blue-500/30 bg-blue-500/10' };
@@ -1145,6 +1256,8 @@
                                 </table>
                             </div>
                         </div>` : ''}
+
+                        ${compactPagesHtml}
 
                         <div class="glass-card p-4 text-xs mt-4">
                              <h4 class="font-semibold text-white mb-2">Projekt Wissen durchstöbern</h4>

@@ -388,6 +388,179 @@ function normalizeFileStem(input) {
         .replace(/^_+|_+$/g, '');
 }
 
+function parseLooseScalarValue(value) {
+    const raw = String(value ?? '').trim();
+    if (!raw) return '';
+    if ((raw.startsWith('"') && raw.endsWith('"')) || (raw.startsWith("'") && raw.endsWith("'"))) {
+        return raw.slice(1, -1);
+    }
+    if (/^(true|false)$/i.test(raw)) return raw.toLowerCase() === 'true';
+    if (/^(null|~)$/i.test(raw)) return null;
+    if (/^-?\d+(\.\d+)?$/.test(raw)) return Number(raw);
+    return raw;
+}
+
+function parseSimpleFrontmatter(raw) {
+    const text = String(raw || '').replace(/\r\n/g, '\n');
+    const match = text.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
+    if (!match) return { data: {}, body: text };
+
+    const data = {};
+    for (const line of match[1].split('\n')) {
+        const trimmed = line.trim();
+        if (!trimmed || trimmed.startsWith('#')) continue;
+        const parts = trimmed.match(/^([A-Za-z0-9_-]+)\s*:\s*(.*)$/);
+        if (!parts) continue;
+        data[parts[1]] = parseLooseScalarValue(parts[2]);
+    }
+    return { data, body: match[2] || '' };
+}
+
+function parseSimpleKeyValueFile(raw) {
+    const text = String(raw || '').replace(/\r\n/g, '\n');
+    const data = {};
+    for (const line of text.split('\n')) {
+        const trimmed = line.trim();
+        if (!trimmed || trimmed.startsWith('#')) continue;
+        const parts = trimmed.match(/^([A-Za-z0-9_-]+)\s*:\s*(.*)$/);
+        if (!parts) continue;
+        data[parts[1]] = parseLooseScalarValue(parts[2]);
+    }
+    return data;
+}
+
+function countWords(raw) {
+    const text = String(raw || '').trim();
+    return text ? text.split(/\s+/).length : 0;
+}
+
+function isoMtime(absPath) {
+    try {
+        const stat = fs.statSync(absPath);
+        return stat?.mtime ? new Date(stat.mtime).toISOString() : null;
+    } catch {
+        return null;
+    }
+}
+
+function detectCompactPagePlaceholders(raw) {
+    return /(TODO|TBD|\{\{[^}]+\}\}|<[^>\n]+>)/.test(String(raw || ''));
+}
+
+function collectCompactPagesForProject(projectId) {
+    const brand = safeSlug(projectId, String(projectId || 'project').toLowerCase());
+    const rootAbs = path.join(WORKSPACE_ROOT, 'projects', 'compact-pages', brand);
+    const rootRel = path.relative(WORKSPACE_ROOT, rootAbs);
+    const templateDirAbs = path.join(rootAbs, '_template');
+
+    const meta = {
+        rootAbsPath: rootAbs,
+        rootRelPath: rootRel,
+        exists: fs.existsSync(rootAbs),
+        template: {
+            dirRelPath: fs.existsSync(templateDirAbs) ? path.relative(WORKSPACE_ROOT, templateDirAbs) : null,
+            finalRelPath: fs.existsSync(path.join(templateDirAbs, 'FINAL.md')) ? path.relative(WORKSPACE_ROOT, path.join(templateDirAbs, 'FINAL.md')) : null,
+            stateRelPath: fs.existsSync(path.join(templateDirAbs, 'STATE.md')) ? path.relative(WORKSPACE_ROOT, path.join(templateDirAbs, 'STATE.md')) : null
+        }
+    };
+
+    if (!meta.exists) {
+        return { ...meta, pages: [], counts: { total: 0, ready: 0, uploaded: 0, blocked: 0 } };
+    }
+
+    let entries = [];
+    try {
+        entries = fs.readdirSync(rootAbs, { withFileTypes: true });
+    } catch {
+        entries = [];
+    }
+
+    const pages = entries
+        .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.') && entry.name !== '_template')
+        .map((entry) => {
+            const dirAbs = path.join(rootAbs, entry.name);
+            const dirRel = path.relative(WORKSPACE_ROOT, dirAbs);
+            const finalAbs = path.join(dirAbs, 'FINAL.md');
+            const stateAbs = path.join(dirAbs, 'STATE.md');
+            const assetsAbs = path.join(dirAbs, 'assets');
+
+            const hasFinal = fs.existsSync(finalAbs);
+            const hasState = fs.existsSync(stateAbs);
+            const hasAssets = fs.existsSync(assetsAbs);
+
+            const finalRaw = hasFinal ? readFileSafe(finalAbs) || '' : '';
+            const stateRaw = hasState ? readFileSafe(stateAbs) || '' : '';
+            const frontmatter = hasFinal ? parseSimpleFrontmatter(finalRaw) : { data: {}, body: '' };
+            const stateData = hasState ? parseSimpleKeyValueFile(stateRaw) : {};
+
+            const stateStatus = String(stateData.status || '').trim().toUpperCase() || 'MISSING';
+            const uploadReady = frontmatter.data.upload_ready === true;
+            const readyForUpload = hasFinal && hasState && stateStatus === 'READY_FOR_UPLOAD' && uploadReady === true;
+            const uploaded = stateStatus === 'UPLOADED';
+
+            const finalModifiedAt = hasFinal ? isoMtime(finalAbs) : null;
+            const stateModifiedAt = hasState ? isoMtime(stateAbs) : null;
+            const updatedAt = [finalModifiedAt, stateModifiedAt].filter(Boolean).sort().pop() || null;
+
+            return {
+                slug: String(frontmatter.data.slug || entry.name).trim() || entry.name,
+                dirName: entry.name,
+                dirRelPath: dirRel,
+                finalRelPath: hasFinal ? path.relative(WORKSPACE_ROOT, finalAbs) : null,
+                stateRelPath: hasState ? path.relative(WORKSPACE_ROOT, stateAbs) : null,
+                assetsRelPath: hasAssets ? path.relative(WORKSPACE_ROOT, assetsAbs) : null,
+                hasFinal,
+                hasState,
+                hasAssets,
+                stateStatus,
+                uploadReady,
+                readyForUpload,
+                uploaded,
+                project: String(frontmatter.data.project || projectId || '').trim() || null,
+                brand: String(frontmatter.data.brand || brand || '').trim() || null,
+                contentType: String(frontmatter.data.content_type || '').trim() || null,
+                route: String(frontmatter.data.route || '').trim() || null,
+                title: String(frontmatter.data.title || '').trim() || null,
+                description: String(frontmatter.data.description || '').trim() || null,
+                lastUpdated: String(frontmatter.data.last_updated || '').trim() || null,
+                uploadedAt: stateData.uploaded_at ? String(stateData.uploaded_at).trim() : null,
+                uploadedBy: stateData.uploaded_by ? String(stateData.uploaded_by).trim() : null,
+                notes: stateData.notes ? String(stateData.notes).trim() : null,
+                hasPlaceholders: hasFinal ? detectCompactPagePlaceholders(finalRaw) : false,
+                bodyWordCount: hasFinal ? countWords(frontmatter.body) : 0,
+                finalModifiedAt,
+                stateModifiedAt,
+                updatedAt
+            };
+        })
+        .sort((a, b) => {
+            const timeA = Date.parse(a.updatedAt || '') || 0;
+            const timeB = Date.parse(b.updatedAt || '') || 0;
+            if (timeA !== timeB) return timeB - timeA;
+            return String(a.slug || '').localeCompare(String(b.slug || ''));
+        });
+
+    const counts = {
+        total: pages.length,
+        ready: pages.filter((page) => page.readyForUpload).length,
+        uploaded: pages.filter((page) => page.uploaded).length,
+        blocked: pages.filter((page) => page.hasFinal && !page.readyForUpload && !page.uploaded).length
+    };
+
+    return { ...meta, pages, counts };
+}
+
+function hydrateCompactPages(projectData, projectId) {
+    const compactPages = collectCompactPagesForProject(projectId);
+    projectData.compactPages = compactPages.pages;
+    projectData.compactPagesMeta = {
+        rootRelPath: compactPages.rootRelPath,
+        exists: compactPages.exists,
+        counts: compactPages.counts,
+        template: compactPages.template
+    };
+}
+
 function findPipelineStepFileByConvention(folderRoot, rowIndex, stepId) {
     if (!folderRoot || !fs.existsSync(folderRoot)) return null;
     const normalizedStepId = normalizePipelineStepId(stepId);
@@ -1191,6 +1364,7 @@ app.get("/api/projects", async (_, res) => {
             ensurePipelineShape(result);
             hydratePipelineDocsAndWordCounts(result);
             hydrateNotebookLmAudioRows(result, projectId);
+            hydrateCompactPages(result, projectId);
 
             return result;
         } catch (e) {
@@ -1231,8 +1405,32 @@ app.get("/api/projects/:projectId", (req, res) => {
         ensurePipelineShape(project);
         hydratePipelineDocsAndWordCounts(project);
         hydrateNotebookLmAudioRows(project, projectId);
+        hydrateCompactPages(project, projectId);
 
         return ok(res, { project, workspaceRoot: WORKSPACE_ROOT });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
+});
+
+app.get("/api/projects/:projectId/compact-pages", (req, res) => {
+    try {
+        const { projectId } = req.params;
+        const data = loadProjectMeta(projectId);
+        if (!data) return res.status(404).json({ success: false, error: "Project not found" });
+
+        const compactPages = collectCompactPagesForProject(projectId);
+        return ok(res, {
+            projectId,
+            compactPages: compactPages.pages,
+            meta: {
+                rootRelPath: compactPages.rootRelPath,
+                exists: compactPages.exists,
+                counts: compactPages.counts,
+                template: compactPages.template
+            },
+            workspaceRoot: WORKSPACE_ROOT
+        });
     } catch (e) {
         return res.status(500).json({ success: false, error: e.message });
     }
