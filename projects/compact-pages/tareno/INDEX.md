@@ -15,6 +15,7 @@ projects/compact-pages/tareno/{page-slug}/
 ├── FINAL.md
 ├── STATE.md
 └── assets/
+    └── screenshots/
 ```
 
 ## Upload-Gates
@@ -41,7 +42,9 @@ Ein VPS-Agent darf eine Page nur hochladen, wenn beide Bedingungen erfuellt sind
 - Ordnername = `slug`
 - Eine Page = ein Ordner
 - Nur `FINAL.md` wird hochgeladen
-- `assets/` ist optional und bleibt lokal, solange der Upload-Flow nichts anderes verlangt
+- Screenshots liegen unter `assets/screenshots/`
+- Dashboard kann Screenshots direkt in diesen Ordner hochladen
+- `assets/` bleibt lokal, solange der Upload-Flow nichts anderes verlangt
 
 ## Vorlage
 

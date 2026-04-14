@@ -16,6 +16,13 @@ Dieser Vertrag definiert, welche Datei fuer eine Tareno Compact Page kanonisch i
 - Ort: `projects/compact-pages/tareno/{page-slug}/STATE.md`
 - Bedeutung: Steuert, ob Upload erlaubt ist.
 
+## Screenshot-Artefakte
+
+- Ordner: `assets/screenshots/`
+- Ort: `projects/compact-pages/tareno/{page-slug}/assets/screenshots/`
+- Zweck: Produkt- oder UI-Screenshots, die zusammen mit der Compact Page verschickt oder hochgeladen werden sollen
+- Erlaubte Formate: `.png`, `.jpg`, `.jpeg`, `.webp`, `.gif`
+
 ## Erlaubte Upload-Voraussetzungen
 
 Ein Upload ist nur erlaubt, wenn:
@@ -55,6 +62,7 @@ Der Body soll kompakt und publish-ready sein. Minimum:
 
 - Nutze `slug` und `route` aus dem Frontmatter als Zielreferenz.
 - Lade nur den Body-Inhalt plus Frontmatter-Metadaten aus `FINAL.md` hoch.
+- Wenn `assets/screenshots/` Bilder enthaelt, nimm diese in das Upload-/Versandpaket auf.
 - Ignoriere `_template/`.
 - Ueberspringe Pages ohne freigegebenen Status.
 - Bei fehlenden Pflichtfeldern: stoppe und melde die Page als blockiert.

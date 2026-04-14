@@ -999,6 +999,19 @@
                                 const uploadReadyHtml = cp.uploadReady === true
                                     ? '<span class="px-2 py-1 rounded-md text-[9px] font-semibold bg-green-500/10 text-green-300 border border-green-500/30">upload_ready: true</span>'
                                     : '<span class="px-2 py-1 rounded-md text-[9px] font-semibold bg-white/5 text-text-muted border border-white/10">upload_ready: false</span>';
+                                const pageKey = window.slugifyForFile(cp.slug || cp.dirName || 'page');
+                                const screenshotInputId = `compact-shot-input-${p.id}-${pageKey}`;
+                                const screenshotStatusId = `compact-shot-status-${p.id}-${pageKey}`;
+                                const screenshotPreviewHtml = Array.isArray(cp.screenshots) && cp.screenshots.length > 0
+                                    ? `<div class="grid grid-cols-2 md:grid-cols-3 gap-2 mt-3">
+                                        ${cp.screenshots.map(shot => `
+                                            <button onclick="openProjectRef('${shot.relPath}')" class="group relative rounded-xl overflow-hidden border border-white/10 bg-black/30 hover:border-cyan-400/40 transition-colors text-left">
+                                                <img src="/api/file/raw?path=${encodeURIComponent(window.toAbsProjectPath(shot.relPath))}" alt="${window.escapeHtml(shot.fileName || 'screenshot')}" class="w-full h-24 object-cover opacity-90 group-hover:opacity-100 transition-opacity" />
+                                                <span class="absolute inset-x-0 bottom-0 px-2 py-1 text-[9px] text-white bg-gradient-to-t from-black/80 to-transparent truncate">${window.escapeHtml(shot.fileName || 'screenshot')}</span>
+                                            </button>
+                                        `).join('')}
+                                    </div>`
+                                    : '<p class="text-[10px] text-text-muted mt-3">Noch keine Screenshots hinterlegt.</p>';
                                 return `
                                 <div class="rounded-2xl border border-white/10 bg-black/30 p-5 shadow-[0_0_20px_rgba(0,0,0,0.18)]">
                                     <div class="flex flex-wrap items-start justify-between gap-3">
@@ -1030,6 +1043,7 @@
                                             <div class="space-y-1.5 text-[10px] text-text-secondary">
                                                 <p><span class="text-text-muted">Typ:</span> ${window.escapeHtml(cp.contentType || '—')}</p>
                                                 <p><span class="text-text-muted">Wörter:</span> ${cp.bodyWordCount || 0}</p>
+                                                <p><span class="text-text-muted">Screenshots:</span> ${cp.screenshotCount || 0}</p>
                                                 <p><span class="text-text-muted">Last updated:</span> ${window.escapeHtml(cp.lastUpdated || '—')}</p>
                                                 <p><span class="text-text-muted">Datei geändert:</span> ${window.escapeHtml(formatBerlinDateTime(cp.updatedAt) || '—')}</p>
                                                 ${cp.uploadedAt ? `<p><span class="text-text-muted">Upload:</span> ${window.escapeHtml(formatBerlinDateTime(cp.uploadedAt) || cp.uploadedAt)}</p>` : ''}
@@ -1039,6 +1053,20 @@
                                     </div>
 
                                     ${cp.description ? `<p class="text-[11px] text-text-secondary leading-relaxed mt-4">${window.escapeHtml(cp.description)}</p>` : ''}
+                                    <div class="mt-4 rounded-xl border border-cyan-500/15 bg-cyan-500/5 p-3">
+                                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                                            <div>
+                                                <p class="text-[9px] uppercase tracking-widest text-cyan-200 font-bold">Screenshots</p>
+                                                <p class="text-[10px] text-text-secondary mt-1">Zusatzmaterial fuer Versand oder Upload-Paket. Ablage: <span class="font-mono">${window.escapeHtml(cp.screenshotsRelDirPath || `${cp.dirRelPath || ''}/assets/screenshots`)}</span></p>
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <input id="${screenshotInputId}" type="file" accept="image/png,image/jpeg,image/webp,image/gif" multiple class="hidden" onchange="uploadCompactPageScreenshots('${p.id}', '${cp.slug || cp.dirName || ''}', this, '${screenshotStatusId}')" />
+                                                <button onclick="document.getElementById('${screenshotInputId}').click()" class="px-3 py-1.5 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-400/30 text-cyan-200 text-[10px] font-bold uppercase tracking-wider transition-colors">Screenshots hochladen</button>
+                                            </div>
+                                        </div>
+                                        <div id="${screenshotStatusId}" class="text-[10px] text-text-muted mt-2">Bereit.</div>
+                                        ${screenshotPreviewHtml}
+                                    </div>
                                     ${warningsHtml}
                                 </div>`;
                             }).join('')}
@@ -1737,6 +1765,62 @@
                 .replace(/>/g, '&gt;')
                 .replace(/"/g, '&quot;')
                 .replace(/'/g, '&#39;');
+        };
+
+        window.uploadCompactPageScreenshots = async (projectId, pageSlug, inputEl, statusId) => {
+            const statusBox = statusId ? document.getElementById(statusId) : null;
+            const files = Array.from(inputEl?.files || []);
+            if (!files.length) {
+                if (statusBox) statusBox.innerText = 'Keine Dateien ausgewählt.';
+                return;
+            }
+
+            const actorAgentId = window.getProjectActorAgentId(projectId);
+            const allowedTypes = new Set(['image/png', 'image/jpeg', 'image/webp', 'image/gif']);
+            const invalid = files.find(file => file?.type && !allowedTypes.has(file.type));
+            if (invalid) {
+                if (statusBox) statusBox.innerText = `Nicht unterstützt: ${invalid.name}`;
+                if (inputEl) inputEl.value = '';
+                return;
+            }
+
+            let uploaded = 0;
+            if (statusBox) statusBox.innerText = `Upload läuft (${files.length})...`;
+            try {
+                for (const file of files) {
+                    const dataUrl = await new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = () => resolve(String(reader.result || ''));
+                        reader.onerror = () => reject(new Error(`Konnte ${file.name} nicht lesen`));
+                        reader.readAsDataURL(file);
+                    });
+                    const contentBase64 = dataUrl.includes(',') ? dataUrl.split(',')[1] : '';
+                    if (!contentBase64) throw new Error(`Leerer Inhalt für ${file.name}`);
+
+                    const res = await fetch(`/api/projects/${projectId}/compact-pages/${encodeURIComponent(pageSlug)}/screenshots`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            actorAgentId,
+                            fileName: file.name,
+                            mimeType: file.type,
+                            contentBase64
+                        })
+                    });
+                    const payload = await res.json().catch(() => ({}));
+                    if (!res.ok || !payload.success) {
+                        throw new Error(payload.error || `Upload fehlgeschlagen (${res.status})`);
+                    }
+                    uploaded += 1;
+                    if (statusBox) statusBox.innerText = `${uploaded}/${files.length} hochgeladen...`;
+                }
+
+                if (inputEl) inputEl.value = '';
+                if (statusBox) statusBox.innerText = `${uploaded} Screenshot${uploaded === 1 ? '' : 's'} hochgeladen.`;
+                await loadCurrentView();
+            } catch (e) {
+                if (statusBox) statusBox.innerText = `Fehler: ${e.message || e}`;
+            }
         };
 
         window.formatMediaConvertSize = (bytes) => {

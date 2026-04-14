@@ -22,6 +22,7 @@
 - `POST /api/projects/:projectId/pipeline/sync-artifacts` mit `{actorAgentId, fromTag?, toTag?, statusOnFound?}` (scannt `projects/blog-artifacts/tagXX/*` und setzt step docs + wordCount)
 - `GET /api/projects/:projectId/pipeline/:cpIndex/:stepId/doc` (liefert aufgelösten Dokumentpfad)
 - `GET /api/projects/:projectId/compact-pages` (scannt `projects/compact-pages/{projectId}/`, liefert FINAL/STATE-Metadaten, Template-Pfade und Upload-Gates)
+- `POST /api/projects/:projectId/compact-pages/:pageSlug/screenshots` (speichert Bilddateien in `assets/screenshots/` der Compact Page)
 
 ## Hinweise für Tareno Blog Publish
 - `POST /api/projects/:projectId/pipeline/:cpIndex/publish-now` sendet `FINAL.md + optional NotebookLM Audio + 08_asset_plan.md`.
@@ -31,6 +32,7 @@
 - Dashboard liest Compact Pages direkt aus `projects/compact-pages/tareno/`.
 - `_template/` wird nur als Vorlage angezeigt, nicht als echte Page.
 - Sichtbar werden nur echte Unterordner mit eigener `FINAL.md` und/oder `STATE.md`.
+- Screenshots werden pro Page unter `assets/screenshots/` gespeichert und im Dashboard als Vorschau angezeigt.
 
 ## Wichtige Bereiche
 - Alle Agenten

@@ -47,3 +47,7 @@ Answer.
 ## CTA
 
 Close with a direct next step.
+
+## Assets
+
+If screenshots exist, place them under `assets/screenshots/`.

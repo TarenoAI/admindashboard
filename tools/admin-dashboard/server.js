@@ -447,6 +447,80 @@ function detectCompactPagePlaceholders(raw) {
     return /(TODO|TBD|\{\{[^}]+\}\}|<[^>\n]+>)/.test(String(raw || ''));
 }
 
+function detectImageMimeType(fileName) {
+    const ext = String(path.extname(String(fileName || '')).toLowerCase());
+    if (ext === '.png') return 'image/png';
+    if (ext === '.jpg' || ext === '.jpeg') return 'image/jpeg';
+    if (ext === '.webp') return 'image/webp';
+    if (ext === '.gif') return 'image/gif';
+    return 'application/octet-stream';
+}
+
+function collectCompactPageScreenshots(dirAbs) {
+    if (!dirAbs || !fs.existsSync(dirAbs)) return [];
+
+    let entries = [];
+    try {
+        entries = fs.readdirSync(dirAbs, { withFileTypes: true });
+    } catch {
+        entries = [];
+    }
+
+    return entries
+        .filter((entry) => entry.isFile())
+        .map((entry) => {
+            const ext = String(path.extname(entry.name || '').toLowerCase());
+            if (!['.png', '.jpg', '.jpeg', '.webp', '.gif'].includes(ext)) return null;
+
+            const absPath = path.join(dirAbs, entry.name);
+            let stat = null;
+            try {
+                stat = fs.statSync(absPath);
+            } catch {
+                stat = null;
+            }
+
+            return {
+                fileName: entry.name,
+                relPath: path.relative(WORKSPACE_ROOT, absPath),
+                mimeType: detectImageMimeType(entry.name),
+                size: Number(stat?.size || 0),
+                modifiedAt: stat?.mtime ? new Date(stat.mtime).toISOString() : null
+            };
+        })
+        .filter(Boolean)
+        .sort((a, b) => (Date.parse(b.modifiedAt || '') || 0) - (Date.parse(a.modifiedAt || '') || 0));
+}
+
+function resolveCompactPageDir(projectId, rawSlug) {
+    const brand = safeSlug(projectId, String(projectId || 'project').toLowerCase());
+    const slug = safeSlug(rawSlug, '');
+    if (!slug || slug === '_template') return null;
+
+    const rootAbs = path.join(WORKSPACE_ROOT, 'projects', 'compact-pages', brand);
+    const dirAbs = path.join(rootAbs, slug);
+    return {
+        brand,
+        slug,
+        rootAbs,
+        rootRelPath: path.relative(WORKSPACE_ROOT, rootAbs),
+        dirAbs,
+        dirRelPath: path.relative(WORKSPACE_ROOT, dirAbs)
+    };
+}
+
+function resolveImageUploadExtension(fileName, mimeType) {
+    const ext = String(path.extname(String(fileName || '')).toLowerCase());
+    if (['.png', '.jpg', '.jpeg', '.webp', '.gif'].includes(ext)) return ext;
+
+    const mime = String(mimeType || '').toLowerCase();
+    if (mime === 'image/png') return '.png';
+    if (mime === 'image/jpeg') return '.jpg';
+    if (mime === 'image/webp') return '.webp';
+    if (mime === 'image/gif') return '.gif';
+    return null;
+}
+
 function collectCompactPagesForProject(projectId) {
     const brand = safeSlug(projectId, String(projectId || 'project').toLowerCase());
     const rootAbs = path.join(WORKSPACE_ROOT, 'projects', 'compact-pages', brand);
@@ -460,7 +534,8 @@ function collectCompactPagesForProject(projectId) {
         template: {
             dirRelPath: fs.existsSync(templateDirAbs) ? path.relative(WORKSPACE_ROOT, templateDirAbs) : null,
             finalRelPath: fs.existsSync(path.join(templateDirAbs, 'FINAL.md')) ? path.relative(WORKSPACE_ROOT, path.join(templateDirAbs, 'FINAL.md')) : null,
-            stateRelPath: fs.existsSync(path.join(templateDirAbs, 'STATE.md')) ? path.relative(WORKSPACE_ROOT, path.join(templateDirAbs, 'STATE.md')) : null
+            stateRelPath: fs.existsSync(path.join(templateDirAbs, 'STATE.md')) ? path.relative(WORKSPACE_ROOT, path.join(templateDirAbs, 'STATE.md')) : null,
+            screenshotsRelDirPath: fs.existsSync(path.join(templateDirAbs, 'assets', 'screenshots')) ? path.relative(WORKSPACE_ROOT, path.join(templateDirAbs, 'assets', 'screenshots')) : null
         }
     };
 
@@ -483,10 +558,12 @@ function collectCompactPagesForProject(projectId) {
             const finalAbs = path.join(dirAbs, 'FINAL.md');
             const stateAbs = path.join(dirAbs, 'STATE.md');
             const assetsAbs = path.join(dirAbs, 'assets');
+            const screenshotsAbs = path.join(assetsAbs, 'screenshots');
 
             const hasFinal = fs.existsSync(finalAbs);
             const hasState = fs.existsSync(stateAbs);
             const hasAssets = fs.existsSync(assetsAbs);
+            const screenshots = collectCompactPageScreenshots(screenshotsAbs);
 
             const finalRaw = hasFinal ? readFileSafe(finalAbs) || '' : '';
             const stateRaw = hasState ? readFileSafe(stateAbs) || '' : '';
@@ -509,9 +586,12 @@ function collectCompactPagesForProject(projectId) {
                 finalRelPath: hasFinal ? path.relative(WORKSPACE_ROOT, finalAbs) : null,
                 stateRelPath: hasState ? path.relative(WORKSPACE_ROOT, stateAbs) : null,
                 assetsRelPath: hasAssets ? path.relative(WORKSPACE_ROOT, assetsAbs) : null,
+                screenshotsRelDirPath: fs.existsSync(screenshotsAbs) ? path.relative(WORKSPACE_ROOT, screenshotsAbs) : null,
                 hasFinal,
                 hasState,
                 hasAssets,
+                screenshots,
+                screenshotCount: screenshots.length,
                 stateStatus,
                 uploadReady,
                 readyForUpload,
@@ -1430,6 +1510,63 @@ app.get("/api/projects/:projectId/compact-pages", (req, res) => {
                 template: compactPages.template
             },
             workspaceRoot: WORKSPACE_ROOT
+        });
+    } catch (e) {
+        return res.status(500).json({ success: false, error: e.message });
+    }
+});
+
+app.post("/api/projects/:projectId/compact-pages/:pageSlug/screenshots", express.json({ limit: '50mb' }), (req, res) => {
+    try {
+        const { projectId, pageSlug } = req.params;
+        const { actorAgentId, fileName, mimeType, contentBase64 } = req.body || {};
+
+        const data = loadProjectMeta(projectId);
+        if (!data) return res.status(404).json({ success: false, error: "Project not found" });
+        if (!hasProjectWritePermission(data, actorAgentId)) {
+            return res.status(403).json({ success: false, error: `Agent ${actorAgentId} has no write permission for project ${projectId}` });
+        }
+
+        const resolvedPage = resolveCompactPageDir(projectId, pageSlug);
+        if (!resolvedPage) return res.status(400).json({ success: false, error: "Invalid compact page slug" });
+        if (!fs.existsSync(resolvedPage.dirAbs)) return res.status(404).json({ success: false, error: "Compact page folder not found" });
+
+        const ext = resolveImageUploadExtension(fileName, mimeType);
+        if (!ext) {
+            return res.status(400).json({ success: false, error: "Only png, jpg, jpeg, webp, or gif screenshots are supported" });
+        }
+        if (!contentBase64 || typeof contentBase64 !== 'string') {
+            return res.status(400).json({ success: false, error: "contentBase64 required" });
+        }
+
+        let binary = null;
+        try {
+            binary = Buffer.from(contentBase64, 'base64');
+        } catch {
+            binary = null;
+        }
+        if (!binary || !binary.length) {
+            return res.status(400).json({ success: false, error: "Invalid image payload" });
+        }
+
+        const outDir = path.join(resolvedPage.dirAbs, 'assets', 'screenshots');
+        fs.mkdirSync(outDir, { recursive: true });
+
+        const parsed = path.parse(String(fileName || '').trim() || 'screenshot');
+        const stem = safeSlug(parsed.name || 'screenshot', 'screenshot');
+        const outName = `${stem}-${Date.now()}${ext}`;
+        const outAbs = path.join(outDir, outName);
+        fs.writeFileSync(outAbs, binary);
+
+        return ok(res, {
+            uploaded: true,
+            projectId,
+            pageSlug: resolvedPage.slug,
+            fileName: outName,
+            relPath: path.relative(WORKSPACE_ROOT, outAbs),
+            screenshotsDir: path.relative(WORKSPACE_ROOT, outDir),
+            size: binary.length,
+            mimeType: detectImageMimeType(outName)
         });
     } catch (e) {
         return res.status(500).json({ success: false, error: e.message });
