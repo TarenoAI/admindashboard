@@ -1,9 +1,9 @@
 {
   "name": "Tareno",
-  "summary": "📊 Dashboard: Indexiert 2.725 | Volltext 1.541 | Final 2/30 | Veröffentlicht 0/30",
+  "summary": "📊 Dashboard: Indexiert 2.725 | Volltext 1.541 | Final 2/30 | Veröffentlicht 0/30 | Intl SEO/GEO +20 | 100-Topic Backlog",
   "status": "on_track",
   "priority": "high",
-  "lastUpdate": "2026-03-08",
+  "lastUpdate": "2026-04-18",
   "agents": [
     {
       "id": "tarenoblog",
@@ -9622,6 +9622,1066 @@
         }
       },
       "id": "TAG-68"
+    },
+    {
+      "id": "TAG-69",
+      "day": "Tag 35 (Post 1)",
+      "date": "2026-04-17",
+      "topic": "Social Media Automation Tools",
+      "keyword": "social media automation tools",
+      "author": "Alex (Tech Lead)",
+      "feature": "Workflow Builder + AI Assist",
+      "cluster": "PILLAR 1: AUTOMATION",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "solution_landing",
+      "intent": "commercial",
+      "market": "us",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": "/solutions/social-media-automation-tools",
+      "topicEn": "Social Media Automation Tools",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "TAG-70",
+      "day": "Tag 35 (Post 2)",
+      "date": "2026-04-17",
+      "topic": "Social Media Scheduler",
+      "keyword": "social media scheduler",
+      "author": "Sarah (Growth)",
+      "feature": "Calendar + Multi-platform Publishing",
+      "cluster": "PILLAR 1: AUTOMATION",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "solution_landing",
+      "intent": "commercial",
+      "market": "us",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": "/solutions/social-media-scheduler",
+      "topicEn": "Social Media Scheduler",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "TAG-71",
+      "day": "Tag 36 (Post 1)",
+      "date": "2026-04-18",
+      "topic": "Best Time to Post on Instagram: how to test your own schedule",
+      "keyword": "best time to post on instagram",
+      "author": "Sarah (Growth)",
+      "feature": "Timing Tests + Calendar",
+      "cluster": "PILLAR 3: DISCOVERY (GEO)",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "blog_article",
+      "intent": "informational",
+      "market": "us/uk/ca/au",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": "/best-time-to-post/instagram",
+      "topicEn": "Best Time to Post on Instagram: how to test your own schedule",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "TAG-72",
+      "day": "Tag 36 (Post 2)",
+      "date": "2026-04-18",
+      "topic": "Best Time to Post on TikTok: timing tests for creators and teams",
+      "keyword": "best time to post on tiktok",
+      "author": "Sarah (Growth)",
+      "feature": "Timing Tests + Calendar",
+      "cluster": "PILLAR 3: DISCOVERY (GEO)",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "blog_article",
+      "intent": "informational",
+      "market": "us/uk/au",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": "/best-time-to-post/tiktok",
+      "topicEn": "Best Time to Post on TikTok: timing tests for creators and teams",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "TAG-73",
+      "day": "Tag 37 (Post 1)",
+      "date": "2026-04-19",
+      "topic": "Instagram Video Downloader",
+      "keyword": "instagram video downloader",
+      "author": "Alex (Tech Lead)",
+      "feature": "Instagram Video Downloader",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "us/de/fr/es/br",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": "/tools/instagram-video-downloader",
+      "topicEn": "Instagram Video Downloader",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "TAG-74",
+      "day": "Tag 37 (Post 2)",
+      "date": "2026-04-19",
+      "topic": "Facebook Video Downloader",
+      "keyword": "facebook video downloader",
+      "author": "Alex (Tech Lead)",
+      "feature": "Facebook Video Downloader",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "us/de/fr/es/br",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": "/tools/facebook-video-downloader",
+      "topicEn": "Facebook Video Downloader",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "TAG-75",
+      "day": "Tag 38 (Post 1)",
+      "date": "2026-04-20",
+      "topic": "How to automate social media posts without losing brand control",
+      "keyword": "social media automation tools",
+      "author": "Alex (Tech Lead)",
+      "feature": "Workflow Builder + Approvals",
+      "cluster": "PILLAR 1: AUTOMATION",
+      "wordTarget": "2400",
+      "pageType": "blog",
+      "contentType": "blog_article",
+      "intent": "informational",
+      "market": "us",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": "/resources/blog/how-to-automate-social-media-posts-without-losing-brand-control",
+      "topicEn": "How to automate social media posts without losing brand control",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "TAG-76",
+      "day": "Tag 38 (Post 2)",
+      "date": "2026-04-20",
+      "topic": "Social media scheduler vs social media management tool: what do you actually need?",
+      "keyword": "social media scheduler vs management tool",
+      "author": "Sarah (Growth)",
+      "feature": "Calendar + Workflow Builder",
+      "cluster": "PILLAR 1: AUTOMATION",
+      "wordTarget": "2400",
+      "pageType": "blog",
+      "contentType": "comparison_article",
+      "intent": "commercial",
+      "market": "us/uk",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": "/resources/blog/social-media-scheduler-vs-social-media-management-tool",
+      "topicEn": "Social media scheduler vs social media management tool: what do you actually need?",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "TAG-77",
+      "day": "Tag 39 (Post 1)",
+      "date": "2026-04-21",
+      "topic": "How to build a social media content calendar from ideas to scheduled posts",
+      "keyword": "social media calendar",
+      "author": "Sarah (Growth)",
+      "feature": "Content Calendar",
+      "cluster": "PILLAR 1: AUTOMATION",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "blog_article",
+      "intent": "informational",
+      "market": "us",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": "/resources/blog/how-to-build-a-social-media-content-calendar",
+      "topicEn": "How to build a social media content calendar from ideas to scheduled posts",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "TAG-78",
+      "day": "Tag 39 (Post 2)",
+      "date": "2026-04-21",
+      "topic": "Best AI social media post generators for creators and lean teams",
+      "keyword": "ai social media post generator",
+      "author": "Mia (Creative)",
+      "feature": "AI Assist + Caption Generator",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "comparison_article",
+      "intent": "commercial",
+      "market": "us/uk",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": "/resources/blog/best-ai-social-media-post-generators",
+      "topicEn": "Best AI social media post generators for creators and lean teams",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "TAG-79",
+      "day": "Tag 40 (Post 1)",
+      "date": "2026-04-22",
+      "topic": "How to repurpose short-form videos across TikTok, Reels, Shorts, and LinkedIn",
+      "keyword": "repurpose social media content",
+      "author": "Mia (Creative)",
+      "feature": "Media Library + Workflow Builder",
+      "cluster": "PILLAR 2: REPURPOSING",
+      "wordTarget": "2400",
+      "pageType": "blog",
+      "contentType": "blog_article",
+      "intent": "informational",
+      "market": "us",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": "/resources/blog/how-to-repurpose-short-form-videos-across-tiktok-reels-shorts-and-linkedin",
+      "topicEn": "How to repurpose short-form videos across TikTok, Reels, Shorts, and LinkedIn",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "TAG-80",
+      "day": "Tag 40 (Post 2)",
+      "date": "2026-04-22",
+      "topic": "Best social media management tools for creators and small teams",
+      "keyword": "best social media management tools",
+      "author": "Sarah (Growth)",
+      "feature": "Comparison Framework + Pricing",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "2600",
+      "pageType": "blog",
+      "contentType": "comparison_article",
+      "intent": "commercial",
+      "market": "us/uk",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": "/resources/blog/best-social-media-management-tools-for-creators-and-small-teams",
+      "topicEn": "Best social media management tools for creators and small teams",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "TAG-81",
+      "day": "Tag 41 (Post 1)",
+      "date": "2026-04-23",
+      "topic": "AI Social Media Post Generator",
+      "keyword": "ai social media post generator",
+      "author": "Mia (Creative)",
+      "feature": "AI Assist (Post Generator)",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "us",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": "/tools/ai-social-media-post-generator",
+      "topicEn": "AI Social Media Post Generator",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "TAG-82",
+      "day": "Tag 41 (Post 2)",
+      "date": "2026-04-23",
+      "topic": "Social Media Calendar",
+      "keyword": "social media calendar",
+      "author": "Sarah (Growth)",
+      "feature": "Calendar + Ideas-to-Queue",
+      "cluster": "PILLAR 1: AUTOMATION",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "solution_landing",
+      "intent": "commercial",
+      "market": "us/uk/de",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": "/solutions/social-media-calendar",
+      "topicEn": "Social Media Calendar",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "TAG-83",
+      "day": "Tag 42 (Post 1)",
+      "date": "2026-04-24",
+      "topic": "Social Media Analytics Tools",
+      "keyword": "social media analytics tools",
+      "author": "Alex (Tech Lead)",
+      "feature": "Analytics Suite",
+      "cluster": "PILLAR 4: TOOLS & HACKS",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "solution_landing",
+      "intent": "commercial",
+      "market": "us/uk",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": "/solutions/social-media-analytics-tools",
+      "topicEn": "Social Media Analytics Tools",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "TAG-84",
+      "day": "Tag 42 (Post 2)",
+      "date": "2026-04-24",
+      "topic": "Best Social Media Scheduler for Creators and Small Teams",
+      "keyword": "best social media scheduler for creators",
+      "author": "Sarah (Growth)",
+      "feature": "Prompt Answer / Decision Criteria",
+      "cluster": "PILLAR 3: DISCOVERY (GEO)",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "ai_answer",
+      "intent": "commercial",
+      "market": "us/uk",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": "/resources/ai-answers/best-social-media-scheduler-for-creators-small-teams",
+      "topicEn": "Best Social Media Scheduler for Creators and Small Teams",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "TAG-85",
+      "day": "Tag 43 (Post 1)",
+      "date": "2026-04-25",
+      "topic": "Social Media Automation with n8n / Make",
+      "keyword": "social media automation with n8n make",
+      "author": "Alex (Tech Lead)",
+      "feature": "Prompt Answer / Workflow Logic",
+      "cluster": "PILLAR 3: DISCOVERY (GEO)",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "ai_answer",
+      "intent": "commercial",
+      "market": "us/uk",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": "/resources/ai-answers/social-media-automation-with-n8n-make",
+      "topicEn": "Social Media Automation with n8n / Make",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "TAG-86",
+      "day": "Tag 43 (Post 2)",
+      "date": "2026-04-25",
+      "topic": "Best Time to Post Instagram / TikTok Testing Method",
+      "keyword": "best time to post testing method",
+      "author": "Sarah (Growth)",
+      "feature": "Prompt Answer / Experiment Design",
+      "cluster": "PILLAR 3: DISCOVERY (GEO)",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "ai_answer",
+      "intent": "commercial",
+      "market": "us/uk/ca/au",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": "/resources/ai-answers/best-time-to-post-instagram-tiktok-testing-method",
+      "topicEn": "Best Time to Post Instagram / TikTok Testing Method",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "TAG-87",
+      "day": "Tag 44 (Post 1)",
+      "date": "2026-04-26",
+      "topic": "Free Social Media Tools for Creators",
+      "keyword": "free social media tools for creators",
+      "author": "Mia (Creative)",
+      "feature": "Prompt Answer / Free Tool Set",
+      "cluster": "PILLAR 3: DISCOVERY (GEO)",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "ai_answer",
+      "intent": "commercial",
+      "market": "us",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": "/resources/ai-answers/free-social-media-tools-for-creators",
+      "topicEn": "Free Social Media Tools for Creators",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "TAG-88",
+      "day": "Tag 44 (Post 2)",
+      "date": "2026-04-26",
+      "topic": "Best Buffer / Hootsuite / Later / Metricool Alternative",
+      "keyword": "best buffer hootsuite later metricool alternative",
+      "author": "Sarah (Growth)",
+      "feature": "Prompt Answer / Comparison Criteria",
+      "cluster": "PILLAR 3: DISCOVERY (GEO)",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "ai_answer",
+      "intent": "commercial",
+      "market": "us/uk",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": "/resources/ai-answers/best-buffer-hootsuite-later-metricool-alternative",
+      "topicEn": "Best Buffer / Hootsuite / Later / Metricool Alternative",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
     }
   ],
   "integrations": {
@@ -9641,11 +10701,5813 @@
     }
   },
   "kpiHeader": {
-    "asOf": "2026-03-05",
+    "asOf": "2026-04-17",
     "competitorIndexed": 2725,
     "competitorFulltextMd": 1541,
     "finishedBlogs": 2,
     "publishedBlogs": 0,
-    "planTotal": 30
-  }
+    "planTotal": 88
+  },
+  "seoBacklog": [
+    {
+      "id": "BG-001",
+      "day": "Backlog 01",
+      "date": "2026-04-17",
+      "topic": "Social Media Automation Tools",
+      "topicEn": "Social Media Automation Tools",
+      "keyword": "social media automation tools, social media automation software",
+      "author": "Strategy",
+      "feature": "US: SV 1,300, CPC 8.42, KD 37; software CPC 12.35, KD 33",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "ai_answer",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which tool should automate posts, approvals, scheduling, and AI workflows?",
+      "localization": "EN first, then DE",
+      "backlog": true,
+      "backlogRank": 1,
+      "slug": "social-media-automation-tools",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-002",
+      "day": "Backlog 02",
+      "date": "2026-04-17",
+      "topic": "Social Media Scheduler",
+      "topicEn": "Social Media Scheduler",
+      "keyword": "social media scheduler, social media scheduling tools",
+      "author": "Strategy",
+      "feature": "US: SV 3,600, CPC 7.95; UK: SV 880, CPC 3.75",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "ai_answer",
+      "intent": "commercial",
+      "market": "US / UK",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Best scheduler for creators and lean teams?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 2,
+      "slug": "social-media-scheduler",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-003",
+      "day": "Backlog 03",
+      "date": "2026-04-17",
+      "topic": "Social Media Management Software",
+      "topicEn": "Social Media Management Software",
+      "keyword": "social media management software",
+      "author": "Strategy",
+      "feature": "US: SV 2,900, CPC 8.73, KD 59",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "solution_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which social media management software fits small teams?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 3,
+      "slug": "social-media-management-software",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-004",
+      "day": "Backlog 04",
+      "date": "2026-04-17",
+      "topic": "Social Media Management Tools",
+      "topicEn": "Social Media Management Tools",
+      "keyword": "social media management tools",
+      "author": "Strategy",
+      "feature": "US: SV 9,900, CPC 9.21, KD 90",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "solution_landing",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "What criteria matter when choosing a management tool?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 4,
+      "slug": "social-media-management-tools",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-005",
+      "day": "Backlog 05",
+      "date": "2026-04-17",
+      "topic": "Social Media Posting Tool",
+      "topicEn": "Social Media Posting Tool",
+      "keyword": "social media posting tool",
+      "author": "Strategy",
+      "feature": "US: CPC 10.90, KD 71",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "solution_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which tool helps publish posts across channels?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 5,
+      "slug": "social-media-posting-tool",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-006",
+      "day": "Backlog 06",
+      "date": "2026-04-17",
+      "topic": "Social Media Publishing Tool",
+      "topicEn": "Social Media Publishing Tool",
+      "keyword": "social media publishing tool",
+      "author": "Strategy",
+      "feature": "US: CPC 9.71, KD 44",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "solution_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which tool is best for publishing workflows?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 6,
+      "slug": "social-media-publishing-tool",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-007",
+      "day": "Backlog 07",
+      "date": "2026-04-17",
+      "topic": "Social Media Calendar",
+      "topicEn": "Social Media Calendar",
+      "keyword": "social media calendar, social media kalender",
+      "author": "Strategy",
+      "feature": "US: SV 4,400, CPC 7.05; DE: SV 260, KD 22",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "solution_landing",
+      "intent": "commercial",
+      "market": "US / DE",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "How should teams plan a social media calendar?",
+      "localization": "EN first, DE later",
+      "backlog": true,
+      "backlogRank": 7,
+      "slug": "social-media-calendar",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-008",
+      "day": "Backlog 08",
+      "date": "2026-04-17",
+      "topic": "Social Media Calendar Template",
+      "topicEn": "Social Media Calendar Template",
+      "keyword": "social media calendar template",
+      "author": "Strategy",
+      "feature": "US: SV 2,400, CPC 5.35, KD 54",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "blog_article",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "What template should I use for my content calendar?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 8,
+      "slug": "social-media-calendar-template",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-009",
+      "day": "Backlog 09",
+      "date": "2026-04-17",
+      "topic": "Content Calendar Software",
+      "topicEn": "Content Calendar Software",
+      "keyword": "content calendar software",
+      "author": "Strategy",
+      "feature": "US: CPC 11.91, KD 37",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "solution_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which calendar software supports social workflows?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 9,
+      "slug": "content-calendar-software",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-010",
+      "day": "Backlog 10",
+      "date": "2026-04-17",
+      "topic": "Content Calendar Template",
+      "topicEn": "Content Calendar Template",
+      "keyword": "content calendar template",
+      "author": "Strategy",
+      "feature": "US: SV 3,600, CPC 5.09, KD 64",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "blog_article",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Can I get a practical content calendar template?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 10,
+      "slug": "content-calendar-template",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-011",
+      "day": "Backlog 11",
+      "date": "2026-04-17",
+      "topic": "Social Media Analytics Tools",
+      "topicEn": "Social Media Analytics Tools",
+      "keyword": "social media analytics tools",
+      "author": "Strategy",
+      "feature": "US: SV 3,600, CPC 11.04, KD 54; UK CPC 8.80",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "solution_landing",
+      "intent": "commercial",
+      "market": "US / UK",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which analytics tool helps decide what to post next?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 11,
+      "slug": "social-media-analytics-tools",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-012",
+      "day": "Backlog 12",
+      "date": "2026-04-17",
+      "topic": "Social Media Analytics Software",
+      "topicEn": "Social Media Analytics Software",
+      "keyword": "social media analytics software",
+      "author": "Strategy",
+      "feature": "US: CPC 19.58, KD 48",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "solution_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which analytics software fits social media teams?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 12,
+      "slug": "social-media-analytics-software",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-013",
+      "day": "Backlog 13",
+      "date": "2026-04-17",
+      "topic": "Social Media Competitor Analysis Tools",
+      "topicEn": "Social Media Competitor Analysis Tools",
+      "keyword": "social media competitor analysis tools",
+      "author": "Strategy",
+      "feature": "US: CPC 31.25, KD 20",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "solution_landing",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Which tool should I use to analyze social competitors?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 13,
+      "slug": "social-media-competitor-analysis-tools",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-014",
+      "day": "Backlog 14",
+      "date": "2026-04-17",
+      "topic": "Social Media Reporting Tool",
+      "topicEn": "Social Media Reporting Tool",
+      "keyword": "social media reporting tool",
+      "author": "Strategy",
+      "feature": "US: CPC 22.80, KD 43",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "solution_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which reporting tool creates useful social reports?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 14,
+      "slug": "social-media-reporting-tool",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-015",
+      "day": "Backlog 15",
+      "date": "2026-04-17",
+      "topic": "White Label Social Media Reports",
+      "topicEn": "White Label Social Media Reports",
+      "keyword": "white label social media reports",
+      "author": "Strategy",
+      "feature": "US: low SV, product proof page",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "solution_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which tool creates white-label reports for clients?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 15,
+      "slug": "white-label-social-media-reports",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-016",
+      "day": "Backlog 16",
+      "date": "2026-04-17",
+      "topic": "Social Media Approval Workflow",
+      "topicEn": "Social Media Approval Workflow",
+      "keyword": "social media approval workflow",
+      "author": "Strategy",
+      "feature": "Low SV, KD 0, strong B2B use case",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "solution_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "How can teams approve social posts before publishing?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 16,
+      "slug": "social-media-approval-workflow",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-017",
+      "day": "Backlog 17",
+      "date": "2026-04-17",
+      "topic": "Social Media Collaboration Tool",
+      "topicEn": "Social Media Collaboration Tool",
+      "keyword": "social media collaboration tool",
+      "author": "Strategy",
+      "feature": "CPC 8.21, KD 0",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "solution_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which tool helps a team collaborate on social content?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 17,
+      "slug": "social-media-collaboration-tool",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-018",
+      "day": "Backlog 18",
+      "date": "2026-04-17",
+      "topic": "Social Media Workflow Tool",
+      "topicEn": "Social Media Workflow Tool",
+      "keyword": "social media workflow tool",
+      "author": "Strategy",
+      "feature": "KD 0, product-category proof",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "solution_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "How do I manage a repeatable social workflow?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 18,
+      "slug": "social-media-workflow-tool",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-019",
+      "day": "Backlog 19",
+      "date": "2026-04-17",
+      "topic": "Social Media Tools For Small Business",
+      "topicEn": "Social Media Tools For Small Business",
+      "keyword": "social media tools for small business",
+      "author": "Strategy",
+      "feature": "US: CPC 6.86, KD 39",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "solution_landing",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Best tools for small businesses managing social media?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 19,
+      "slug": "social-media-tools-for-small-business",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-020",
+      "day": "Backlog 20",
+      "date": "2026-04-17",
+      "topic": "Social Media Tools For Agencies",
+      "topicEn": "Social Media Tools For Agencies",
+      "keyword": "social media tools for agencies",
+      "author": "Strategy",
+      "feature": "US: CPC 12.38, KD 29",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "solution_landing",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Best tools for agencies managing clients?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 20,
+      "slug": "social-media-tools-for-agencies",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-021",
+      "day": "Backlog 21",
+      "date": "2026-04-17",
+      "topic": "Best Time To Post On Instagram",
+      "topicEn": "Best Time To Post On Instagram",
+      "keyword": "best time to post on instagram",
+      "author": "Strategy",
+      "feature": "US: SV 60,500, CPC 1.07, KD 27; ES KD 15",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "research_page",
+      "intent": "commercial",
+      "market": "US / ES",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "When should I post on Instagram?",
+      "localization": "EN first, ES P1",
+      "backlog": true,
+      "backlogRank": 21,
+      "slug": "best-time-to-post-on-instagram",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-022",
+      "day": "Backlog 22",
+      "date": "2026-04-17",
+      "topic": "Best Day To Post On Instagram",
+      "topicEn": "Best Day To Post On Instagram",
+      "keyword": "best day to post on instagram",
+      "author": "Strategy",
+      "feature": "US: SV 14,800, KD 31",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "research_page",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Which day performs best on Instagram?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 22,
+      "slug": "best-day-to-post-on-instagram",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-023",
+      "day": "Backlog 23",
+      "date": "2026-04-17",
+      "topic": "Instagram Posting Schedule",
+      "topicEn": "Instagram Posting Schedule",
+      "keyword": "instagram posting schedule",
+      "author": "Strategy",
+      "feature": "US: CPC 4.42, KD 30",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "blog_article",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "What should my Instagram posting schedule be?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 23,
+      "slug": "instagram-posting-schedule",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-024",
+      "day": "Backlog 24",
+      "date": "2026-04-17",
+      "topic": "Best Time To Post On TikTok",
+      "topicEn": "Best Time To Post On TikTok",
+      "keyword": "best time to post on tiktok",
+      "author": "Strategy",
+      "feature": "US: SV 60,500, CPC 1.36, KD 44; UK CPC 2.08",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "research_page",
+      "intent": "commercial",
+      "market": "US / UK",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "When should I post on TikTok?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 24,
+      "slug": "best-time-to-post-on-tiktok",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-025",
+      "day": "Backlog 25",
+      "date": "2026-04-17",
+      "topic": "TikTok Posting Schedule",
+      "topicEn": "TikTok Posting Schedule",
+      "keyword": "tiktok posting schedule",
+      "author": "Strategy",
+      "feature": "US: CPC 4.48, KD 33",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "blog_article",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "What TikTok posting schedule should I test?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 25,
+      "slug": "tiktok-posting-schedule",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-026",
+      "day": "Backlog 26",
+      "date": "2026-04-17",
+      "topic": "Best Time To Post On Facebook",
+      "topicEn": "Best Time To Post On Facebook",
+      "keyword": "best time to post on facebook",
+      "author": "Strategy",
+      "feature": "US: SV 6,600, CPC 1.13, KD 24",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "research_page",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "When should businesses post on Facebook?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 26,
+      "slug": "best-time-to-post-on-facebook",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-027",
+      "day": "Backlog 27",
+      "date": "2026-04-17",
+      "topic": "Best Time To Post On LinkedIn",
+      "topicEn": "Best Time To Post On LinkedIn",
+      "keyword": "best time to post on linkedin",
+      "author": "Strategy",
+      "feature": "US: SV 5,400, CPC 1.93, KD 45",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "research_page",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "When should B2B teams post on LinkedIn?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 27,
+      "slug": "best-time-to-post-on-linkedin",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-028",
+      "day": "Backlog 28",
+      "date": "2026-04-17",
+      "topic": "Best Time To Post On YouTube",
+      "topicEn": "Best Time To Post On YouTube",
+      "keyword": "best time to post on youtube",
+      "author": "Strategy",
+      "feature": "US: SV 3,600, KD 42",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "research_page",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "When should YouTube videos go live?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 28,
+      "slug": "best-time-to-post-on-youtube",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-029",
+      "day": "Backlog 29",
+      "date": "2026-04-17",
+      "topic": "Best Time To Post On Pinterest",
+      "topicEn": "Best Time To Post On Pinterest",
+      "keyword": "best time to post on pinterest",
+      "author": "Strategy",
+      "feature": "US: KD 17, CPC 1.66",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "research_page",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "When should brands post on Pinterest?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 29,
+      "slug": "best-time-to-post-on-pinterest",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-030",
+      "day": "Backlog 30",
+      "date": "2026-04-17",
+      "topic": "Best Time To Post On Threads",
+      "topicEn": "Best Time To Post On Threads",
+      "keyword": "best time to post on threads",
+      "author": "Strategy",
+      "feature": "US: KD 23",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "research_page",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "When should I post on Threads?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 30,
+      "slug": "best-time-to-post-on-threads",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-031",
+      "day": "Backlog 31",
+      "date": "2026-04-17",
+      "topic": "Cross-Platform Posting Schedule",
+      "topicEn": "Cross-Platform Posting Schedule",
+      "keyword": "social media posting schedule",
+      "author": "Strategy",
+      "feature": "US: SV 1,600, CPC 6.48, KD 75",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "blog_article",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "How often should I post on each platform?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 31,
+      "slug": "cross-platform-posting-schedule",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-032",
+      "day": "Backlog 32",
+      "date": "2026-04-17",
+      "topic": "Social Media Content Calendar Template",
+      "topicEn": "Social Media Content Calendar Template",
+      "keyword": "social media content calendar template",
+      "author": "Strategy",
+      "feature": "US: SV 1,300, CPC 5.66, KD 53",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "blog_article",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "What should a content calendar include?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 32,
+      "slug": "social-media-content-calendar-template",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-033",
+      "day": "Backlog 33",
+      "date": "2026-04-17",
+      "topic": "Instagram Video Downloader",
+      "topicEn": "Instagram Video Downloader",
+      "keyword": "instagram video downloader",
+      "author": "Strategy",
+      "feature": "US SV 201k; DE 49.5k; FR local 60.5k; ES local 246k; BR local 1.22M",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US / DE / FR / ES / BR",
+      "locale": "pt",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Safe tool to save public Instagram videos?",
+      "localization": "EN first, localize",
+      "backlog": true,
+      "backlogRank": 33,
+      "slug": "instagram-video-downloader",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-034",
+      "day": "Backlog 34",
+      "date": "2026-04-17",
+      "topic": "Instagram Reels Downloader",
+      "topicEn": "Instagram Reels Downloader",
+      "keyword": "instagram reel downloader",
+      "author": "Strategy",
+      "feature": "US: SV 74k, KD 46; DE: SV 22.2k, KD 23",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US / DE / ES",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "How can I save public Instagram Reels?",
+      "localization": "EN first, localize",
+      "backlog": true,
+      "backlogRank": 34,
+      "slug": "instagram-reels-downloader",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-035",
+      "day": "Backlog 35",
+      "date": "2026-04-17",
+      "topic": "Facebook Video Downloader",
+      "topicEn": "Facebook Video Downloader",
+      "keyword": "facebook video downloader",
+      "author": "Strategy",
+      "feature": "US SV 135k, KD 35; DE 60.5k, KD 28; FR 40.5k, KD 24",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "DE / FR / US / BR",
+      "locale": "pt",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Safest way to save public Facebook videos?",
+      "localization": "EN first, localize",
+      "backlog": true,
+      "backlogRank": 35,
+      "slug": "facebook-video-downloader",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-036",
+      "day": "Backlog 36",
+      "date": "2026-04-17",
+      "topic": "LinkedIn Video Downloader",
+      "topicEn": "LinkedIn Video Downloader",
+      "keyword": "linkedin video downloader",
+      "author": "Strategy",
+      "feature": "US SV 2.4k; DE SV 390; FR/ES supporting terms",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US / DE / FR / ES",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "How can I save a LinkedIn video for review?",
+      "localization": "EN first, localize",
+      "backlog": true,
+      "backlogRank": 36,
+      "slug": "linkedin-video-downloader",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-037",
+      "day": "Backlog 37",
+      "date": "2026-04-17",
+      "topic": "Threads Video Downloader",
+      "topicEn": "Threads Video Downloader",
+      "keyword": "threads video download",
+      "author": "Strategy",
+      "feature": "Tareno already has early rankings in US/NL/AU",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US / NL / AU",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "How can I save Threads videos?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 37,
+      "slug": "threads-video-downloader",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-038",
+      "day": "Backlog 38",
+      "date": "2026-04-17",
+      "topic": "TikTok Video Downloader",
+      "topicEn": "TikTok Video Downloader",
+      "keyword": "tiktok video downloader",
+      "author": "Strategy",
+      "feature": "Existing tool cluster; validate before build",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "How can I save public TikTok videos for review?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 38,
+      "slug": "tiktok-video-downloader",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-039",
+      "day": "Backlog 39",
+      "date": "2026-04-17",
+      "topic": "YouTube Shorts Downloader",
+      "topicEn": "YouTube Shorts Downloader",
+      "keyword": "youtube shorts downloader",
+      "author": "Strategy",
+      "feature": "Existing tool has FR ranking signal",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US / FR",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "How can I save YouTube Shorts for review?",
+      "localization": "EN first, FR later",
+      "backlog": true,
+      "backlogRank": 39,
+      "slug": "youtube-shorts-downloader",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-040",
+      "day": "Backlog 40",
+      "date": "2026-04-17",
+      "topic": "YouTube Video Downloader",
+      "topicEn": "YouTube Video Downloader",
+      "keyword": "youtube video downloader",
+      "author": "Strategy",
+      "feature": "Existing page; Semrush audit shows schema issue",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "How can I archive public YouTube videos?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 40,
+      "slug": "youtube-video-downloader",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-041",
+      "day": "Backlog 41",
+      "date": "2026-04-17",
+      "topic": "Instagram Caption Generator",
+      "topicEn": "Instagram Caption Generator",
+      "keyword": "instagram caption generator",
+      "author": "Strategy",
+      "feature": "US: SV 8,100, KD 62",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which AI tool writes Instagram captions?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 41,
+      "slug": "instagram-caption-generator",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-042",
+      "day": "Backlog 42",
+      "date": "2026-04-17",
+      "topic": "TikTok Caption Generator",
+      "topicEn": "TikTok Caption Generator",
+      "keyword": "tiktok caption generator",
+      "author": "Strategy",
+      "feature": "US: SV 720, CPC 2.95, KD 27",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which tool writes TikTok captions?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 42,
+      "slug": "tiktok-caption-generator",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-043",
+      "day": "Backlog 43",
+      "date": "2026-04-17",
+      "topic": "AI Caption Generator",
+      "topicEn": "AI Caption Generator",
+      "keyword": "ai caption generator",
+      "author": "Strategy",
+      "feature": "US: SV 6,600, KD 72",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "blog",
+      "contentType": "tool_landing",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Which AI caption generator keeps brand voice?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 43,
+      "slug": "ai-caption-generator",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-044",
+      "day": "Backlog 44",
+      "date": "2026-04-17",
+      "topic": "Social Media Post Generator",
+      "topicEn": "Social Media Post Generator",
+      "keyword": "social media post generator",
+      "author": "Strategy",
+      "feature": "US: SV 1,000, CPC 4.34, KD 44",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which AI tool generates social posts?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 44,
+      "slug": "social-media-post-generator",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-045",
+      "day": "Backlog 45",
+      "date": "2026-04-17",
+      "topic": "LinkedIn Post Generator",
+      "topicEn": "LinkedIn Post Generator",
+      "keyword": "linkedin post generator",
+      "author": "Strategy",
+      "feature": "US: SV 880, CPC 3.10, KD 35",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which tool writes LinkedIn posts?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 45,
+      "slug": "linkedin-post-generator",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-046",
+      "day": "Backlog 46",
+      "date": "2026-04-17",
+      "topic": "Facebook Post Generator",
+      "topicEn": "Facebook Post Generator",
+      "keyword": "facebook post generator",
+      "author": "Strategy",
+      "feature": "US: SV 1,300, CPC 2.13, KD 39",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which tool creates Facebook posts?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 46,
+      "slug": "facebook-post-generator",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-047",
+      "day": "Backlog 47",
+      "date": "2026-04-17",
+      "topic": "Instagram Hashtag Generator",
+      "topicEn": "Instagram Hashtag Generator",
+      "keyword": "instagram hashtag generator",
+      "author": "Strategy",
+      "feature": "US: SV 2,400, KD 71; DE CPC 1.02",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US / DE",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which hashtags should I use on Instagram?",
+      "localization": "EN first, DE",
+      "backlog": true,
+      "backlogRank": 47,
+      "slug": "instagram-hashtag-generator",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-048",
+      "day": "Backlog 48",
+      "date": "2026-04-17",
+      "topic": "TikTok Hashtag Generator",
+      "topicEn": "TikTok Hashtag Generator",
+      "keyword": "tiktok hashtag generator",
+      "author": "Strategy",
+      "feature": "US: SV 2,900, KD 45",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which hashtags should I use on TikTok?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 48,
+      "slug": "tiktok-hashtag-generator",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-049",
+      "day": "Backlog 49",
+      "date": "2026-04-17",
+      "topic": "Hashtag Generator",
+      "topicEn": "Hashtag Generator",
+      "keyword": "hashtag generator",
+      "author": "Strategy",
+      "feature": "US: SV 9,900, KD 66",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which tool generates hashtags across platforms?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 49,
+      "slug": "hashtag-generator",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-050",
+      "day": "Backlog 50",
+      "date": "2026-04-17",
+      "topic": "YouTube Tag Generator",
+      "topicEn": "YouTube Tag Generator",
+      "keyword": "youtube tag generator",
+      "author": "Strategy",
+      "feature": "US: SV 5,400, KD 43",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which tags should I use on YouTube?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 50,
+      "slug": "youtube-tag-generator",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-051",
+      "day": "Backlog 51",
+      "date": "2026-04-17",
+      "topic": "YouTube Title Generator",
+      "topicEn": "YouTube Title Generator",
+      "keyword": "youtube title generator",
+      "author": "Strategy",
+      "feature": "US: SV 2,900, KD 39",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which title will improve YouTube CTR?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 51,
+      "slug": "youtube-title-generator",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-052",
+      "day": "Backlog 52",
+      "date": "2026-04-17",
+      "topic": "YouTube Description Generator",
+      "topicEn": "YouTube Description Generator",
+      "keyword": "youtube description generator",
+      "author": "Strategy",
+      "feature": "US: SV 2,900, KD 49",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which tool writes YouTube descriptions?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 52,
+      "slug": "youtube-description-generator",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-053",
+      "day": "Backlog 53",
+      "date": "2026-04-17",
+      "topic": "TikTok Script Generator",
+      "topicEn": "TikTok Script Generator",
+      "keyword": "tiktok script generator",
+      "author": "Strategy",
+      "feature": "US: CPC 2.47, KD 25",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which tool creates TikTok scripts?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 53,
+      "slug": "tiktok-script-generator",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-054",
+      "day": "Backlog 54",
+      "date": "2026-04-17",
+      "topic": "Video Script Generator",
+      "topicEn": "Video Script Generator",
+      "keyword": "video script generator",
+      "author": "Strategy",
+      "feature": "US: CPC 1.36, KD 61",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which tool writes short video scripts?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 54,
+      "slug": "video-script-generator",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-055",
+      "day": "Backlog 55",
+      "date": "2026-04-17",
+      "topic": "Hook Generator",
+      "topicEn": "Hook Generator",
+      "keyword": "hook generator",
+      "author": "Strategy",
+      "feature": "US: SV 1,300, KD 39",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which hook should I use for short-form video?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 55,
+      "slug": "hook-generator",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-056",
+      "day": "Backlog 56",
+      "date": "2026-04-17",
+      "topic": "Instagram Bio Generator",
+      "topicEn": "Instagram Bio Generator",
+      "keyword": "instagram bio generator",
+      "author": "Strategy",
+      "feature": "US: SV 2,900, KD 25",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which tool writes Instagram bios?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 56,
+      "slug": "instagram-bio-generator",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-057",
+      "day": "Backlog 57",
+      "date": "2026-04-17",
+      "topic": "Username Generator",
+      "topicEn": "Username Generator",
+      "keyword": "username generator",
+      "author": "Strategy",
+      "feature": "US: SV 90,500, KD 47",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which username should I choose?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 57,
+      "slug": "username-generator",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-058",
+      "day": "Backlog 58",
+      "date": "2026-04-17",
+      "topic": "Instagram Grid Maker",
+      "topicEn": "Instagram Grid Maker",
+      "keyword": "instagram grid maker",
+      "author": "Strategy",
+      "feature": "US: SV 2,900, CPC 1.29, KD 28",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "US / DE / SG",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "How do I split images for Instagram grid posts?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 58,
+      "slug": "instagram-grid-maker",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-059",
+      "day": "Backlog 59",
+      "date": "2026-04-17",
+      "topic": "Instagram Carousel Maker",
+      "topicEn": "Instagram Carousel Maker",
+      "keyword": "instagram carousel maker",
+      "author": "Strategy",
+      "feature": "Related free-tool cluster; validate before build",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "blog",
+      "contentType": "tool_landing",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "How do I create an Instagram carousel faster?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 59,
+      "slug": "instagram-carousel-maker",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-060",
+      "day": "Backlog 60",
+      "date": "2026-04-17",
+      "topic": "Social Media Content Ideas",
+      "topicEn": "Social Media Content Ideas",
+      "keyword": "social media content ideas",
+      "author": "Strategy",
+      "feature": "US: SV 880, CPC 1.97, KD 13",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "blog",
+      "contentType": "tool_landing",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "What should I post this week?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 60,
+      "slug": "social-media-content-ideas",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-061",
+      "day": "Backlog 61",
+      "date": "2026-04-17",
+      "topic": "Buffer Alternative",
+      "topicEn": "Buffer Alternative",
+      "keyword": "buffer alternative",
+      "author": "Strategy",
+      "feature": "US: CPC 6.44, KD 32",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "money_intent",
+      "contentType": "comparison_article",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Is Tareno a good Buffer alternative?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 61,
+      "slug": "buffer-alternative",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-062",
+      "day": "Backlog 62",
+      "date": "2026-04-17",
+      "topic": "Hootsuite Alternative",
+      "topicEn": "Hootsuite Alternative",
+      "keyword": "hootsuite alternative",
+      "author": "Strategy",
+      "feature": "US: SV 390, CPC 6.29, KD 31",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "money_intent",
+      "contentType": "comparison_article",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Is Tareno a good Hootsuite alternative?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 62,
+      "slug": "hootsuite-alternative",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-063",
+      "day": "Backlog 63",
+      "date": "2026-04-17",
+      "topic": "Later Alternative",
+      "topicEn": "Later Alternative",
+      "keyword": "later alternative",
+      "author": "Strategy",
+      "feature": "US: CPC 6.55, KD 13",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "money_intent",
+      "contentType": "comparison_article",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Is Tareno a good Later alternative?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 63,
+      "slug": "later-alternative",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-064",
+      "day": "Backlog 64",
+      "date": "2026-04-17",
+      "topic": "Metricool Alternative",
+      "topicEn": "Metricool Alternative",
+      "keyword": "metricool alternative",
+      "author": "Strategy",
+      "feature": "US: CPC 6.54, KD 20",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "money_intent",
+      "contentType": "comparison_article",
+      "intent": "commercial",
+      "market": "US / ES / DE",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Is Tareno a good Metricool alternative?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 64,
+      "slug": "metricool-alternative",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-065",
+      "day": "Backlog 65",
+      "date": "2026-04-17",
+      "topic": "Sprout Social Alternative",
+      "topicEn": "Sprout Social Alternative",
+      "keyword": "sprout social alternative",
+      "author": "Strategy",
+      "feature": "US: SV 210, CPC 19.74, KD 27",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "money_intent",
+      "contentType": "comparison_article",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Is there a lighter Sprout Social alternative?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 65,
+      "slug": "sprout-social-alternative",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-066",
+      "day": "Backlog 66",
+      "date": "2026-04-17",
+      "topic": "Publer Alternative",
+      "topicEn": "Publer Alternative",
+      "keyword": "publer alternative",
+      "author": "Strategy",
+      "feature": "US: KD 0, CPC 3.95",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "money_intent",
+      "contentType": "comparison_article",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Is Tareno a Publer alternative?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 66,
+      "slug": "publer-alternative",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-067",
+      "day": "Backlog 67",
+      "date": "2026-04-17",
+      "topic": "SocialBee Alternative",
+      "topicEn": "SocialBee Alternative",
+      "keyword": "socialbee alternative",
+      "author": "Strategy",
+      "feature": "US: KD 0, CPC 4.58",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "money_intent",
+      "contentType": "comparison_article",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Is Tareno a SocialBee alternative?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 67,
+      "slug": "socialbee-alternative",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-068",
+      "day": "Backlog 68",
+      "date": "2026-04-17",
+      "topic": "Loomly Alternative",
+      "topicEn": "Loomly Alternative",
+      "keyword": "loomly alternative",
+      "author": "Strategy",
+      "feature": "US: KD 6, CPC 8.79",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "money_intent",
+      "contentType": "comparison_article",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Is Tareno a Loomly alternative?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 68,
+      "slug": "loomly-alternative",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-069",
+      "day": "Backlog 69",
+      "date": "2026-04-17",
+      "topic": "Planoly Alternative",
+      "topicEn": "Planoly Alternative",
+      "keyword": "planoly alternative",
+      "author": "Strategy",
+      "feature": "US: KD 8, CPC 4.35",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "money_intent",
+      "contentType": "comparison_article",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Is Tareno a Planoly alternative?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 69,
+      "slug": "planoly-alternative",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-070",
+      "day": "Backlog 70",
+      "date": "2026-04-17",
+      "topic": "Sendible Alternative",
+      "topicEn": "Sendible Alternative",
+      "keyword": "sendible alternative",
+      "author": "Strategy",
+      "feature": "US: CPC 14.56, KD 0",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "money_intent",
+      "contentType": "comparison_article",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Is Tareno a Sendible alternative?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 70,
+      "slug": "sendible-alternative",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-071",
+      "day": "Backlog 71",
+      "date": "2026-04-17",
+      "topic": "Agorapulse Alternative",
+      "topicEn": "Agorapulse Alternative",
+      "keyword": "agorapulse alternative",
+      "author": "Strategy",
+      "feature": "US: CPC 14.12, KD 0",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "money_intent",
+      "contentType": "comparison_article",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Is Tareno an Agorapulse alternative?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 71,
+      "slug": "agorapulse-alternative",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-072",
+      "day": "Backlog 72",
+      "date": "2026-04-17",
+      "topic": "Best Buffer Alternatives",
+      "topicEn": "Best Buffer Alternatives",
+      "keyword": "best buffer alternatives",
+      "author": "Strategy",
+      "feature": "US: KD 0",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "comparison_article",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "What are the best Buffer alternatives?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 72,
+      "slug": "best-buffer-alternatives",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-073",
+      "day": "Backlog 73",
+      "date": "2026-04-17",
+      "topic": "Best Hootsuite Alternatives",
+      "topicEn": "Best Hootsuite Alternatives",
+      "keyword": "best hootsuite alternatives",
+      "author": "Strategy",
+      "feature": "US: KD 33",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "comparison_article",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "What are the best Hootsuite alternatives?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 73,
+      "slug": "best-hootsuite-alternatives",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-074",
+      "day": "Backlog 74",
+      "date": "2026-04-17",
+      "topic": "Best Later Alternatives",
+      "topicEn": "Best Later Alternatives",
+      "keyword": "best later alternatives",
+      "author": "Strategy",
+      "feature": "US: KD 0",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "comparison_article",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "What are the best Later alternatives?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 74,
+      "slug": "best-later-alternatives",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-075",
+      "day": "Backlog 75",
+      "date": "2026-04-17",
+      "topic": "Buffer vs Hootsuite",
+      "topicEn": "Buffer vs Hootsuite",
+      "keyword": "buffer vs hootsuite",
+      "author": "Strategy",
+      "feature": "US: SV 720, CPC 4.76, KD 41",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "comparison_article",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Should I choose Buffer or Hootsuite?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 75,
+      "slug": "buffer-vs-hootsuite",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-076",
+      "day": "Backlog 76",
+      "date": "2026-04-17",
+      "topic": "Buffer vs Later",
+      "topicEn": "Buffer vs Later",
+      "keyword": "buffer vs later",
+      "author": "Strategy",
+      "feature": "US: SV 210, CPC 4.11, KD 14",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "comparison_article",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Should I choose Buffer or Later?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 76,
+      "slug": "buffer-vs-later",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-077",
+      "day": "Backlog 77",
+      "date": "2026-04-17",
+      "topic": "Hootsuite vs Later",
+      "topicEn": "Hootsuite vs Later",
+      "keyword": "hootsuite vs later",
+      "author": "Strategy",
+      "feature": "US: CPC 7.33, KD 16",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "comparison_article",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Should I choose Hootsuite or Later?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 77,
+      "slug": "hootsuite-vs-later",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-078",
+      "day": "Backlog 78",
+      "date": "2026-04-17",
+      "topic": "Metricool vs Hootsuite",
+      "topicEn": "Metricool vs Hootsuite",
+      "keyword": "metricool vs hootsuite",
+      "author": "Strategy",
+      "feature": "US: CPC 5.99, KD 8",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "comparison_article",
+      "intent": "informational",
+      "market": "US / ES",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Should I choose Metricool or Hootsuite?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 78,
+      "slug": "metricool-vs-hootsuite",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-079",
+      "day": "Backlog 79",
+      "date": "2026-04-17",
+      "topic": "Best Social Media Tools For Small Business",
+      "topicEn": "Best Social Media Tools For Small Business",
+      "keyword": "best social media tools for small business",
+      "author": "Strategy",
+      "feature": "US: CPC 10.18, KD 58",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "solution_landing",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "What tools should a small business use?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 79,
+      "slug": "best-social-media-tools-for-small-business",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-080",
+      "day": "Backlog 80",
+      "date": "2026-04-17",
+      "topic": "Best Social Media Tools For Agencies",
+      "topicEn": "Best Social Media Tools For Agencies",
+      "keyword": "best social media tools for agencies",
+      "author": "Strategy",
+      "feature": "US: low SV, agency intent",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "solution_landing",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "What social tools fit agency workflows?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 80,
+      "slug": "best-social-media-tools-for-agencies",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-081",
+      "day": "Backlog 81",
+      "date": "2026-04-17",
+      "topic": "Best Scheduler For Creators And Small Teams",
+      "topicEn": "Best Scheduler For Creators And Small Teams",
+      "keyword": "best social media scheduler for creators",
+      "author": "Strategy",
+      "feature": "Prompt-driven GEO page",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "ai_answer",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "AI answer for scheduler selection criteria",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 81,
+      "slug": "best-scheduler-for-creators-and-small-teams",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-082",
+      "day": "Backlog 82",
+      "date": "2026-04-17",
+      "topic": "Social Media Automation With n8n / Make",
+      "topicEn": "Social Media Automation With n8n / Make",
+      "keyword": "social media automation with n8n",
+      "author": "Strategy",
+      "feature": "Prompt-driven GEO page",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "ai_answer",
+      "intent": "commercial",
+      "market": "US / DE",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which tool supports n8n/Make and human review?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 82,
+      "slug": "social-media-automation-with-n8n-make",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-083",
+      "day": "Backlog 83",
+      "date": "2026-04-17",
+      "topic": "Best Time To Post Testing Method",
+      "topicEn": "Best Time To Post Testing Method",
+      "keyword": "how to test best posting time",
+      "author": "Strategy",
+      "feature": "Prompt-driven GEO page",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "ai_answer",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "How should I test posting times for my audience?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 83,
+      "slug": "best-time-to-post-testing-method",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-084",
+      "day": "Backlog 84",
+      "date": "2026-04-17",
+      "topic": "Free Social Media Tools For Creators",
+      "topicEn": "Free Social Media Tools For Creators",
+      "keyword": "free social media tools for creators",
+      "author": "Strategy",
+      "feature": "Prompt-driven tool hub",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "ai_answer",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which free tools help creators move faster?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 84,
+      "slug": "free-social-media-tools-for-creators",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-085",
+      "day": "Backlog 85",
+      "date": "2026-04-17",
+      "topic": "Best Buffer / Hootsuite / Later / Metricool Alternative",
+      "topicEn": "Best Buffer / Hootsuite / Later / Metricool Alternative",
+      "keyword": "best social media tool alternative",
+      "author": "Strategy",
+      "feature": "Prompt-driven comparison hub",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "ai_answer",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which alternative fits my team?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 85,
+      "slug": "best-buffer-hootsuite-later-metricool-alternative",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-086",
+      "day": "Backlog 86",
+      "date": "2026-04-17",
+      "topic": "Social Media Tool Buying Criteria",
+      "topicEn": "Social Media Tool Buying Criteria",
+      "keyword": "how to choose social media management tool",
+      "author": "Strategy",
+      "feature": "Criteria page for AI citations",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "ai_answer",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "What criteria matter when choosing a tool?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 86,
+      "slug": "social-media-tool-buying-criteria",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-087",
+      "day": "Backlog 87",
+      "date": "2026-04-17",
+      "topic": "AI Social Media Workflow Criteria",
+      "topicEn": "AI Social Media Workflow Criteria",
+      "keyword": "AI social media workflow",
+      "author": "Strategy",
+      "feature": "Criteria page for AI citations",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "ai_answer",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "How should AI fit into a social workflow?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 87,
+      "slug": "ai-social-media-workflow-criteria",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-088",
+      "day": "Backlog 88",
+      "date": "2026-04-17",
+      "topic": "Social Media Approval Software With AI",
+      "topicEn": "Social Media Approval Software With AI",
+      "keyword": "social media approval workflow",
+      "author": "Strategy",
+      "feature": "Low KD + product proof",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "ai_answer",
+      "intent": "commercial",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 1,
+      "url": null,
+      "prompt": "Which approval workflow keeps AI content controlled?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 88,
+      "slug": "social-media-approval-software-with-ai",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-089",
+      "day": "Backlog 89",
+      "date": "2026-04-17",
+      "topic": "What To Automate In Social Media",
+      "topicEn": "What To Automate In Social Media",
+      "keyword": "what social media tasks to automate",
+      "author": "Strategy",
+      "feature": "Prompt-driven education",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "ai_answer",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "What should and should not be automated?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 89,
+      "slug": "what-to-automate-in-social-media",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-090",
+      "day": "Backlog 90",
+      "date": "2026-04-17",
+      "topic": "How To Choose A Social Media Management Tool",
+      "topicEn": "How To Choose A Social Media Management Tool",
+      "keyword": "choose social media management tool",
+      "author": "Strategy",
+      "feature": "Prompt-driven buying guide",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "ai_answer",
+      "intent": "informational",
+      "market": "US",
+      "locale": "en",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "How do I choose the right tool?",
+      "localization": "EN first",
+      "backlog": true,
+      "backlogRank": 90,
+      "slug": "how-to-choose-a-social-media-management-tool",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-091",
+      "day": "Backlog 91",
+      "date": "2026-04-17",
+      "topic": "DE Instagram Video Download",
+      "topicEn": "DE Instagram Video Download",
+      "keyword": "instagram video download, instagram video downloader",
+      "author": "Strategy",
+      "feature": "DE: SV 60,500/49,500, KD 29-30",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "DE",
+      "locale": "de",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Wie lade ich Instagram Videos sicher herunter?",
+      "localization": "Native DE",
+      "backlog": true,
+      "backlogRank": 91,
+      "slug": "de-instagram-video-download",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-092",
+      "day": "Backlog 92",
+      "date": "2026-04-17",
+      "topic": "DE Facebook Video Download",
+      "topicEn": "DE Facebook Video Download",
+      "keyword": "facebook video download",
+      "author": "Strategy",
+      "feature": "DE: SV 60,500, KD 28",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "DE",
+      "locale": "de",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Wie speichere ich Facebook Videos sicher?",
+      "localization": "Native DE",
+      "backlog": true,
+      "backlogRank": 92,
+      "slug": "de-facebook-video-download",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-093",
+      "day": "Backlog 93",
+      "date": "2026-04-17",
+      "topic": "DE Social Media Automatisierung",
+      "topicEn": "DE Social Media Automatisierung",
+      "keyword": "social media automatisierung",
+      "author": "Strategy",
+      "feature": "DE: SV 140, CPC 3.26, KD 13",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "solution_landing",
+      "intent": "commercial",
+      "market": "DE",
+      "locale": "de",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Welches Tool automatisiert Social Media Workflows?",
+      "localization": "Native DE",
+      "backlog": true,
+      "backlogRank": 93,
+      "slug": "de-social-media-automatisierung",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-094",
+      "day": "Backlog 94",
+      "date": "2026-04-17",
+      "topic": "DE Social Media Kalender",
+      "topicEn": "DE Social Media Kalender",
+      "keyword": "social media kalender",
+      "author": "Strategy",
+      "feature": "DE: SV 260, KD 22",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "solution_landing",
+      "intent": "informational",
+      "market": "DE",
+      "locale": "de",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Wie plane ich einen Social Media Kalender?",
+      "localization": "Native DE",
+      "backlog": true,
+      "backlogRank": 94,
+      "slug": "de-social-media-kalender",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-095",
+      "day": "Backlog 95",
+      "date": "2026-04-17",
+      "topic": "FR Telecharger Video Instagram",
+      "topicEn": "FR Telecharger Video Instagram",
+      "keyword": "telecharger video instagram",
+      "author": "Strategy",
+      "feature": "FR: SV 60,500, CPC 1.16, KD 44",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "FR",
+      "locale": "fr",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Comment telecharger une video Instagram publique?",
+      "localization": "Native FR",
+      "backlog": true,
+      "backlogRank": 95,
+      "slug": "fr-telecharger-video-instagram",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-096",
+      "day": "Backlog 96",
+      "date": "2026-04-17",
+      "topic": "FR Telecharger Video Facebook",
+      "topicEn": "FR Telecharger Video Facebook",
+      "keyword": "telecharger video facebook",
+      "author": "Strategy",
+      "feature": "FR: SV 40,500, CPC 0.41, KD 24",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "FR",
+      "locale": "fr",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Comment enregistrer une video Facebook publique?",
+      "localization": "Native FR",
+      "backlog": true,
+      "backlogRank": 96,
+      "slug": "fr-telecharger-video-facebook",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-097",
+      "day": "Backlog 97",
+      "date": "2026-04-17",
+      "topic": "FR Programmer Publication Instagram",
+      "topicEn": "FR Programmer Publication Instagram",
+      "keyword": "programmer publication instagram",
+      "author": "Strategy",
+      "feature": "FR: SV 880, KD 25",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "2200",
+      "pageType": "blog",
+      "contentType": "solution_landing",
+      "intent": "informational",
+      "market": "FR",
+      "locale": "fr",
+      "priorityTier": 2,
+      "url": null,
+      "prompt": "Comment programmer des publications Instagram?",
+      "localization": "Native FR",
+      "backlog": true,
+      "backlogRank": 97,
+      "slug": "fr-programmer-publication-instagram",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-098",
+      "day": "Backlog 98",
+      "date": "2026-04-17",
+      "topic": "ES Mejor Hora Para Publicar En Instagram",
+      "topicEn": "ES Mejor Hora Para Publicar En Instagram",
+      "keyword": "mejor hora para publicar en instagram",
+      "author": "Strategy",
+      "feature": "ES: SV 2,900, KD 15",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1800",
+      "pageType": "money_intent",
+      "contentType": "research_page",
+      "intent": "commercial",
+      "market": "ES",
+      "locale": "es",
+      "priorityTier": 3,
+      "url": null,
+      "prompt": "Cual es la mejor hora para publicar en Instagram?",
+      "localization": "Native ES",
+      "backlog": true,
+      "backlogRank": 98,
+      "slug": "es-mejor-hora-para-publicar-en-instagram",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-099",
+      "day": "Backlog 99",
+      "date": "2026-04-17",
+      "topic": "ES Descargar Video Instagram",
+      "topicEn": "ES Descargar Video Instagram",
+      "keyword": "descargar video instagram",
+      "author": "Strategy",
+      "feature": "ES: SV 246,000, KD 75",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "ES",
+      "locale": "es",
+      "priorityTier": 3,
+      "url": null,
+      "prompt": "Como descargar videos de Instagram?",
+      "localization": "Native ES, after ES timing",
+      "backlog": true,
+      "backlogRank": 99,
+      "slug": "es-descargar-video-instagram",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    },
+    {
+      "id": "BG-100",
+      "day": "Backlog 100",
+      "date": "2026-04-17",
+      "topic": "BR Baixar Video Instagram",
+      "topicEn": "BR Baixar Video Instagram",
+      "keyword": "baixar video instagram",
+      "author": "Strategy",
+      "feature": "BR: SV 1,220,000, KD 44",
+      "cluster": "100-Topic Backlog",
+      "wordTarget": "1600",
+      "pageType": "money_intent",
+      "contentType": "tool_landing",
+      "intent": "commercial",
+      "market": "BR / PT",
+      "locale": "pt",
+      "priorityTier": 3,
+      "url": null,
+      "prompt": "Como baixar video do Instagram com seguranca?",
+      "localization": "Native PT-BR",
+      "backlog": true,
+      "backlogRank": 100,
+      "slug": "br-baixar-video-instagram",
+      "steps": {
+        "content_research": {
+          "status": "pending",
+          "doc": null
+        },
+        "structure": {
+          "status": "pending",
+          "doc": null
+        },
+        "drafting": {
+          "status": "pending",
+          "doc": null
+        },
+        "feature_inserts": {
+          "status": "pending",
+          "doc": null
+        },
+        "editing": {
+          "status": "pending",
+          "doc": null
+        },
+        "geo_polish": {
+          "status": "pending",
+          "doc": null
+        },
+        "final": {
+          "status": "pending",
+          "doc": null
+        },
+        "multimedia_enrichment": {
+          "status": "pending",
+          "doc": null
+        }
+      }
+    }
+  ]
 }

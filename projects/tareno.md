@@ -1,7 +1,14 @@
-# Tareno – Projektbereich Blogs
+# Tareno – Projektbereich Content + International SEO
 
 ## Ziel
-Transparente Steuerung der Blog-Produktion mit klarer Übersicht zu Plan, Erstellung, Veröffentlichung und Subagent-Arbeitsschritten.
+Transparente Steuerung der Blog-Produktion, internationaler SEO-/GEO-Pages und Money-Intent-Landingpages mit klarer Übersicht zu Plan, Erstellung, Veröffentlichung und Subagent-Arbeitsschritten.
+
+## Erweiterung
+- English-first International SEO für US, UK, DE, FR, ES und BR
+- Blog-Artikel für Informations- und Timing-Cluster
+- Money-Intent-Pages für Tools, Lösungen und AI-Answer-GEO
+- Spätere Lokalisierung auf `de`, `fr`, `es` und `pt` nach English validation
+- 100-Topic Money-Intent SEO + GEO Backlog aus dem internationalen Plan
 
 ## Blog-Operations Tabelle
 
@@ -35,6 +42,16 @@ Transparente Steuerung der Blog-Produktion mit klarer Übersicht zu Plan, Erstel
 - Owner
 - Letzte Änderung
 - Referenzen auf Zwischenartefakte
+
+## Pflichtfelder je internationaler Page
+- Page-Typ
+- Content-Typ
+- Intent
+- Markt
+- Locale
+- URL
+- Priority Tier
+- Letzte Änderung
 
 ## Referenzen
 - `projects/_access/tareno.md`

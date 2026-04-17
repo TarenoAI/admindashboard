@@ -934,6 +934,17 @@
 
                     const isTarenoProject = (p.id || '').toLowerCase() === 'tareno' || (p.name || '').toLowerCase().includes('tareno');
                     const tarenoFeatureTools = Array.from(new Set((p.contentPipeline || []).map(cp => cp.feature).filter(v => v && v !== 'nan')));
+                    const tarenoContentPipelineRows = Array.isArray(p.contentPipeline) ? p.contentPipeline : [];
+                    const tarenoInternationalRows = tarenoContentPipelineRows.filter(cp => (cp.pageType || '').toLowerCase() === 'money_intent' || (cp.intent || '').toLowerCase() === 'commercial' || (cp.contentType || '').toLowerCase() === 'ai_answer');
+                    const tarenoBlogRows = tarenoContentPipelineRows.filter(cp => (cp.pageType || '').toLowerCase() === 'blog');
+                    const tarenoIntlPipelineStats = {
+                        total: tarenoContentPipelineRows.length,
+                        blog: tarenoBlogRows.length,
+                        money: tarenoContentPipelineRows.filter(cp => (cp.pageType || '').toLowerCase() === 'money_intent').length,
+                        aiAnswer: tarenoContentPipelineRows.filter(cp => (cp.contentType || '').toLowerCase() === 'ai_answer').length,
+                        commercial: tarenoContentPipelineRows.filter(cp => (cp.intent || '').toLowerCase() === 'commercial').length,
+                    };
+                    const tarenoIntlFocusRows = tarenoInternationalRows.slice(-6).reverse();
                     const tarenoTools = [
                         ...tarenoFeatureTools,
                         'Kanban Task Board (Drag & Drop)',
@@ -949,6 +960,23 @@
                             <h4 class="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-4 flex items-center gap-2 pb-2 border-b border-white/5">🧰 Tareno Tools</h4>
                             <div class="flex flex-col gap-1.5">
                                 ${tarenoTools.map(tool => `<div class="text-[10px] text-text-secondary bg-black/20 border border-white/5 rounded px-2 py-1.5">${tool}</div>`).join('')}
+                            </div>
+                        </div>
+                    ` : '';
+                    const tarenoIntlPipelineHtml = isTarenoProject ? `
+                        <div>
+                            <h4 class="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-4 flex items-center gap-2 pb-2 border-b border-white/5">🌍 International SEO / Money-Intent</h4>
+                            <div class="rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-3 space-y-3">
+                                <p class="text-[10px] text-text-secondary leading-relaxed">English-first expansion für Blogs, Money-Intent-Landingpages und GEO/AI-Answer-Pages. Sichtbar im Content-Pipeline-Block mit <span class="font-mono">pageType</span>, <span class="font-mono">contentType</span>, <span class="font-mono">market</span> und <span class="font-mono">url</span>.</p>
+                                <div class="grid grid-cols-2 gap-2 text-[10px]">
+                                    <div class="rounded-lg bg-black/20 border border-white/5 p-2"><span class="block text-text-muted uppercase tracking-wider mb-1">Total</span><span class="text-white font-bold">${tarenoIntlPipelineStats.total}</span></div>
+                                    <div class="rounded-lg bg-black/20 border border-white/5 p-2"><span class="block text-text-muted uppercase tracking-wider mb-1">Blogs</span><span class="text-white font-bold">${tarenoIntlPipelineStats.blog}</span></div>
+                                    <div class="rounded-lg bg-black/20 border border-white/5 p-2"><span class="block text-text-muted uppercase tracking-wider mb-1">Money</span><span class="text-white font-bold">${tarenoIntlPipelineStats.money}</span></div>
+                                    <div class="rounded-lg bg-black/20 border border-white/5 p-2"><span class="block text-text-muted uppercase tracking-wider mb-1">AI Answers</span><span class="text-white font-bold">${tarenoIntlPipelineStats.aiAnswer}</span></div>
+                                </div>
+                                <div class="flex flex-col gap-1.5">
+                                    ${tarenoIntlFocusRows.length > 0 ? tarenoIntlFocusRows.map(cp => `<div class="text-[10px] text-text-secondary bg-black/20 border border-white/5 rounded px-2 py-1.5"><span class="font-mono text-cyan-200">${cp.id}</span> · ${cp.topicEn || cp.topic || '—'}</div>`).join('') : '<p class="text-[10px] text-text-muted italic">Noch keine internationalen Rows vorhanden</p>'}
+                                </div>
                             </div>
                         </div>
                     ` : '';
@@ -975,6 +1003,118 @@
                     const compactPagesRoot = compactPagesMeta.rootRelPath || `projects/compact-pages/${(p.id || '').toLowerCase()}`;
                     const compactTemplateFinal = compactPagesMeta.template?.finalRelPath || null;
                     const compactTemplateState = compactPagesMeta.template?.stateRelPath || null;
+                    const seoBacklogRows = Array.isArray(p.seoBacklog) ? p.seoBacklog : [];
+                    const compactRoadmapRows = [...tarenoContentPipelineRows, ...seoBacklogRows];
+                    const compactRoadmapStats = {
+                        total: compactRoadmapRows.length,
+                        active: tarenoContentPipelineRows.length,
+                        backlog: seoBacklogRows.length,
+                        moneyIntent: compactRoadmapRows.filter(cp => (cp.pageType || '').toLowerCase() === 'money_intent').length,
+                        aiAnswers: compactRoadmapRows.filter(cp => (cp.contentType || '').toLowerCase() === 'ai_answer').length,
+                    };
+                    const compactRoadmapHtml = isTarenoProject ? `
+                        <div class="glass-card mt-6 p-0 overflow-hidden shadow-2xl border border-white/10 bg-black/40">
+                            <div class="p-6 md:p-8 border-b border-white/5 bg-gradient-to-r from-cyan-500/10 to-transparent relative">
+                                <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                                    <div>
+                                        <h4 class="text-xs uppercase tracking-widest text-cyan-200 font-extrabold flex items-center gap-2">🧭 Compact Pages Roadmap & Approvals</h4>
+                                        <p class="text-xs text-text-muted mt-2 max-w-3xl">Die komplette Schreib- und Review-Übersicht fuer Tareno in derselben Struktur wie die Content Pipeline. Hier siehst du die aktiven Rows aus <span class="font-mono">contentPipeline</span> und den 100-Topic-Backlog zusammen.</p>
+                                    </div>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-white/5 border border-white/10 text-white">${compactRoadmapStats.total || 0} rows</span>
+                                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-cyan-500/10 border border-cyan-500/30 text-cyan-200">${compactRoadmapStats.active || 0} active</span>
+                                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-violet-500/10 border border-violet-500/30 text-violet-200">${compactRoadmapStats.backlog || 0} backlog</span>
+                                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-amber-500/10 border border-amber-500/30 text-amber-300">${compactRoadmapStats.aiAnswers || 0} ai answers</span>
+                                    </div>
+                                </div>
+                            </div>
+                            ${compactRoadmapRows.length > 0 ? `
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs text-white">
+                                    <thead class="bg-black/60 border-b border-white/10 uppercase text-[9px] text-text-muted font-bold tracking-wider">
+                                        <tr>
+                                            <th class="p-5 min-w-[180px]">Tag / Thema</th>
+                                            ${['Research', 'Structure', 'Drafting', 'Features', 'Editing', 'Geo-Polish', 'Final Review', 'Multimedia'].map(s => `<th class="p-5 text-center px-2">${s}</th>`).join('')}
+                                            <th class="p-5 text-center">Row Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-white/5">
+                                        ${compactRoadmapRows.map((cp, cpIndex) => `
+                                        <tr class="${cp.backlog ? 'hover:bg-violet-500/5 hover:bg-opacity-10' : 'hover:bg-cyan-500/5 hover:bg-opacity-10'} transition-colors group">
+                                            <td class="p-5 align-top">
+                                                <div class="flex items-center gap-2 mb-1.5">
+                                                    <span class="font-bold text-white text-xs bg-cyan-500/20 text-cyan-200 px-2 py-0.5 rounded border border-cyan-500/30 shadow-[0_0_10px_rgba(34,211,238,0.15)]">${cp.id || `TAG-${String(cpIndex + 1).padStart(2, '0')}`}</span>
+                                                    <span class="text-[9px] uppercase tracking-wider text-text-muted bg-white/5 px-2 py-0.5 rounded border border-white/5">${cp.day}</span>
+                                                    <span class="text-[9px] uppercase tracking-wider text-text-muted bg-white/5 px-2 py-0.5 rounded border border-white/5">${cp.date}</span>
+                                                </div>
+                                                <p class="text-xs text-white font-semibold md:max-w-[220px] leading-snug mb-1.5">${cp.topicEn || cp.topic || '—'}</p>
+                                                ${cp.topicEn && cp.topic && cp.topicEn !== cp.topic ? `<p class="text-[10px] text-text-muted md:max-w-[220px] leading-snug mb-2.5">DE: ${cp.topic}</p>` : '<div class="mb-2.5"></div>'}
+                                                <div class="flex flex-col gap-1">
+                                                    ${cp.keyword && cp.keyword !== 'nan' ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">KW:</span><span class="text-[10px] text-brand/80 leading-tight line-clamp-1" title="${cp.keyword}">${cp.keyword}</span></div>` : ''}
+                                                    ${cp.feature && cp.feature !== 'nan' ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">Tool:</span><span class="text-[10px] text-text-secondary leading-tight line-clamp-1" title="${cp.feature}">${cp.feature}</span></div>` : ''}
+                                                    ${cp.author && cp.author !== 'nan' ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">Aut:</span><span class="text-[10px] text-text-secondary leading-tight line-clamp-1">${cp.author}</span></div>` : ''}
+                                                    ${cp.pageType ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">Type:</span><span class="text-[10px] text-cyan-200 leading-tight line-clamp-1">${cp.pageType}</span></div>` : ''}
+                                                    ${cp.contentType ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">Format:</span><span class="text-[10px] text-text-secondary leading-tight line-clamp-1">${cp.contentType}</span></div>` : ''}
+                                                    ${cp.locale ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">Locale:</span><span class="text-[10px] text-text-secondary leading-tight line-clamp-1">${cp.locale}</span></div>` : ''}
+                                                    ${cp.market ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">Market:</span><span class="text-[10px] text-text-secondary leading-tight line-clamp-1">${cp.market}</span></div>` : ''}
+                                                    ${cp.priorityTier ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">Tier:</span><span class="text-[10px] text-text-secondary leading-tight line-clamp-1">P${cp.priorityTier}</span></div>` : ''}
+                                                    ${cp.url ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">URL:</span><span class="text-[10px] text-cyan-200 leading-tight break-all">${cp.url}</span></div>` : ''}
+                                                </div>
+                                            </td>
+                                            ${['content_research', 'structure', 'drafting', 'feature_inserts', 'editing', 'geo_polish', 'final', 'multimedia_enrichment'].map(step => {
+                                                const stepData = cp.steps?.[step] || { status: 'pending', doc: null };
+                                                let btnHtml = '';
+                                                let iconClr = 'text-white/20';
+
+                                                if (stepData.status === 'done') {
+                                                    btnHtml = '<div class="flex gap-1.5 justify-center"><button class="px-3 py-1.5 rounded-md bg-green-500/20 hover:bg-green-500/30 text-green-400 border border-green-500/30 text-[9px] font-bold transition-all shadow-sm w-full cursor-default">✓ Approved</button></div>';
+                                                    iconClr = 'text-green-400 hover:text-green-300 drop-shadow-[0_0_8px_rgba(74,222,128,0.4)]';
+                                                } else if (stepData.status === 'rejected') {
+                                                    const reasonStr = stepData.rejectReason ? ` title="Begründung: ${stepData.rejectReason.replace(/"/g, '&quot;')}"` : ' title="Abgelehnt"';
+                                                    btnHtml = `<span class="px-2 py-1.5 rounded-md bg-red-500/10 text-red-400/80 text-[9px] block text-center border border-red-500/20 w-full font-medium tracking-wide cursor-help"${reasonStr}>✕ Rejected</span>`;
+                                                    iconClr = 'text-red-400 hover:text-red-300 opacity-60';
+                                                } else {
+                                                    btnHtml = `<div class="flex gap-1.5 justify-center items-center">
+                                                        <button onclick="updateStepStatus('${p.id}', ${cpIndex}, '${step}', 'done')" class="w-7 h-7 rounded-md bg-green-500/10 hover:bg-green-500/20 text-green-400 hover:text-green-300 flex items-center justify-center border border-green-500/20 hover:border-green-500/40 transition-all shadow-sm" title="Als erledigt markieren">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
+                                                        </button>
+                                                        <button onclick="updateStepStatus('${p.id}', ${cpIndex}, '${step}', 'review')" class="w-7 h-7 rounded-md bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 hover:text-yellow-300 flex items-center justify-center border border-yellow-500/20 hover:border-yellow-500/40 transition-all shadow-sm" title="Zur Prüfung senden">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" /></svg>
+                                                        </button>
+                                                    </div>`;
+                                                    iconClr = 'text-white/50 hover:text-white';
+                                                }
+
+                                                const hasStepDoc = Boolean(stepData.doc);
+                                                const stepLabel = hasStepDoc ? 'Dokument' : '—';
+                                                return `<td class="p-5 text-center align-top">
+                                                    <div class="flex flex-col items-center gap-2">
+                                                        ${btnHtml}
+                                                        <div class="flex items-center gap-1.5 text-[9px] ${iconClr}">
+                                                            <span class="font-bold">${stepData.status || 'pending'}</span>
+                                                            ${hasStepDoc ? `<button onclick="openProjectRef('${stepData.doc}')" class="underline underline-offset-2 hover:text-cyan-200 transition-colors">${stepLabel}</button>` : `<span class="opacity-50">${stepLabel}</span>`}
+                                                        </div>
+                                                    </div>
+                                                </td>`;
+                                            }).join('')}
+                                            <td class="p-5 text-center align-top">
+                                                <div class="flex flex-col gap-2 items-center">
+                                                    <span class="px-3 py-1.5 rounded-md ${cp.backlog ? 'bg-violet-500/10 text-violet-200 border-violet-500/30' : 'bg-cyan-500/10 text-cyan-200 border-cyan-500/30'} text-[9px] font-bold uppercase tracking-wider w-full">${cp.backlog ? 'Backlog' : 'Roadmap'}</span>
+                                                    <span class="px-3 py-1.5 rounded-md bg-white/5 text-text-muted border border-white/10 text-[9px] font-bold uppercase tracking-wider w-full">Planned</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>` : `<div class="p-6 md:p-8">
+                                <div class="rounded-2xl border border-dashed border-white/10 bg-black/20 p-5">
+                                    <p class="text-sm font-semibold text-white">Noch keine Money-Intent Compact Pages in der Roadmap</p>
+                                    <p class="text-xs text-text-muted mt-2 leading-relaxed">Sobald Rows mit <span class="font-mono">pageType: money_intent</span> oder <span class="font-mono">contentType: ai_answer</span> existieren, erscheinen sie hier in der gleichen Tabellenstruktur wie die Content Pipeline.</p>
+                                </div>
+                            </div>`}
+                        </div>
+                    ` : '';
                     const compactPageCardsHtml = compactPages.length > 0
                         ? `<div class="grid grid-cols-1 xl:grid-cols-2 gap-4 p-6 md:p-8">
                             ${compactPages.map(cp => {
@@ -1097,6 +1237,7 @@
                                     </div>
                                 </div>
                             </div>
+                            ${compactRoadmapHtml}
                             ${compactPageCardsHtml}
                         </div>` : '';
 
@@ -1146,6 +1287,7 @@
                                         <div class="flex flex-col gap-2">${agentHtml}</div>
                                     </div>
                                     ${tarenoToolsHtml}
+                                    ${tarenoIntlPipelineHtml}
                                     ${mediaConvertHtml}
                                     <div class="flex flex-col flex-1 overflow-hidden">
                                         <h4 class="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-4 flex items-center justify-between pb-2 border-b border-white/5 flex-shrink-0">
@@ -1213,6 +1355,12 @@
                                                     ${cp.keyword && cp.keyword !== 'nan' ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">KW:</span><span class="text-[10px] text-brand/80 leading-tight line-clamp-1" title="${cp.keyword}">${cp.keyword}</span></div>` : ''}
                                                     ${cp.feature && cp.feature !== 'nan' ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">Tool:</span><span class="text-[10px] text-text-secondary leading-tight line-clamp-1" title="${cp.feature}">${cp.feature}</span></div>` : ''}
                                                     ${cp.author && cp.author !== 'nan' ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">Aut:</span><span class="text-[10px] text-text-secondary leading-tight line-clamp-1">${cp.author}</span></div>` : ''}
+                                                    ${cp.pageType ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">Type:</span><span class="text-[10px] text-cyan-200 leading-tight line-clamp-1">${cp.pageType}</span></div>` : ''}
+                                                    ${cp.contentType ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">Format:</span><span class="text-[10px] text-text-secondary leading-tight line-clamp-1">${cp.contentType}</span></div>` : ''}
+                                                    ${cp.locale ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">Locale:</span><span class="text-[10px] text-text-secondary leading-tight line-clamp-1">${cp.locale}</span></div>` : ''}
+                                                    ${cp.market ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">Market:</span><span class="text-[10px] text-text-secondary leading-tight line-clamp-1">${cp.market}</span></div>` : ''}
+                                                    ${cp.priorityTier ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">Tier:</span><span class="text-[10px] text-text-secondary leading-tight line-clamp-1">P${cp.priorityTier}</span></div>` : ''}
+                                                    ${cp.url ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">URL:</span><span class="text-[10px] text-brand/80 leading-tight break-all">${cp.url}</span></div>` : ''}
                                                 </div>
                                             </td>
                                             ${['content_research', 'structure', 'drafting', 'feature_inserts', 'editing', 'geo_polish', 'final', 'multimedia_enrichment'].map(step => {
