@@ -4617,4 +4617,213 @@ app.post('/api/ytdlp/transcript', ytdlpRateLimit, ytdlpBridgeAuth, async (req, r
  return res.status(502).json({ success: false, reqId, error: 'No transcript found.' });
 });
 
+// ─── Internal Landing-Pages Proxy ──────────────────────────────────────────────
+// Secrets are read from process.env only – never sent to the browser.
+// The browser talks to /api/dashboard/landing-pages (BasicAuth protected).
+// server.js forwards to the Tareno Next.js API using the appropriate secret.
+
+const LANDING_BASE = (() => {
+    const base = String(process.env.TARENO_BLOG_API_BASE || 'https://tareno.co').trim().replace(/\/+$/, '');
+    return base;
+})();
+
+function getLandingSecret(mode, method) {
+    // Publish, Delete, or update of published pages require the stronger secret.
+    const needsPublish = (typeof mode === 'string' && mode === 'publish')
+        || (typeof method === 'string' && method.toUpperCase() === 'DELETE');
+    const publishSecret = process.env.LANDING_PUBLISH_SECRET || '';
+    const draftSecret = process.env.LANDING_API_SECRET || '';
+    if (needsPublish) return publishSecret || draftSecret;
+    return draftSecret || publishSecret;
+}
+
+// Helper: forward simple JSON or multipart to Tareno
+async function proxyLandingRequest(tarUrl, method, body, secret, res) {
+    try {
+        const resp = await fetch(tarUrl, {
+            method,
+            headers: {
+                Authorization: `Bearer ${secret}`,
+                'Content-Type': 'application/json',
+            },
+            body: body ? JSON.stringify(body) : undefined,
+        });
+        const text = await resp.text();
+        const json = tryParseJson(text);
+        res.status(resp.status);
+        if (json) {
+            return res.json(json);
+        }
+        return res.send(text);
+    } catch (err) {
+        return res.status(502).json({ success: false, error: `Tareno proxy error: ${err.message}` });
+    }
+}
+
+// Helper: forward multipart (with images) to Tareno
+async function proxyLandingMultipart(tarUrl, method, fields, imageFiles, secret, res) {
+    try {
+        const { FormData, Blob } = await import('node:buffer').then(() => globalThis).catch(() => ({}));
+
+        // Node 18+ has FormData natively; fetch API also exposes it
+        let fd;
+        if (typeof FormData !== 'undefined') {
+            fd = new FormData();
+        } else {
+            // Fallback: send as JSON (no image support)
+            return proxyLandingRequest(tarUrl, method, fields, secret, res);
+        }
+
+        // Add scalar fields
+        for (const [k, v] of Object.entries(fields || {})) {
+            if (v == null) continue;
+            fd.append(k, typeof v === 'string' ? v : JSON.stringify(v));
+        }
+
+        // Add image files (sent as Base64 from the browser)
+        if (Array.isArray(imageFiles) && imageFiles.length > 0) {
+            for (const img of imageFiles) {
+                if (!img || !img.base64 || !img.name) continue;
+                const buf = Buffer.from(img.base64, 'base64');
+                const mime = img.mime || 'image/jpeg';
+                const blob = new Blob([buf], { type: mime });
+                fd.append('visualFiles', blob, img.name);
+            }
+        }
+
+        const resp = await fetch(tarUrl, {
+            method,
+            headers: { Authorization: `Bearer ${secret}` },
+            body: fd,
+            duplex: 'half',
+        });
+        const text = await resp.text();
+        const json = tryParseJson(text);
+        res.status(resp.status);
+        return json ? res.json(json) : res.send(text);
+    } catch (err) {
+        return res.status(502).json({ success: false, error: `Tareno multipart proxy error: ${err.message}` });
+    }
+}
+
+// GET /api/dashboard/landing-pages  – list pages
+app.get('/api/dashboard/landing-pages', async (req, res) => {
+    try {
+        const { type, status } = req.query;
+        const qs = new URLSearchParams();
+        if (type) qs.set('type', type);
+        if (status) qs.set('status', status || 'all');
+        const secret = getLandingSecret('draft', 'GET');
+        if (!secret) return res.status(500).json({ success: false, error: 'LANDING_API_SECRET not configured on server.' });
+
+        const tarUrl = `${LANDING_BASE}/api/content/landing-pages${qs.toString() ? '?' + qs.toString() : ''}`;
+        await proxyLandingRequest(tarUrl, 'GET', undefined, secret, res);
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// POST /api/dashboard/landing-pages  – create
+app.post('/api/dashboard/landing-pages', express.json({ limit: '200mb' }), async (req, res) => {
+    try {
+        const body = req.body || {};
+        const { _imageFiles, ...fields } = body;
+        const mode = String(fields.mode || 'draft').trim().toLowerCase();
+        const secret = getLandingSecret(mode, 'POST');
+        if (!secret) return res.status(500).json({ success: false, error: 'LANDING_API_SECRET not configured on server.' });
+        if (mode === 'publish' && !process.env.LANDING_PUBLISH_SECRET) {
+            return res.status(403).json({ success: false, error: 'Publishing requires LANDING_PUBLISH_SECRET to be configured on the server.' });
+        }
+
+        const tarUrl = `${LANDING_BASE}/api/content/landing-pages`;
+        if (_imageFiles && _imageFiles.length > 0) {
+            await proxyLandingMultipart(tarUrl, 'POST', fields, _imageFiles, secret, res);
+        } else {
+            await proxyLandingRequest(tarUrl, 'POST', fields, secret, res);
+        }
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// GET /api/dashboard/landing-pages/:slug  – single page
+app.get('/api/dashboard/landing-pages/:slug', async (req, res) => {
+    try {
+        const { slug } = req.params;
+        const { type } = req.query;
+        const qs = new URLSearchParams();
+        if (type) qs.set('type', type);
+        const secret = getLandingSecret('draft', 'GET');
+        if (!secret) return res.status(500).json({ success: false, error: 'LANDING_API_SECRET not configured on server.' });
+
+        const tarUrl = `${LANDING_BASE}/api/content/landing-pages/${encodeURIComponent(slug)}${qs.toString() ? '?' + qs.toString() : ''}`;
+        await proxyLandingRequest(tarUrl, 'GET', undefined, secret, res);
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// PUT /api/dashboard/landing-pages/:slug  – update
+app.put('/api/dashboard/landing-pages/:slug', express.json({ limit: '200mb' }), async (req, res) => {
+    try {
+        const { slug } = req.params;
+        const body = req.body || {};
+        const { _imageFiles, ...fields } = body;
+        const mode = String(fields.mode || '').trim().toLowerCase();
+        const secret = getLandingSecret(mode, 'PUT');
+        if (!secret) return res.status(500).json({ success: false, error: 'LANDING_API_SECRET not configured on server.' });
+        if (mode === 'publish' && !process.env.LANDING_PUBLISH_SECRET) {
+            return res.status(403).json({ success: false, error: 'Publishing requires LANDING_PUBLISH_SECRET to be configured on the server.' });
+        }
+
+        const tarUrl = `${LANDING_BASE}/api/content/landing-pages/${encodeURIComponent(slug)}`;
+        if (_imageFiles && _imageFiles.length > 0) {
+            await proxyLandingMultipart(tarUrl, 'PUT', fields, _imageFiles, secret, res);
+        } else {
+            await proxyLandingRequest(tarUrl, 'PUT', fields, secret, res);
+        }
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// DELETE /api/dashboard/landing-pages/:slug
+app.delete('/api/dashboard/landing-pages/:slug', async (req, res) => {
+    try {
+        const { slug } = req.params;
+        const { type } = req.query;
+        const secret = getLandingSecret('publish', 'DELETE');
+        if (!secret) return res.status(500).json({ success: false, error: 'LANDING_PUBLISH_SECRET not configured on server.' });
+        if (!process.env.LANDING_PUBLISH_SECRET) {
+            return res.status(403).json({ success: false, error: 'Deleting requires LANDING_PUBLISH_SECRET to be configured on the server.' });
+        }
+
+        const qs = new URLSearchParams();
+        if (type) qs.set('type', type);
+        const tarUrl = `${LANDING_BASE}/api/content/landing-pages/${encodeURIComponent(slug)}${qs.toString() ? '?' + qs.toString() : ''}`;
+        await proxyLandingRequest(tarUrl, 'DELETE', undefined, secret, res);
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// GET /api/dashboard/strategy  – AI content strategy (read-only)
+app.get('/api/dashboard/strategy', async (req, res) => {
+    try {
+        const { period, provider } = req.query;
+        const qs = new URLSearchParams();
+        if (period) qs.set('period', period);
+        if (provider) qs.set('provider', provider);
+        const secret = getLandingSecret('draft', 'GET');
+        if (!secret) return res.status(500).json({ success: false, error: 'LANDING_API_SECRET not configured on server.' });
+
+        const tarUrl = `${LANDING_BASE}/api/analytics/strategy${qs.toString() ? '?' + qs.toString() : ''}`;
+        await proxyLandingRequest(tarUrl, 'GET', undefined, secret, res);
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+// ─── End Landing-Pages Proxy ───────────────────────────────────────────────────
+
 app.listen(PORT, () => console.log(`OpenClaw Admin Dashboard läuft auf http://localhost:${PORT}`));
+

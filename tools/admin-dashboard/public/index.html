@@ -230,6 +230,9 @@
             <div class="nav-item" onclick="switchTab('agent-builder', this)">
                 <span>🛠️</span> Agent Builder
             </div>
+            <div class="nav-item" onclick="switchTab('content-pipeline', this)">
+                <span>🚀</span> Content Pipeline
+            </div>
         </nav>
 
         <div class="p-4 border-t border-border-subtle">
@@ -369,6 +372,19 @@
                     const response = await fetch(`/api/agent-files?agent=${encodeURIComponent(selectedAgent.key)}`);
                     const data = await response.json();
                     currentData = data;
+                    renderView(currentTab, currentData, container);
+                    return;
+                }
+
+                if (currentTab === 'content-pipeline') {
+                    // Fetch pages (all statuses) + strategy in parallel
+                    const [pagesResp, stratResp] = await Promise.all([
+                        fetch('/api/dashboard/landing-pages?status=all'),
+                        fetch('/api/dashboard/strategy?period=month&provider=youtube').catch(() => null)
+                    ]);
+                    const pagesData = await pagesResp.json().catch(() => ({}));
+                    const stratData = stratResp ? await stratResp.json().catch(() => null) : null;
+                    currentData = { pages: pagesData, strategy: stratData };
                     renderView(currentTab, currentData, container);
                     return;
                 }
@@ -1710,6 +1726,319 @@
                                 ${(block.items || []).length ? `<ul class="space-y-2">${(block.items || []).map(item => `<li class="text-xs text-text-secondary leading-relaxed flex items-start gap-2"><span class="text-brand">•</span><span>${item}</span></li>`).join('')}</ul>` : '<p class="text-xs text-text-muted">Noch keine Einträge.</p>'}
                             </div>
                         `).join('')}
+                    </div>
+                </div>`;
+            }
+
+            else if (tab === 'content-pipeline') {
+                const pagesData = data.pages || {};
+                const strategy = data.strategy;
+                const rawPages = Array.isArray(pagesData.pages) ? pagesData.pages
+                    : (Array.isArray(pagesData.data) ? pagesData.data : []);
+
+                const typeLabelMap = {
+                    compare: 'Compare', solutions: 'Solutions',
+                    workflows: 'Workflows', 'best-time-to-post': 'Best Time to Post'
+                };
+                const typeUrlPrefixMap = {
+                    compare: '/compare/', solutions: '/solutions/',
+                    workflows: '/workflows/', 'best-time-to-post': '/best-time-to-post/'
+                };
+
+                const statusBadge = (s) => s === 'published'
+                    ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold border bg-emerald-500/15 text-emerald-300 border-emerald-500/30 uppercase tracking-wide">Published</span>`
+                    : `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold border bg-amber-500/15 text-amber-300 border-amber-500/30 uppercase tracking-wide">Draft</span>`;
+
+                const fmtDate = (v) => { if (!v) return '—'; try { return new Date(v).toLocaleDateString('de-DE'); } catch { return v; } };
+
+                // --- Strategy Panel ---
+                let stratHtml = '';
+                if (strategy && (strategy.niche || strategy.recommendations || (strategy.data && strategy.data.niche))) {
+                    const s = strategy.data || strategy;
+                    stratHtml = `
+                    <div class="glass-card p-5 border-brand/20 bg-gradient-to-r from-brand/5 to-transparent mb-2">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-lg">🧠</span>
+                            <h3 class="text-sm font-bold text-white">AI Strategy Input <span class="text-[10px] text-text-muted font-normal ml-1">(Nur zur internen Brief-Ableitung)</span></h3>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                            ${s.niche ? `<div class="bg-black/30 border border-white/5 rounded-lg p-3"><p class="text-text-muted uppercase text-[9px] tracking-wider mb-1">Niche</p><p class="text-white font-semibold">${s.niche}</p></div>` : ''}
+                            ${s.dataCoverage ? `<div class="bg-black/30 border border-white/5 rounded-lg p-3"><p class="text-text-muted uppercase text-[9px] tracking-wider mb-1">Data Coverage</p><p class="text-white font-semibold">${s.dataCoverage}</p></div>` : ''}
+                            ${s.videoStrategy ? `<div class="bg-black/30 border border-white/5 rounded-lg p-3"><p class="text-text-muted uppercase text-[9px] tracking-wider mb-1">Video Strategy</p><p class="text-white">${s.videoStrategy}</p></div>` : ''}
+                        </div>
+                        ${s.recommendations && s.recommendations.length ? `
+                        <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            ${s.recommendations.slice(0,4).map(r => `<div class="flex items-start gap-2 text-xs text-text-secondary"><span class="text-brand mt-0.5">→</span><span>${r}</span></div>`).join('')}
+                        </div>` : ''}
+                    </div>`;
+                }
+
+                // --- Overview Table ---
+                let tableRows = '';
+                if (rawPages.length === 0) {
+                    tableRows = `<tr><td colspan="6" class="text-center py-10 text-text-muted text-sm">Keine Landing-Pages gefunden. Erstelle die erste!</td></tr>`;
+                } else {
+                    rawPages.forEach((page, idx) => {
+                        const isPublished = page.status === 'published' || (page.publishedAt && new Date(page.publishedAt).getFullYear() > 1970);
+                        const status = isPublished ? 'published' : 'draft';
+                        const prefix = typeUrlPrefixMap[page.type] || '/';
+                        const liveUrl = `https://tareno.co${prefix}${page.slug}`;
+                        const typeLabel = typeLabelMap[page.type] || (page.type || '—');
+                        tableRows += `
+                        <tr class="border-b border-white/5 hover:bg-white/3 transition-colors group" id="cp-row-${idx}">
+                            <td class="py-3 pr-3 pl-4">
+                                <p class="text-sm font-semibold text-white leading-tight">${page.title || page.slug || '—'}</p>
+                                <p class="text-[10px] text-text-muted font-mono mt-0.5">${page.slug || '—'}</p>
+                            </td>
+                            <td class="py-3 pr-3">
+                                <span class="px-2 py-0.5 rounded-full text-[10px] border bg-blue-500/10 text-blue-300 border-blue-500/20 font-medium">${typeLabel}</span>
+                            </td>
+                            <td class="py-3 pr-3">${statusBadge(status)}</td>
+                            <td class="py-3 pr-3 text-xs text-text-muted">${fmtDate(page.updatedAt || page.createdAt)}</td>
+                            <td class="py-3 pr-3">
+                                <a href="${liveUrl}" target="_blank" rel="noopener" class="text-[10px] text-brand hover:underline font-mono">${prefix}${page.slug}</a>
+                            </td>
+                            <td class="py-3 pr-4">
+                                <div class="flex items-center gap-1.5 justify-end">
+                                    <button onclick="cpOpenEdit(${idx})" class="px-2.5 py-1 text-[10px] font-semibold bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-colors">✏️ Edit</button>
+                                    <a href="${liveUrl}" target="_blank" class="px-2.5 py-1 text-[10px] font-semibold bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-colors">🔗 Open</a>
+                                    ${!isPublished ? `<button onclick="cpPublish(${idx})" class="px-2.5 py-1 text-[10px] font-bold bg-emerald-500/15 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-300 rounded-lg transition-colors">🚀 Publish</button>` : ''}
+                                    <button onclick="cpDelete(${idx})" class="px-2.5 py-1 text-[10px] font-bold bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-300 rounded-lg transition-colors">🗑</button>
+                                </div>
+                            </td>
+                        </tr>`;
+                    });
+                }
+
+                html = `
+                <div class="space-y-6 pb-16">
+                    ${stratHtml}
+
+                    <!-- Header bar -->
+                    <div class="glass-card p-5 border border-white/5 bg-gradient-to-r from-black/20 to-transparent flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-white mb-1 flex items-center gap-2">🚀 Content Pipeline <span class="text-sm font-normal text-text-muted">Landing-Pages (intern)</span></h2>
+                            <p class="text-xs text-text-muted">Interne Verwaltung — Kein öffentlicher Zugang. Secrets werden niemals im Browser gespeichert.</p>
+                        </div>
+                        <button onclick="cpOpenCreate()" class="px-5 py-2.5 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-xl shadow-[0_0_20px_rgba(130,81,238,0.3)] transition-all whitespace-nowrap flex items-center gap-2">
+                            <span>+</span> Neue Landing-Page
+                        </button>
+                    </div>
+
+                    <!-- Filter bar -->
+                    <div class="flex flex-wrap gap-3 items-center">
+                        <select id="cp-filter-type" onchange="cpApplyFilters()" class="bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
+                            <option value="">Alle Types</option>
+                            <option value="compare">Compare</option>
+                            <option value="solutions">Solutions</option>
+                            <option value="workflows">Workflows</option>
+                            <option value="best-time-to-post">Best Time to Post</option>
+                        </select>
+                        <select id="cp-filter-status" onchange="cpApplyFilters()" class="bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
+                            <option value="">Alle Status</option>
+                            <option value="draft">Draft</option>
+                            <option value="published">Published</option>
+                        </select>
+                        <span class="text-xs text-text-muted ml-auto">${rawPages.length} Seiten total</span>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="glass-card overflow-hidden">
+                        <table class="w-full text-xs" id="cp-table">
+                            <thead>
+                                <tr class="border-b border-white/8 bg-black/20">
+                                    <th class="text-left py-3 pl-4 pr-3 text-text-muted uppercase tracking-wider text-[9px] font-bold">Titel / Slug</th>
+                                    <th class="text-left py-3 pr-3 text-text-muted uppercase tracking-wider text-[9px] font-bold">Type</th>
+                                    <th class="text-left py-3 pr-3 text-text-muted uppercase tracking-wider text-[9px] font-bold">Status</th>
+                                    <th class="text-left py-3 pr-3 text-text-muted uppercase tracking-wider text-[9px] font-bold">Zuletzt geändert</th>
+                                    <th class="text-left py-3 pr-3 text-text-muted uppercase tracking-wider text-[9px] font-bold">URL</th>
+                                    <th class="text-right py-3 pr-4 text-text-muted uppercase tracking-wider text-[9px] font-bold">Aktionen</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cp-table-body">${tableRows}</tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ===== CREATE / EDIT MODAL ===== -->
+                <div id="cp-modal" class="hidden fixed inset-0 z-[120] bg-black/85 backdrop-blur-md flex items-start justify-center p-4 pt-8 overflow-y-auto">
+                    <div class="glass-card w-full max-w-3xl flex flex-col shadow-[0_0_60px_rgba(0,0,0,0.9)] border border-white/12 rounded-2xl overflow-hidden animate-slide-up mb-8">
+                        <!-- Modal Header -->
+                        <div class="p-5 border-b border-white/5 bg-gradient-to-r from-black/40 to-transparent flex items-center justify-between sticky top-0 z-10 bg-neutral-bg2/90 backdrop-blur">
+                            <div>
+                                <h3 id="cp-modal-title" class="text-lg font-bold text-white">Neue Landing-Page</h3>
+                                <p class="text-[10px] text-text-muted uppercase tracking-wider mt-0.5">Intern · Nur Draft → Publish mit Bestätigung</p>
+                            </div>
+                            <button onclick="cpCloseModal()" class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 flex items-center justify-center text-text-muted hover:text-white transition-colors">✕</button>
+                        </div>
+
+                        <!-- Modal Body -->
+                        <div class="p-6 flex flex-col gap-5 overflow-y-auto">
+                            <!-- Hidden: editing slug -->
+                            <input type="hidden" id="cp-edit-slug" value="" />
+                            <input type="hidden" id="cp-edit-type-original" value="" />
+
+                            <!-- Row 1: Type + Slug -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="cp-label">Page Type *</label>
+                                    <select id="cp-type" class="cp-input" onchange="cpUpdateSlugPreview()">
+                                        <option value="compare">Compare (/compare/…)</option>
+                                        <option value="solutions">Solutions (/solutions/…)</option>
+                                        <option value="workflows">Workflows (/workflows/…)</option>
+                                        <option value="best-time-to-post">Best Time to Post</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="cp-label">Slug *</label>
+                                    <input id="cp-slug" type="text" class="cp-input font-mono" placeholder="z.B. hootsuite-alternative" oninput="cpUpdateSlugPreview()" />
+                                    <p id="cp-slug-preview" class="text-[10px] text-text-muted mt-1 font-mono"></p>
+                                </div>
+                            </div>
+
+                            <!-- Row 2: Title + Meta Title -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="cp-label">Title</label>
+                                    <input id="cp-title" type="text" class="cp-input" placeholder="Seitentitel" />
+                                </div>
+                                <div>
+                                    <label class="cp-label">Meta Title</label>
+                                    <input id="cp-metatitle" type="text" class="cp-input" placeholder="SEO Titel" />
+                                </div>
+                            </div>
+
+                            <!-- Meta Description -->
+                            <div>
+                                <label class="cp-label">Meta Description</label>
+                                <textarea id="cp-metadesc" rows="2" class="cp-input resize-none" placeholder="SEO Beschreibung (120–160 Zeichen)"></textarea>
+                            </div>
+
+                            <!-- Eyebrow + Headline -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="cp-label">Eyebrow</label>
+                                    <input id="cp-eyebrow" type="text" class="cp-input" placeholder="z.B. Compare" />
+                                </div>
+                                <div>
+                                    <label class="cp-label">Headline</label>
+                                    <input id="cp-headline" type="text" class="cp-input" placeholder="Hauptüberschrift" />
+                                </div>
+                            </div>
+
+                            <!-- Description -->
+                            <div>
+                                <label class="cp-label">Description</label>
+                                <textarea id="cp-description" rows="3" class="cp-input resize-none" placeholder="Kurzbeschreibung der Seite"></textarea>
+                            </div>
+
+                            <!-- bestFor / notIdealFor / strongestDiff / pricingFit -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="cp-label">Best For</label>
+                                    <textarea id="cp-bestfor" rows="2" class="cp-input resize-none" placeholder="Für wen ist das ideal?"></textarea>
+                                </div>
+                                <div>
+                                    <label class="cp-label">Not Ideal For</label>
+                                    <textarea id="cp-notidealfor" rows="2" class="cp-input resize-none" placeholder="Für wen nicht?"></textarea>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="cp-label">Strongest Differentiator</label>
+                                    <input id="cp-differentiator" type="text" class="cp-input" />
+                                </div>
+                                <div>
+                                    <label class="cp-label">Pricing Fit</label>
+                                    <input id="cp-pricingfit" type="text" class="cp-input" />
+                                </div>
+                            </div>
+
+                            <!-- ===== REPEATABLE LISTS ===== -->
+                            <!-- Modules -->
+                            <div>
+                                <label class="cp-label flex items-center justify-between">
+                                    Modules
+                                    <button onclick="cpAddItem('cp-modules-list')" class="cp-add-btn">+ Item</button>
+                                </label>
+                                <div id="cp-modules-list" class="space-y-2"></div>
+                            </div>
+
+                            <!-- Proof Points -->
+                            <div>
+                                <label class="cp-label flex items-center justify-between">
+                                    Proof Points
+                                    <button onclick="cpAddItem('cp-proofpoints-list')" class="cp-add-btn">+ Item</button>
+                                </label>
+                                <div id="cp-proofpoints-list" class="space-y-2"></div>
+                            </div>
+
+                            <!-- Steps -->
+                            <div>
+                                <label class="cp-label flex items-center justify-between">
+                                    Steps
+                                    <button onclick="cpAddItem('cp-steps-list')" class="cp-add-btn">+ Item</button>
+                                </label>
+                                <div id="cp-steps-list" class="space-y-2"></div>
+                            </div>
+
+                            <!-- FAQs -->
+                            <div>
+                                <label class="cp-label flex items-center justify-between">
+                                    FAQs (Frage / Antwort)
+                                    <button onclick="cpAddFaq()" class="cp-add-btn">+ FAQ</button>
+                                </label>
+                                <div id="cp-faqs-list" class="space-y-3"></div>
+                            </div>
+
+                            <!-- Internal Links -->
+                            <div>
+                                <label class="cp-label flex items-center justify-between">
+                                    Internal Links (Label / Href)
+                                    <button onclick="cpAddInternalLink()" class="cp-add-btn">+ Link</button>
+                                </label>
+                                <div id="cp-links-list" class="space-y-2"></div>
+                            </div>
+
+                            <!-- ===== IMAGE UPLOAD ===== -->
+                            <div>
+                                <label class="cp-label">Visual Files (max. 12 Bilder, max. 12 MB je)</label>
+                                <div class="border-2 border-dashed border-white/15 rounded-xl p-5 text-center hover:border-brand/40 transition-colors cursor-pointer relative" onclick="document.getElementById('cp-img-input').click()">
+                                    <input id="cp-img-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif" multiple class="absolute inset-0 opacity-0 cursor-pointer" onchange="cpHandleImages(this)" />
+                                    <div class="text-2xl mb-2">🖼️</div>
+                                    <p class="text-xs text-text-muted">Klicken oder Drag &amp; Drop</p>
+                                    <p class="text-[10px] text-text-muted mt-1">PNG, JPG, WebP, GIF · max. 12 MB · max. 12 Bilder</p>
+                                </div>
+                                <div id="cp-img-preview" class="flex flex-wrap gap-2 mt-3"></div>
+                            </div>
+
+                            <!-- Result / Response box -->
+                            <div id="cp-result-box" class="hidden">
+                                <label class="cp-label">Server-Antwort</label>
+                                <pre id="cp-result-pre" class="text-xs text-text-secondary whitespace-pre-wrap bg-black/40 border border-white/10 rounded-xl p-4 max-h-48 overflow-y-auto"></pre>
+                                <div id="cp-live-url-box" class="hidden mt-3 flex items-center gap-2">
+                                    <span class="text-xs text-text-muted">Live-URL:</span>
+                                    <a id="cp-live-url-link" href="#" target="_blank" class="text-xs text-brand hover:underline font-mono"></a>
+                                </div>
+                                <div id="cp-visuals-box" class="hidden mt-3">
+                                    <p class="text-xs text-text-muted mb-2">Hochgeladene Visuals (R2 URLs):</p>
+                                    <div id="cp-visuals-list" class="flex flex-wrap gap-2"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal Footer -->
+                        <div class="p-4 border-t border-white/5 bg-black/20 flex justify-between items-center gap-3 sticky bottom-0">
+                            <button onclick="cpCloseModal()" class="px-4 py-2 border border-white/10 rounded-lg text-xs font-semibold text-text-muted hover:text-white hover:bg-white/5 transition-colors">Abbrechen</button>
+                            <div class="flex gap-3">
+                                <button id="cp-save-btn" onclick="cpSaveDraft()" class="px-5 py-2 border border-amber-400/40 bg-amber-500/20 rounded-lg text-xs font-bold text-amber-200 hover:bg-amber-500/30 transition-colors shadow-[0_0_12px_rgba(245,158,11,0.15)]">
+                                    💾 Save Draft
+                                </button>
+                                <button id="cp-publish-btn" onclick="cpPublishFromForm()" class="px-5 py-2 border border-emerald-400/40 bg-emerald-500/20 rounded-lg text-xs font-bold text-emerald-200 hover:bg-emerald-500/30 transition-colors shadow-[0_0_12px_rgba(16,185,129,0.15)]">
+                                    🚀 Publish
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>`;
             }
@@ -3547,6 +3876,509 @@
             </div>
         </div>
     </div>
+
+    <!-- ===== Content Pipeline CSS ===== -->
+    <style type="text/tailwindcss">
+        .cp-label {
+            display: block;
+            font-size: 0.625rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 700;
+            color: theme('colors.text.muted');
+            margin-bottom: 0.375rem;
+            margin-left: 0.25rem;
+        }
+        .cp-input {
+            width: 100%;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.8rem;
+            color: white;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .cp-input:focus { border-color: rgba(130,81,238,0.5); }
+        .cp-add-btn {
+            font-size: 0.625rem;
+            font-weight: 700;
+            padding: 0.25rem 0.625rem;
+            border: 1px solid rgba(130,81,238,0.3);
+            background: rgba(130,81,238,0.1);
+            color: theme('colors.brand.DEFAULT');
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .cp-add-btn:hover { background: rgba(130,81,238,0.25); }
+        .cp-repeatable-item {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        .cp-repeatable-item input, .cp-repeatable-item textarea {
+            flex: 1;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 0.5rem;
+            padding: 0.4rem 0.6rem;
+            font-size: 0.75rem;
+            color: white;
+            outline: none;
+        }
+        .cp-repeatable-item input:focus, .cp-repeatable-item textarea:focus {
+            border-color: rgba(130,81,238,0.4);
+        }
+        .cp-remove-btn {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 0.375rem;
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.2);
+            color: rgba(239,68,68,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+        .cp-remove-btn:hover { background: rgba(239,68,68,0.25); color: #ef4444; }
+    </style>
+
+    <!-- ===== Content Pipeline JavaScript ===== -->
+    <script>
+        // ── State ──────────────────────────────────────────────────────
+        let cpPages = [];           // populated on render
+        let cpImageFiles = [];      // [{name, mime, base64}]
+        let cpIsEditing = false;    // true = PUT, false = POST
+
+        const CP_TYPE_PREFIX = {
+            compare: '/compare/',
+            solutions: '/solutions/',
+            workflows: '/workflows/',
+            'best-time-to-post': '/best-time-to-post/'
+        };
+
+        // ── Sync pages array from render data ─────────────────────────
+        function cpSync(data) {
+            const pd = data?.pages || {};
+            cpPages = Array.isArray(pd.pages) ? pd.pages
+                : Array.isArray(pd.data) ? pd.data : [];
+        }
+
+        // Patch renderView to always sync cpPages
+        const _origRender = renderView;
+        renderView = function(tab, data, container) {
+            if (tab === 'content-pipeline') cpSync(data);
+            _origRender(tab, data, container);
+        };
+
+        // ── Slug preview ───────────────────────────────────────────────
+        function cpUpdateSlugPreview() {
+            const type = document.getElementById('cp-type')?.value || 'compare';
+            const slug = (document.getElementById('cp-slug')?.value || '').trim();
+            const el = document.getElementById('cp-slug-preview');
+            if (el) el.textContent = slug ? `tareno.co${CP_TYPE_PREFIX[type] || '/'}${slug}` : '';
+        }
+
+        // ── Repeatable single-item list ────────────────────────────────
+        function cpAddItem(listId, value = '') {
+            const list = document.getElementById(listId);
+            if (!list) return;
+            const wrap = document.createElement('div');
+            wrap.className = 'cp-repeatable-item';
+            wrap.innerHTML = `<input type="text" class="cp-input text-xs" value="${value.replace(/"/g,'&quot;')}" placeholder="Wert eingeben…" />
+                <button class="cp-remove-btn" onclick="this.parentElement.remove()">✕</button>`;
+            list.appendChild(wrap);
+        }
+
+        function cpGetItems(listId) {
+            return Array.from(document.querySelectorAll(`#${listId} input`))
+                .map(i => i.value.trim()).filter(Boolean);
+        }
+
+        function cpSetItems(listId, arr) {
+            const list = document.getElementById(listId);
+            if (!list) return;
+            list.innerHTML = '';
+            (arr || []).forEach(v => cpAddItem(listId, v));
+        }
+
+        // ── FAQ pair ──────────────────────────────────────────────────
+        function cpAddFaq(q = '', a = '') {
+            const list = document.getElementById('cp-faqs-list');
+            if (!list) return;
+            const wrap = document.createElement('div');
+            wrap.className = 'bg-black/30 border border-white/8 rounded-xl p-3 flex flex-col gap-2';
+            wrap.innerHTML = `
+                <input type="text" placeholder="Frage…" value="${q.replace(/"/g,'&quot;')}" class="cp-input text-xs" data-faq="q" />
+                <textarea rows="2" placeholder="Antwort…" class="cp-input resize-none text-xs" data-faq="a">${a.replace(/</g,'&lt;')}</textarea>
+                <div class="flex justify-end"><button class="cp-remove-btn" onclick="this.closest('.bg-black\\/30').remove()">✕ Entfernen</button></div>`;
+            list.appendChild(wrap);
+        }
+
+        function cpGetFaqs() {
+            return Array.from(document.querySelectorAll('#cp-faqs-list > div')).map(wrap => ({
+                question: (wrap.querySelector('[data-faq="q"]')?.value || '').trim(),
+                answer: (wrap.querySelector('[data-faq="a"]')?.value || '').trim()
+            })).filter(f => f.question || f.answer);
+        }
+
+        function cpSetFaqs(arr) {
+            const list = document.getElementById('cp-faqs-list');
+            if (!list) return;
+            list.innerHTML = '';
+            (arr || []).forEach(f => cpAddFaq(f.question || '', f.answer || ''));
+        }
+
+        // ── Internal links ────────────────────────────────────────────
+        function cpAddInternalLink(label = '', href = '') {
+            const list = document.getElementById('cp-links-list');
+            if (!list) return;
+            const wrap = document.createElement('div');
+            wrap.className = 'cp-repeatable-item';
+            wrap.innerHTML = `
+                <input type="text" placeholder="Label" value="${label.replace(/"/g,'&quot;')}" class="cp-input text-xs" data-link="label" />
+                <input type="text" placeholder="/pricing" value="${href.replace(/"/g,'&quot;')}" class="cp-input text-xs font-mono" data-link="href" />
+                <button class="cp-remove-btn" onclick="this.parentElement.remove()">✕</button>`;
+            list.appendChild(wrap);
+        }
+
+        function cpGetInternalLinks() {
+            return Array.from(document.querySelectorAll('#cp-links-list > div')).map(wrap => ({
+                label: (wrap.querySelector('[data-link="label"]')?.value || '').trim(),
+                href: (wrap.querySelector('[data-link="href"]')?.value || '').trim()
+            })).filter(l => l.label || l.href);
+        }
+
+        function cpSetInternalLinks(arr) {
+            const list = document.getElementById('cp-links-list');
+            if (!list) return;
+            list.innerHTML = '';
+            (arr || []).forEach(l => cpAddInternalLink(l.label || '', l.href || ''));
+        }
+
+        // ── Image handling ────────────────────────────────────────────
+        function cpHandleImages(input) {
+            const MAX = 12;
+            const MAX_MB = 12;
+            const preview = document.getElementById('cp-img-preview');
+            const files = Array.from(input.files || []);
+
+            files.forEach(file => {
+                if (cpImageFiles.length >= MAX) return;
+                if (file.size > MAX_MB * 1024 * 1024) {
+                    alert(`${file.name} ist zu groß (max. ${MAX_MB} MB).`);
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const base64 = e.target.result.split(',')[1];
+                    cpImageFiles.push({ name: file.name, mime: file.type, base64 });
+                    // Thumbnail
+                    const thumb = document.createElement('div');
+                    thumb.className = 'relative group';
+                    thumb.innerHTML = `<img src="${e.target.result}" class="w-20 h-20 object-cover rounded-lg border border-white/10" title="${file.name}" />
+                        <button onclick="cpRemoveImage(this, '${file.name}')" class="absolute top-1 right-1 w-5 h-5 bg-red-500/80 rounded-full text-[9px] text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">✕</button>
+                        <p class="text-[8px] text-text-muted mt-0.5 truncate w-20 text-center">${file.name}</p>`;
+                    if (preview) preview.appendChild(thumb);
+                };
+                reader.readAsDataURL(file);
+            });
+            input.value = '';
+        }
+
+        function cpRemoveImage(btn, name) {
+            cpImageFiles = cpImageFiles.filter(f => f.name !== name);
+            btn.closest('.relative.group')?.remove();
+        }
+
+        // ── Modal open/close ──────────────────────────────────────────
+        function cpOpenCreate() {
+            cpIsEditing = false;
+            cpImageFiles = [];
+            document.getElementById('cp-modal-title').textContent = 'Neue Landing-Page';
+            document.getElementById('cp-edit-slug').value = '';
+            document.getElementById('cp-edit-type-original').value = '';
+            // Clear all fields
+            ['cp-slug','cp-title','cp-metatitle','cp-eyebrow','cp-headline','cp-differentiator','cp-pricingfit'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            ['cp-metadesc','cp-description','cp-bestfor','cp-notidealfor'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            document.getElementById('cp-type').value = 'compare';
+            ['cp-modules-list','cp-proofpoints-list','cp-steps-list','cp-faqs-list','cp-links-list'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.innerHTML = '';
+            });
+            const prev = document.getElementById('cp-img-preview');
+            if (prev) prev.innerHTML = '';
+            const rb = document.getElementById('cp-result-box');
+            if (rb) rb.classList.add('hidden');
+            cpUpdateSlugPreview();
+            document.getElementById('cp-modal').classList.remove('hidden');
+        }
+
+        function cpOpenEdit(idx) {
+            const page = cpPages[idx];
+            if (!page) return;
+            cpIsEditing = true;
+            cpImageFiles = [];
+
+            document.getElementById('cp-modal-title').textContent = `Bearbeiten: ${page.slug}`;
+            document.getElementById('cp-edit-slug').value = page.slug || '';
+            document.getElementById('cp-edit-type-original').value = page.type || '';
+
+            const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+            set('cp-type', page.type || 'compare');
+            set('cp-slug', page.slug || '');
+            set('cp-title', page.title || '');
+            set('cp-metatitle', page.metaTitle || '');
+            set('cp-metadesc', page.metaDescription || '');
+            set('cp-eyebrow', page.eyebrow || '');
+            set('cp-headline', page.headline || '');
+            set('cp-description', page.description || '');
+            set('cp-bestfor', page.bestFor || '');
+            set('cp-notidealfor', page.notIdealFor || '');
+            set('cp-differentiator', page.strongestDifferentiator || '');
+            set('cp-pricingfit', page.pricingFit || '');
+
+            cpSetItems('cp-modules-list', page.modules || []);
+            cpSetItems('cp-proofpoints-list', page.proofPoints || []);
+            cpSetItems('cp-steps-list', page.steps || []);
+            cpSetFaqs(page.faqs || []);
+            cpSetInternalLinks(page.internalLinks || []);
+
+            const prev = document.getElementById('cp-img-preview');
+            if (prev) prev.innerHTML = '';
+            const rb = document.getElementById('cp-result-box');
+            if (rb) rb.classList.add('hidden');
+
+            cpUpdateSlugPreview();
+            document.getElementById('cp-modal').classList.remove('hidden');
+        }
+
+        function cpCloseModal() {
+            document.getElementById('cp-modal').classList.add('hidden');
+        }
+
+        // ── Collect form data ─────────────────────────────────────────
+        function cpCollectFields(mode) {
+            const g = (id) => (document.getElementById(id)?.value || '').trim();
+            return {
+                type: g('cp-type'),
+                slug: g('cp-slug'),
+                mode,
+                title: g('cp-title'),
+                metaTitle: g('cp-metatitle'),
+                metaDescription: g('cp-metadesc'),
+                eyebrow: g('cp-eyebrow'),
+                headline: g('cp-headline'),
+                description: g('cp-description'),
+                bestFor: g('cp-bestfor'),
+                notIdealFor: g('cp-notidealfor'),
+                strongestDifferentiator: g('cp-differentiator'),
+                pricingFit: g('cp-pricingfit'),
+                modules: cpGetItems('cp-modules-list'),
+                proofPoints: cpGetItems('cp-proofpoints-list'),
+                steps: cpGetItems('cp-steps-list'),
+                faqs: cpGetFaqs(),
+                internalLinks: cpGetInternalLinks(),
+                ...(cpImageFiles.length > 0 ? { _imageFiles: cpImageFiles } : {})
+            };
+        }
+
+        // ── Save Draft ────────────────────────────────────────────────
+        async function cpSaveDraft() {
+            const btn = document.getElementById('cp-save-btn');
+            if (btn) { btn.disabled = true; btn.textContent = '⏳ Speichern…'; }
+            try {
+                const fields = cpCollectFields('draft');
+                if (!fields.slug) { alert('Slug ist Pflichtfeld.'); return; }
+                if (!fields.type) { alert('Type ist Pflichtfeld.'); return; }
+
+                let url = '/api/dashboard/landing-pages';
+                let method = 'POST';
+                if (cpIsEditing) {
+                    const origSlug = document.getElementById('cp-edit-slug').value;
+                    url = `/api/dashboard/landing-pages/${encodeURIComponent(origSlug)}`;
+                    method = 'PUT';
+                }
+
+                const resp = await fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(fields)
+                });
+                const json = await resp.json().catch(() => ({}));
+                cpShowResult(resp.status, json, fields.type, fields.slug, 'draft');
+                if (resp.ok) {
+                    // Switch to edit mode for this slug
+                    cpIsEditing = true;
+                    document.getElementById('cp-edit-slug').value = fields.slug;
+                    document.getElementById('cp-edit-type-original').value = fields.type;
+                }
+            } catch (err) {
+                cpShowError(err.message);
+            } finally {
+                if (btn) { btn.disabled = false; btn.textContent = '💾 Save Draft'; }
+            }
+        }
+
+        // ── Publish from form ─────────────────────────────────────────
+        async function cpPublishFromForm() {
+            if (!confirm('⚠️ Diese Seite jetzt veröffentlichen?\n\nPublizierte Seiten sind live auf tareno.co. Nur fortfahren wenn der Inhalt geprüft ist.')) return;
+            const btn = document.getElementById('cp-publish-btn');
+            if (btn) { btn.disabled = true; btn.textContent = '⏳ Publizieren…'; }
+            try {
+                const fields = cpCollectFields('publish');
+                if (!fields.slug) { alert('Slug ist Pflichtfeld.'); return; }
+
+                let url = '/api/dashboard/landing-pages';
+                let method = 'POST';
+                if (cpIsEditing) {
+                    const origSlug = document.getElementById('cp-edit-slug').value;
+                    url = `/api/dashboard/landing-pages/${encodeURIComponent(origSlug)}`;
+                    method = 'PUT';
+                }
+
+                const resp = await fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(fields)
+                });
+                const json = await resp.json().catch(() => ({}));
+
+                if (resp.status === 403) {
+                    cpShowResult(resp.status, { error: 'Publishing requires LANDING_PUBLISH_SECRET – bitte auf dem Server konfigurieren.' }, fields.type, fields.slug, 'publish');
+                    return;
+                }
+                cpShowResult(resp.status, json, fields.type, fields.slug, 'publish');
+            } catch (err) {
+                cpShowError(err.message);
+            } finally {
+                if (btn) { btn.disabled = false; btn.textContent = '🚀 Publish'; }
+            }
+        }
+
+        // ── Publish from overview table ───────────────────────────────
+        async function cpPublish(idx) {
+            const page = cpPages[idx];
+            if (!page) return;
+            if (!confirm(`⚠️ "${page.title || page.slug}" jetzt veröffentlichen?\n\nNur fortfahren wenn geprüft!`)) return;
+            try {
+                const resp = await fetch(`/api/dashboard/landing-pages/${encodeURIComponent(page.slug)}?type=${encodeURIComponent(page.type)}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ type: page.type, slug: page.slug, mode: 'publish' })
+                });
+                const json = await resp.json().catch(() => ({}));
+                if (resp.status === 403) {
+                    alert('Publishing requires LANDING_PUBLISH_SECRET – auf dem Server konfigurieren.');
+                    return;
+                }
+                alert(resp.ok ? `✅ "${page.slug}" ist jetzt live!` : `❌ Fehler: ${json.error || resp.statusText}`);
+                if (resp.ok) loadCurrentView();
+            } catch (err) {
+                alert(`Fehler: ${err.message}`);
+            }
+        }
+
+        // ── Delete from overview table ────────────────────────────────
+        async function cpDelete(idx) {
+            const page = cpPages[idx];
+            if (!page) return;
+            if (!confirm(`🗑 "${page.title || page.slug}" LÖSCHEN?\n\nDiese Aktion ist unwiderruflich. Nur LANDING_PUBLISH_SECRET kann löschen.`)) return;
+            try {
+                const resp = await fetch(`/api/dashboard/landing-pages/${encodeURIComponent(page.slug)}?type=${encodeURIComponent(page.type)}`, {
+                    method: 'DELETE'
+                });
+                const json = await resp.json().catch(() => ({}));
+                if (resp.status === 403) {
+                    alert('Löschen requires LANDING_PUBLISH_SECRET – auf dem Server konfigurieren.');
+                    return;
+                }
+                alert(resp.ok ? `✅ "${page.slug}" wurde gelöscht.` : `❌ Fehler: ${json.error || resp.statusText}`);
+                if (resp.ok) loadCurrentView();
+            } catch (err) {
+                alert(`Fehler: ${err.message}`);
+            }
+        }
+
+        // ── Filter table ──────────────────────────────────────────────
+        function cpApplyFilters() {
+            const typeFilter = (document.getElementById('cp-filter-type')?.value || '').toLowerCase();
+            const statusFilter = (document.getElementById('cp-filter-status')?.value || '').toLowerCase();
+            cpPages.forEach((page, idx) => {
+                const row = document.getElementById(`cp-row-${idx}`);
+                if (!row) return;
+                const isPublished = page.status === 'published' || (page.publishedAt && new Date(page.publishedAt).getFullYear() > 1970);
+                const status = isPublished ? 'published' : 'draft';
+                const typeMatch = !typeFilter || page.type === typeFilter;
+                const statusMatch = !statusFilter || status === statusFilter;
+                row.style.display = (typeMatch && statusMatch) ? '' : 'none';
+            });
+        }
+
+        // ── Result display ────────────────────────────────────────────
+        function cpShowResult(status, json, type, slug, mode) {
+            const rb = document.getElementById('cp-result-box');
+            const pre = document.getElementById('cp-result-pre');
+            const urlBox = document.getElementById('cp-live-url-box');
+            const urlLink = document.getElementById('cp-live-url-link');
+            const visBox = document.getElementById('cp-visuals-box');
+            const visList = document.getElementById('cp-visuals-list');
+
+            if (!rb || !pre) return;
+            rb.classList.remove('hidden');
+
+            const isOk = status >= 200 && status < 300;
+            pre.style.borderColor = isOk ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)';
+            pre.style.background = isOk ? 'rgba(16,185,129,0.05)' : 'rgba(239,68,68,0.05)';
+            pre.textContent = `HTTP ${status} – ${isOk ? '✅ Erfolg' : '❌ Fehler'}\n\n${JSON.stringify(json, null, 2)}`;
+
+            // Live URL
+            if (isOk && slug) {
+                const prefix = CP_TYPE_PREFIX[type] || '/';
+                const liveUrl = `https://tareno.co${prefix}${slug}`;
+                urlBox.classList.remove('hidden');
+                urlLink.href = liveUrl;
+                urlLink.textContent = liveUrl;
+            } else {
+                urlBox.classList.add('hidden');
+            }
+
+            // Visuals
+            const visuals = json?.assets?.visuals || json?.data?.assets?.visuals || [];
+            if (visuals.length > 0) {
+                visBox.classList.remove('hidden');
+                visList.innerHTML = visuals.map(v =>
+                    `<a href="${v}" target="_blank" class="text-[10px] text-brand hover:underline font-mono truncate max-w-xs block">${v}</a>`
+                ).join('');
+            } else {
+                visBox.classList.add('hidden');
+            }
+
+            rb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function cpShowError(msg) {
+            const rb = document.getElementById('cp-result-box');
+            const pre = document.getElementById('cp-result-pre');
+            if (!rb || !pre) return;
+            rb.classList.remove('hidden');
+            pre.style.borderColor = 'rgba(239,68,68,0.3)';
+            pre.style.background = 'rgba(239,68,68,0.05)';
+            pre.textContent = `❌ Client-Fehler: ${msg}`;
+        }
+    </script>
 </body>
 
 </html>
