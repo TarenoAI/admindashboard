@@ -1004,13 +1004,19 @@
                     const compactTemplateFinal = compactPagesMeta.template?.finalRelPath || null;
                     const compactTemplateState = compactPagesMeta.template?.stateRelPath || null;
                     const seoBacklogRows = Array.isArray(p.seoBacklog) ? p.seoBacklog : [];
-                    const compactRoadmapRows = [...tarenoContentPipelineRows, ...seoBacklogRows];
+                    const compactRoadmapRows = [...tarenoContentPipelineRows];
+                    const compactBacklogRows = [...seoBacklogRows];
+                    const compactWorkflowSteps = ['Research', 'Structure', 'Drafting', 'Features', 'Editing', 'Geo-Polish', 'Final Review', 'Multimedia'];
                     const compactRoadmapStats = {
                         total: compactRoadmapRows.length,
-                        active: tarenoContentPipelineRows.length,
-                        backlog: seoBacklogRows.length,
                         moneyIntent: compactRoadmapRows.filter(cp => (cp.pageType || '').toLowerCase() === 'money_intent').length,
                         aiAnswers: compactRoadmapRows.filter(cp => (cp.contentType || '').toLowerCase() === 'ai_answer').length,
+                    };
+                    const compactBacklogStats = {
+                        total: compactBacklogRows.length,
+                        moneyIntent: compactBacklogRows.filter(cp => (cp.pageType || '').toLowerCase() === 'money_intent').length,
+                        aiAnswers: compactBacklogRows.filter(cp => (cp.contentType || '').toLowerCase() === 'ai_answer').length,
+                        authors: new Set(compactBacklogRows.map(cp => cp.author).filter(Boolean)).size,
                     };
                     const compactRoadmapHtml = isTarenoProject ? `
                         <div class="glass-card mt-6 p-0 overflow-hidden shadow-2xl border border-white/10 bg-black/40">
@@ -1018,12 +1024,11 @@
                                 <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                                     <div>
                                         <h4 class="text-xs uppercase tracking-widest text-cyan-200 font-extrabold flex items-center gap-2">🧭 Compact Pages Roadmap & Approvals</h4>
-                                        <p class="text-xs text-text-muted mt-2 max-w-3xl">Die komplette Schreib- und Review-Übersicht fuer Tareno in derselben Struktur wie die Content Pipeline. Hier siehst du die aktiven Rows aus <span class="font-mono">contentPipeline</span> und den 100-Topic-Backlog zusammen.</p>
+                                        <p class="text-xs text-text-muted mt-2 max-w-3xl">Die komplette Schreib- und Review-Übersicht fuer Tareno in derselben Struktur wie die Content Pipeline. Hier siehst du die aktiven Rows aus <span class="font-mono">contentPipeline</span>.</p>
                                     </div>
                                     <div class="flex flex-wrap gap-2">
-                                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-white/5 border border-white/10 text-white">${compactRoadmapStats.total || 0} rows</span>
-                                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-cyan-500/10 border border-cyan-500/30 text-cyan-200">${compactRoadmapStats.active || 0} active</span>
-                                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-violet-500/10 border border-violet-500/30 text-violet-200">${compactRoadmapStats.backlog || 0} backlog</span>
+                                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-white/5 border border-white/10 text-white">${compactRoadmapStats.total || 0} active rows</span>
+                                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-cyan-500/10 border border-cyan-500/30 text-cyan-200">${compactRoadmapStats.moneyIntent || 0} money intent</span>
                                         <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-amber-500/10 border border-amber-500/30 text-amber-300">${compactRoadmapStats.aiAnswers || 0} ai answers</span>
                                     </div>
                                 </div>
@@ -1034,7 +1039,7 @@
                                     <thead class="bg-black/60 border-b border-white/10 uppercase text-[9px] text-text-muted font-bold tracking-wider">
                                         <tr>
                                             <th class="p-5 min-w-[180px]">Tag / Thema</th>
-                                            ${['Research', 'Structure', 'Drafting', 'Features', 'Editing', 'Geo-Polish', 'Final Review', 'Multimedia'].map(s => `<th class="p-5 text-center px-2">${s}</th>`).join('')}
+                                            ${compactWorkflowSteps.map(s => `<th class="p-5 text-center px-2">${s}</th>`).join('')}
                                             <th class="p-5 text-center">Row Actions</th>
                                         </tr>
                                     </thead>
@@ -1111,6 +1116,82 @@
                                 <div class="rounded-2xl border border-dashed border-white/10 bg-black/20 p-5">
                                     <p class="text-sm font-semibold text-white">Noch keine Money-Intent Compact Pages in der Roadmap</p>
                                     <p class="text-xs text-text-muted mt-2 leading-relaxed">Sobald Rows mit <span class="font-mono">pageType: money_intent</span> oder <span class="font-mono">contentType: ai_answer</span> existieren, erscheinen sie hier in der gleichen Tabellenstruktur wie die Content Pipeline.</p>
+                                </div>
+                            </div>`}
+                        </div>
+                    ` : '';
+                    const compactBacklogHtml = isTarenoProject ? `
+                        <div class="glass-card mt-6 p-0 overflow-hidden shadow-2xl border border-white/10 bg-black/40">
+                            <div class="p-6 md:p-8 border-b border-white/5 bg-gradient-to-r from-violet-500/12 to-transparent relative">
+                                <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                                    <div>
+                                        <h4 class="text-xs uppercase tracking-widest text-violet-200 font-extrabold flex items-center gap-2">🧭 Compact Pages Backlog Atlas</h4>
+                                        <p class="text-xs text-text-muted mt-2 max-w-3xl">Die 100 Vorschläge aus dem internationalen SEO-/GEO-Plan werden hier als visuelle Roadmap gelistet. Jeder Eintrag zeigt Titel, gewählten Author und die gleiche Schrittstruktur wie die Content Pipeline.</p>
+                                    </div>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-white/5 border border-white/10 text-white">${compactBacklogStats.total || 0} topics</span>
+                                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-violet-500/10 border border-violet-500/30 text-violet-200">${compactBacklogStats.authors || 0} authors</span>
+                                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-cyan-500/10 border border-cyan-500/30 text-cyan-200">${compactBacklogStats.moneyIntent || 0} money intent</span>
+                                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-amber-500/10 border border-amber-500/30 text-amber-300">${compactBacklogStats.aiAnswers || 0} ai answers</span>
+                                    </div>
+                                </div>
+                            </div>
+                            ${compactBacklogRows.length > 0 ? `
+                            <div class="p-6 md:p-8 space-y-4 max-h-[980px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+                                ${compactBacklogRows.map((cp, cpIndex) => `
+                                    <article class="rounded-2xl border border-white/10 bg-black/35 p-4 md:p-5 shadow-[0_0_20px_rgba(0,0,0,0.14)] hover:border-violet-400/30 hover:bg-black/45 transition-colors">
+                                        <div class="grid grid-cols-1 xl:grid-cols-[minmax(280px,360px)_1fr_auto] gap-4 items-start">
+                                            <div class="min-w-0">
+                                                <div class="flex flex-wrap items-center gap-2 mb-2">
+                                                    <span class="px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest bg-violet-500/15 text-violet-200 border border-violet-500/30">${cp.id || `BG-${String(cpIndex + 1).padStart(3, '0')}`}</span>
+                                                    <span class="px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest bg-white/5 text-text-muted border border-white/10">${cp.day || 'Backlog'}</span>
+                                                    <span class="px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest bg-white/5 text-text-muted border border-white/10">${cp.date || '—'}</span>
+                                                </div>
+                                                <h5 class="text-sm md:text-base font-semibold text-white leading-snug">${window.escapeHtml(cp.topicEn || cp.topic || 'Unbenanntes Thema')}</h5>
+                                                ${cp.topicEn && cp.topic && cp.topicEn !== cp.topic ? `<p class="text-[10px] text-text-muted mt-1 leading-snug">DE: ${window.escapeHtml(cp.topic)}</p>` : ''}
+                                                <div class="mt-3 space-y-1.5 text-[10px] text-text-secondary">
+                                                    ${cp.author && cp.author !== 'nan' ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">Aut:</span><span class="leading-tight">${window.escapeHtml(cp.author)}</span></div>` : ''}
+                                                    ${cp.keyword && cp.keyword !== 'nan' ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">KW:</span><span class="text-brand/80 leading-tight">${window.escapeHtml(cp.keyword)}</span></div>` : ''}
+                                                    ${cp.feature && cp.feature !== 'nan' ? `<div class="flex items-start gap-1.5"><span class="text-[9px] text-text-muted uppercase tracking-wider font-bold mt-0.5 shrink-0">Tool:</span><span class="leading-tight">${window.escapeHtml(cp.feature)}</span></div>` : ''}
+                                                    <div class="flex flex-wrap gap-1.5 pt-1">
+                                                        ${cp.pageType ? `<span class="px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest bg-cyan-500/10 text-cyan-200 border border-cyan-500/30">${window.escapeHtml(cp.pageType)}</span>` : ''}
+                                                        ${cp.contentType ? `<span class="px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest bg-white/5 text-text-muted border border-white/10">${window.escapeHtml(cp.contentType)}</span>` : ''}
+                                                        ${cp.intent ? `<span class="px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest bg-white/5 text-text-muted border border-white/10">${window.escapeHtml(cp.intent)}</span>` : ''}
+                                                        ${cp.market ? `<span class="px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest bg-white/5 text-text-muted border border-white/10">${window.escapeHtml(cp.market)}</span>` : ''}
+                                                        ${cp.locale ? `<span class="px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest bg-white/5 text-text-muted border border-white/10">${window.escapeHtml(cp.locale)}</span>` : ''}
+                                                        ${cp.priorityTier ? `<span class="px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest bg-amber-500/10 text-amber-300 border border-amber-500/30">P${window.escapeHtml(String(cp.priorityTier))}</span>` : ''}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-2">
+                                                ${compactWorkflowSteps.map((stepName, stepIndex) => `
+                                                    <div class="flex flex-col items-center justify-between gap-2 min-h-[94px] rounded-xl border border-white/8 bg-black/45 p-2.5 shadow-[0_0_16px_rgba(0,0,0,0.15)]">
+                                                        <div class="w-full flex items-center justify-between gap-1">
+                                                            <span class="text-[8px] uppercase tracking-widest text-text-muted font-bold truncate">${stepName}</span>
+                                                            <span class="text-[9px] text-amber-300">↑</span>
+                                                        </div>
+                                                        <div class="w-8 h-8 rounded-lg border border-amber-500/30 bg-amber-500/10 flex items-center justify-center text-amber-300 shadow-[0_0_14px_rgba(245,158,11,0.12)]">
+                                                            ⬆
+                                                        </div>
+                                                        <div class="w-full rounded-md border border-white/5 bg-white/[0.03] px-2 py-1 text-center text-[9px] text-text-muted font-medium">
+                                                            Pending
+                                                        </div>
+                                                    </div>
+                                                `).join('')}
+                                            </div>
+
+                                            <div class="flex flex-row xl:flex-col gap-2 xl:items-stretch">
+                                                <span class="px-3 py-1.5 rounded-md bg-violet-500/10 text-violet-200 border border-violet-500/30 text-[9px] font-bold uppercase tracking-wider text-center">${cp.backlog ? 'Backlog' : 'Roadmap'}</span>
+                                                <span class="px-3 py-1.5 rounded-md bg-white/5 text-text-muted border border-white/10 text-[9px] font-bold uppercase tracking-wider text-center">Planned</span>
+                                            </div>
+                                        </div>
+                                    </article>
+                                `).join('')}
+                            </div>` : `<div class="p-6 md:p-8">
+                                <div class="rounded-2xl border border-dashed border-white/10 bg-black/20 p-5">
+                                    <p class="text-sm font-semibold text-white">Noch kein 100-Topic Backlog geladen</p>
+                                    <p class="text-xs text-text-muted mt-2 leading-relaxed">Sobald <span class="font-mono">seoBacklog</span> im Tareno-Datensatz befüllt ist, erscheint hier die vollständige grafische Liste mit Titel, Author und Pipeline-Schritten.</p>
                                 </div>
                             </div>`}
                         </div>
@@ -1238,6 +1319,7 @@
                                 </div>
                             </div>
                             ${compactRoadmapHtml}
+                            ${compactBacklogHtml}
                             ${compactPageCardsHtml}
                         </div>` : '';
 
