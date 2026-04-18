@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>OpenClaw - Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/seo-backlog.js" defer></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -233,6 +234,9 @@
             <div class="nav-item" onclick="switchTab('content-pipeline', this)">
                 <span>🚀</span> Content Pipeline
             </div>
+            <div class="nav-item" onclick="switchTab('seo-backlog', this)">
+                <span>🗺️</span> SEO/GEO Backlog
+            </div>
         </nav>
 
         <div class="p-4 border-t border-border-subtle">
@@ -386,6 +390,12 @@
                     const stratData = stratResp ? await stratResp.json().catch(() => null) : null;
                     currentData = { pages: pagesData, strategy: stratData };
                     renderView(currentTab, currentData, container);
+                    return;
+                }
+
+                if (currentTab === 'seo-backlog') {
+                    currentData = {};
+                    renderView(currentTab, {}, container);
                     return;
                 }
 
@@ -2043,7 +2053,113 @@
                 </div>`;
             }
 
+            else if (tab === 'seo-backlog') {
+                html = `
+                <div class="space-y-5 pb-16">
+                    <!-- Header -->
+                    <div class="glass-card p-5 bg-gradient-to-r from-blue-500/10 to-transparent border-blue-500/20 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-white mb-1 flex items-center gap-2">🗺️ SEO/GEO Backlog <span class="text-sm font-normal text-text-muted">100 Money-Intent Pages</span></h2>
+                            <p class="text-xs text-text-muted">Basierend auf: <span class="font-mono text-blue-300">international_seo_geo_content_plan_2026-04-17.md</span> · Stand: 17.04.2026</p>
+                        </div>
+                        <div class="flex gap-2 flex-wrap">
+                            <button onclick="seoDownloadCSV()" class="px-4 py-2 text-xs font-bold border border-blue-400/40 bg-blue-500/15 text-blue-200 rounded-xl hover:bg-blue-500/30 transition-colors flex items-center gap-1.5">⬇️ CSV Download</button>
+                            <button onclick="seoDownloadJSON()" class="px-4 py-2 text-xs font-bold border border-white/15 bg-white/5 text-text-secondary rounded-xl hover:bg-white/10 transition-colors flex items-center gap-1.5">⬇️ JSON</button>
+                            <button onclick="seoResetStatus()" class="px-4 py-2 text-xs font-semibold border border-white/10 bg-white/5 text-text-muted rounded-xl hover:bg-white/10 transition-colors">↺ Reset Status</button>
+                        </div>
+                    </div>
+
+                    <!-- Stats Bar -->
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3" id="seo-stats-bar">
+                        <div class="glass-card p-3 text-center"><p class="text-[9px] text-text-muted uppercase tracking-wider mb-1">Total</p><p class="text-2xl font-black text-white">100</p></div>
+                        <div class="glass-card p-3 text-center"><p class="text-[9px] text-text-muted uppercase tracking-wider mb-1">Open</p><p class="text-2xl font-black text-amber-400" id="seo-stat-open">100</p></div>
+                        <div class="glass-card p-3 text-center"><p class="text-[9px] text-text-muted uppercase tracking-wider mb-1">In Progress</p><p class="text-2xl font-black text-blue-400" id="seo-stat-progress">0</p></div>
+                        <div class="glass-card p-3 text-center"><p class="text-[9px] text-text-muted uppercase tracking-wider mb-1">Done</p><p class="text-2xl font-black text-emerald-400" id="seo-stat-done">0</p></div>
+                        <div class="glass-card p-3 text-center"><p class="text-[9px] text-text-muted uppercase tracking-wider mb-1">Skipped</p><p class="text-2xl font-black text-zinc-500" id="seo-stat-skip">0</p></div>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="flex flex-wrap gap-2 items-center">
+                        <select id="seo-f-type" onchange="seoApplyFilters()" class="bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
+                            <option value="">Alle Types</option>
+                            <option value="Landing">Landing</option>
+                            <option value="Tool">Tool</option>
+                            <option value="Blog">Blog</option>
+                            <option value="GEO">GEO</option>
+                            <option value="Compare">Compare</option>
+                            <option value="Localized">Localized</option>
+                        </select>
+                        <select id="seo-f-api" onchange="seoApplyFilters()" class="bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
+                            <option value="">Alle APIs</option>
+                            <option value="LP API (solutions)">LP solutions</option>
+                            <option value="LP API (compare)">LP compare</option>
+                            <option value="LP API (workflows)">LP workflows</option>
+                            <option value="LP API (best-time-to-post)">LP best-time</option>
+                            <option value="Blog API">Blog API</option>
+                            <option value="Tool content (code)">Tool code</option>
+                        </select>
+                        <select id="seo-f-market" onchange="seoApplyFilters()" class="bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
+                            <option value="">Alle Märkte</option>
+                            <option value="US">US</option>
+                            <option value="DE">DE</option>
+                            <option value="FR">FR</option>
+                            <option value="ES">ES</option>
+                            <option value="UK">UK</option>
+                            <option value="BR">BR / PT</option>
+                        </select>
+                        <select id="seo-f-status" onchange="seoApplyFilters()" class="bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
+                            <option value="">Alle Status</option>
+                            <option value="open">Open</option>
+                            <option value="in_progress">In Progress</option>
+                            <option value="done">Done</option>
+                            <option value="skip">Skip</option>
+                        </select>
+                        <input id="seo-f-search" oninput="seoApplyFilters()" type="text" placeholder="🔍 Suche Topic / Keyword…" class="bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none flex-1 min-w-[180px]" />
+                        <span class="text-xs text-text-muted ml-auto" id="seo-filter-count">100 sichtbar</span>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="glass-card overflow-hidden overflow-x-auto">
+                        <table class="w-full text-[11px] min-w-[900px]" id="seo-table">
+                            <thead>
+                                <tr class="border-b border-white/8 bg-black/20">
+                                    <th class="text-left py-2.5 pl-4 pr-2 text-text-muted uppercase tracking-wider text-[8px] font-bold w-8">#</th>
+                                    <th class="text-left py-2.5 pr-2 text-text-muted uppercase tracking-wider text-[8px] font-bold">Topic / Page</th>
+                                    <th class="text-left py-2.5 pr-2 text-text-muted uppercase tracking-wider text-[8px] font-bold">Type</th>
+                                    <th class="text-left py-2.5 pr-2 text-text-muted uppercase tracking-wider text-[8px] font-bold">API</th>
+                                    <th class="text-left py-2.5 pr-2 text-text-muted uppercase tracking-wider text-[8px] font-bold">Märkte</th>
+                                    <th class="text-left py-2.5 pr-2 text-text-muted uppercase tracking-wider text-[8px] font-bold">Localization</th>
+                                    <th class="text-left py-2.5 pr-2 text-text-muted uppercase tracking-wider text-[8px] font-bold">Signal</th>
+                                    <th class="text-left py-2.5 pr-3 text-text-muted uppercase tracking-wider text-[8px] font-bold">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="seo-table-body"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="glass-card p-4">
+                        <p class="text-[9px] uppercase tracking-wider text-text-muted font-bold mb-3">Legende · Type-Farben</p>
+                        <div class="flex flex-wrap gap-3 text-[10px]">
+                            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-purple-500/60 inline-block"></span> Landing / Solutions</span>
+                            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-blue-500/60 inline-block"></span> Tool (code)</span>
+                            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-amber-500/60 inline-block"></span> Blog / Lead Magnet</span>
+                            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-cyan-500/60 inline-block"></span> GEO / AI-Answer</span>
+                            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-rose-500/60 inline-block"></span> Compare</span>
+                            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-emerald-500/60 inline-block"></span> Localized</span>
+                        </div>
+                    </div>
+                </div>`;
+            }
+
             container.innerHTML = `<div class="animate-fade-in">${html}</div>`;
+            if (tab === 'seo-backlog') {
+                setTimeout(() => {
+                    if (typeof seoRenderRows === 'function') {
+                        seoRenderRows(SEO_TOPICS);
+                    }
+                }, 50);
+            }
         }
 
         window.openProjectDetail = (idx) => {
