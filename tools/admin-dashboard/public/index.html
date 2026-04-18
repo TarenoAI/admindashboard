@@ -237,6 +237,9 @@
             <div class="nav-item" onclick="switchTab('seo-backlog', this)">
                 <span>🗺️</span> SEO/GEO Backlog
             </div>
+            <div class="nav-item" onclick="switchTab('doc-dispatch', this)">
+                <span>📤</span> Doc Dispatch
+            </div>
         </nav>
 
         <div class="p-4 border-t border-border-subtle">
@@ -396,6 +399,14 @@
                 if (currentTab === 'seo-backlog') {
                     currentData = {};
                     renderView(currentTab, {}, container);
+                    return;
+                }
+
+                if (currentTab === 'doc-dispatch') {
+                    const statusResp = await fetch('/api/dashboard/dispatch-status').catch(() => null);
+                    const statusData = statusResp ? await statusResp.json().catch(() => ({})) : {};
+                    currentData = { apiStatus: statusData };
+                    renderView(currentTab, currentData, container);
                     return;
                 }
 
@@ -1557,6 +1568,100 @@
                         </div>` : ''}
 
                         ${compactPagesHtml}
+
+                        ${isTarenoProject ? `
+                        <div class="glass-card mt-6 p-0 overflow-hidden shadow-2xl border border-indigo-500/20 bg-black/40" id="tareno-doc-dispatch">
+                            <div class="p-6 md:p-8 border-b border-white/5 bg-gradient-to-r from-indigo-500/10 to-transparent">
+                                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                                    <div>
+                                        <h4 class="text-xs uppercase tracking-widest text-indigo-200 font-extrabold flex items-center gap-2">📤 Doc Dispatch — Dokumente per API versenden</h4>
+                                        <p class="text-xs text-text-muted mt-2 max-w-3xl">Markdown-Dateien (FINAL.md, Blog-Artikel, Landing-Pages) hochladen und direkt an die Tareno Blog API oder Landing Page API schicken. Secrets bleiben serverseitig.</p>
+                                    </div>
+                                    <div id="dispatch-api-status" class="flex gap-2 flex-wrap">
+                                        <span class="px-3 py-1 rounded-full text-[10px] font-bold bg-white/5 border border-white/10 text-text-muted">API Status wird geprüft…</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-6 md:p-8 space-y-6">
+                                <!-- Drop Zone -->
+                                <div id="dispatch-dropzone"
+                                    ondragover="event.preventDefault(); this.classList.add('border-indigo-400/60','bg-indigo-500/10')"
+                                    ondragleave="this.classList.remove('border-indigo-400/60','bg-indigo-500/10')"
+                                    ondrop="dispatchHandleDrop(event)"
+                                    class="rounded-2xl border-2 border-dashed border-white/15 bg-black/20 p-8 text-center transition-all cursor-pointer hover:border-indigo-400/40 hover:bg-indigo-500/5"
+                                    onclick="document.getElementById('dispatch-file-input').click()">
+                                    <div class="text-3xl mb-2">📄</div>
+                                    <p class="text-sm font-semibold text-white mb-1">Markdown-Datei hier ablegen oder klicken</p>
+                                    <p class="text-xs text-text-muted">Unterstützt: .md · FINAL.md · Blog-Artikel · Landing Page Inhalte</p>
+                                    <input type="file" id="dispatch-file-input" accept=".md,.txt" class="hidden" onchange="dispatchLoadFile(this)">
+                                </div>
+                                <!-- Or paste -->
+                                <div>
+                                    <p class="text-[9px] uppercase tracking-widest text-text-muted font-bold mb-2">Oder Inhalt direkt einfügen</p>
+                                    <textarea id="dispatch-content" rows="10" placeholder="# Markdown hier einfügen…&#10;&#10;FINAL.md Inhalt, Blog-Artikel oder Structured JSON body..." class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-xs text-white font-mono focus:outline-none focus:border-indigo-400/40 resize-y" oninput="dispatchPreviewUpdate()"></textarea>
+                                </div>
+                                <!-- Config Row -->
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div>
+                                        <label class="text-[9px] uppercase tracking-widest text-text-muted font-bold block mb-2">Ziel-API</label>
+                                        <select id="dispatch-api" onchange="dispatchApiChanged()" class="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
+                                            <option value="blog">Blog API (/api/blog/create)</option>
+                                            <option value="lp-solutions">LP API · solutions</option>
+                                            <option value="lp-compare">LP API · compare</option>
+                                            <option value="lp-workflows">LP API · workflows</option>
+                                            <option value="lp-best-time">LP API · best-time-to-post</option>
+                                        </select>
+                                    </div>
+                                    <div id="dispatch-mode-wrap">
+                                        <label class="text-[9px] uppercase tracking-widest text-text-muted font-bold block mb-2">Modus</label>
+                                        <select id="dispatch-mode" class="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
+                                            <option value="draft">Draft (kein Publish-Secret nötig)</option>
+                                            <option value="publish">Publish (Publish-Secret erforderlich)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="text-[9px] uppercase tracking-widest text-text-muted font-bold block mb-2">Dateiname / Slug</label>
+                                        <input id="dispatch-slug" type="text" placeholder="z.B. social-media-scheduler" class="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
+                                    </div>
+                                </div>
+                                <!-- Meta fields (Blog) -->
+                                <div id="dispatch-blog-meta" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="text-[9px] uppercase tracking-widest text-text-muted font-bold block mb-2">Blog Titel</label>
+                                        <input id="dispatch-title" type="text" placeholder="Artikel-Titel" class="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
+                                    </div>
+                                    <div>
+                                        <label class="text-[9px] uppercase tracking-widest text-text-muted font-bold block mb-2">Tag / Content ID</label>
+                                        <input id="dispatch-tag" type="text" placeholder="z.B. TAG-07" class="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
+                                    </div>
+                                </div>
+                                <!-- Preview pill -->
+                                <div id="dispatch-preview-bar" class="hidden flex items-center gap-3 bg-black/30 border border-white/8 rounded-xl px-4 py-3">
+                                    <span class="text-lg">📄</span>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-xs font-semibold text-white truncate" id="dispatch-preview-name">—</p>
+                                        <p class="text-[10px] text-text-muted" id="dispatch-preview-size">—</p>
+                                    </div>
+                                    <button onclick="dispatchClear()" class="text-[10px] text-red-400 hover:text-red-300 border border-red-500/20 bg-red-500/10 px-2 py-1 rounded">✕ Clear</button>
+                                </div>
+                                <!-- Actions -->
+                                <div class="flex flex-wrap gap-3 items-center pt-2 border-t border-white/5">
+                                    <button onclick="dispatchSend()" id="dispatch-send-btn" class="px-6 py-2.5 rounded-xl bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-400/40 text-indigo-200 text-xs font-bold uppercase tracking-wider transition-colors flex items-center gap-2">
+                                        <span>📤</span> Senden
+                                    </button>
+                                    <button onclick="dispatchPreviewJSON()" class="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-text-secondary text-xs font-bold uppercase tracking-wider transition-colors">
+                                        👁 JSON Preview
+                                    </button>
+                                    <span id="dispatch-status-msg" class="text-xs text-text-muted"></span>
+                                </div>
+                                <!-- Response viewer -->
+                                <div id="dispatch-response" class="hidden">
+                                    <p class="text-[9px] uppercase tracking-widest text-text-muted font-bold mb-2">API Response</p>
+                                    <pre id="dispatch-response-body" class="bg-black/50 border border-white/10 rounded-xl p-4 text-[11px] text-text-secondary font-mono whitespace-pre-wrap overflow-x-auto max-h-[300px]"></pre>
+                                </div>
+                            </div>
+                        </div>
+                        ` : ''}
 
                         <div class="glass-card p-4 text-xs mt-4">
                              <h4 class="font-semibold text-white mb-2">Projekt Wissen durchstöbern</h4>
@@ -4494,6 +4599,190 @@
             pre.style.background = 'rgba(239,68,68,0.05)';
             pre.textContent = `❌ Client-Fehler: ${msg}`;
         }
+    </script>
+
+    <script>
+    /* ===== Doc Dispatch Handlers ===== */
+
+    // Check API status when Tareno project detail loads
+    async function dispatchCheckApiStatus() {
+        const el = document.getElementById('dispatch-api-status');
+        if (!el) return;
+        try {
+            const r = await fetch('/api/dashboard/dispatch-status');
+            const d = await r.json();
+            let html = '';
+            if (!d.hasSecret) {
+                html = '<span class="px-3 py-1 rounded-full text-[10px] font-bold bg-red-500/10 border border-red-500/30 text-red-300">⚠ LANDING_API_SECRET fehlt</span>';
+            } else {
+                html += `<span class="px-3 py-1 rounded-full text-[10px] font-bold ${d.blogReachable ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300' : 'bg-amber-500/10 border-amber-500/30 text-amber-300'}">Blog API: ${d.blogReachable ? '✓ OK' : '? Unbekannt'}</span>`;
+                html += `<span class="px-3 py-1 rounded-full text-[10px] font-bold ${d.lpReachable ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300' : 'bg-amber-500/10 border-amber-500/30 text-amber-300'}">LP API: ${d.lpReachable ? '✓ OK' : '? Unbekannt'}</span>`;
+                html += `<span class="px-3 py-1 rounded-full text-[10px] font-bold bg-white/5 border border-white/10 text-text-muted font-mono">${d.base || '—'}</span>`;
+            }
+            el.innerHTML = html;
+        } catch(e) {
+            el.innerHTML = '<span class="px-3 py-1 rounded-full text-[10px] font-bold bg-red-500/10 border border-red-500/30 text-red-300">API Status nicht erreichbar</span>';
+        }
+    }
+
+    // Called when Tareno project detail renders
+    document.addEventListener('tareno-detail-ready', () => {
+        dispatchCheckApiStatus();
+    });
+
+    function dispatchHandleDrop(e) {
+        e.preventDefault();
+        const dz = document.getElementById('dispatch-dropzone');
+        if (dz) dz.classList.remove('border-indigo-400/60','bg-indigo-500/10');
+        const file = e.dataTransfer?.files?.[0];
+        if (file) dispatchReadFile(file);
+    }
+
+    function dispatchLoadFile(input) {
+        const file = input?.files?.[0];
+        if (file) dispatchReadFile(file);
+    }
+
+    function dispatchReadFile(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const ta = document.getElementById('dispatch-content');
+            if (ta) ta.value = e.target.result;
+            // Auto-fill slug from filename
+            const slugEl = document.getElementById('dispatch-slug');
+            if (slugEl && !slugEl.value) {
+                slugEl.value = file.name.replace(/\.md$/i,'').replace(/\s+/g,'-').toLowerCase();
+            }
+            // Auto-fill title from first H1
+            const titleEl = document.getElementById('dispatch-title');
+            if (titleEl && !titleEl.value) {
+                const m = e.target.result.match(/^#\s+(.+)$/m);
+                if (m) titleEl.value = m[1].trim();
+            }
+            dispatchShowPreview(file.name, file.size);
+        };
+        reader.readAsText(file);
+    }
+
+    function dispatchShowPreview(name, size) {
+        const bar = document.getElementById('dispatch-preview-bar');
+        const nameEl = document.getElementById('dispatch-preview-name');
+        const sizeEl = document.getElementById('dispatch-preview-size');
+        if (bar) bar.classList.remove('hidden');
+        if (nameEl) nameEl.textContent = name;
+        if (sizeEl) sizeEl.textContent = `${(size/1024).toFixed(1)} KB`;
+    }
+
+    function dispatchClear() {
+        ['dispatch-content','dispatch-slug','dispatch-title','dispatch-tag'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = '';
+        });
+        const bar = document.getElementById('dispatch-preview-bar');
+        if (bar) bar.classList.add('hidden');
+        const fi = document.getElementById('dispatch-file-input');
+        if (fi) fi.value = '';
+        const resp = document.getElementById('dispatch-response');
+        if (resp) resp.classList.add('hidden');
+        dispatchSetStatus('');
+    }
+
+    function dispatchApiChanged() {
+        const api = document.getElementById('dispatch-api')?.value || '';
+        const meta = document.getElementById('dispatch-blog-meta');
+        const modeWrap = document.getElementById('dispatch-mode-wrap');
+        if (meta) meta.style.display = api === 'blog' ? '' : 'none';
+        if (modeWrap) modeWrap.style.display = api === 'blog' ? 'none' : '';
+    }
+
+    function dispatchPreviewUpdate() { /* live char count could go here */ }
+
+    function dispatchBuildPayload() {
+        const api = document.getElementById('dispatch-api')?.value || 'blog';
+        const content = document.getElementById('dispatch-content')?.value || '';
+        const slug = document.getElementById('dispatch-slug')?.value || '';
+        const title = document.getElementById('dispatch-title')?.value || '';
+        const tag = document.getElementById('dispatch-tag')?.value || '';
+        const mode = document.getElementById('dispatch-mode')?.value || 'draft';
+
+        if (api === 'blog') {
+            return {
+                endpoint: '/api/dashboard/blog-dispatch',
+                body: { title: title || slug, slug, tag, content, source: 'admin-dashboard' }
+            };
+        } else {
+            const lpType = api.replace('lp-', ''); // solutions, compare, workflows, best-time-to-post
+            return {
+                endpoint: '/api/dashboard/lp-dispatch',
+                body: { slug, title, content, type: lpType, mode, source: 'admin-dashboard' }
+            };
+        }
+    }
+
+    function dispatchPreviewJSON() {
+        const { body } = dispatchBuildPayload();
+        const resp = document.getElementById('dispatch-response');
+        const pre = document.getElementById('dispatch-response-body');
+        if (resp) resp.classList.remove('hidden');
+        if (pre) pre.textContent = JSON.stringify(body, null, 2);
+    }
+
+    async function dispatchSend() {
+        const content = document.getElementById('dispatch-content')?.value || '';
+        if (!content.trim()) {
+            dispatchSetStatus('⚠ Kein Inhalt vorhanden.', 'text-amber-400');
+            return;
+        }
+        const btn = document.getElementById('dispatch-send-btn');
+        if (btn) { btn.disabled = true; btn.textContent = '⏳ Senden…'; }
+        dispatchSetStatus('Wird gesendet…');
+
+        try {
+            const { endpoint, body } = dispatchBuildPayload();
+            const r = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            const text = await r.text();
+            let json;
+            try { json = JSON.parse(text); } catch { json = null; }
+
+            const resp = document.getElementById('dispatch-response');
+            const pre = document.getElementById('dispatch-response-body');
+            if (resp) resp.classList.remove('hidden');
+            if (pre) pre.textContent = json ? JSON.stringify(json, null, 2) : text;
+
+            if (r.ok) {
+                dispatchSetStatus('✅ Erfolgreich gesendet!', 'text-emerald-400');
+            } else {
+                dispatchSetStatus(`❌ Fehler ${r.status}: ${json?.error || r.statusText}`, 'text-red-400');
+            }
+        } catch(e) {
+            dispatchSetStatus(`❌ Netzwerkfehler: ${e.message}`, 'text-red-400');
+        } finally {
+            if (btn) { btn.disabled = false; btn.innerHTML = '<span>📤</span> Senden'; }
+        }
+    }
+
+    function dispatchSetStatus(msg, cls = 'text-text-muted') {
+        const el = document.getElementById('dispatch-status-msg');
+        if (!el) return;
+        el.textContent = msg;
+        el.className = `text-xs ${cls}`;
+    }
+
+    // Fire after project detail renders (hook into existing openProjectDetail)
+    const _origOpenProjectDetail = window.openProjectDetail;
+    window.openProjectDetail = function(idx) {
+        _origOpenProjectDetail && _origOpenProjectDetail(idx);
+        setTimeout(() => {
+            if (document.getElementById('tareno-doc-dispatch')) {
+                document.dispatchEvent(new CustomEvent('tareno-detail-ready'));
+                dispatchApiChanged(); // set initial visibility
+            }
+        }, 100);
+    };
     </script>
 </body>
 

@@ -4825,5 +4825,75 @@ app.get('/api/dashboard/strategy', async (req, res) => {
 });
 // ─── End Landing-Pages Proxy ───────────────────────────────────────────────────
 
+// ─── Document Dispatch Proxy ────────────────────────────────────────────────────
+// POST /api/dashboard/blog-dispatch  – send a Markdown doc to Tareno Blog API
+app.post('/api/dashboard/blog-dispatch', express.json({ limit: '50mb' }), async (req, res) => {
+    try {
+        const secret = process.env.LANDING_API_SECRET || process.env.LANDING_PUBLISH_SECRET || '';
+        if (!secret) return res.status(500).json({ success: false, error: 'LANDING_API_SECRET not configured on server.' });
+
+        const body = req.body || {};
+        // Forward as-is to the Tareno Blog create endpoint
+        const tarUrl = `${LANDING_BASE}/api/blog/create`;
+        const resp = await fetch(tarUrl, {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${secret}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+        });
+        const text = await resp.text();
+        const json = tryParseJson(text);
+        res.status(resp.status);
+        return json ? res.json(json) : res.send(text);
+    } catch (err) {
+        res.status(502).json({ success: false, error: `Blog dispatch proxy error: ${err.message}` });
+    }
+});
+
+// POST /api/dashboard/lp-dispatch  – send a structured doc to Landing Page API
+app.post('/api/dashboard/lp-dispatch', express.json({ limit: '50mb' }), async (req, res) => {
+    try {
+        const body = req.body || {};
+        const mode = String(body.mode || 'draft').trim().toLowerCase();
+        const secret = getLandingSecret(mode, 'POST');
+        if (!secret) return res.status(500).json({ success: false, error: 'LANDING_API_SECRET not configured on server.' });
+        if (mode === 'publish' && !process.env.LANDING_PUBLISH_SECRET) {
+            return res.status(403).json({ success: false, error: 'Publishing requires LANDING_PUBLISH_SECRET on server.' });
+        }
+
+        const tarUrl = `${LANDING_BASE}/api/content/landing-pages`;
+        const resp = await fetch(tarUrl, {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${secret}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+        });
+        const text = await resp.text();
+        const json = tryParseJson(text);
+        res.status(resp.status);
+        return json ? res.json(json) : res.send(text);
+    } catch (err) {
+        res.status(502).json({ success: false, error: `LP dispatch proxy error: ${err.message}` });
+    }
+});
+
+// GET /api/dashboard/dispatch-status  – health check for both APIs
+app.get('/api/dashboard/dispatch-status', async (req, res) => {
+    const secret = process.env.LANDING_API_SECRET || process.env.LANDING_PUBLISH_SECRET || '';
+    const hasSecret = !!secret;
+    let blogReachable = false;
+    let lpReachable = false;
+    if (hasSecret) {
+        try {
+            const r1 = await fetch(`${LANDING_BASE}/api/blog/status`, { headers: { Authorization: `Bearer ${secret}` } });
+            blogReachable = r1.ok || r1.status === 405; // 405 = endpoint exists but wrong method
+        } catch { blogReachable = false; }
+        try {
+            const r2 = await fetch(`${LANDING_BASE}/api/content/landing-pages`, { headers: { Authorization: `Bearer ${secret}` } });
+            lpReachable = r2.ok || r2.status === 405;
+        } catch { lpReachable = false; }
+    }
+    res.json({ hasSecret, blogReachable, lpReachable, base: LANDING_BASE });
+});
+// ─── End Document Dispatch Proxy ────────────────────────────────────────────────
+
 app.listen(PORT, () => console.log(`OpenClaw Admin Dashboard läuft auf http://localhost:${PORT}`));
 
