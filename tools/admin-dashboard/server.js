@@ -2785,6 +2785,33 @@ app.post("/api/projects/:projectId/knowledge", express.json({ limit: '50mb' }), 
         res.status(500).json({ success: false, error: e.message });
     }
 });
+
+app.post("/api/projects/:projectId/seo-backlog", express.json({ limit: '50mb' }), async (req, res) => {
+    const { projectId } = req.params;
+    const { seoBacklog } = req.body;
+
+    if (!Array.isArray(seoBacklog)) {
+        return res.status(400).json({ success: false, error: "seoBacklog must be an array" });
+    }
+
+    const projectFile = path.join(WORKSPACE_ROOT, "data", "projects", `${projectId}.json`);
+    if (!fs.existsSync(projectFile)) {
+        return res.status(404).json({ success: false, error: "Project not found" });
+    }
+
+    try {
+        const data = JSON.parse(fs.readFileSync(projectFile, 'utf8'));
+        data.seoBacklog = seoBacklog;
+        data.lastUpdated = new Date().toISOString();
+        
+        fs.writeFileSync(projectFile, JSON.stringify(data, null, 2), 'utf8');
+        syncAllAssignedAgents(projectId, data);
+
+        ok(res, { message: "SEO Backlog updated successfully", count: seoBacklog.length });
+    } catch (e) {
+        res.status(500).json({ success: false, error: e.message });
+    }
+});
 app.get("/api/overview", async (_, res) => {
     const xvfb = await runCmd("systemctl is-active xvfb");
     const openclaw = await runFirstOk(["/usr/bin/openclaw status", "/usr/local/bin/openclaw status"]);
